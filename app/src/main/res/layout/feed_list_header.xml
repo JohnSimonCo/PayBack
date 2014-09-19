@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
-            <se.jrp.deptapp.RobotoMediumTextView
+            <com.johnsimon.payback.RobotoMediumTextView
                 android:id="@+id/feed_header_balance"
                 android:textSize="@dimen/feed_header_balance_text_size"
                 android:textColor="#fff"
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <se.jrp.deptapp.RobotoMediumTextView
+            <com.johnsimon.payback.RobotoMediumTextView
                 android:id="@+id/total_debt"
                 android:textSize="@dimen/feed_header_title_text_size"
                 android:textStyle="bold"
@@ -58,7 +58,7 @@
 
         </LinearLayout>
 
-        <se.jrp.deptapp.FloatingActionButton
+        <com.johnsimon.payback.FloatingActionButton
             android:id="@+id/feed_fab"
             android:layout_marginEnd="@dimen/fab_right_margin"
             android:layout_marginRight="@dimen/fab_right_margin"

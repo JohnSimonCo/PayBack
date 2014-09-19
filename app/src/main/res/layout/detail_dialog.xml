@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <se.jrp.deptapp.RobotoMediumTextView
+    <com.johnsimon.payback.RobotoMediumTextView
         android:text="Title"
         android:id="@+id/dialog_custom_title"
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
         android:textSize="22sp"
         android:padding="8dp"/>
 
-    <se.jrp.deptapp.RobotoMediumTextView
+    <com.johnsimon.payback.RobotoMediumTextView
         android:text="Content"
         android:id="@+id/dialog_custom_content"
         android:layout_width="wrap_content"
