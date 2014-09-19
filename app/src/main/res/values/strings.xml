@@ -26,6 +26,8 @@
     <string name="share">Share via</string>
     <string name="gradient_content_description">Gradient</string>
     <string name="note">Note</string>
+    <string name="paid_back">Paid back!</string>
+    <string name="checkbox">Checkbox!</string>
 
     <!--Preferences-->
     <string name="pref_settings">Settings</string>

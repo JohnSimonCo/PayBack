@@ -12,8 +12,9 @@ import android.widget.Button;
 public class DebtDetailDialogFragment extends DialogFragment {
 
     public static Debt debt;
+	public AlertDialog alertDialog;
 
-    public static DebtDetailDialogFragment newInstance(Debt _debt) {
+	public static DebtDetailDialogFragment newInstance(Debt _debt) {
         debt = _debt;
         return new DebtDetailDialogFragment();
     }
@@ -45,6 +46,16 @@ public class DebtDetailDialogFragment extends DialogFragment {
             }
         });
 
+		dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(Math.round(debt.amount));
+				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
+
+				alertDialog.cancel();
+			}
+		});
+
         RobotoMediumTextView dialog_custom_title = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_title);
         RobotoMediumTextView dialog_custom_content = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_content);
 
@@ -54,8 +65,8 @@ public class DebtDetailDialogFragment extends DialogFragment {
 
         builder.setView(rootView);
 
-
-        return builder.create();
+		alertDialog = builder.create();
+        return alertDialog;
     }
 
 }
