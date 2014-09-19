@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RadioGroup;
 
 import com.micromobs.android.floatlabel.FloatLabelEditText;
@@ -99,7 +101,6 @@ public class CreateDebtActivity extends Activity {
 		create_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Save everything
 
 				if (create_fab.mActive) {
 					String name = contactsInputField.getText().toString();
@@ -186,5 +187,52 @@ public class CreateDebtActivity extends Activity {
 			Log.e("getAllContactNames()", e.getMessage());
 		}
 		return lContactNamesList;
+	}
+
+	private class PersonAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
+		private ArrayList<String> resultList;
+
+		public PersonAutoCompleteAdapter(Context context, int textViewResourceId, ArrayList<String> arrayList) {
+			super(context, textViewResourceId);
+		}
+
+		@Override
+		public int getCount() {
+			return resultList.size();
+		}
+
+		@Override
+		public String getItem(int index) {
+			return resultList.get(index);
+		}
+
+		@Override
+		public Filter getFilter() {
+			Filter filter = new Filter() {
+				@Override
+				protected FilterResults performFiltering(CharSequence constraint) {
+					FilterResults filterResults = new FilterResults();
+					if (constraint != null) {
+						// Retrieve the autocomplete results.
+						resultList = autocomplete(constraint.toString());
+
+						// Assign the data to the FilterResults
+						filterResults.values = resultList;
+						filterResults.count = resultList.size();
+					}
+					return filterResults;
+				}
+
+				@Override
+				protected void publishResults(CharSequence constraint, FilterResults results) {
+					if (results != null && results.count > 0) {
+						notifyDataSetChanged();
+					}
+					else {
+						notifyDataSetInvalidated();
+					}
+				}};
+			return filter;
+		}
 	}
 }

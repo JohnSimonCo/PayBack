@@ -18,8 +18,6 @@ public class SetupActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
-		//Dirty shit, hoppas John inte ser :)
-		//(on a serious note, det var det här elelr skapa ett nytt tema)
 		getActionBar().setIcon(android.R.color.transparent);
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
