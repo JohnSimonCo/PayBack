@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context="se.jrp.deptapp.SetupActivity">
+
+    <LinearLayout
+        android:id="@+id/setup_header"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/create_start_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="@color/accent_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <se.jrp.deptapp.RobotoMediumTextView
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:text="@string/welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@id/setup_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/ic_launcher"
+            android:paddingTop="32dp"
+            android:paddingBottom="32dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <se.jrp.deptapp.RobotoMediumTextView
+            android:textSize="19sp"
+            android:paddingLeft="@dimen/create_start_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/welcome_full_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <se.jrp.deptapp.RobotoMediumTextView
+            android:textSize="19sp"
+            android:paddingLeft="@dimen/create_start_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/welcome_end_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <se.jrp.deptapp.FloatingActionButton
+        android:id="@+id/setup_fab"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
+</RelativeLayout>

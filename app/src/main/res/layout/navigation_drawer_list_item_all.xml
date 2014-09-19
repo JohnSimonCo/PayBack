@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:orientation="horizontal"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
+      android:background="@drawable/selector_navigation_drawer_list_item"
+      android:paddingLeft="@dimen/base_padding"
+      android:paddingRight="@dimen/base_padding"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_marginRight="16dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp">
+
+        <ImageView
+            android:background="@drawable/ic_ic_person_placeholder_outline"
+            android:layout_width="44dp"
+            android:layout_height="44dp" />
+
+        <ImageView
+            android:background="@null"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_people_placeholder"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </RelativeLayout>
+
+    <se.jrp.deptapp.RobotoMediumTextView
+        android:text="@string/all"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/gray_text_light"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

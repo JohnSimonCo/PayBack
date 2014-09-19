@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="red">#C83339</color>
+    <color name="green">#609677</color>
+
+
+    <color name="gray_text_dark">#181818</color>
+    <color name="gray_text_normal">#333333</color>
+    <color name="gray_text_light">#555555</color>
+    <color name="gray_text_very_light">#888888</color>
+    <color name="gray_onred_light">#aaaaaa</color>
+    <color name="gray_onred_very_light">#dddddd</color>
+
+<!--
+    <color name="light_gray">#666666</color>
+    <color name="lightest_gray">#888888</color>
+    <color name="kinda_lightest_gray">#cccccc</color>
+    <color name="lightester_gray">#dddddd</color>
+-->
+
+
+
+
+    <!--<color name="accent_color">#e51c23</color>-->
+    <color name="accent_color">#cc4339</color>
+
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_header_height">
+        
+        <ImageView
+            android:scaleType="centerCrop"
+            android:src="@drawable/art_v2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_header_image_height" />
+
+        <ImageView
+            android:layout_marginBottom="@dimen/feed_image_gradient_bottom_margin"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/feed_image_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="140dp" />
+        
+        <ImageView
+            android:layout_marginBottom="28dp"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/feed_image_bottom_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/feed_left_margin"
+            android:layout_marginLeft="@dimen/feed_left_margin"
+            android:layout_marginBottom="@dimen/feed_header_bottom_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <se.jrp.deptapp.RobotoMediumTextView
+                android:id="@+id/feed_header_balance"
+                android:textSize="@dimen/feed_header_balance_text_size"
+                android:textColor="#fff"
+                android:text="@string/balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <se.jrp.deptapp.RobotoMediumTextView
+                android:id="@+id/total_debt"
+                android:textSize="@dimen/feed_header_title_text_size"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:text="+10 000 Kr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <se.jrp.deptapp.FloatingActionButton
+            android:id="@+id/feed_fab"
+            android:layout_marginEnd="@dimen/fab_right_margin"
+            android:layout_marginRight="@dimen/fab_right_margin"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"/>
+
+    </RelativeLayout>
+</FrameLayout>

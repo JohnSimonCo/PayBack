@@ -1,0 +1,52 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.johnsimon.payback">
+
+    <!--
+        Used Libraries:
+
+        RoundedAvatarDrawable by Evelio Tarazona Cáceres (http://evel.io/2013/07/21/rounded-avatars-in-android/)
+        FloatingActionButton by Faiz Malkani (https://github.com/FaizMalkani/FloatingActionButton)
+        SystemBarTint by Jeff Gilfelt (https://github.com/jgilfelt/SystemBarTint)
+        L-Dialogs by Lewis Deane (https://github.com/lewisjdeane/L-Dialogs)
+        AndroidFloatLabel by weddingparty (https://github.com/weddingparty/AndroidFloatLabel)
+
+        Android L Icon Pack by icons8.com (http://buzz.icons8.com/)
+    -->
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".FeedActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:icon="@null"
+            android:theme="@style/AppTheme_NoActionBarBorder"
+            android:name=".SetupActivity" >
+        </activity>
+        <activity
+            android:name=".CreateDebtActivity"
+            android:icon="@drawable/ic_actionbar_left"
+            android:label="@string/title_activity_create_debt"
+            android:theme="@style/AppTheme_NoActionBarBorder" >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/pref_settings"
+            android:parentActivityName=".FeedActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.jrp.deptapp.FeedActivity" />
+        </activity>
+    </application>
+
+</manifest>

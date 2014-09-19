@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    >
+
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:background="@drawable/ic_ic_person_placeholder_outline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:background="@null"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="2dp"
+                android:id="@+id/list_item_avatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <se.jrp.deptapp.RobotoMediumTextView
+                android:textColor="@color/gray_text_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:id="@+id/list_item_person"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <se.jrp.deptapp.RobotoMediumTextView
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray_text_light"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:id="@+id/list_item_note"    />
+
+                <se.jrp.deptapp.RobotoMediumTextView
+                    android:textSize="14sp"
+                    android:textColor="@color/gray_text_very_light"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:id="@+id/list_item_date"    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/green"
+            android:id="@+id/list_item_amount"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginLeft="@dimen/feed_left_margin"
+        android:background="@color/gray_onred_very_light"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+</LinearLayout>
