@@ -48,7 +48,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
         boolean hasAvatar = false;
         if (hasAvatar) {
-            //Set avatar as image
+            //Set avatar as image like some stupid faggot
         } else {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
         }

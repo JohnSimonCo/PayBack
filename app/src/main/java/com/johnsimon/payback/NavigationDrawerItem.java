@@ -5,18 +5,16 @@ import android.graphics.Bitmap;
 import java.util.UUID;
 
 public class NavigationDrawerItem {
-	public boolean all = false;
-	public String title;
-	public UUID personId;
-    public Bitmap image;
-
-	public NavigationDrawerItem(String title, UUID personId, Bitmap image) {
-		this.title = title;
-		this.personId = personId;
-        this.image = image;
+	public enum Type {
+		All,
+		Person,
+		Settings
 	}
+	public Type type;
 
-	protected NavigationDrawerItem() {
-
+	public NavigationDrawerItem(Type type) {
+		this.type = type;
+	}
+	public NavigationDrawerItem() {
 	}
 }

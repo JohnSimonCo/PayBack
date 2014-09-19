@@ -82,13 +82,13 @@ public class FeedFragment extends Fragment {
 		return rootView;
 	}
 
-	public static FeedFragment newInstance(NavigationDrawerItem item) {
+	public static FeedFragment newInstance(NavigationDrawerItemFeed item) {
 		FeedFragment fragment = new FeedFragment();
 		Bundle args = new Bundle();
 
-		if(item.all) {
+		if(item.type == NavigationDrawerItem.Type.All) {
 			args.putBoolean(ARG_ALL, true);
-		} else {
+		} else if(item.type == NavigationDrawerItem.Type.Person) {
 			args.putString(ARG_PERSON_ID, item.personId.toString());
 		}
 		fragment.setArguments(args);

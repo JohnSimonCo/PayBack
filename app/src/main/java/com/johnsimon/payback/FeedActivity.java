@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -55,12 +56,14 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, FeedFragment.newInstance(item))
-                .commit();
+		if(item instanceof NavigationDrawerItemFeed) {
+			// update the main content by replacing fragments
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, FeedFragment.newInstance((NavigationDrawerItemFeed)item))
+					.commit();
+		} else if(item.type == NavigationDrawerItem.Type.Settings) {
+			startActivity(new Intent(this, SettingsActivity.class));
+		}
 
     }
 
@@ -94,7 +97,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
     }
