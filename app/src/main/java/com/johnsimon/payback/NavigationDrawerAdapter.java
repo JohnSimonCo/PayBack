@@ -26,6 +26,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		for(Person person : people) {
 			items.add(new NavigationDrawerItemFeed(person.toString(), person.id, null));
 		}
+
 	}
 
 	@Override
@@ -46,10 +47,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
-		NavigationDrawerItemFeed item = (NavigationDrawerItemFeed)getItem(i);
+		NavigationDrawerItemFeed item = (NavigationDrawerItemFeed) items.get(i);
+		boolean isSelected = i == NavigationDrawerFragment.mCurrentSelectedPosition;
 
 		if(item == allItem) {
-			return getAllView(view);
+			return getAllView(view, isSelected);
 		}
 
 		if (view == null) {
@@ -72,10 +74,16 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		holder.title.setText(item.title);
 
+		if(isSelected) {
+			holder.title.setTypeface(null, Typeface.BOLD);
+		} else {
+			holder.title.setTypeface(null, Typeface.NORMAL);
+		}
+
 		return view;
 	}
 
-	public View getAllView(View view) {
+	public View getAllView(View view, boolean isSelected) {
 		ViewHolder holder;
 		if (view == null) {
 			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
@@ -92,7 +100,12 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_people_placeholder)));
 
 		holder.title.setText(R.string.all);
-		holder.title.setTypeface(null, Typeface.BOLD);
+
+		if(isSelected) {
+			holder.title.setTypeface(null, Typeface.BOLD);
+		} else {
+			holder.title.setTypeface(null, Typeface.NORMAL);
+		}
 
 		return view;
 	}

@@ -123,7 +123,7 @@ public class CreateDebtActivity extends Activity {
         //TEST
         contactsInputField.setAdapter(new ArrayAdapter<String>(this, R.layout.autocomplete_list_item, R.id.autocomplete_list_item_title, getAllContactNames()));
 
-		
+
 
         //END TEST
         /*
