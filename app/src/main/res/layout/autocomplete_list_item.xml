@@ -4,7 +4,9 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.johnsimon.payback.RobotoMediumTextView
+        android:padding="16dp"
+        android:textSize="17sp"
         android:id="@+id/autocomplete_list_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

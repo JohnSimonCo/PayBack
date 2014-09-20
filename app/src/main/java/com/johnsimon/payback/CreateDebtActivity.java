@@ -2,6 +2,7 @@ package com.johnsimon.payback;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -42,7 +43,6 @@ public class CreateDebtActivity extends Activity {
 	private FloatingActionButton create_fab;
 
 	private RequiredValidator validator;
-    private ArrayList<Person> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class CreateDebtActivity extends Activity {
         contactsInputField = (AutoCompleteTextView) findViewById(R.id.floating_label_edit_text_auto);
 		if(fromPerson != null) {
 			contactsInputField.setText(fromPerson.name);
+			contactsInputField.setSelection(contactsInputField.getText().length());
 		}
 
 		//This is the container for the float label edit text...
@@ -87,14 +88,12 @@ public class CreateDebtActivity extends Activity {
 			public void onValid() {
 				create_fab.setActive(true);
 				create_fab.setAlpha(1f);
-				create_fab.setClickable(true);
 			}
 
 			@Override
 			public void onInvalid() {
 				create_fab.setActive(false);
 				create_fab.setAlpha(0.6f);
-				create_fab.setClickable(false);
 			}
 		});
 
@@ -115,28 +114,12 @@ public class CreateDebtActivity extends Activity {
 					finish();
 					startActivity(new Intent(ctx, FeedActivity.class), ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
 				} else {
-					Resource.toast(ctx, "You need to enter a name and a amount");
+					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}
             }
         });
 
-        //TEST
         contactsInputField.setAdapter(new ArrayAdapter<String>(this, R.layout.autocomplete_list_item, R.id.autocomplete_list_item_title, getAllContactNames()));
-
-		
-
-        //END TEST
-        /*
-        list = getAllContactNames();
-
-        for (int i = 0; i < 20; i ++) {
-            list.add(new Person(i + " Person"));
-        }
-
-        ContactsAutoCompleteAdapter adapter = new ContactsAutoCompleteAdapter(this, list);
-        contactsInputField.setAdapter(adapter);
-
-        */
 
     }
 
@@ -155,9 +138,6 @@ public class CreateDebtActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
@@ -178,83 +158,19 @@ public class CreateDebtActivity extends Activity {
 	private List<String> getAllContactNames() {
 		List<String> lContactNamesList = new ArrayList<String>();
 		try {
-			// Get all Contacts
-			Cursor lPeople = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-			if (lPeople != null) {
-				while (lPeople.moveToNext()) {
-					// Add Contact's Name into the List
-					lContactNamesList.add(lPeople.getString(lPeople.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-				}
+
+			String whereName = ContactsContract.Data.MIMETYPE + " = ?";
+			String[] whereNameParams = new String[] { ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE };
+			Cursor nameCur = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, whereName, whereNameParams, ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+			while (nameCur.moveToNext()) {
+				String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
+				lContactNamesList.add(display);
 			}
+			nameCur.close();
+
 		} catch (NullPointerException e) {
 			Log.e("getAllContactNames()", e.getMessage());
 		}
 		return lContactNamesList;
-	}
-
-	private class PersonAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
-		private ArrayList<String> resultList;
-
-		public PersonAutoCompleteAdapter(Context context, int textViewResourceId) {
-			super(context, textViewResourceId);
-		}
-
-		@Override
-		public int getCount() {
-			return resultList.size();
-		}
-
-		@Override
-		public String getItem(int index) {
-			return resultList.get(index);
-		}
-
-		@Override
-		public Filter getFilter() {
-			Filter filter = new Filter() {
-				@Override
-				protected FilterResults performFiltering(CharSequence constraint) {
-					FilterResults filterResults = new FilterResults();
-					if (constraint != null) {
-						// Retrieve the autocomplete results.
-						resultList = autocomplete();
-
-						// Assign the data to the FilterResults
-						filterResults.values = resultList;
-						filterResults.count = resultList.size();
-					}
-					return filterResults;
-				}
-
-				@Override
-				protected void publishResults(CharSequence constraint, FilterResults results) {
-					if (results != null && results.count > 0) {
-						notifyDataSetChanged();
-					}
-					else {
-						notifyDataSetInvalidated();
-					}
-				}};
-			return filter;
-		}
-
-		private ArrayList<String> autocomplete() {
-
-			ArrayList<String> lContactNamesList = new ArrayList<String>();
-			try {
-				// Get all Contacts
-				Cursor lPeople = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-				if (lPeople != null) {
-					while (lPeople.moveToNext()) {
-						// Add Contact's Name into the List
-						lContactNamesList.add(lPeople.getString(lPeople.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-					}
-				}
-			} catch (NullPointerException e) {
-				Log.e("getAllContactNames()", e.getMessage());
-			}
-			return lContactNamesList;
-		}
-
 	}
 }

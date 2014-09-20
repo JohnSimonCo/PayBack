@@ -28,6 +28,7 @@
     <string name="note">Note</string>
     <string name="paid_back">Paid back!</string>
     <string name="checkbox">Checkbox!</string>
+    <string name="create_fab_error">You need to enter a name and a amount</string>
 
     <!--Preferences-->
     <string name="pref_settings">Settings</string>

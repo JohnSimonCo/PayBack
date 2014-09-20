@@ -20,7 +20,10 @@ public class Debt {
 	}
 
 	public static String amountString(float amount) {
-		return Float.toString(Math.abs(amount)) + Resource.getCurrency();
+		return Float.toString(Math.abs(amount))
+				.replaceAll("(\\.\\d)\\d+$", "$1")
+				.replaceAll("\\.0$", "")
+				+ " " + Resource.getCurrency();
 	}
 	public static int getColor(float amount) {
 		return amount == 0 ? NEUTRAL_COLOR : amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
