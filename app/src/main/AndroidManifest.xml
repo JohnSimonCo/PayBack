@@ -51,7 +51,7 @@
             android:parentActivityName=".FeedActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="se.jrp.deptapp.FeedActivity" />
+                android:value="com.johnsimon.payback.FeedActivity" />
         </activity>
     </application>
 

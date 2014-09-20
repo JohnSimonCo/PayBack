@@ -36,7 +36,7 @@ public class PaidBackDialogFragment extends DialogFragment {
 			public void run() {
 				ad.cancel();
 			}
-		}, 800);
+		}, 700);
 
 
 		return ad;

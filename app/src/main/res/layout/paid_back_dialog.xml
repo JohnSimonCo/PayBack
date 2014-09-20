@@ -6,6 +6,7 @@
       android:paddingBottom="20dp"
       android:paddingLeft="32dp"
       android:paddingRight="32dp"
+      android:background="@color/green"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content">
 

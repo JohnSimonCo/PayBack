@@ -38,8 +38,4 @@
         <item name="android:textColor">@color/gray_text_normal</item>
     </style>
 
-    <style name="piad_back_dailog_fragment">
-        <item name="android:background">@drawable/paid_back_background</item>
-    </style>
-
 </resources>

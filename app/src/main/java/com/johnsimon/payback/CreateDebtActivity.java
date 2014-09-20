@@ -120,25 +120,6 @@ public class CreateDebtActivity extends Activity {
         });
 
         contactsInputField.setAdapter(new ArrayAdapter<String>(this, R.layout.autocomplete_list_item, R.id.autocomplete_list_item_title, getAllContactNames()));
-
-<<<<<<< HEAD
-=======
-
-
-        //END TEST
-        /*
-        list = getAllContactNames();
-
-        for (int i = 0; i < 20; i ++) {
-            list.add(new Person(i + " Person"));
-        }
-
-        ContactsAutoCompleteAdapter adapter = new ContactsAutoCompleteAdapter(this, list);
-        contactsInputField.setAdapter(adapter);
-
-        */
-
->>>>>>> origin/master
     }
 
 	@Override

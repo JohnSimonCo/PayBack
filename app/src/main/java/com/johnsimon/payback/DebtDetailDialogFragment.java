@@ -50,7 +50,6 @@ public class DebtDetailDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(Math.round(debt.amount));
-				paidBackDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.piad_back_dailog_fragment);
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
 
 				alertDialog.cancel();
