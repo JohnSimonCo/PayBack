@@ -122,6 +122,9 @@ public class CreateDebtActivity extends Activity {
 
         //TEST
         contactsInputField.setAdapter(new ArrayAdapter<String>(this, R.layout.autocomplete_list_item, R.id.autocomplete_list_item_title, getAllContactNames()));
+
+		
+
         //END TEST
         /*
         list = getAllContactNames();
@@ -192,7 +195,7 @@ public class CreateDebtActivity extends Activity {
 	private class PersonAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 		private ArrayList<String> resultList;
 
-		public PersonAutoCompleteAdapter(Context context, int textViewResourceId, ArrayList<String> arrayList) {
+		public PersonAutoCompleteAdapter(Context context, int textViewResourceId) {
 			super(context, textViewResourceId);
 		}
 
@@ -214,7 +217,7 @@ public class CreateDebtActivity extends Activity {
 					FilterResults filterResults = new FilterResults();
 					if (constraint != null) {
 						// Retrieve the autocomplete results.
-						resultList = autocomplete(constraint.toString());
+						resultList = autocomplete();
 
 						// Assign the data to the FilterResults
 						filterResults.values = resultList;
@@ -234,5 +237,24 @@ public class CreateDebtActivity extends Activity {
 				}};
 			return filter;
 		}
+
+		private ArrayList<String> autocomplete() {
+
+			ArrayList<String> lContactNamesList = new ArrayList<String>();
+			try {
+				// Get all Contacts
+				Cursor lPeople = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+				if (lPeople != null) {
+					while (lPeople.moveToNext()) {
+						// Add Contact's Name into the List
+						lContactNamesList.add(lPeople.getString(lPeople.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+					}
+				}
+			} catch (NullPointerException e) {
+				Log.e("getAllContactNames()", e.getMessage());
+			}
+			return lContactNamesList;
+		}
+
 	}
 }
