@@ -32,7 +32,8 @@
         android:orientation="horizontal">
 
         <Button
-            android:text="SHARE"
+            android:textAllCaps="true"
+            android:text="@string/send"
             android:id="@+id/dialog_custom_cancel"
             android:layout_width="88dp"
             android:layout_height="36dp"
@@ -41,7 +42,8 @@
             android:textColor="#212121"/>
 
         <Button
-            android:text="PAY BACK"
+            android:textAllCaps="true"
+            android:text="@string/pay_back"
             android:id="@+id/dialog_custom_confirm"
             android:layout_width="88dp"
             android:layout_height="36dp"

@@ -49,6 +49,7 @@ public class DebtDetailDialogFragment extends DialogFragment {
 		dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(Math.round(debt.amount));
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
 

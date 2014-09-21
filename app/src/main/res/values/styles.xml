@@ -38,4 +38,9 @@
         <item name="android:textColor">@color/gray_text_normal</item>
     </style>
 
+    <style name="paid_back_anim" >
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/paid_back_dialog_out</item>
+    </style>
+
 </resources>

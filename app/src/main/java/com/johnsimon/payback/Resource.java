@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.UUID;
@@ -132,4 +133,25 @@ public class Resource {
 	public static void toast(Context context, int i) {
 		toast(context, Integer.toString(i));
 	}
+
+    public static ArrayList<String> getAllAvailableCurrencies() {
+        //Yeah i wrote this myself, thanks for asking! :D
+
+        ArrayList<String> currencys = new ArrayList<String>();
+        Locale[] locs = Locale.getAvailableLocales();
+
+        for(Locale loc : locs) {
+            try {
+                String val = Currency.getInstance(loc).getCurrencyCode() + " (" + Currency.getInstance(loc).getSymbol() + ")";
+                if(!currencys.contains(val))
+                    currencys.add(val);
+            } catch(Exception exc)
+            {
+                // Locale not found
+            }
+            Collections.sort(currencys);
+        }
+
+        return currencys;
+    }
 }

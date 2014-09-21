@@ -29,9 +29,27 @@
     <string name="paid_back">Paid back!</string>
     <string name="checkbox">Checkbox!</string>
     <string name="create_fab_error">You need to enter a name and a amount</string>
+    <string name="pay_back">Pay Back</string>
+    <string name="send">Send</string>
+
 
     <!--Preferences-->
     <string name="pref_settings">Settings</string>
     <string name="pref_general">General</string>
+    <string name="currency">Currency</string>
+
+    <string-array name="currencyDisplay">
+        <item>Kronor (Kr)</item>
+        <item>Dollar ($)</item>
+        <item>Euro (£)</item>
+        <item>Vodka (L)</item>
+    </string-array>
+
+    <string-array name="currencyReturn">
+        <item>Kr</item>
+        <item>$</item>
+        <item>£</item>
+        <item>L</item>
+    </string-array>
 
 </resources>

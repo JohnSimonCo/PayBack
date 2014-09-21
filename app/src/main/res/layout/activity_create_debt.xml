@@ -89,7 +89,7 @@
             android:contentDescription="@string/gradient_content_description"
             android:src="@drawable/feed_image_bottom_shadow"
             android:layout_width="match_parent"
-            android:layout_height="6dp" />
+            android:layout_height="10dp" />
 
         <com.johnsimon.payback.FloatingActionButton
             android:layout_marginTop="166dp"
@@ -111,7 +111,7 @@
             <com.micromobs.android.floatlabel.FloatLabelEditTextDark
                 android:id="@+id/create_float_label_note"
                 android:textColorHint="@color/gray_text_very_light"
-                android:textColor="@color/gray_text_normal"
+                android:textColor="@color/gray_text_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 

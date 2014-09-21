@@ -47,12 +47,7 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/pref_settings"
-            android:parentActivityName=".FeedActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.johnsimon.payback.FeedActivity" />
-        </activity>
+            android:label="@string/pref_settings"   />
     </application>
 
 </manifest>

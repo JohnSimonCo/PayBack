@@ -108,6 +108,8 @@ public class CreateDebtActivity extends Activity {
 
 					String note = FloatLabelEditTextDark.mEditTextView.getText().toString();
 
+                    //Just because activity was started as adding debt for
+                    //for a specific person it doesn't mean the user can't change the name
 					Resource.debts.add(0, new Debt(fromPerson == null ? Resource.people.get(0) : fromPerson, theyOwe ? amount : -amount, note));
 					Resource.commit();
 

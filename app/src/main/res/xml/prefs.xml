@@ -1,10 +1,15 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    android:fitsSystemWindows="@bool/kitkat"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:title="@string/pref_general"  >
 
-        <Preference
-            android:title="@string/app_name"    />
+        <ListPreference
+            android:title="@string/currency"
+            android:entries="@array/currencyDisplay"
+            android:entryValues="@array/currencyReturn"
+            android:key="pref_currency" />
 
     </PreferenceCategory>
 
