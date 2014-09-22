@@ -9,8 +9,6 @@
         SystemBarTint by Jeff Gilfelt (https://github.com/jgilfelt/SystemBarTint)
         L-Dialogs by Lewis Deane (https://github.com/lewisjdeane/L-Dialogs)
         AndroidFloatLabel by weddingparty (https://github.com/weddingparty/AndroidFloatLabel)
-
-        Android L Icon Pack by icons8.com (http://buzz.icons8.com/)
     -->
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />

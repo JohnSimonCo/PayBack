@@ -2,4 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="se.jrp.deptapp.FeedActivity" >
 
+    <item
+        android:id="@+id/menu_filter"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_filter"
+        android:title="@string/filter"  />
+
 </menu>

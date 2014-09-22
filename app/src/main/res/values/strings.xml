@@ -31,7 +31,21 @@
     <string name="create_fab_error">You need to enter a name and a amount</string>
     <string name="pay_back">Pay Back</string>
     <string name="send">Send</string>
+    <string name="about_title">About</string>
+    <string name="filter">Filter</string>
 
+
+    <!--About-->
+    <string name="lib_rad">RoundedAvatarDrawable</string>
+    <string name="author_rad">Evelio Tarazona Cáceres</string>
+    <string name="lib_fab">FloatingActionButton</string>
+    <string name="author_fab">Faiz Malkani</string>
+    <string name="lib_sbt">SystemBarTint</string>
+    <string name="author_sbt">Jeff Gilfelt</string>
+    <string name="lib_ldialogs">L-Dialogs</string>
+    <string name="author_ldialogs">Lewis Deane</string>
+    <string name="lib_afl">AndroidFloatLabel</string>
+    <string name="author_afl">weddingparty</string>
 
     <!--Preferences-->
     <string name="pref_settings">Settings</string>

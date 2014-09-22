@@ -10,6 +10,7 @@
     <color name="gray_text_light">#555555</color>
     <color name="gray_text_very_light">#888888</color>
     <color name="gray_onred_light">#aaaaaa</color>
+    <color name="gray_onred_kinda_light">#cccccc</color>
     <color name="gray_onred_very_light">#dddddd</color>
 
 <!--
