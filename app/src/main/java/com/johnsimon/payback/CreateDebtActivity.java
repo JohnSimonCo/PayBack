@@ -103,8 +103,12 @@ public class CreateDebtActivity extends Activity {
 
 				if (create_fab.mActive) {
 					String name = contactsInputField.getText().toString();
+					boolean iOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe;
+
 					int amount = Integer.parseInt(floatingLabelEditText.getText().toString());
-					boolean theyOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_they_owe;
+					if(iOwe) {
+						amount = -amount;
+					}
 
 					String note = FloatLabelEditTextDark.mEditTextView.getText().toString();
 					if (note.equals("")) {
@@ -113,7 +117,7 @@ public class CreateDebtActivity extends Activity {
 
                     //Just because activity was started as adding debt for
                     //for a specific person it doesn't mean the user can't change the name
-					Resource.debts.add(0, new Debt(fromPerson == null ? Resource.people.get(0) : fromPerson, theyOwe ? amount : -amount, note));
+					Resource.debts.add(0, new Debt(fromPerson == null ? Resource.people.get(0) : fromPerson, amount, note));
 					Resource.commit();
 
 					finish();
@@ -159,22 +163,20 @@ public class CreateDebtActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-	private List<String> getAllContactNames() {
-		List<String> lContactNamesList = new ArrayList<String>();
-		try {
-
-			String whereName = ContactsContract.Data.MIMETYPE + " = ?";
-			String[] whereNameParams = new String[] { ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE };
-			Cursor nameCur = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, whereName, whereNameParams, ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
-			while (nameCur.moveToNext()) {
-				String display = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME));
-				lContactNamesList.add(display);
+	private ArrayList<String> getAllContactNames() {
+		ArrayList<String> contactNames = new ArrayList<String>();
+		ArrayList<String> uris = new ArrayList<String>();
+		Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		if(cursor.getCount() > 0) {
+			while(cursor.moveToNext()) {
+				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+				String uri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+				uris.add(uri);
+				if(!name.matches(".*@.*\\..*") && !contactNames.contains(name)) {
+					contactNames.add(name);
+				}
 			}
-			nameCur.close();
-
-		} catch (NullPointerException e) {
-			Log.e("getAllContactNames()", e.getMessage());
 		}
-		return lContactNamesList;
+		return contactNames;
 	}
 }
