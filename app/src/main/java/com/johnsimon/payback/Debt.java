@@ -24,6 +24,7 @@ public class Debt {
 		this.isPaidBack = false;
 	}
 
+
 	//Used when extracting from serializable form
 	public Debt(Person owner, float amount, String note, boolean isPaidBack) {
 		this(owner, amount, note);

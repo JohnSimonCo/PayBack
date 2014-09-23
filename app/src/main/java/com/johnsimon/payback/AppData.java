@@ -49,10 +49,21 @@ public class AppData {
 		return null;
 	}
 
+	public Person findPerson(String name) {
+		return findPerson(people, name);
+	}
+
+	public static Person findPerson(ArrayList<Person> people, String name) {
+		for(Person p : people)
+			if(p.name.equals(name)) return p;
+		return null;
+	}
+
     public ArrayList<String> peopleArray() {
         ArrayList<String> result = new ArrayList<String>();
-        for(Person p : people)
-            result.add(p.toString());
+        for(Person p : people) {
+			result.add(p.toString());
+		}
         return result;
     }
 }

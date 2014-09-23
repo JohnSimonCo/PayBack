@@ -102,9 +102,10 @@ public class CreateDebtActivity extends Activity {
             public void onClick(View v) {
 
 				if (create_fab.mActive) {
-					String name = contactsInputField.getText().toString();
-					boolean iOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe;
+					String name = contactsInputField.getText().toString().trim();
+					Person person = Resource.getPerson(name);
 
+					boolean iOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe;
 					int amount = Integer.parseInt(floatingLabelEditText.getText().toString());
 					if(iOwe) {
 						amount = -amount;
@@ -117,18 +118,23 @@ public class CreateDebtActivity extends Activity {
 
                     //Just because activity was started as adding debt for
                     //for a specific person it doesn't mean the user can't change the name
-					Resource.debts.add(0, new Debt(fromPerson == null ? Resource.people.get(0) : fromPerson, amount, note));
+					Resource.debts.add(0, new Debt(person, amount, note));
 					Resource.commit();
 
-					finish();
 					startActivity(new Intent(ctx, FeedActivity.class), ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
+					finish();
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}
             }
         });
 
-        contactsInputField.setAdapter(new ArrayAdapter<String>(this, R.layout.autocomplete_list_item, R.id.autocomplete_list_item_title, getAllContactNames()));
+        contactsInputField.setAdapter(new ArrayAdapter<String>(
+			this,
+			R.layout.autocomplete_list_item,
+			R.id.autocomplete_list_item_title,
+			Resource.getAllNames()
+		));
     }
 
 	@Override
@@ -162,21 +168,4 @@ public class CreateDebtActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-	private ArrayList<String> getAllContactNames() {
-		ArrayList<String> contactNames = new ArrayList<String>();
-		ArrayList<String> uris = new ArrayList<String>();
-		Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		if(cursor.getCount() > 0) {
-			while(cursor.moveToNext()) {
-				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-				String uri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-				uris.add(uri);
-				if(!name.matches(".*@.*\\..*") && !contactNames.contains(name)) {
-					contactNames.add(name);
-				}
-			}
-		}
-		return contactNames;
-	}
 }

@@ -1,7 +1,10 @@
 package com.johnsimon.payback;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -26,14 +29,19 @@ public class Resource {
 	public static AppData data = null;
 	public static ArrayList<Person> people;
 	public static ArrayList<Debt> debts;
+	public static ArrayList<Contact> contacts;
+
 	public static boolean isFirstRun = false;
+	private static Context context;
 	private static SharedPreferences preferences;
 
 	private final static String currencySymbol = Currency.getInstance(Locale.getDefault()).getSymbol();
 
-	public static void fetchData(SharedPreferences preferences) {
+	public static void fetchData(Activity context) {
 		if(data != null) return;
-		Resource.preferences = preferences;
+
+		Resource.context = context;
+		Resource.preferences = context.getPreferences(Context.MODE_PRIVATE);
 
 		String JSON = preferences.getString(SAVE_KEY_APP_DATA, null);
 		data = JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract();
@@ -42,21 +50,27 @@ public class Resource {
 
 		isFirstRun = isFirstRun();
 		if(isFirstRun) {
-			Person druggie = new Person("Random druggie", UUID.randomUUID());
-			Person dealer = new Person("Ma hagsätra dealer", UUID.randomUUID());
-			Person ica = new Person("killen på ica", UUID.randomUUID());
-			people.add(druggie);
-			people.add(dealer);
-			people.add(ica);
+			ColorPalette palette = ColorPalette.getInstance(context);
+			Person john = new Person("John Rapp", palette);
+			Person simon = new Person("Simon Halvdansson", palette);
+			Person agge = new Person("Agge Eklöf", palette);
+			people.add(john);
+			people.add(simon);
+			people.add(agge);
 
-			debts.add(new Debt(druggie, -2000, "weed an sum white shit"));
-			debts.add(new Debt(dealer, -20000, "100 l moskovskaya, ingen grossistrabbat :/"));
-			debts.add(new Debt(ica, 350, "sög av mig"));
-			debts.add(new Debt(ica, -10, "snabbt knull"));
-			debts.add(new Debt(ica, 500, "hand job på plattan"));
+			debts.add(new Debt(john, 100, "Dyr kebab"));
+			debts.add(new Debt(simon, -200, "Pokemonkort"));
+			debts.add(new Debt(simon, -1000, "Glömde kortet på ICA"));
+			debts.add(new Debt(agge, 40, null));
+			debts.add(new Debt(john, 200, "Lampor till dator"));
+			debts.add(new Debt(agge, 2.5f, "Äpple delat på 2"));
 
 			commit();
 		}
+
+		contacts = Resource.getAllContacts(context);
+
+
 
 		/* Censored Version
 		if(isFirstRun(preferences)) {
@@ -123,6 +137,32 @@ public class Resource {
 		return currencySymbol;
 	}
 
+	private static ArrayList<Contact> getAllContacts(Context ctx) {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
+		Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		if(cursor.getCount() > 0) {
+			while(cursor.moveToNext()) {
+				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+				//If it's not an email adress
+				if(!name.matches(".*@.*\\..*")) {
+					//Make sure it's unique
+					boolean unique = true;
+					for (Contact contact : contacts) {
+						if(contact.name.equals(name)) unique = false;
+					}
+					for (Person person: people) {
+						if(person.name.equals(name)) unique = false;
+					}
+					if(unique) {
+						contacts.add(new Contact(name, photoURI));
+					}
+				}
+			}
+		}
+		return contacts;
+	}
+
 	public static void toast(Context context, String text) {
 		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 	}
@@ -146,8 +186,7 @@ public class Resource {
                 String val = Currency.getInstance(loc).getCurrencyCode() + " (" + Currency.getInstance(loc).getSymbol() + ")";
                 if(!currencys.contains(val))
                     currencys.add(val);
-            } catch(Exception exc)
-            {
+            } catch(Exception exc) {
                 // Locale not found
             }
             Collections.sort(currencys);
@@ -215,4 +254,32 @@ public class Resource {
 		a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
 		v.startAnimation(a);
 	}
+
+	public static Person getPerson(String name) {
+		for (Person p : people) {
+			if(p.name.equals(name)) return p;
+		}
+
+		for (Contact c : contacts) {
+			if(c.name.equals(name)) {
+				contacts.remove(c);
+				return new Person(c.name, c.photoURI);
+			}
+		}
+
+		return new Person(name, ColorPalette.getInstance(context));
+	}
+
+	public static ArrayList<String> getAllNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (Person person : people) {
+			names.add(person.name);
+		}
+		for (Contact contact : contacts) {
+			names.add(contact.name);
+		}
+
+		return names;
+	}
+
 }

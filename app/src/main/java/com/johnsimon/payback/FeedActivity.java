@@ -28,7 +28,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		Resource.fetchData(getPreferences(Context.MODE_PRIVATE));
+		Resource.fetchData(this);
 
 /*
         if (Resource.isFirstRun(preferences)) {
