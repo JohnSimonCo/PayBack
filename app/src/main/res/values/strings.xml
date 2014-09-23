@@ -37,9 +37,12 @@
     <string name="welcome_using_nfc">Using NFC</string>
     <string name="welcome_using_nfc_text">Bump two devices together to sync debt details. You can either sync an entire page or a specific debt.</string>
     <string name="welcome_got_it">Got it!</string>
+    <string name="cash">Cash</string>
 
 
     <!--About-->
+    <string name="lib_devdesign">Development and Design</string>
+    <string name="author_johnsimon">John Rapp Farnes\nSimon Halvdansson</string>
     <string name="lib_rad">RoundedAvatarDrawable</string>
     <string name="author_rad">Evelio Tarazona Cáceres</string>
     <string name="lib_fab">FloatingActionButton</string>

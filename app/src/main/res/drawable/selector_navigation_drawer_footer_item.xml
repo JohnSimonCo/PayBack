@@ -5,8 +5,5 @@
     <item
         android:drawable="@color/gray_oncolor_very_light"
         android:state_pressed="true" />
-    <item
-
-        android:drawable="@android:color/white" />
 
 </selector>

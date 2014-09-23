@@ -107,6 +107,9 @@ public class CreateDebtActivity extends Activity {
 					boolean theyOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_they_owe;
 
 					String note = FloatLabelEditTextDark.mEditTextView.getText().toString();
+					if (note.equals("")) {
+						note = getString(R.string.cash);
+					}
 
                     //Just because activity was started as adding debt for
                     //for a specific person it doesn't mean the user can't change the name
