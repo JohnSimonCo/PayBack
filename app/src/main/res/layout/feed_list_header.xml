@@ -12,7 +12,7 @@
         
         <ImageView
             android:scaleType="centerCrop"
-            android:src="@drawable/art_v2"
+            android:src="@drawable/art"
             android:layout_width="match_parent"
             android:layout_height="@dimen/list_header_image_height" />
 

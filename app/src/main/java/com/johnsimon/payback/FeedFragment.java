@@ -79,6 +79,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(debts.get(position - listView.getHeaderViewsCount()));
                 dialog.show(getFragmentManager().beginTransaction(), "dialog");
 				dialog.paidBackCallback = self;
+				dialog.editCallback = self;
             }
         });
 
@@ -117,12 +118,17 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		Resource.debts.remove(debt);
 		Resource.commit();
 		adapter.notifyDataSetChanged();
+		displayTotalDebt();
 	}
 
 	@Override
 	public void onEdit(Debt debt) {
-		//TODO make this nigga work for me like a slave
-		Intent intent = new Intent(getActivity(), CreateDebtActivity.class);
+		Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
+				.putExtra(CreateDebtActivity.ARG_FROM_FEED, true)
+				.putExtra(CreateDebtActivity.ARG_FROM_PERSON_ID, debt.owner.id.toString())
+				.putExtra(CreateDebtActivity.ARG_AMOUNT, debt.amount)
+				.putExtra(CreateDebtActivity.ARG_NOTE, debt.note);
+
 		startActivity(intent);
 	}
 }

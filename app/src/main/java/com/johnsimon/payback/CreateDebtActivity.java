@@ -34,6 +34,8 @@ public class CreateDebtActivity extends Activity {
 
 	public static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
 	public static String ARG_FROM_PERSON_ID = Resource.arg(ARG_PREFIX, "FROM_PERSON");
+	public static String ARG_AMOUNT = Resource.arg(ARG_PREFIX, "AMOUNT");
+	public static String ARG_NOTE = Resource.arg(ARG_PREFIX, "NOTE");
 
 	//Views
     private AutoCompleteTextView contactsInputField;
@@ -54,7 +56,9 @@ public class CreateDebtActivity extends Activity {
 
         setContentView(R.layout.activity_create_debt);
 
-		String fromId = getIntent().getStringExtra(ARG_FROM_PERSON_ID);
+		Intent intent = getIntent();
+
+		String fromId = intent.getStringExtra(ARG_FROM_PERSON_ID);
 		final Person fromPerson = fromId == null ? null : Resource.data.findPerson(UUID.fromString(fromId));
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,6 +75,12 @@ public class CreateDebtActivity extends Activity {
 		//...while this is the internal edit text
 		floatingLabelEditText = (EditText) findViewById(R.id.floating_label_edit_text);
 		floatingLabelEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+		if(intent.hasExtra(ARG_AMOUNT)) {
+			floatingLabelEditText.setText(Float.toString(intent.getFloatExtra(ARG_AMOUNT, 0f)));
+		}
+		if(intent.hasExtra(ARG_NOTE)) {
+			FloatLabelEditTextDark.mEditTextView.setText(intent.getStringExtra(ARG_NOTE));
+		}
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
@@ -97,6 +107,13 @@ public class CreateDebtActivity extends Activity {
 			}
 		});
 
+		contactsInputField.setAdapter(new ArrayAdapter<String>(
+				this,
+				R.layout.autocomplete_list_item,
+				R.id.autocomplete_list_item_title,
+				Resource.getAllNames()
+		));
+
 		create_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,14 +123,14 @@ public class CreateDebtActivity extends Activity {
 					Person person = Resource.getPerson(name);
 
 					boolean iOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe;
-					int amount = Integer.parseInt(floatingLabelEditText.getText().toString());
+					float amount = Float.parseFloat(floatingLabelEditText.getText().toString());
 					if(iOwe) {
 						amount = -amount;
 					}
 
-					String note = FloatLabelEditTextDark.mEditTextView.getText().toString();
+					String note = FloatLabelEditTextDark.mEditTextView.getText().toString().trim();
 					if (note.equals("")) {
-						note = getString(R.string.cash);
+						note = null;
 					}
 
                     //Just because activity was started as adding debt for
@@ -128,13 +145,6 @@ public class CreateDebtActivity extends Activity {
 				}
             }
         });
-
-        contactsInputField.setAdapter(new ArrayAdapter<String>(
-			this,
-			R.layout.autocomplete_list_item,
-			R.id.autocomplete_list_item_title,
-			Resource.getAllNames()
-		));
     }
 
 	@Override

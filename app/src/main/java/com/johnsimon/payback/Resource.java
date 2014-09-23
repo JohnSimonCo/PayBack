@@ -32,7 +32,7 @@ public class Resource {
 	public static ArrayList<Contact> contacts;
 
 	public static boolean isFirstRun = false;
-	private static Context context;
+	private static Activity context;
 	private static SharedPreferences preferences;
 
 	private final static String currencySymbol = Currency.getInstance(Locale.getDefault()).getSymbol();
@@ -49,7 +49,7 @@ public class Resource {
 		debts = data.debts;
 
 		isFirstRun = isFirstRun();
-		if(isFirstRun) {
+		if(people.size() == 0) {
 			ColorPalette palette = ColorPalette.getInstance(context);
 			Person john = new Person("John Rapp", palette);
 			Person simon = new Person("Simon Halvdansson", palette);
@@ -119,7 +119,6 @@ public class Resource {
     public static boolean isFirstRun() {
         if (preferences.getBoolean(SAVE_KEY_FIRST_RUN, true)) {
             preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
-
             return true;
         } else {
             return false;
@@ -256,18 +255,23 @@ public class Resource {
 	}
 
 	public static Person getPerson(String name) {
-		for (Person p : people) {
-			if(p.name.equals(name)) return p;
+		for (Person person : people) {
+			if(person.name.equals(name)) return person;
 		}
 
+		Person person = null;
 		for (Contact c : contacts) {
 			if(c.name.equals(name)) {
+				person = new Person(c.name, c.photoURI);
 				contacts.remove(c);
-				return new Person(c.name, c.photoURI);
+				break;
 			}
 		}
-
-		return new Person(name, ColorPalette.getInstance(context));
+		if(person == null) {
+			person = new Person(name, ColorPalette.getInstance(context));
+		}
+		people.add(person);
+		return person;
 	}
 
 	public static ArrayList<String> getAllNames() {

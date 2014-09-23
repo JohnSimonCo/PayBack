@@ -94,13 +94,17 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 						switch (item.getItemId()) {
 							case R.id.detail_dialog_edit:
-
-								editCallback.onEdit(debt);
+								if(editCallback != null) {
+									editCallback.onEdit(debt);
+								}
+								//alertDialog.cancel();
 
 								return true;
 							case R.id.detail_dialog_delete:
-
-								editCallback.onDelete(debt);
+								if(editCallback != null) {
+									editCallback.onDelete(debt);
+								}
+								alertDialog.cancel();
 
 								return true;
 							default:

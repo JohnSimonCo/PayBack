@@ -30,17 +30,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 		Resource.fetchData(this);
 
-/*
-        if (Resource.isFirstRun(preferences)) {
-            startActivity(new Intent(this, SetupActivity.class));
-            finish();
-        } else {
-            Resource.generateContent(preferences);
-        }
-*/
-
-        WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-        welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
+        //WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+        //welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
 
 	    setContentView(R.layout.activity_feed);
 

@@ -1,6 +1,7 @@
 package com.johnsimon.payback;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,11 +43,12 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		}
 
 		Debt debt = list.get(position);
+		Resources resources = context.getResources();
 
 		holder.person.setText(debt.owner.name);
-		holder.note.setText(debt.note);
+		holder.note.setText(debt.note == null ? resources.getString(R.string.cash) : debt.note);
 		holder.amount.setText(debt.amountAsString);
-		holder.amount.setTextColor(context.getResources().getColor(Debt.getColor(debt.amount)));
+		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
         boolean hasAvatar = false;
         if (hasAvatar) {

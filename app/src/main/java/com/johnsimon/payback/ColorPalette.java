@@ -18,14 +18,16 @@ public class ColorPalette {
 	private int[] palette;
 	public ColorPalette(Resources resources) {
 		palette = new int[] {
-			resources.getColor(R.color.color1)
+			resources.getColor(R.color.color1),
+			resources.getColor(R.color.color2),
+			resources.getColor(R.color.color3)
 		};
 	}
 
 	public int nextColor() {
 		ArrayList<Integer> usedColors = new ArrayList<Integer>(palette.length);
-		for (int i = 0; i < usedColors.size(); i++) {
-			usedColors.set(i, 0);
+		for (int i = 0; i < palette.length; i++) {
+			usedColors.add(i, 0);
 		}
 
 		for (Person person : Resource.people) {

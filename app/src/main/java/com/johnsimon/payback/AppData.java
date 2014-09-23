@@ -23,8 +23,9 @@ public class AppData {
 	public ArrayList<Debt> personalizedFeed(Person person) {
 		ArrayList<Debt> result = new ArrayList<Debt>();
 		for(Debt debt : debts) {
-			if(debt.owner == person)
+			if(debt.owner == person) {
 				result.add(debt);
+			}
 		}
 		return result;
 	}
@@ -49,21 +50,6 @@ public class AppData {
 		return null;
 	}
 
-	public Person findPerson(String name) {
-		return findPerson(people, name);
-	}
 
-	public static Person findPerson(ArrayList<Person> people, String name) {
-		for(Person p : people)
-			if(p.name.equals(name)) return p;
-		return null;
-	}
 
-    public ArrayList<String> peopleArray() {
-        ArrayList<String> result = new ArrayList<String>();
-        for(Person p : people) {
-			result.add(p.toString());
-		}
-        return result;
-    }
 }
