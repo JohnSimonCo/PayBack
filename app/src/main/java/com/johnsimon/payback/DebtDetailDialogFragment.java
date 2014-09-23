@@ -17,6 +17,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 	public static Debt debt;
 	public PaidBackCallback paidBackCallback = null;
+	public EditCallback editCallback = null;
 	public AlertDialog alertDialog;
 
 	public static DebtDetailDialogFragment newInstance(Debt debt) {
@@ -68,7 +69,6 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 				} else {
 					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK);
 				}
-				debt.isPaidBack = !debt.isPaidBack;
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
 				paidBackDialogFragment.completeCallback = self;
 
@@ -95,8 +95,12 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 						switch (item.getItemId()) {
 							case R.id.detail_dialog_edit:
 
+								editCallback.onEdit(debt);
+
 								return true;
 							case R.id.detail_dialog_delete:
+
+								editCallback.onDelete(debt);
 
 								return true;
 							default:
@@ -117,11 +121,16 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	@Override
 	public void onComplete() {
 		if(paidBackCallback != null) {
-			paidBackCallback.onPaidBack();
+			paidBackCallback.onPaidBack(debt);
 		}
 	}
 
 	public interface PaidBackCallback {
-		public void onPaidBack();
+		public void onPaidBack(Debt debt);
+	}
+
+	public interface EditCallback {
+		public void onDelete(Debt debt);
+		public void onEdit(Debt debt);
 	}
 }

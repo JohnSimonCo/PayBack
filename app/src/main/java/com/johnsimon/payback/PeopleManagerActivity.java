@@ -23,6 +23,8 @@ public class PeopleManagerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+		//TODO this has a long way to go
+
 		SystemBarTintManager tintManager = new SystemBarTintManager(this);
 		tintManager.setStatusBarTintEnabled(true);
 		tintManager.setTintColor(getResources().getColor(R.color.accent_color));
