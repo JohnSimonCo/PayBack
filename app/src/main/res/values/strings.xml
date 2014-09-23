@@ -24,7 +24,8 @@
     <string name="share">Share via</string>
     <string name="gradient_content_description">Gradient</string>
     <string name="note">Note</string>
-    <string name="paid_back">Paid back!</string>
+    <string name="paid_back_exclamation">Paid back!</string>
+    <string name="paid_back">Paid back</string>
     <string name="checkbox">Checkbox!</string>
     <string name="create_fab_error">You need to enter a name and a amount</string>
     <string name="pay_back">Pay Back</string>
@@ -35,6 +36,7 @@
     <string name="welcome_currency_hint">Currency (ex. $)</string>
     <string name="welcome_using_nfc">Using NFC</string>
     <string name="welcome_using_nfc_text">Bump two devices together to sync debt details. You can either sync an entire page or a specific debt.</string>
+    <string name="welcome_got_it">Got it!</string>
 
 
     <!--About-->

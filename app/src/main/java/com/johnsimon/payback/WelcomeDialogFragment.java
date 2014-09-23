@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 public class WelcomeDialogFragment extends DialogFragment {
 
+	public AlertDialog alertDialog;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -49,13 +51,18 @@ public class WelcomeDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 //Button was disabled when no currency so we're free
                 //to continue since the user was able to press the button
+				WelcomeNfcDialogFragment welcomeNfcDialogFragment = new WelcomeNfcDialogFragment();
+				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 
+				alertDialog.cancel();
             }
         });
 
-        builder.setView(rootView);
+		builder.setView(rootView);
 
-        return builder.create();
+		alertDialog = builder.create();
+
+        return alertDialog;
     }
 
 }

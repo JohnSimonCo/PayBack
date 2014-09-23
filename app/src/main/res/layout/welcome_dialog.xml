@@ -59,11 +59,11 @@
         android:textAllCaps="true"
         android:text="@string/welcome_continue"
         android:id="@+id/welcome_continue"
-        android:layout_width="88dp"
-        android:layout_height="36dp"
+        android:layout_width="94dp"
+        android:layout_height="42dp"
         android:background="?android:attr/selectableItemBackground"
         android:textColor="@color/green_lighter"
         android:clickable="false"
-        android:textSize="14sp"/>
+        android:textSize="16sp"/>
 
 </LinearLayout>
