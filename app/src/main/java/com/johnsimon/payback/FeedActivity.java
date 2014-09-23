@@ -42,8 +42,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
         welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
 
-        getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.accent_color)));
-
 	    setContentView(R.layout.activity_feed);
 
 	    SystemBarTintManager tintManager = new SystemBarTintManager(this);
