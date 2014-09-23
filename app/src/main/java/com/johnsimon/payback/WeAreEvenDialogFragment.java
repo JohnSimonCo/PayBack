@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 public class WeAreEvenDialogFragment extends DialogFragment {
 
@@ -29,6 +31,11 @@ public class WeAreEvenDialogFragment extends DialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
 		View rootView = inflater.inflate(R.layout.we_are_even_dialog, null);
+
+		RobotoMediumTextView evenDialogTitle = (RobotoMediumTextView) rootView.findViewById(R.id.even_dialog_title);
+		Animation textAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_from_bottom);
+
+		evenDialogTitle.setAnimation(textAnim);
 
 		builder.setView(rootView);
 
