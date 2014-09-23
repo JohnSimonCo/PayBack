@@ -108,9 +108,6 @@ public class Resource {
         }
     }
 
-	public static ArrayList<Debt> getEntries(boolean getAll, Person person) {
-		return getAll ? debts : data.personalizedFeed(person);
-	}
 	public static String prefix(String prefix) {
 		return prefix + "_";
 	}

@@ -10,7 +10,7 @@ public class Debt {
 	public String amountAsString;
 	public String note;
 	public int color;
-	public boolean payedBack;
+	public boolean isPaidBack;
 
 	public Debt(Person owner, float amount, String note) {
 		this.owner = owner;
@@ -20,9 +20,9 @@ public class Debt {
 		this.color = getColor(amount);
 	}
 
-	public Debt(Person owner, float amount, String note, boolean payedBack) {
+	public Debt(Person owner, float amount, String note, boolean isPaidBack) {
 		this(owner, amount, note);
-		this.payedBack = payedBack;
+		this.isPaidBack = isPaidBack;
 	}
 
 	public static String amountString(float amount) {

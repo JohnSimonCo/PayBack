@@ -32,7 +32,9 @@ public class AppData {
 	public static int totalDebt(ArrayList<Debt> debts) {
 		int total = 0;
 		for(Debt debt : debts) {
-			total += debt.amount;
+			if(!debt.isPaidBack) {
+				total += debt.amount;
+			}
 		}
 		return total;
 	}

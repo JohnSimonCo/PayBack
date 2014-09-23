@@ -1,7 +1,6 @@
 package com.johnsimon.payback;
 
 import android.app.ActivityOptions;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,13 +14,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public final static String ARG_ALL = Resource.arg(ARG_PREFIX, "ARG_ALL");
 	public final static String ARG_PERSON_ID = Resource.arg(ARG_PREFIX, "ARG_PERSON_ID");
 
 	private ArrayList<Debt> debts;
+	private FeedListAdapter adapter;
+
+	private TextView total_debt;
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,21 +36,20 @@ public class FeedFragment extends Fragment {
 		final boolean showAll = args.getBoolean(ARG_ALL, false);
 		final Person person;
 		if(showAll) {
-			debts = Resource.getEntries(true, null);
+			debts = Resource.debts;
 			person = null;
 		} else {
 			UUID id = UUID.fromString(args.getString(ARG_PERSON_ID));
-			person =  Resource.data.findPerson(id);
-			debts = Resource.getEntries(false, person);
+			person = Resource.data.findPerson(id);
+			debts = Resource.data.personalizedFeed(person);
 		}
 
-		TextView total_debt = (TextView) headerView.findViewById(R.id.total_debt);
-		int debt = AppData.totalDebt(debts);
+		total_debt = (TextView) headerView.findViewById(R.id.total_debt);
 
-		String totalString = Debt.totalString(debt, getResources().getString(R.string.even));
-		total_debt.setText(totalString);
+		displayTotalDebt();
 
-        listView.setAdapter(new FeedListAdapter(getActivity(), debts));
+		adapter = new FeedListAdapter(getActivity(), debts);
+        listView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
         fab.setColor(getResources().getColor(R.color.accent_color));
@@ -71,18 +72,20 @@ public class FeedFragment extends Fragment {
         listView.addHeaderView(headerView, null, false);
         listView.setEmptyView(inflater.inflate(R.layout.list_empty_view, null));
 
+		final FeedFragment self = this;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DialogFragment newFragment = DebtDetailDialogFragment.newInstance(debts.get(position - listView.getHeaderViewsCount()));
-                newFragment.show(getFragmentManager().beginTransaction(), "dialog");
+				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(debts.get(position - listView.getHeaderViewsCount()));
+                dialog.show(getFragmentManager().beginTransaction(), "dialog");
+				dialog.paidBackCallback = self;
             }
         });
 
 		return rootView;
 	}
 
-	public static FeedFragment newInstance(NavigationDrawerItemFeed item) {
+	public static FeedFragment newInstance(NavigationDrawerItem item) {
 		FeedFragment fragment = new FeedFragment();
 		Bundle args = new Bundle();
 
@@ -95,4 +98,15 @@ public class FeedFragment extends Fragment {
 		return fragment;
 	}
 
+	@Override
+	public void onPaidBack() {
+		adapter.notifyDataSetChanged();
+		displayTotalDebt();
+	}
+
+	public void displayTotalDebt() {
+		int debt = AppData.totalDebt(debts);
+
+		total_debt.setText(Debt.totalString(debt, getResources().getString(R.string.even)));
+	}
 }

@@ -13,8 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
-	private final static NavigationDrawerItemFeed allItem = new NavigationDrawerItemFeed();
-	private final static NavigationDrawerItem settingsItem = new NavigationDrawerItem(NavigationDrawerItem.Type.Settings);
+	private final static NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
 	private final ArrayList<NavigationDrawerItem> items = new ArrayList<NavigationDrawerItem>();
 
 	private final Activity context;
@@ -24,7 +23,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		items.add(allItem);
 		for(Person person : people) {
-			items.add(new NavigationDrawerItemFeed(person.toString(), person.id, null));
+			items.add(new NavigationDrawerItem(person.toString(), person.id, null));
 		}
 
 	}
@@ -36,7 +35,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	@Override
 	public NavigationDrawerItem getItem(int i) {
-		return i >= items.size() ? settingsItem : items.get(i);
+		return items.get(i);
 	}
 
 	@Override
@@ -47,7 +46,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
-		NavigationDrawerItemFeed item = (NavigationDrawerItemFeed) items.get(i);
+		NavigationDrawerItem item = getItem(i);
 		boolean isSelected = i == NavigationDrawerFragment.mCurrentSelectedPosition;
 
 		if(item == allItem) {

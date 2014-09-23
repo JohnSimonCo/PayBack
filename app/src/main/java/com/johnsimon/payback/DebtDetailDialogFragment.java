@@ -3,19 +3,21 @@ package com.johnsimon.payback;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
-public class DebtDetailDialogFragment extends DialogFragment {
+public class DebtDetailDialogFragment extends DialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
-    public static Debt debt;
+	public static Debt debt;
+	public PaidBackCallback paidBackCallback = null;
 	public AlertDialog alertDialog;
 
-	public static DebtDetailDialogFragment newInstance(Debt _debt) {
-        debt = _debt;
+	public static DebtDetailDialogFragment newInstance(Debt debt) {
+		DebtDetailDialogFragment.debt = debt;
         return new DebtDetailDialogFragment();
     }
 
@@ -46,13 +48,15 @@ public class DebtDetailDialogFragment extends DialogFragment {
             }
         });
 
+		final DebtDetailDialogFragment self = this;
 		dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				debt.isPaidBack = !debt.isPaidBack;
 
-				PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(Math.round(debt.amount));
+				PaidBackDialogFragment paidBackDialogFragment = new PaidBackDialogFragment();
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
-				debt.payedBack = !debt.payedBack;
+				paidBackDialogFragment.completeCallback = self;
 
 				alertDialog.cancel();
 			}
@@ -71,4 +75,14 @@ public class DebtDetailDialogFragment extends DialogFragment {
         return alertDialog;
     }
 
+	@Override
+	public void onComplete() {
+		if(paidBackCallback != null) {
+			paidBackCallback.onPaidBack();
+		}
+	}
+
+	public interface PaidBackCallback {
+		public void onPaidBack();
+	}
 }

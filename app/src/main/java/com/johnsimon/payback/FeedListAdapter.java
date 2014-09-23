@@ -32,8 +32,9 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 					(TextView) convertView.findViewById(R.id.list_item_person),
 					(TextView) convertView.findViewById(R.id.list_item_amount),
 					(TextView) convertView.findViewById(R.id.list_item_note),
-                    (ImageView) convertView.findViewById(R.id.list_item_avatar)
-			);
+                    (ImageView) convertView.findViewById(R.id.list_item_avatar),
+					(TextView) convertView.findViewById(R.id.list_item_paid_back)
+					);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -53,6 +54,9 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
         }
 
+		//@TODO Fix this stupid fgt with an animation.
+		holder.paidBack.setVisibility(debt.isPaidBack ? View.VISIBLE : View.GONE);
+
 		return convertView;
 	}
 
@@ -60,13 +64,15 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		public TextView person;
 		public TextView amount;
 		public TextView note;
-        public ImageView avatar;
+		public ImageView avatar;
+		public TextView paidBack;
 
-		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar) {
+		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar, TextView paidBack) {
 			this.person = person;
 			this.amount = amount;
 			this.note = note;
-            this.avatar = avatar;
+			this.avatar = avatar;
+			this.paidBack = paidBack;
 		}
 	}
 }

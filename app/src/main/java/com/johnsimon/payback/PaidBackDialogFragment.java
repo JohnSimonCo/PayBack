@@ -11,12 +11,7 @@ import android.widget.ImageView;
 
 public class PaidBackDialogFragment extends DialogFragment {
 
-	public static int amount;
-
-	public static PaidBackDialogFragment newInstance(int _amount) {
-		amount = _amount;
-		return new PaidBackDialogFragment();
-	}
+	public CompleteCallback completeCallback;
 
     @Override
     public void onStart() {
@@ -40,18 +35,23 @@ public class PaidBackDialogFragment extends DialogFragment {
 
 		builder.setView(rootView);
 
-		final AlertDialog ad = builder.create();
+		final AlertDialog alertDialog = builder.create();
 
 		final Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				ad.cancel();
+				completeCallback.onComplete();
+				alertDialog.cancel();
 			}
 		}, 1000);
 
 
-		return ad;
+		return alertDialog;
+	}
+
+	public interface CompleteCallback {
+		public void onComplete();
 	}
 
 }

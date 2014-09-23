@@ -61,15 +61,10 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
-		if(item instanceof NavigationDrawerItemFeed) {
-			// update the main content by replacing fragments
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, FeedFragment.newInstance((NavigationDrawerItemFeed)item))
-					.commit();
-		} else if(item.type == NavigationDrawerItem.Type.Settings) {
-			startActivity(new Intent(this, SettingsActivity.class));
-		}
-
+		// update the main content by replacing fragments
+		getFragmentManager().beginTransaction()
+				.replace(R.id.container, FeedFragment.newInstance(item))
+				.commit();
     }
 
     public void onSectionAttached(int index) {

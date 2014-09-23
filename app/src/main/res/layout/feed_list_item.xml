@@ -97,7 +97,7 @@
 
     <com.johnsimon.payback.RobotoMediumTextView
         android:visibility="gone"
-        android:id="@+id/feed_list_item_paid_back"
+        android:id="@+id/list_item_paid_back"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:textSize="20sp"

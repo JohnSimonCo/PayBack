@@ -10,16 +10,16 @@ public class DebtSerializable {
 	public UUID ownerId;
 	public float amount;
 	public String note;
-	public boolean payedBack;
+	public boolean isPaidBack;
 
 	public DebtSerializable(Debt debt) {
 		this.ownerId = debt.owner.id;
 		this.amount = debt.amount;
 		this.note = debt.note;
-		this.payedBack = debt.payedBack;
+		this.isPaidBack = debt.isPaidBack;
 	}
 
 	public Debt extract(ArrayList<Person> people) {
-		return new Debt(AppData.findPerson(people, ownerId), amount, note, payedBack);
+		return new Debt(AppData.findPerson(people, ownerId), amount, note, isPaidBack);
 	}
 }
