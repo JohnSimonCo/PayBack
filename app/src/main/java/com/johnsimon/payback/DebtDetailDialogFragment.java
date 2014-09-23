@@ -52,6 +52,7 @@ public class DebtDetailDialogFragment extends DialogFragment {
 
 				PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(Math.round(debt.amount));
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
+				debt.payedBack = !debt.payedBack;
 
 				alertDialog.cancel();
 			}

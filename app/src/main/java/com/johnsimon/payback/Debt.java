@@ -10,6 +10,7 @@ public class Debt {
 	public String amountAsString;
 	public String note;
 	public int color;
+	public boolean payedBack;
 
 	public Debt(Person owner, float amount, String note) {
 		this.owner = owner;
@@ -19,9 +20,14 @@ public class Debt {
 		this.color = getColor(amount);
 	}
 
+	public Debt(Person owner, float amount, String note, boolean payedBack) {
+		this(owner, amount, note);
+		this.payedBack = payedBack;
+	}
+
 	public static String amountString(float amount) {
 		return Float.toString(Math.abs(amount))
-				.replaceAll("(\\.\\d)\\d+$", "$1")
+//				.replaceAll("(\\.\\d)\\d+$", "$1")
 				.replaceAll("\\.0$", "")
 				+ " " + Resource.getCurrency();
 	}
