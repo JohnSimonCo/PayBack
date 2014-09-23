@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback {
+public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public final static String ARG_ALL = Resource.arg(ARG_PREFIX, "ARG_ALL");
@@ -99,15 +99,30 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 	}
 
 	@Override
-	public void onPaidBack() {
+	public void onPaidBack(Debt debt) {
+		debt.isPaidBack = !debt.isPaidBack;
+		Resource.commit();
 		adapter.notifyDataSetChanged();
 		displayTotalDebt();
-		Resource.commit();
 	}
 
 	public void displayTotalDebt() {
 		int debt = AppData.totalDebt(debts);
 
 		total_debt.setText(Debt.totalString(debt, getResources().getString(R.string.even)));
+	}
+
+	@Override
+	public void onDelete(Debt debt) {
+		Resource.debts.remove(debt);
+		Resource.commit();
+		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onEdit(Debt debt) {
+		//TODO make this nigga work for me like a slave
+		Intent intent = new Intent(getActivity(), CreateDebtActivity.class);
+		startActivity(intent);
 	}
 }

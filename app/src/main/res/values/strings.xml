@@ -38,9 +38,13 @@
     <string name="welcome_using_nfc_text">Bump two devices together to sync debt details. You can either sync an entire page or a specific debt.</string>
     <string name="welcome_got_it">Got it!</string>
     <string name="cash">Cash</string>
+    <string name="manage_people">Manage people</string>
+    <string name="undid">Undid!</string>
+    <string name="undo_pay_back">Undo Pay Back</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
-
-    <!--About-->
+    <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
     <string name="author_johnsimon">John Rapp Farnes\nSimon Halvdansson</string>
     <string name="lib_rad">RoundedAvatarDrawable</string>
@@ -54,7 +58,7 @@
     <string name="lib_afl">AndroidFloatLabel</string>
     <string name="author_afl">weddingparty</string>
 
-    <!--Preferences-->
+    <!-- Preferences -->
     <string name="pref_settings">Settings</string>
     <string name="pref_general">General</string>
     <string name="currency">Currency</string>
@@ -65,12 +69,14 @@
         <item>Euro (£)</item>
         <item>Vodka (L)</item>
     </string-array>
-
     <string-array name="currencyReturn">
         <item>Kr</item>
         <item>$</item>
         <item>£</item>
         <item>L</item>
     </string-array>
+
+    <string name="title_activity_people_manager">People</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

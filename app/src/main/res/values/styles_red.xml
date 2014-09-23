@@ -44,6 +44,7 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_red</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_red</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Red</item>
+
     </style>
 
     <style name="ActionBar.Transparent.Red" parent="@android:style/Widget.Holo.ActionBar">
@@ -81,6 +82,9 @@
     <style name="Theme.Red.Widget" parent="@android:style/Theme.Holo">
         <item name="android:popupMenuStyle">@style/PopupMenu.Red</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Red</item>
+
+        <item name="android:listChoiceIndicatorSingle">@drawable/red_radiobutton_btn_radio_holo_light</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonred_radiobutton</item>
     </style>
 
 </resources>
