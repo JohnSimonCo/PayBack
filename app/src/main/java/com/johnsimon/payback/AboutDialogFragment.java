@@ -13,7 +13,6 @@ public class AboutDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Build the dialog and set up the button click handlers
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View rootView = inflater.inflate(R.layout.about_dialog_fragment, null);
@@ -21,7 +20,6 @@ public class AboutDialogFragment extends DialogFragment {
         builder.setView(rootView);
 
         final AlertDialog ad = builder.create();
-
 
         return ad;
     }

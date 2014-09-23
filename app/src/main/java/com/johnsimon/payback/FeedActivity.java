@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.PopupMenu;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -94,11 +95,19 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
+
+	/*  This method is called by /res/navigation_drawer_list_footer.xml
+		to either navigate to settings or show the "About screen". New
+		items can be added here by adding the same onClick=""
+	 */
+	public void navigationDraweFooterClick(View v) {
+		if (v.getId() == R.id.navigation_drawer_footer_settings) {
+			startActivity(new Intent(this, SettingsActivity.class));
+		} else if (v.getId() == R.id.navigation_drawer_footer_about) {
+			AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+			aboutDialogFragment.show(getFragmentManager(), "about_dialog");
+		}
+	}
 }

@@ -22,7 +22,7 @@
             <com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView
                 android:paddingLeft="@dimen/create_start_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textColorHint="@color/gray_onred_very_light"
+                android:textColorHint="@color/gray_oncolor_very_light"
                 android:textColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,8 +30,8 @@
                 floatlabel:fitScreenWidth="full"
                 floatlabel:hint="@string/person_hint"
                 floatlabel:textSize="22dp"
-                floatlabel:textColorHintFocused="@color/gray_onred_very_light"
-                floatlabel:textColorHintUnFocused="@color/gray_onred_very_light"   />
+                floatlabel:textColorHintFocused="@color/gray_oncolor_very_light"
+                floatlabel:textColorHintUnFocused="@color/gray_oncolor_very_light"   />
 
             <RelativeLayout
                 android:paddingLeft="@dimen/create_start_margin"
@@ -69,16 +69,16 @@
                 <com.micromobs.android.floatlabel.FloatLabelEditText
                     android:id="@+id/create_float_label_amount"
                     android:layout_toRightOf="@id/create_radio"
-                    android:textColorHint="@color/gray_onred_very_light"
+                    android:textColorHint="@color/gray_oncolor_very_light"
                     android:textColor="@android:color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     floatlabel:fitScreenWidth="full"
                     floatlabel:hint="@string/amount"
-                    floatlabel:textSize="20dp"
-                    floatlabel:textColorHintFocused="@color/gray_onred_very_light"
-                    floatlabel:textColorHintUnFocused="@color/gray_onred_very_light"   />
+                    floatlabel:textSize="18dp"
+                    floatlabel:textColorHintFocused="@color/gray_oncolor_very_light"
+                    floatlabel:textColorHintUnFocused="@color/gray_oncolor_very_light"   />
 
             </RelativeLayout>
 

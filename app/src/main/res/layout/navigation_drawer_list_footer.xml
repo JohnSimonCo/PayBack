@@ -4,34 +4,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <Button
-            android:drawableLeft="@drawable/ic_settings_cog"
-            android:drawableStart="@drawable/ic_settings_cog"
-            android:drawablePadding="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    <ImageView
-        android:scaleType="fitXY"
-        android:layout_marginLeft="16dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_settings_cog"
-        android:layout_width="32dp"
-        android:layout_height="32dp" />
-
-    <TextView
-        android:fontFamily="sans-serif-light"
-        android:paddingLeft="8dp"
-        android:paddingRight="16dp"
-        android:layout_gravity="center_vertical"
-        android:textAllCaps="true"
+    <Button
+        android:id="@+id/navigation_drawer_footer_settings"
+        style="@style/navigation_drawer_footer"
+        android:onClick="navigationDraweFooterClick"
+        android:drawableLeft="@drawable/ic_settings_cog"
+        android:drawableStart="@drawable/ic_settings_cog"
         android:text="@string/action_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    />
+
+    <View
+        android:background="@color/gray_oncolor_very_light"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <Button
+        android:id="@+id/navigation_drawer_footer_about"
+        style="@style/navigation_drawer_footer"
+        android:onClick="navigationDraweFooterClick"
+        android:drawableLeft="@drawable/ic_info_outline"
+        android:drawableStart="@drawable/ic_info_outline"
+        android:text="@string/about_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    />
 
 </LinearLayout>
