@@ -7,8 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 public class DebtDetailDialogFragment extends DialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
@@ -36,6 +39,11 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
         dialog_custom_confirm.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
         dialog_custom_cancel.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
 
+		if (debt.isPaidBack) {
+			dialog_custom_confirm.setText(R.string.undo_pay_back);
+			dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
+		}
+
         //This is the share button
         dialog_custom_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,9 +60,15 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 		dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				debt.isPaidBack = !debt.isPaidBack;
 
-				PaidBackDialogFragment paidBackDialogFragment = new PaidBackDialogFragment();
+				PaidBackDialogFragment paidBackDialogFragment;
+
+				if (debt.isPaidBack) {
+					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK);
+				} else {
+					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK);
+				}
+				debt.isPaidBack = !debt.isPaidBack;
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
 				paidBackDialogFragment.completeCallback = self;
 
@@ -68,6 +82,31 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
         dialog_custom_title.setText(debt.owner.name);
         dialog_custom_content.setText(debt.note);
 
+		ImageButton detailDialogOverflow = (ImageButton) rootView.findViewById(R.id.detail_dialog_overflow);
+		detailDialogOverflow.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+				popupMenu.inflate(R.menu.detail_dialog_popup);
+				popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+
+						switch (item.getItemId()) {
+							case R.id.detail_dialog_edit:
+
+								return true;
+							case R.id.detail_dialog_delete:
+
+								return true;
+							default:
+								return false;
+						}
+					}
+				});
+				popupMenu.show();
+			}
+		});
 
         builder.setView(rootView);
 

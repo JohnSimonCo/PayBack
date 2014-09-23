@@ -100,12 +100,22 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		to either navigate to settings or show the "About screen". New
 		items can be added here by adding the same onClick=""
 	 */
-	public void navigationDraweFooterClick(View v) {
-		if (v.getId() == R.id.navigation_drawer_footer_settings) {
-			startActivity(new Intent(this, SettingsActivity.class));
-		} else if (v.getId() == R.id.navigation_drawer_footer_about) {
-			AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-			aboutDialogFragment.show(getFragmentManager(), "about_dialog");
+	public void navigationDrawerFooterClick(View v) {
+
+		switch (v.getId()) {
+			case R.id.navigation_drawer_footer_people:
+				startActivity(new Intent(this, PeopleManagerActivity.class));
+				break;
+			case R.id.navigation_drawer_footer_settings:
+				startActivity(new Intent(this, SettingsActivity.class));
+				break;
+			case R.id.navigation_drawer_footer_about:
+				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+				aboutDialogFragment.show(getFragmentManager(), "about_dialog");
+				break;
+
+			default:
+				break;
 		}
 	}
 }

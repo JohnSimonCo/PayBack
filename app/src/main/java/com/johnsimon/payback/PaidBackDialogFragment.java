@@ -5,12 +5,20 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 public class PaidBackDialogFragment extends DialogFragment {
+
+	public final static int PAY_BACK = 0;
+	public final static int UNDO_PAY_BACK = 1;
+
+	private static boolean payBack = false;
+
+	public static PaidBackDialogFragment newInstance(int flag) {
+		payBack = flag == PAY_BACK;
+		return new PaidBackDialogFragment();
+	}
 
 	public CompleteCallback completeCallback;
 
@@ -32,7 +40,12 @@ public class PaidBackDialogFragment extends DialogFragment {
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
-		View rootView = inflater.inflate(R.layout.paid_back_dialog, null);
+		View rootView;
+		if (payBack) {
+			rootView = inflater.inflate(R.layout.paid_back_dialog, null);
+		} else {
+			rootView = inflater.inflate(R.layout.paid_back_dialog_reverse, null);
+		}
 
 		builder.setView(rootView);
 
