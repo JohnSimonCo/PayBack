@@ -98,7 +98,6 @@
     <com.johnsimon.payback.RobotoMediumTextView
         android:visibility="gone"
         android:id="@+id/list_item_paid_back"
-        android:paddingTop="4dp"
         android:paddingBottom="12dp"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal"

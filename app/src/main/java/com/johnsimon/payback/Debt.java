@@ -5,6 +5,10 @@ public class Debt {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
+	private final static int NEUTRAL_COLOR_DISABLED = R.color.gray_text_very_light;
+	private final static int POSITIVE_COLOR_DISABLED = R.color.green_disabled;
+	private final static int NEGATIVE_COLOR_DISABLED = R.color.red_disabled;
+
 	public Person owner;
 	public float amount;
 	public String amountAsString;
@@ -31,8 +35,13 @@ public class Debt {
 				.replaceAll("\\.0$", "")
 				+ " " + Resource.getCurrency();
 	}
+
 	public static int getColor(float amount) {
 		return amount == 0 ? NEUTRAL_COLOR : amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
+	}
+
+	public static int getDisabledColor(float amount) {
+		return amount == 0 ? NEUTRAL_COLOR : amount > 0 ? POSITIVE_COLOR_DISABLED : NEGATIVE_COLOR_DISABLED;
 	}
 
 	public static String totalString(float amount, String even) {

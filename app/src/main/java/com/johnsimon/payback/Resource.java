@@ -2,6 +2,10 @@ package com.johnsimon.payback;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -151,4 +155,64 @@ public class Resource {
 
         return currencys;
     }
+
+	public static void expand(final View v) {
+		expand(v, 3);
+	}
+
+	public static void expand(final View v, int msPerDp) {
+		v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		final int targtetHeight = v.getMeasuredHeight();
+
+		v.getLayoutParams().height = 0;
+		v.setVisibility(View.VISIBLE);
+		Animation a = new Animation()
+		{
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				v.getLayoutParams().height = interpolatedTime == 1
+						? LinearLayout.LayoutParams.WRAP_CONTENT
+						: (int)(targtetHeight * interpolatedTime);
+				v.requestLayout();
+			}
+
+			@Override
+			public boolean willChangeBounds() {
+				return true;
+			}
+		};
+
+		// 0.333dp/ms
+		a.setDuration((int)(targtetHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
+		v.startAnimation(a);
+	}
+	public static void collapse(final View v) {
+		collapse(v, 3);
+	}
+
+	public static void collapse(final View v, int msPerDp) {
+		final int initialHeight = v.getMeasuredHeight();
+
+		Animation a = new Animation()
+		{
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				if(interpolatedTime == 1){
+					v.setVisibility(View.GONE);
+				}else{
+					v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+					v.requestLayout();
+				}
+			}
+
+			@Override
+			public boolean willChangeBounds() {
+				return true;
+			}
+		};
+
+		// 0.333dp/ms
+		a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
+		v.startAnimation(a);
+	}
 }

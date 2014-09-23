@@ -54,8 +54,25 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
         }
 
-		//@TODO Fix this stupid fgt with an animation.
-		holder.paidBack.setVisibility(debt.isPaidBack ? View.VISIBLE : View.GONE);
+		if (debt.isPaidBack) {
+			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));
+			holder.note.setTextColor(context.getResources().getColor(R.color.gray_oncolor_light));
+			holder.amount.setTextColor(context.getResources().getColor(Debt.getDisabledColor(debt.amount)));
+			holder.avatar.setAlpha(0.5f);
+
+			if (holder.paidBack.getVisibility() == View.GONE) {
+				Resource.expand(holder.paidBack);
+			}
+		} else {
+			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_normal));
+			holder.note.setTextColor(context.getResources().getColor(R.color.gray_text_light));
+			holder.amount.setTextColor(context.getResources().getColor(Debt.getColor(debt.amount)));
+			holder.avatar.setAlpha(1f);
+
+			if (holder.paidBack.getVisibility() == View.VISIBLE) {
+				Resource.collapse(holder.paidBack);
+			}
+		}
 
 		return convertView;
 	}

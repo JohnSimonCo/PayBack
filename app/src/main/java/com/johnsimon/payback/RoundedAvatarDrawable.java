@@ -98,6 +98,4 @@ public class RoundedAvatarDrawable extends Drawable {
     public Bitmap getBitmap() {
         return mBitmap;
     }
-
-    // TODO allow set and use target density, mutate, constant state, changing configurations, etc.
 }
