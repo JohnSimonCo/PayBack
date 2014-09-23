@@ -14,7 +14,7 @@ public class Debt {
 	public String amountAsString;
 	public String note;
 	public int color;
-	public boolean isPaidBack;
+	public boolean isPaidBack = false;
 
 	public Debt(Person owner, float amount, String note) {
 		this.owner = owner;
