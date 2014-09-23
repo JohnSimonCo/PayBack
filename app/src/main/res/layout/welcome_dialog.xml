@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:floatlabel="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -44,13 +46,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/welcome_currency_edit"
+
+    <com.micromobs.android.floatlabel.FloatLabelEditText
+        android:id="@+id/welcome_currency_edit_float"
+        android:textColorHint="@color/gray_text_light"
+        android:textColor="@color/gray_text_normal"
         android:inputType="textCapWords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:hint="@string/welcome_currency_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+        floatlabel:hint="@string/welcome_currency_hint"
+        floatlabel:textSize="17sp"
+        floatlabel:textColorHintFocused="@color/gray_text_light"
+        floatlabel:textColorHintUnFocused="@color/gray_text_light"    />
 
     <Button
         android:layout_marginRight="@dimen/activity_horizontal_margin"

@@ -3,6 +3,7 @@
 
     <color name="red">#C83339</color>
     <color name="green">#8db69e</color>
+    <color name="green_strong">#4c775e</color>
     <color name="red_disabled">#e9adaf</color>
     <color name="green_disabled">#bad3c4</color>
 

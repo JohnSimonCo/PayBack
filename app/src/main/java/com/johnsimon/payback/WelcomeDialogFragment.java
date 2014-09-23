@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.micromobs.android.floatlabel.FloatLabelEditText;
+
 import java.util.ArrayList;
 
 public class WelcomeDialogFragment extends DialogFragment {
@@ -28,14 +30,16 @@ public class WelcomeDialogFragment extends DialogFragment {
         final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
         welcome_continue.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "robotomedium.ttf"));
 
-        EditText currencyEditText = (EditText) rootView.findViewById(R.id.welcome_currency_edit);
+        FloatLabelEditText currencyEditTextFloat = (FloatLabelEditText) rootView.findViewById(R.id.welcome_currency_edit_float);
+		EditText currencyEditText = currencyEditTextFloat.getEditText();
+		currencyEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
         new RequiredValidator(new EditText[] {
                 currencyEditText
         }, new ValidatorListener() {
             @Override
             public void onValid() {
-                welcome_continue.setTextColor(getResources().getColor(R.color.green));
+                welcome_continue.setTextColor(getResources().getColor(R.color.green_strong));
                 welcome_continue.setEnabled(true);
 				welcome_continue.setClickable(true);
             }
