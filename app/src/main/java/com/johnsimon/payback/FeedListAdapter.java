@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FeedListAdapter extends ArrayAdapter<Debt> {
 	private final Activity context;

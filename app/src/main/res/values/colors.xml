@@ -6,9 +6,6 @@
     <color name="red_disabled">#e9adaf</color>
     <color name="green_disabled">#bad3c4</color>
 
-
-    <color name="green_lighter">#9dc0ab</color>
-
     <color name="gray_text_dark">#181818</color>
     <color name="gray_text_normal">#333333</color>
     <color name="gray_text_light">#555555</color>

@@ -18,6 +18,9 @@ public class WelcomeNfcDialogFragment extends DialogFragment {
 
 		View rootView = inflater.inflate(R.layout.welcome_dialog_nfc, null);
 
+		Button welcome_got_it = (Button) rootView.findViewById(R.id.welcome_got_it);
+		welcome_got_it.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "robotomedium.ttf"));
+
 		builder.setView(rootView);
 
 		return builder.create();

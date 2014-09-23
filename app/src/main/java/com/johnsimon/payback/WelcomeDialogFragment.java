@@ -37,13 +37,15 @@ public class WelcomeDialogFragment extends DialogFragment {
             public void onValid() {
                 welcome_continue.setTextColor(getResources().getColor(R.color.green));
                 welcome_continue.setEnabled(true);
+				welcome_continue.setClickable(true);
             }
 
             @Override
             public void onInvalid() {
-                welcome_continue.setTextColor(getResources().getColor(R.color.green_lighter));
+                welcome_continue.setTextColor(getResources().getColor(R.color.green_disabled));
                 welcome_continue.setEnabled(false);
-            }
+				welcome_continue.setClickable(false);
+			}
         });
 
         welcome_continue.setOnClickListener(new View.OnClickListener() {
