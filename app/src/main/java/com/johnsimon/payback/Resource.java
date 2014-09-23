@@ -145,7 +145,7 @@ public class Resource {
 				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
 				//If it's not an email adress
-				if(!name.matches(".*@.*\\..*")) {
+				if(name != null && !name.matches(".*@.*\\..*")) {
 					//Make sure it's unique
 					boolean unique = true;
 					for (Contact contact : contacts) {
