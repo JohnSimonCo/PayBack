@@ -14,8 +14,6 @@
     <string name="balance">Balance:</string>
     <string name="title_activity_setup">Pay Back</string>
     <string name="welcome">Welcome to Pay Back!</string>
-    <string name="welcome_full_text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, illum, totam. Aliquam animi consectetur delectus dicta est et excepturi fugit iusto maxime nesciunt obcaecati possimus rerum saepe sunt suscipit, tempora!</string>
-    <string name="welcome_end_text">Thanks!\nSimon Halvdansson and John Rapp Farnes</string>
     <string name="title_activity_create_debt">Create new debt</string>
     <string name="list_empty_text">No debts yet :)</string>
     <string name="even">We\'re even!</string>
@@ -33,6 +31,10 @@
     <string name="send">Send</string>
     <string name="about_title">About</string>
     <string name="filter">Filter</string>
+    <string name="welcome_continue">Continue</string>
+    <string name="welcome_currency_hint">Currency (ex. $)</string>
+    <string name="welcome_using_nfc">Using NFC</string>
+    <string name="welcome_using_nfc_text">Bump two devices together to sync debt details. You can either sync an entire page or a specific debt.</string>
 
 
     <!--About-->

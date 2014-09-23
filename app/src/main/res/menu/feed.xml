@@ -6,6 +6,23 @@
         android:id="@+id/menu_filter"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_filter"
-        android:title="@string/filter"  />
+        android:title="@string/filter"  >
+
+        <menu>
+            <group android:checkableBehavior="single" >
+                <item
+                    android:id="@+id/menu_filter_all"
+                    android:title="Option 1"
+                    android:checked="true"/>
+                <item
+                    android:id="@+id/menu_filter_pending"
+                    android:title="Option 2"/>
+                <item
+                    android:id="@+id/menu_filter_finished"
+                    android:title="Option 3"/>
+            </group>
+        </menu>
+
+    </item>
 
 </menu>

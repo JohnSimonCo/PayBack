@@ -33,11 +33,6 @@
 
         </activity>
         <activity
-            android:icon="@null"
-            android:theme="@style/AppTheme_NoActionBarBorder"
-            android:name=".SetupActivity" >
-        </activity>
-        <activity
             android:name=".CreateDebtActivity"
             android:icon="@drawable/ic_actionbar_left"
             android:label="@string/title_activity_create_debt"

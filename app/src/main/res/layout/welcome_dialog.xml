@@ -2,7 +2,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/green"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -39,27 +38,32 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="16dp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/gray_text_light"
         android:textSize="18sp"
         android:text="Before we get started, enter the currency you wish to use. This can be changed later in settings."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/welcome_currency_edit"
+        android:inputType="textCapWords"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:hint="@string/welcome_currency_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/cur_spinner"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"    />
-
-        <EditText
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    <Button
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_gravity="end"
+        android:textAllCaps="true"
+        android:text="@string/welcome_continue"
+        android:id="@+id/welcome_continue"
+        android:layout_width="88dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/green_lighter"
+        android:clickable="false"
+        android:textSize="14sp"/>
 
 </LinearLayout>
