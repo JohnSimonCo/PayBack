@@ -43,6 +43,12 @@
     <string name="undo_pay_back">Undo Pay Back</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="ioweyou">I owe you</string>
+    <string name="youoweme">You owe me</string>
+    <string name="debt_for">for</string>
+    <string name="bytime">By time</string>
+    <string name="byamount">By amount</string>
+    <string name="alphabetical">By alphabetical</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

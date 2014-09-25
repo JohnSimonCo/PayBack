@@ -80,6 +80,8 @@
 
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Red.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:itemTextAppearance">@style/black_text</item>
+
         <item name="android:popupMenuStyle">@style/PopupMenu.Red</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Red</item>
 

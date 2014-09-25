@@ -1,7 +1,5 @@
 <PreferenceScreen
-    android:fitsSystemWindows="@bool/kitkat"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
     <PreferenceCategory
         android:title="@string/pref_general"  >
 
@@ -12,5 +10,4 @@
             android:key="pref_currency" />
 
     </PreferenceCategory>
-
 </PreferenceScreen>

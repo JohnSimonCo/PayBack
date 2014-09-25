@@ -43,26 +43,26 @@
 
                 <RadioGroup
                     android:id="@+id/create_radio"
-                    android:layout_marginRight="32dp"
+                    android:layout_marginRight="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <RadioButton
                         android:id="@+id/create_radio_they_owe"
-                        android:textSize="17dp"
+                        android:textSize="19dp"
                         android:checked="true"
                         android:textColor="@android:color/white"
                         android:text="@string/they_owe"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="36dp" />
 
                     <RadioButton
                         android:id="@+id/create_radio_i_owe"
-                        android:textSize="17dp"
+                        android:textSize="19dp"
                         android:textColor="@android:color/white"
                         android:text="@string/i_owe"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="36dp" />
 
                 </RadioGroup>
 
@@ -92,7 +92,7 @@
             android:layout_height="10dp" />
 
         <com.johnsimon.payback.FloatingActionButton
-            android:layout_marginTop="166dp"
+            android:layout_marginTop="170dp"
             android:layout_alignParentRight="true"
             android:id="@+id/create_fab"
             android:layout_marginEnd="@dimen/fab_create_right_margin"
