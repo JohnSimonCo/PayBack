@@ -47,15 +47,17 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		}
 
 		Debt debt = list.get(position);
+		Person owner = debt.owner;
 		Resources resources = context.getResources();
 
-		holder.person.setText(debt.owner.name);
+		holder.person.setText(owner.name);
 		holder.note.setText(debt.note == null ? resources.getString(R.string.cash) : debt.note);
 		holder.amount.setText(debt.amountAsString);
 		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
-        boolean hasAvatar = false;
-        if (hasAvatar) {
+		if(owner.color != null) {
+			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.name.substring(0, 1), owner.color).toBitmap(params.width, params.height)));
+
             //Set avatar as image like some stupid faggot
         } else {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));

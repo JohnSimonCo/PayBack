@@ -15,6 +15,8 @@ import android.widget.PopupMenu;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+//public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
+//http://developer.android.com/reference/android/text/format/DateUtils.html#getRelativeTimeSpanString%28long%29
 public class FeedActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
