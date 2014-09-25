@@ -1,5 +1,8 @@
 package com.johnsimon.payback;
 
+import android.content.Context;
+import android.text.TextUtils;
+
 public class Debt {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
@@ -77,4 +80,24 @@ public class Debt {
 		this.amount = amount;
 		this.note = note;
 	}
+
+	//Method to get a string usable for sharing.
+	public String getShareString(Context ctx) {
+		String shareText;
+
+		if (this.amount < 0) {
+			shareText = ctx.getString(R.string.ioweyou);
+		} else {
+			shareText = ctx.getString(R.string.youoweme);
+		}
+
+		shareText = shareText + " " + this.amountAsString;
+		if (!TextUtils.isEmpty(shareText)) {
+			shareText = shareText + " " + ctx.getString(R.string.debt_for) + " " + this.note;
+		}
+
+		return shareText;
+	}
+
+
 }

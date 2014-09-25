@@ -51,22 +51,9 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
             @Override
             public void onClick(View v) {
 
-				String shareText;
-
-				if (debt.amount < 0) {
-					shareText = getString(R.string.ioweyou);
-				} else {
-					shareText = getString(R.string.youoweme);
-				}
-
-				shareText = shareText + " " + debt.amountAsString;
-				if (!TextUtils.isEmpty(shareText)) {
-					shareText = shareText + " " + getString(R.string.debt_for) + " " + debt.note;
-				}
-
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity()));
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.share)));
             }
