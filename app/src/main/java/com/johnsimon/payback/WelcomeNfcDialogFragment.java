@@ -11,6 +11,8 @@ import android.widget.Button;
 
 public class WelcomeNfcDialogFragment extends DialogFragment {
 
+	private AlertDialog alertDialog;
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -21,9 +23,18 @@ public class WelcomeNfcDialogFragment extends DialogFragment {
 		Button welcome_got_it = (Button) rootView.findViewById(R.id.welcome_got_it);
 		welcome_got_it.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "robotomedium.ttf"));
 
+		welcome_got_it.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				alertDialog.cancel();
+			}
+		});
+
 		builder.setView(rootView);
 
-		return builder.create();
+		alertDialog = builder.create();
+
+		return alertDialog;
 	}
 
 }

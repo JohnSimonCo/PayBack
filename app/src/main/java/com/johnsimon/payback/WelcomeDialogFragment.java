@@ -58,6 +58,8 @@ public class WelcomeDialogFragment extends DialogFragment {
 		hasNfc = NfcAdapter.getDefaultAdapter(getActivity()) != null;
 
 		if (hasNfc) {
+			welcome_continue.setText(R.string.welcome_continue);
+		} else {
 			welcome_continue.setText(R.string.welcome_got_it);
 		}
 
