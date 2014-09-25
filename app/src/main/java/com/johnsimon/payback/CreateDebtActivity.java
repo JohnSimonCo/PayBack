@@ -131,7 +131,7 @@ public class CreateDebtActivity extends Activity {
 						floatLabelNameAutoCompleteTextView.getText().toString().trim(),
 						radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
 						Float.parseFloat(floatLabelAmountEditText.getText().toString()),
-							floatLabelNoteEditText.getText().toString().trim()
+						floatLabelNoteEditText.getText().toString().trim()
 					);
 
 					startActivity(new Intent(ctx, FeedActivity.class), ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());

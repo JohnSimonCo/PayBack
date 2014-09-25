@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
-import java.util.UUID;
 
 public class Resource {
 	private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";

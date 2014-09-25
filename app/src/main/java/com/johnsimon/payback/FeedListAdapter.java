@@ -71,8 +71,6 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
 			if (holder.paidBack.getVisibility() == View.GONE) {
 
-
-
 				if (animationDebt == debt) {
 					Resource.expand(holder.paidBack);
 					animationDebt = null;
