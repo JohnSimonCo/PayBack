@@ -5,13 +5,17 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
 import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
@@ -89,6 +93,42 @@ public class CreateDebtActivity extends Activity {
 			floatLabelNameAutoCompleteTextView.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
 			floatLabelAmountEditText.requestFocus();
 		}
+
+		floatLabelNameAutoCompleteTextView.setPadding(
+			Resource.getPx(8, this),
+			Resource.getPx(8, this),
+			Resource.getPx(42, this),
+			Resource.getPx(8, this)
+		);
+
+		final ImageButton clearEditText = (ImageButton) findViewById(R.id.create_clear);
+		clearEditText.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				floatLabelNameAutoCompleteTextView.setText("");
+			}
+		});
+
+		floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (TextUtils.isEmpty(s.toString())) {
+					clearEditText.setVisibility(View.GONE);
+				} else {
+					clearEditText.setVisibility(View.VISIBLE);
+				}
+			}
+		});
 
 		create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 		create_fab.setColor(getResources().getColor(android.R.color.white));

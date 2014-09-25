@@ -313,4 +313,11 @@ public class Resource {
 		return names;
 	}
 
+	//Enter size in dp, returns it in px
+	// http://stackoverflow.com/questions/5255184/android-and-setting-width-and-height-programmatically-in-dp-units
+	// (lookin' professional n' shit)
+	public static int getPx(int dp, Context ctx) {
+		return (int) (dp * ctx.getResources().getDisplayMetrics().density + 0.5f);
+	}
+
 }
