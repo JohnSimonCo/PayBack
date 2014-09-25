@@ -14,8 +14,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
 import com.micromobs.android.floatlabel.FloatLabelEditText;
-import com.micromobs.android.floatlabel.FloatLabelEditTextDark;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class CreateDebtActivity extends Activity {
@@ -27,10 +27,14 @@ public class CreateDebtActivity extends Activity {
 	public static String ARG_TIMESTAMP = Resource.arg(ARG_PREFIX, "AMOUNT");
 
 	//Views
-    private AutoCompleteTextView contactsInputField;
-	private EditText floatingLabelEditText;
 	private FloatLabelEditText floatLabelAmount;
-	private FloatLabelEditTextDark create_float_label_note;
+	private FloatLabelEditText floatLabelNote;
+	private FloatLabelAutoCompleteTextView floatLabelName;
+
+	private EditText floatLabelAmountEditText;
+	private EditText floatLabelNoteEditText;
+	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
+
 	private RadioGroup radioGroup;
 	private FloatingActionButton create_fab;
 
@@ -51,37 +55,38 @@ public class CreateDebtActivity extends Activity {
 		Intent intent = getIntent();
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        contactsInputField = (AutoCompleteTextView) findViewById(R.id.floating_label_edit_text_auto);
 
-		//This is the container for the float label edit text...
 		floatLabelAmount = (FloatLabelEditText) findViewById(R.id.create_float_label_amount);
-		floatLabelAmount.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
+		floatLabelNote = (FloatLabelEditText) findViewById(R.id.create_float_label_note);
+		floatLabelName = (FloatLabelAutoCompleteTextView) findViewById(R.id.create_float_label_name);
 
-		//...while this is the internal edit text
-		floatingLabelEditText = (EditText) findViewById(R.id.floating_label_edit_text);
-		floatingLabelEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+		floatLabelAmountEditText = floatLabelAmount.getEditText();
+		floatLabelNoteEditText = floatLabelNote.getEditText();
+		floatLabelNameAutoCompleteTextView = floatLabelName.getEditText();
 
-		create_float_label_note = (FloatLabelEditTextDark) findViewById(R.id.floating_label_edit_text);
+		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
+
+		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
+		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 
 		if(intent.hasExtra(ARG_TIMESTAMP)) {
 			editingDebt = Resource.data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
 
-			contactsInputField.setText(editingDebt.owner.name);
+			floatLabelNameAutoCompleteTextView.setText(editingDebt.owner.name);
 
-			floatingLabelEditText.setText(Float.toString(Math.abs(editingDebt.amount)));
+			floatLabelAmountEditText.setText(Float.toString(Math.abs(editingDebt.amount)));
 
-			EditText noteEditText = create_float_label_note.getEditText();
-			noteEditText.setText(editingDebt.note);
+			floatLabelNoteEditText.setText(editingDebt.note);
 			//Assume the user wants to change the note
-			noteEditText.setSelection(noteEditText.getText().length());
-			noteEditText.requestFocus();
+			floatLabelNameAutoCompleteTextView.setSelection(floatLabelNameAutoCompleteTextView.getText().length());
+			floatLabelNameAutoCompleteTextView.requestFocus();
 
 			boolean iOwe = editingDebt.amount < 0;
 			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
 		} else if(intent.hasExtra(ARG_FROM_PERSON_NAME)) {
-			contactsInputField.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
-			floatingLabelEditText.requestFocus();
+			floatLabelNameAutoCompleteTextView.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
+			floatLabelAmountEditText.requestFocus();
 		}
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
@@ -93,13 +98,13 @@ public class CreateDebtActivity extends Activity {
 		final Context ctx = this;
 
 		validator = new RequiredValidator(new EditText[] {
-				contactsInputField,
-				floatingLabelEditText
+				floatLabelNameAutoCompleteTextView,
+				floatLabelAmountEditText
 		}, new ValidatorListener() {
 			@Override
 			public void onValid() {
 				//Some dirty Simme-style validation up in here
-				if(floatingLabelEditText.getText().equals("0")) return;
+				if(floatLabelAmountEditText.getText().equals("0")) return;
 				create_fab.setActive(true);
 				create_fab.setAlpha(1f);
 			}
@@ -111,7 +116,7 @@ public class CreateDebtActivity extends Activity {
 			}
 		});
 
-		contactsInputField.setAdapter(new ArrayAdapter<String>(
+		floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(
 				this,
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
@@ -124,10 +129,10 @@ public class CreateDebtActivity extends Activity {
 
 				if (create_fab.mActive) {
 					saveDebt(
-						contactsInputField.getText().toString().trim(),
+						floatLabelNameAutoCompleteTextView.getText().toString().trim(),
 						radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
-						Float.parseFloat(floatingLabelEditText.getText().toString()),
-						create_float_label_note.getText().trim()
+						Float.parseFloat(floatLabelAmountEditText.getText().toString()),
+							floatLabelNoteEditText.getText().toString().trim()
 					);
 
 					startActivity(new Intent(ctx, FeedActivity.class), ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());

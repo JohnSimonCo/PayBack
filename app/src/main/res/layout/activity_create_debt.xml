@@ -20,6 +20,7 @@
             android:layout_height="wrap_content">
 
             <com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView
+                android:id="@+id/create_float_label_name"
                 android:paddingLeft="@dimen/create_start_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:textColorHint="@color/gray_oncolor_very_light"
@@ -108,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.micromobs.android.floatlabel.FloatLabelEditTextDark
+            <com.micromobs.android.floatlabel.FloatLabelEditText
                 android:id="@+id/create_float_label_note"
                 android:textColorHint="@color/gray_text_very_light"
                 android:textColor="@color/gray_text_light"
