@@ -93,7 +93,7 @@ public class CreateDebtActivity extends Activity {
 
 		create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 		create_fab.setColor(getResources().getColor(android.R.color.white));
-		create_fab.setDrawable(getResources().getDrawable(R.drawable.ic_check));
+		create_fab.setDrawable(getResources().getDrawable(R.drawable.ic_fab_check));
 
 		final Context ctx = this;
 

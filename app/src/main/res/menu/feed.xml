@@ -17,9 +17,6 @@
                 <item
                     android:id="@+id/menu_filter_amount"
                     android:title="@string/byamount"/>
-                <item
-                    android:id="@+id/menu_filter_alphabetical"
-                    android:title="@string/alphabetical"/>
             </group>
         </menu>
 
