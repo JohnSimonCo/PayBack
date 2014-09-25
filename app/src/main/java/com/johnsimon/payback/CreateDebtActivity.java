@@ -69,6 +69,7 @@ public class CreateDebtActivity extends Activity {
 		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
+		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
 		if(intent.hasExtra(ARG_TIMESTAMP)) {
 			editingDebt = Resource.data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
@@ -79,8 +80,8 @@ public class CreateDebtActivity extends Activity {
 
 			floatLabelNoteEditText.setText(editingDebt.note);
 			//Assume the user wants to change the note
-			floatLabelNameAutoCompleteTextView.setSelection(floatLabelNameAutoCompleteTextView.getText().length());
-			floatLabelNameAutoCompleteTextView.requestFocus();
+			floatLabelNoteEditText.setSelection(floatLabelNoteEditText.getText().length());
+			floatLabelNoteEditText.requestFocus();
 
 			boolean iOwe = editingDebt.amount < 0;
 			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
@@ -89,7 +90,6 @@ public class CreateDebtActivity extends Activity {
 			floatLabelAmountEditText.requestFocus();
 		}
 
-		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
 		create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 		create_fab.setColor(getResources().getColor(android.R.color.white));

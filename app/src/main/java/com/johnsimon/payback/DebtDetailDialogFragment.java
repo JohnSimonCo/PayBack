@@ -117,7 +117,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 								if(editCallback != null) {
 									editCallback.onEdit(debt);
 								}
-								//alertDialog.cancel();
+								alertDialog.cancel();
 
 								return true;
 							case R.id.detail_dialog_delete:
