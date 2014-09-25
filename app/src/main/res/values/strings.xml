@@ -48,6 +48,7 @@
     <string name="debt_for">for</string>
     <string name="bytime">Latest</string>
     <string name="byamount">By amount</string>
+    <string name="clear">Clear</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

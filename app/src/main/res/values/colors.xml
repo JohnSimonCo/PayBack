@@ -17,6 +17,7 @@
 
     <color name="accent_color">#cc4339</color>
 
+    <color name="white_on_red_selector">#66ffffff</color>
     <color name="apptheme_greenedittext_color">#8db69e</color>
 
     <!-- Placeholder colors for casuals with no profile picture -->

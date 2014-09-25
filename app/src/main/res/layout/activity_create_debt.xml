@@ -19,20 +19,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView
-                android:id="@+id/create_float_label_name"
+            <RelativeLayout
                 android:paddingLeft="@dimen/create_start_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textColorHint="@color/gray_oncolor_very_light"
-                android:textColor="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="wrap_content">
 
-                floatlabel:fitScreenWidth="full"
-                floatlabel:hint="@string/person_hint"
-                floatlabel:textSize="22dp"
-                floatlabel:textColorHintFocused="@color/gray_oncolor_very_light"
-                floatlabel:textColorHintUnFocused="@color/gray_oncolor_very_light"   />
+                <com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView
+                    android:id="@+id/create_float_label_name"
+                    android:textColorHint="@color/gray_oncolor_very_light"
+                    android:textColor="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    floatlabel:fitScreenWidth="full"
+                    floatlabel:hint="@string/person_hint"
+                    floatlabel:textSize="22dp"
+                    floatlabel:textColorHintFocused="@color/gray_oncolor_very_light"
+                    floatlabel:textColorHintUnFocused="@color/gray_oncolor_very_light"   />
+
+                <ImageButton
+                    android:id="@+id/create_clear"
+                    android:contentDescription="@string/clear"
+                    android:background="@drawable/flat_white_selector"
+                    android:src="@drawable/ic_clear"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:paddingLeft="@dimen/create_start_margin"
