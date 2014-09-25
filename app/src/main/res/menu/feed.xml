@@ -11,15 +11,15 @@
         <menu>
             <group android:checkableBehavior="single" >
                 <item
-                    android:id="@+id/menu_filter_all"
-                    android:title="Option 1"
+                    android:id="@+id/menu_filte_time"
+                    android:title="@string/bytime"
                     android:checked="true"/>
                 <item
-                    android:id="@+id/menu_filter_pending"
-                    android:title="Option 2"/>
+                    android:id="@+id/menu_filter_amount"
+                    android:title="@string/byamount"/>
                 <item
-                    android:id="@+id/menu_filter_finished"
-                    android:title="Option 3"/>
+                    android:id="@+id/menu_filter_alphabetical"
+                    android:title="@string/alphabetical"/>
             </group>
         </menu>
 
