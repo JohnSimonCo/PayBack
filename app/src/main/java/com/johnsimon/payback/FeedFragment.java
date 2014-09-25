@@ -103,6 +103,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 	public void onPaidBack(Debt debt) {
 		debt.isPaidBack = !debt.isPaidBack;
 		Resource.commit();
+		adapter.animationDebt = debt;
 		adapter.notifyDataSetChanged();
 		displayTotalDebt();
 	}

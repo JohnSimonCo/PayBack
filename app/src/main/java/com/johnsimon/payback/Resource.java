@@ -196,63 +196,82 @@ public class Resource {
     }
 
 	public static void expand(final View v) {
-		expand(v, 3);
+		expand(v, true, 3);
 	}
 
-	public static void expand(final View v, int msPerDp) {
+	public static void expand(final View v, boolean b) {
+		expand(v, b, 3);
+	}
+
+	public static void expand(final View v, boolean animate, int msPerDp) {
 		v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		final int targtetHeight = v.getMeasuredHeight();
 
-		v.getLayoutParams().height = 0;
-		v.setVisibility(View.VISIBLE);
-		Animation a = new Animation()
-		{
-			@Override
-			protected void applyTransformation(float interpolatedTime, Transformation t) {
-				v.getLayoutParams().height = interpolatedTime == 1
-						? LinearLayout.LayoutParams.WRAP_CONTENT
-						: (int)(targtetHeight * interpolatedTime);
-				v.requestLayout();
-			}
-
-			@Override
-			public boolean willChangeBounds() {
-				return true;
-			}
-		};
-
-		// 0.333dp/ms
-		a.setDuration((int)(targtetHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
-		v.startAnimation(a);
-	}
-	public static void collapse(final View v) {
-		collapse(v, 3);
-	}
-
-	public static void collapse(final View v, int msPerDp) {
-		final int initialHeight = v.getMeasuredHeight();
-
-		Animation a = new Animation()
-		{
-			@Override
-			protected void applyTransformation(float interpolatedTime, Transformation t) {
-				if(interpolatedTime == 1){
-					v.setVisibility(View.GONE);
-				}else{
-					v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+		if (animate) {
+			v.getLayoutParams().height = 0;
+			v.setVisibility(View.VISIBLE);
+			Animation a = new Animation() {
+				@Override
+				protected void applyTransformation(float interpolatedTime, Transformation t) {
+					v.getLayoutParams().height = interpolatedTime == 1
+							? LinearLayout.LayoutParams.WRAP_CONTENT
+							: (int)(targtetHeight * interpolatedTime);
 					v.requestLayout();
 				}
-			}
 
-			@Override
-			public boolean willChangeBounds() {
-				return true;
-			}
-		};
+				@Override
+				public boolean willChangeBounds() {
+					return true;
+				}
+			};
 
-		// 0.333dp/ms
-		a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
-		v.startAnimation(a);
+			// 0.333dp/ms
+			a.setDuration((int)(targtetHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
+			v.startAnimation(a);
+		} else {
+			v.setVisibility(View.VISIBLE);
+			v.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+			v.requestLayout();
+		}
+	}
+
+	public static void collapse(final View v) {
+		collapse(v, true, 3);
+	}
+
+	public static void collapse(final View v, boolean b) {
+		collapse(v, b, 3);
+	}
+
+	public static void collapse(final View v, boolean animate, int msPerDp) {
+		final int initialHeight = v.getMeasuredHeight();
+
+		if (animate) {
+			Animation a = new Animation() {
+				@Override
+				protected void applyTransformation(float interpolatedTime, Transformation t) {
+					if (interpolatedTime == 1){
+						v.setVisibility(View.GONE);
+					} else {
+						v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+						v.requestLayout();
+					}
+				}
+
+				@Override
+				public boolean willChangeBounds() {
+					return true;
+				}
+			};
+
+			// 0.333dp/ms
+			a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
+			v.startAnimation(a);
+		} else {
+			v.setVisibility(View.GONE);
+			v.getLayoutParams().height = 0;
+			v.requestLayout();
+		}
 	}
 
 	public static Person getPerson(String name) {

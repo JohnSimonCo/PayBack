@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,11 +18,14 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 	private final Activity context;
 	private final ArrayList<Debt> list;
 
+	public Debt animationDebt = null;
+
 	public FeedListAdapter(Activity context, ArrayList<Debt> list) {
 		super(context, R.layout.feed_list_item, list);
 		this.context = context;
 		this.list = list;
 	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
@@ -63,8 +67,18 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 			holder.amount.setTextColor(context.getResources().getColor(Debt.getDisabledColor(debt.amount)));
 			holder.avatar.setAlpha(0.5f);
 
+			Resource.toast(context, animationDebt == debt);
+
 			if (holder.paidBack.getVisibility() == View.GONE) {
-				Resource.expand(holder.paidBack);
+
+
+
+				if (animationDebt == debt) {
+					Resource.expand(holder.paidBack);
+					animationDebt = null;
+				} else {
+					Resource.expand(holder.paidBack, false);
+				}
 			}
 		} else {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_normal));
@@ -72,8 +86,15 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 			holder.amount.setTextColor(context.getResources().getColor(Debt.getColor(debt.amount)));
 			holder.avatar.setAlpha(1f);
 
+
 			if (holder.paidBack.getVisibility() == View.VISIBLE) {
-				Resource.collapse(holder.paidBack);
+
+				if (animationDebt == debt) {
+					Resource.collapse(holder.paidBack);
+					animationDebt = null;
+				} else {
+					Resource.collapse(holder.paidBack, false);
+				}
 			}
 		}
 
