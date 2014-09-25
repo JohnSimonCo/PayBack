@@ -3,11 +3,14 @@ package com.johnsimon.payback;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by John on 2014-09-23.
@@ -25,29 +28,27 @@ public class ColorPalette {
 	}
 
 	public int nextColor() {
-		ArrayList<Integer> usedColors = new ArrayList<Integer>(palette.length);
-		for (int i = 0; i < palette.length; i++) {
-			usedColors.add(i, 0);
+		SparseIntArray usedColors = new SparseIntArray(palette.length);
+		for(int color : palette) {
+			usedColors.put(color, 0);
 		}
 
 		for (Person person : Resource.people) {
 			if(person.color != null) {
-				int index = usedColors.indexOf(person.color);
-				usedColors.set(index, usedColors.get(index) + 1);
+				usedColors.put(person.color, usedColors.get(person.color) + 1);
 			}
 		}
 
-		int index = 0, smallest = usedColors.get(0);
-
-		for (int i = 1; i < usedColors.size(); i++) {
-			int count = usedColors.get(i);
-			if(count < smallest) {
-				smallest = count;
-				index = i;
+		int color = 0, smallest = -1;
+		for(int i = 0; i < usedColors.size(); i++) {
+			int value = usedColors.valueAt(i);
+			if(smallest == -1 || value < smallest) {
+				smallest = value;
+				color = usedColors.keyAt(i);
 			}
 		}
 
-		return palette[index];
+		return color;
 	}
 
 	public static ColorPalette getInstance(Context context) {

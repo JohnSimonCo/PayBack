@@ -57,10 +57,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 				.commit();
     }
 
-    public void onSectionAttached(int index) {
-	    title = Resource.people.get(index - 1).name;
-    }
-
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);

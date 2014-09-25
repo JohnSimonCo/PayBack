@@ -45,11 +45,18 @@ public class AppData {
 	}
 
 	public static Person findPerson(ArrayList<Person> people, UUID id) {
-		for(Person p : people)
+		for(Person p : people) {
 			if(p.id.equals(id)) return p;
+		}
 		return null;
 	}
 
+	public Debt findDebt(long timestamp) {
+		for (Debt debt : debts) {
+			if(debt.timestamp == timestamp) return debt;
+		}
 
+		return null;
+	}
 
 }

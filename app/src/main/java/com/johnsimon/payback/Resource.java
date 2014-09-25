@@ -58,16 +58,17 @@ public class Resource {
 			people.add(simon);
 			people.add(agge);
 
-			debts.add(new Debt(john, 100, "Dyr kebab"));
-			debts.add(new Debt(simon, -200, "Pokemonkort"));
-			debts.add(new Debt(simon, -1000, "Glömde kortet på ICA"));
-			debts.add(new Debt(agge, 40, null));
-			debts.add(new Debt(john, 200, "Lampor till dator"));
-			debts.add(new Debt(agge, 2.5f, "Äpple delat på 2"));
+			//#perfmatters
+			long timestamp = System.currentTimeMillis();
+			debts.add(new Debt(john, 100, "Dyr kebab", timestamp));
+			debts.add(new Debt(simon, -200, "Pokemonkort", ++timestamp));
+			debts.add(new Debt(simon, -1000, "Glömde kortet på ICA", ++timestamp));
+			debts.add(new Debt(agge, 40, null, ++timestamp));
+			debts.add(new Debt(john, 200, "Lampor till dator", ++timestamp));
+			debts.add(new Debt(agge, 2.5f, "Äpple delat på 2", ++timestamp));
 
 			commit();
 		}
-
 		contacts = Resource.getAllContacts(context);
 
 
@@ -143,17 +144,22 @@ public class Resource {
 			while(cursor.moveToNext()) {
 				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-				//If it's not an email adress
 				if(name == null) toast(ctx, "WTF?!! Name is null");
+				//If it's not an email adress
 				if(name != null && !name.matches(".*@.*\\..*")) {
 					//Make sure it's unique
 					boolean unique = true;
-					for (Contact contact : contacts) {
-						if(contact.name.equals(name)) unique = false;
-					}
+					//First search in people (since that list is generally smaller)
 					for (Person person: people) {
 						if(person.name.equals(name)) unique = false;
 					}
+					//If not found, continue to search in contacts
+					if(unique) {
+						for (Contact contact : contacts) {
+							if(contact.name.equals(name)) unique = false;
+						}
+					}
+					//If unique, add to contacts
 					if(unique) {
 						contacts.add(new Contact(name, photoURI));
 					}
@@ -263,8 +269,11 @@ public class Resource {
 		Person person = null;
 		for (Contact c : contacts) {
 			if(c.name.equals(name)) {
-				person = new Person(c.name, c.photoURI);
 				contacts.remove(c);
+				if(c.photoURI != null) {
+					//Will be handled later otherwise
+					person = new Person(c.name, c.photoURI);
+				}
 				break;
 			}
 		}

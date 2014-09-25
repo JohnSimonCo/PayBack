@@ -33,7 +33,7 @@ public class FloatLabelEditTextDark
 
 	private AttributeSet mAttrs;
 	private Context mContext;
-	public static EditText mEditTextView;
+	private EditText mEditTextView;
 	private TextView mFloatingLabel;
 
 	// -----------------------------------------------------------------------

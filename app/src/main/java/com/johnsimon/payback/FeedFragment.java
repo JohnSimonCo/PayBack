@@ -62,7 +62,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 					.putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
 				if(!showAll) {
-					intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_ID, person.id.toString());
+					intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
 				}
 
 				startActivity(intent, ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
@@ -125,9 +125,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 	public void onEdit(Debt debt) {
 		Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
 				.putExtra(CreateDebtActivity.ARG_FROM_FEED, true)
-				.putExtra(CreateDebtActivity.ARG_FROM_PERSON_ID, debt.owner.id.toString())
-				.putExtra(CreateDebtActivity.ARG_AMOUNT, debt.amount)
-				.putExtra(CreateDebtActivity.ARG_NOTE, debt.note);
+				.putExtra(CreateDebtActivity.ARG_TIMESTAMP, debt.timestamp);
 
 		startActivity(intent);
 	}

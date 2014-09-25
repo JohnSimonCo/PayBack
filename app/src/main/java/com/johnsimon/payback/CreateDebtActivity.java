@@ -2,49 +2,41 @@ package com.johnsimon.payback;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.RadioGroup;
 
 import com.micromobs.android.floatlabel.FloatLabelEditText;
 import com.micromobs.android.floatlabel.FloatLabelEditTextDark;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class CreateDebtActivity extends Activity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 	public static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
-	public static String ARG_FROM_PERSON_ID = Resource.arg(ARG_PREFIX, "FROM_PERSON");
-	public static String ARG_AMOUNT = Resource.arg(ARG_PREFIX, "AMOUNT");
-	public static String ARG_NOTE = Resource.arg(ARG_PREFIX, "NOTE");
+	public static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
+	public static String ARG_TIMESTAMP = Resource.arg(ARG_PREFIX, "AMOUNT");
 
 	//Views
     private AutoCompleteTextView contactsInputField;
 	private EditText floatingLabelEditText;
 	private FloatLabelEditText floatLabelAmount;
+	private FloatLabelEditTextDark create_float_label_note;
 	private RadioGroup radioGroup;
 	private FloatingActionButton create_fab;
 
 	private RequiredValidator validator;
+
+	private Debt editingDebt = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +50,8 @@ public class CreateDebtActivity extends Activity {
 
 		Intent intent = getIntent();
 
-		String fromId = intent.getStringExtra(ARG_FROM_PERSON_ID);
-		final Person fromPerson = fromId == null ? null : Resource.data.findPerson(UUID.fromString(fromId));
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
         contactsInputField = (AutoCompleteTextView) findViewById(R.id.floating_label_edit_text_auto);
-		if(fromPerson != null) {
-			contactsInputField.setText(fromPerson.name);
-			contactsInputField.setSelection(contactsInputField.getText().length());
-		}
 
 		//This is the container for the float label edit text...
 		floatLabelAmount = (FloatLabelEditText) findViewById(R.id.create_float_label_amount);
@@ -75,11 +60,28 @@ public class CreateDebtActivity extends Activity {
 		//...while this is the internal edit text
 		floatingLabelEditText = (EditText) findViewById(R.id.floating_label_edit_text);
 		floatingLabelEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-		if(intent.hasExtra(ARG_AMOUNT)) {
-			floatingLabelEditText.setText(Float.toString(intent.getFloatExtra(ARG_AMOUNT, 0f)));
-		}
-		if(intent.hasExtra(ARG_NOTE)) {
-			FloatLabelEditTextDark.mEditTextView.setText(intent.getStringExtra(ARG_NOTE));
+
+		create_float_label_note = (FloatLabelEditTextDark) findViewById(R.id.floating_label_edit_text);
+
+
+		if(intent.hasExtra(ARG_TIMESTAMP)) {
+			editingDebt = Resource.data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
+
+			contactsInputField.setText(editingDebt.owner.name);
+
+			floatingLabelEditText.setText(Float.toString(Math.abs(editingDebt.amount)));
+
+			EditText noteEditText = create_float_label_note.getEditText();
+			noteEditText.setText(editingDebt.note);
+			//Assume the user wants to change the note
+			noteEditText.setSelection(noteEditText.getText().length());
+			noteEditText.requestFocus();
+
+			boolean iOwe = editingDebt.amount < 0;
+			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
+		} else if(intent.hasExtra(ARG_FROM_PERSON_NAME)) {
+			contactsInputField.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
+			floatingLabelEditText.requestFocus();
 		}
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
@@ -96,6 +98,8 @@ public class CreateDebtActivity extends Activity {
 		}, new ValidatorListener() {
 			@Override
 			public void onValid() {
+				//Some dirty Simme-style validation up in here
+				if(floatingLabelEditText.getText().equals("0")) return;
 				create_fab.setActive(true);
 				create_fab.setAlpha(1f);
 			}
@@ -119,24 +123,12 @@ public class CreateDebtActivity extends Activity {
             public void onClick(View v) {
 
 				if (create_fab.mActive) {
-					String name = contactsInputField.getText().toString().trim();
-					Person person = Resource.getPerson(name);
-
-					boolean iOwe = radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe;
-					float amount = Float.parseFloat(floatingLabelEditText.getText().toString());
-					if(iOwe) {
-						amount = -amount;
-					}
-
-					String note = FloatLabelEditTextDark.mEditTextView.getText().toString().trim();
-					if (note.equals("")) {
-						note = null;
-					}
-
-                    //Just because activity was started as adding debt for
-                    //for a specific person it doesn't mean the user can't change the name
-					Resource.debts.add(0, new Debt(person, amount, note));
-					Resource.commit();
+					saveDebt(
+						contactsInputField.getText().toString().trim(),
+						radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
+						Float.parseFloat(floatingLabelEditText.getText().toString()),
+						create_float_label_note.getText().trim()
+					);
 
 					startActivity(new Intent(ctx, FeedActivity.class), ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
 					finish();
@@ -145,7 +137,31 @@ public class CreateDebtActivity extends Activity {
 				}
             }
         });
+
     }
+
+	public void saveDebt(String name, boolean iOwe, float amount, String note) {
+		if(iOwe) {
+			amount = -amount;
+		}
+		if (note.equals("")) {
+			note = null;
+		}
+
+		if(editingDebt == null) {
+			Resource.debts.add(0, new Debt(Resource.getPerson(name), amount, note));
+		} else {
+			editingDebt.edit(
+				editingDebt.owner.name.equals(name)
+					? editingDebt.owner
+					: Resource.getPerson(name),
+				amount,
+				note
+			);
+		}
+
+		Resource.commit();
+	}
 
 	@Override
 	public void onResume() {
