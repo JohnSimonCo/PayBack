@@ -17,6 +17,10 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class FeedActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+	private static String ARG_PREFIX = Resource.prefix("FEED");
+
+	public static String ARG_GOTO_PERSON_ID = Resource.arg(ARG_PREFIX, "GOTO_PERSON");
+
     private NavigationDrawerFragment navigationDrawerFragment;
 
     /**

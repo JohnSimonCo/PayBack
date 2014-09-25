@@ -84,7 +84,6 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 			holder.amount.setTextColor(context.getResources().getColor(Debt.getColor(debt.amount)));
 			holder.avatar.setAlpha(1f);
 
-
 			if (holder.paidBack.getVisibility() == View.VISIBLE) {
 
 				if (animationDebt == debt) {

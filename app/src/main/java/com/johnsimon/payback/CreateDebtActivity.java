@@ -127,14 +127,17 @@ public class CreateDebtActivity extends Activity {
             public void onClick(View v) {
 
 				if (create_fab.mActive) {
-					saveDebt(
+					Person person = saveDebt(
 						floatLabelNameAutoCompleteTextView.getText().toString().trim(),
 						radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
 						Float.parseFloat(floatLabelAmountEditText.getText().toString()),
 						floatLabelNoteEditText.getText().toString().trim()
 					);
 
-					startActivity(new Intent(ctx, FeedActivity.class), ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
+					Intent intent = new Intent(ctx, FeedActivity.class)
+							.putExtra(FeedActivity.ARG_GOTO_PERSON_ID, person.id.toString());
+
+					startActivity(intent, ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
 					finish();
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
@@ -144,7 +147,7 @@ public class CreateDebtActivity extends Activity {
 
     }
 
-	public void saveDebt(String name, boolean iOwe, float amount, String note) {
+	public Person saveDebt(String name, boolean iOwe, float amount, String note) {
 		if(iOwe) {
 			amount = -amount;
 		}
@@ -152,19 +155,20 @@ public class CreateDebtActivity extends Activity {
 			note = null;
 		}
 
+		Person person;
 		if(editingDebt == null) {
-			Resource.debts.add(0, new Debt(Resource.getPerson(name), amount, note));
+			person = Resource.getPerson(name);
+			Resource.debts.add(0, new Debt(person, amount, note));
 		} else {
-			editingDebt.edit(
-				editingDebt.owner.name.equals(name)
-					? editingDebt.owner
-					: Resource.getPerson(name),
-				amount,
-				note
-			);
+			person = editingDebt.owner.name.equals(name)
+				? editingDebt.owner
+				: Resource.getPerson(name);
+
+			editingDebt.edit(person, amount, note);
 		}
 
 		Resource.commit();
+		return person;
 	}
 
 	@Override

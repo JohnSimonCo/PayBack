@@ -32,15 +32,24 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
         View headerView = getActivity().getLayoutInflater().inflate(R.layout.feed_list_header, null);
 
-        Bundle args = getArguments();
-		final boolean showAll = args.getBoolean(ARG_ALL, false);
+		final boolean showAll;
 		final Person person;
-		if(showAll) {
-			debts = Resource.debts;
+		Intent intent = getActivity().getIntent();
+		Bundle args = getArguments();
+		if(args.getBoolean(ARG_ALL, false)) {
+			showAll = true;
 			person = null;
+			debts = Resource.debts;
 		} else {
-			UUID id = UUID.fromString(args.getString(ARG_PERSON_ID));
-			person = Resource.data.findPerson(id);
+			showAll = false;
+			String uuid = null;
+			if(intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
+				uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+				intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+			} else if(args.containsKey(ARG_PERSON_ID)) {
+				uuid = args.getString(ARG_PERSON_ID);
+			}
+			person = Resource.data.findPerson(UUID.fromString(uuid));
 			debts = Resource.data.personalizedFeed(person);
 		}
 

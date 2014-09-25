@@ -78,6 +78,7 @@ public class Debt {
 	public void edit(Person owner, float amount, String note) {
 		this.owner = owner;
 		this.amount = amount;
+		this.amountAsString = amountString(amount);
 		this.note = note;
 	}
 

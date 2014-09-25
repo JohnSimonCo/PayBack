@@ -40,7 +40,8 @@ public class ColorPalette {
 		}
 
 		int color = 0, smallest = -1;
-		for(int i = 0; i < usedColors.size(); i++) {
+		//#perfmatters
+		for(int i = 0, length = usedColors.size(); i < length; i++) {
 			int value = usedColors.valueAt(i);
 			if(smallest == -1 || value < smallest) {
 				smallest = value;
