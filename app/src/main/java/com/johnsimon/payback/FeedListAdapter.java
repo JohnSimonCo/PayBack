@@ -56,7 +56,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
 		if(owner.color != null) {
-			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.name.substring(0, 1), owner.color).toBitmap(params.width, params.height)));
+			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.name.substring(0, 1), owner.color).toBitmap(Resource.getPx(48, context), Resource.getPx(48, context))));
 
             //Set avatar as image like some stupid faggot
         } else {
@@ -68,8 +68,6 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 			holder.note.setTextColor(context.getResources().getColor(R.color.gray_oncolor_light));
 			holder.amount.setTextColor(context.getResources().getColor(Debt.getDisabledColor(debt.amount)));
 			holder.avatar.setAlpha(0.5f);
-
-			Resource.toast(context, animationDebt == debt);
 
 			if (holder.paidBack.getVisibility() == View.GONE) {
 
