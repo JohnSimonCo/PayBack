@@ -109,17 +109,17 @@ public class CreateDebtActivity extends Activity {
 			}
 		});
 
+		if (TextUtils.isEmpty(floatLabelNameAutoCompleteTextView.getText().toString())) {
+			clearEditText.setVisibility(View.GONE);
+		}
+
 		floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
 			}
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
 			}
-
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (TextUtils.isEmpty(s.toString())) {

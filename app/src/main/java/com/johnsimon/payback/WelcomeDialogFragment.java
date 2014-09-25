@@ -55,6 +55,15 @@ public class WelcomeDialogFragment extends DialogFragment {
 			}
         });
 
+		Spinner currencySpinner = (Spinner) rootView.findViewById(R.id.welcome_currency_spinner);
+
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+				R.array.currencies, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		currencySpinner.setAdapter(adapter);
+
 		hasNfc = NfcAdapter.getDefaultAdapter(getActivity()) != null;
 
 		if (hasNfc) {
@@ -66,6 +75,8 @@ public class WelcomeDialogFragment extends DialogFragment {
 		builder.setView(rootView);
 
 		alertDialog = builder.create();
+
+		alertDialog.setCancelable(false);
 
         return alertDialog;
     }
