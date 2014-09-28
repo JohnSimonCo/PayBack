@@ -23,8 +23,8 @@ import android.widget.TextView;
 import com.johnsimon.payback.R;
 
 @TargetApi(11)
-public class FloatLabelEditText
-    extends LinearLayout {
+public class FloatLabelEditTextDark
+        extends LinearLayout {
 
     private int mCurrentApiVersion = android.os.Build.VERSION.SDK_INT, mFocusedColor, mUnFocusedColor, mFitScreenWidth, mGravity;
     private float mTextSizeInSp;
@@ -39,20 +39,20 @@ public class FloatLabelEditText
     // -----------------------------------------------------------------------
     // default constructors
 
-    public FloatLabelEditText(Context context) {
+    public FloatLabelEditTextDark(Context context) {
         super(context);
         mContext = context;
         initializeView();
     }
 
-    public FloatLabelEditText(Context context, AttributeSet attrs) {
+    public FloatLabelEditTextDark(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mAttrs = attrs;
         initializeView();
     }
 
-    public FloatLabelEditText(Context context, AttributeSet attrs, int defStyle) {
+    public FloatLabelEditTextDark(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
         mAttrs = attrs;
@@ -68,8 +68,8 @@ public class FloatLabelEditText
 
     public String getText() {
         if (getEditTextString() != null &&
-            getEditTextString().toString() != null &&
-            getEditTextString().toString().length() > 0) {
+                getEditTextString().toString() != null &&
+                getEditTextString().toString().length() > 0) {
             return getEditTextString().toString();
         }
         return "";
@@ -91,7 +91,7 @@ public class FloatLabelEditText
         }
 
         LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mInflater.inflate(R.layout.weddingparty_floatlabel_edittext, this, true);
+        mInflater.inflate(R.layout.weddingparty_floatlabel_edittext_dark, this, true);
 
         mFloatingLabel = (TextView) findViewById(R.id.floating_label_hint);
         mEditTextView = (EditText) findViewById(R.id.floating_label_edit_text);
@@ -103,7 +103,7 @@ public class FloatLabelEditText
 
     private void getAttributesFromXmlAndStoreLocally() {
         TypedArray attributesFromXmlLayout = mContext.obtainStyledAttributes(mAttrs,
-                                                                             R.styleable.FloatLabelEditText);
+                R.styleable.FloatLabelEditText);
         if (attributesFromXmlLayout == null) {
             return;
         }
@@ -111,19 +111,19 @@ public class FloatLabelEditText
         mHintText = attributesFromXmlLayout.getString(R.styleable.FloatLabelEditText_hint);
         mEditText = attributesFromXmlLayout.getString(R.styleable.FloatLabelEditText_text);
         mGravity = attributesFromXmlLayout.getInt(R.styleable.FloatLabelEditText_gravity,
-                                                  Gravity.LEFT);
+                Gravity.LEFT);
         mTextSizeInSp = getScaledFontSize(attributesFromXmlLayout.getDimensionPixelSize(R.styleable.FloatLabelEditText_textSize,
-                                                                                        (int) mEditTextView
-                                                                                            .getTextSize()
-                                                                                       ));
+                (int) mEditTextView
+                        .getTextSize()
+        ));
         mFocusedColor = attributesFromXmlLayout.getColor(R.styleable.FloatLabelEditText_textColorHintFocused,
-                                                         android.R.color.black);
+                android.R.color.black);
         mUnFocusedColor = attributesFromXmlLayout.getColor(R.styleable.FloatLabelEditText_textColorHintUnFocused,
-                                                           android.R.color.darker_gray);
+                android.R.color.darker_gray);
         mFitScreenWidth = attributesFromXmlLayout.getInt(R.styleable.FloatLabelEditText_fitScreenWidth,
-                                                         0);
+                0);
         mIsPassword = (attributesFromXmlLayout.getInt(R.styleable.FloatLabelEditText_inputType,
-                                                      0) == 1);
+                0) == 1);
         attributesFromXmlLayout.recycle();
     }
 
@@ -131,7 +131,7 @@ public class FloatLabelEditText
 
         if (mIsPassword) {
             mEditTextView.setInputType(InputType.TYPE_CLASS_TEXT |
-                                       InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
             mEditTextView.setTypeface(Typeface.DEFAULT);
         }
 
@@ -185,21 +185,21 @@ public class FloatLabelEditText
     private void showFloatingLabel() {
         mFloatingLabel.setVisibility(VISIBLE);
         mFloatingLabel.startAnimation(AnimationUtils.loadAnimation(getContext(),
-                                                                   R.anim.weddingparty_floatlabel_slide_from_bottom));
+                R.anim.weddingparty_floatlabel_slide_from_bottom));
     }
 
     private void hideFloatingLabel() {
         mFloatingLabel.setVisibility(INVISIBLE);
         mFloatingLabel.startAnimation(AnimationUtils.loadAnimation(getContext(),
-                                                                   R.anim.weddingparty_floatlabel_slide_to_bottom));
+                R.anim.weddingparty_floatlabel_slide_to_bottom));
     }
 
     private OnFocusChangeListener getFocusChangeListener() {
         return new OnFocusChangeListener() {
 
             ValueAnimator mFocusToUnfocusAnimation
-                ,
-                mUnfocusToFocusAnimation;
+                    ,
+                    mUnfocusToFocusAnimation;
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -233,8 +233,8 @@ public class FloatLabelEditText
 
     private ValueAnimator getFocusAnimation(int fromColor, int toColor) {
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(),
-                                                              fromColor,
-                                                              toColor);
+                fromColor,
+                toColor);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
@@ -256,7 +256,7 @@ public class FloatLabelEditText
 
     private int getSpecialWidth() {
         float screenWidth = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
-                                                                                               .getWidth();
+                .getWidth();
         int prevWidth = mEditTextView.getWidth();
 
         switch (mFitScreenWidth) {

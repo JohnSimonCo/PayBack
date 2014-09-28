@@ -24,6 +24,7 @@ import android.widget.RadioGroup;
 
 import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
 import com.micromobs.android.floatlabel.FloatLabelEditText;
+import com.micromobs.android.floatlabel.FloatLabelEditTextDark;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class CreateDebtActivity extends Activity {
@@ -36,7 +37,7 @@ public class CreateDebtActivity extends Activity {
 
 	//Views
 	private FloatLabelEditText floatLabelAmount;
-	private FloatLabelEditText floatLabelNote;
+	private FloatLabelEditTextDark floatLabelNote;
 	private FloatLabelAutoCompleteTextView floatLabelName;
 
 	private EditText floatLabelAmountEditText;
@@ -65,7 +66,7 @@ public class CreateDebtActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		floatLabelAmount = (FloatLabelEditText) findViewById(R.id.create_float_label_amount);
-		floatLabelNote = (FloatLabelEditText) findViewById(R.id.create_float_label_note);
+		floatLabelNote = (FloatLabelEditTextDark) findViewById(R.id.create_float_label_note);
 		floatLabelName = (FloatLabelAutoCompleteTextView) findViewById(R.id.create_float_label_name);
 
 		floatLabelAmountEditText = floatLabelAmount.getEditText();
