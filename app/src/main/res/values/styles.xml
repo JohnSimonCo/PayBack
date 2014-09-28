@@ -1,7 +1,15 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.Red">
+        <item name="android:actionBarStyle">@style/AppTheme_ActionBar</item>
+    </style>
 
+    <style name="AppTheme_ActionBar" parent="@style/ActionBar.Solid.Red">
+        <item name="android:subtitleTextStyle">@style/AppTheme_ActionBar_SubtitleTextStyle</item>
+    </style>
+
+    <style name="AppTheme_ActionBar_SubtitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme_NoActionBarBorder" parent="AppTheme">

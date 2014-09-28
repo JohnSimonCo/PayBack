@@ -102,11 +102,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
             }
         });
 
-        if (savedInstanceState == null) {
-            //Staring the app, not rotating. Let's animate
-
-        }
-
 		return rootView;
 	}
 

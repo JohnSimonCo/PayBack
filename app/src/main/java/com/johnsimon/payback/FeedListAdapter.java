@@ -67,10 +67,13 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
         //TODO start using holder.avaterLetter instead of drawing on bitmap
 		if(owner.color != null) {
-			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.name.substring(0, 1), owner.color).toBitmap(Resource.getPx(48, context), Resource.getPx(48, context))));
-
+			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
+            holder.avatarLetter.setVisibility(View.VISIBLE);
+            holder.avatarLetter.setText(owner.name.substring(0, 1));
             //Set avatar as image like some stupid faggot
         } else {
+            holder.avatarLetter.setVisibility(View.GONE);
+
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
         }
 

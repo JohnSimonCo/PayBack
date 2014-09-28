@@ -24,6 +24,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 	public static String ARG_GOTO_PERSON_ID = Resource.arg(ARG_PREFIX, "GOTO_PERSON");
     public static boolean animateListItems = true;
 
+    private ActionBar actionBar;
+
     private NavigationDrawerFragment navigationDrawerFragment;
 
     /**
@@ -34,6 +36,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        actionBar = getActionBar();
 
 		Resource.fetchData(this);
 
@@ -62,6 +66,12 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
 				.commit();
+
+        if(item.type == NavigationDrawerItem.Type.All) {
+            actionBar.setSubtitle(R.string.all);
+        } else if(item.type == NavigationDrawerItem.Type.Person) {
+            actionBar.setSubtitle(item.title);
+        }
     }
 
     public void restoreActionBar() {

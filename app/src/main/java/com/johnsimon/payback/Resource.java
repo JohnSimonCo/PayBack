@@ -182,26 +182,6 @@ public class Resource {
 		toast(context, Integer.toString(i));
 	}
 
-    public static ArrayList<String> getAllAvailableCurrencies() {
-        //Yeah i wrote this myself, thanks for asking! :D
-
-        ArrayList<String> currencys = new ArrayList<String>();
-        Locale[] locs = Locale.getAvailableLocales();
-
-        for(Locale loc : locs) {
-            try {
-                String val = Currency.getInstance(loc).getCurrencyCode() + " (" + Currency.getInstance(loc).getSymbol() + ")";
-                if(!currencys.contains(val))
-                    currencys.add(val);
-            } catch(Exception exc) {
-                // Locale not found
-            }
-            Collections.sort(currencys);
-        }
-
-        return currencys;
-    }
-
 	public static void expand(final View v) {
 		expand(v, true, 3);
 	}
@@ -381,5 +361,4 @@ public class Resource {
         animAlpha.start();
 
     }
-
 }
