@@ -84,7 +84,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 					intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
 				}
 
-				startActivity(intent, ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
+				startActivity(intent);
 			}
 		});
 
