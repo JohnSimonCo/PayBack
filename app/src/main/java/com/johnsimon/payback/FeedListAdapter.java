@@ -39,8 +39,18 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 					(TextView) convertView.findViewById(R.id.list_item_amount),
 					(TextView) convertView.findViewById(R.id.list_item_note),
                     (ImageView) convertView.findViewById(R.id.list_item_avatar),
-					(TextView) convertView.findViewById(R.id.list_item_paid_back)
+                    (TextView) convertView.findViewById(R.id.list_item_paid_back),
+                    (TextView) convertView.findViewById(R.id.list_item_avatar_letter)
 					);
+
+            if (FeedActivity.animateListItems) {
+                int offset = position;
+                if (list.size() != 0) {
+                    offset++;
+                }
+                Resource.doListAnimation(convertView, (offset * 60));
+            }
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -55,6 +65,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		holder.amount.setText(debt.amountAsString);
 		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
+        //TODO start using holder.avaterLetter instead of drawing on bitmap
 		if(owner.color != null) {
 			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.name.substring(0, 1), owner.color).toBitmap(Resource.getPx(48, context), Resource.getPx(48, context))));
 
@@ -104,13 +115,15 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		public TextView note;
 		public ImageView avatar;
 		public TextView paidBack;
+        public TextView avatarLetter;
 
-		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar, TextView paidBack) {
+		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar, TextView paidBack, TextView avatarLetter) {
 			this.person = person;
 			this.amount = amount;
 			this.note = note;
 			this.avatar = avatar;
-			this.paidBack = paidBack;
+            this.paidBack = paidBack;
+            this.avatarLetter= avatarLetter;
 		}
 	}
 }

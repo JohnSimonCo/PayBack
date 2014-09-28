@@ -12,10 +12,14 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
@@ -184,6 +188,16 @@ public class CreateDebtActivity extends Activity {
 				}
             }
         });
+
+
+        LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
+        LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
+
+        Animation inFromTop = AnimationUtils.loadAnimation(this, R.anim.in_from_top);
+        createHeader.startAnimation(inFromTop);
+        create_fab.startAnimation(inFromTop);
+        Resource.animateHardwareFadeIn(createHeaderContent, 300, 800);
+        Resource.animateHardwareFadeIn(floatLabelNote, 300, 800);
 
     }
 

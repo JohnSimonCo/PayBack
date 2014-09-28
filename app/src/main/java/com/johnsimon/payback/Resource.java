@@ -1,5 +1,8 @@
 package com.johnsimon.payback;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -319,5 +322,64 @@ public class Resource {
 	public static int getPx(int dp, Context ctx) {
 		return (int) (dp * ctx.getResources().getDisplayMetrics().density + 0.5f);
 	}
+
+    public static void doListAnimation(final View view, int offset) {
+        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+        view.setAlpha(0f);
+
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
+                "alpha", 1);
+        animAlpha.setDuration(450);
+        animAlpha.setStartDelay(offset);
+        animAlpha.start();
+
+        view.setRotation(20f);
+
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
+                "rotation", 0f);
+        rotation.setDuration(350);
+        rotation.setStartDelay(offset);
+        rotation.start();
+
+        view.setTranslationY(620f);
+
+        ObjectAnimator animY = ObjectAnimator.ofFloat(view,
+                "translationY", 0);
+        animY.setDuration(450);
+        animY.setStartDelay(offset);
+
+        animY.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setLayerType(View.LAYER_TYPE_NONE, null);
+            }
+        });
+
+        animY.start();
+    }
+
+    public static void animateHardwareFadeIn(final View view, int duration, int offset) {
+
+        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+        view.setAlpha(0f);
+
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
+                "alpha", 1);
+        animAlpha.setDuration(duration);
+        animAlpha.setStartDelay(offset);
+
+        animAlpha.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.VISIBLE);
+                view.setLayerType(View.LAYER_TYPE_NONE, null);
+            }
+        });
+
+        animAlpha.start();
+
+    }
 
 }

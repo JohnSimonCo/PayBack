@@ -22,6 +22,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
 	public static String ARG_GOTO_PERSON_ID = Resource.arg(ARG_PREFIX, "GOTO_PERSON");
+    public static boolean animateListItems = true;
 
     private NavigationDrawerFragment navigationDrawerFragment;
 
@@ -59,7 +60,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		// update the main content by replacing fragments
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, FeedFragment.newInstance(item))
+				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
 				.commit();
     }
 
@@ -114,4 +115,16 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 				break;
 		}
 	}
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
+    }
 }

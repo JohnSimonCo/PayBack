@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,15 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		adapter = new FeedListAdapter(getActivity(), debts);
         listView.setAdapter(adapter);
 
+        //We're done animating.
+        Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            public void run() {
+                FeedActivity.animateListItems = false;
+            }
+        };
+        handler.postDelayed(r, 400);
+
         FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
         fab.setColor(getResources().getColor(R.color.accent_color));
         fab.setDrawable(getResources().getDrawable(R.drawable.ic_action_content_new));
@@ -91,6 +101,11 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 				dialog.editCallback = self;
             }
         });
+
+        if (savedInstanceState == null) {
+            //Staring the app, not rotating. Let's animate
+
+        }
 
 		return rootView;
 	}
