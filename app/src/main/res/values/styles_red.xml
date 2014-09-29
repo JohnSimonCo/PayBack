@@ -38,13 +38,24 @@
     </style>
 
     <style name="ActionBar.Solid.Red" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:height">@dimen/action_bar_height</item>
         <item name="android:textAppearance">@style/black_text</item>
+        <item name="android:titleTextStyle">@style/ActionTitleTextStyle</item>
+
+        <item name="android:subtitleTextStyle">@style/AppTheme_ActionBar_SubtitleTextStyle</item>
+        <item name="android:icon">@drawable/transparent</item>
+
 
         <item name="android:background">@drawable/ab_solid_red</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_red</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_red</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Red</item>
 
+    </style>
+
+    <style name="ActionTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">19sp</item>
     </style>
 
     <style name="ActionBar.Transparent.Red" parent="@android:style/Widget.Holo.ActionBar">
@@ -87,6 +98,10 @@
 
         <item name="android:listChoiceIndicatorSingle">@drawable/red_radiobutton_btn_radio_holo_light</item>
         <item name="android:radioButtonStyle">@style/RadioButtonred_radiobutton</item>
+    </style>
+
+    <style name="black_text">
+        <item name="android:textColor">@color/gray_text_normal</item>
     </style>
 
 </resources>

@@ -40,7 +40,8 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 					(TextView) convertView.findViewById(R.id.list_item_note),
                     (ImageView) convertView.findViewById(R.id.list_item_avatar),
                     (TextView) convertView.findViewById(R.id.list_item_paid_back),
-                    (TextView) convertView.findViewById(R.id.list_item_avatar_letter)
+                    (TextView) convertView.findViewById(R.id.list_item_avatar_letter),
+                    (TextView) convertView.findViewById(R.id.list_item_date)
 					);
 
             if (FeedActivity.animateListItems) {
@@ -119,14 +120,16 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		public ImageView avatar;
 		public TextView paidBack;
         public TextView avatarLetter;
+        public TextView date;
 
-		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar, TextView paidBack, TextView avatarLetter) {
+		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar, TextView paidBack, TextView avatarLetter, TextView date) {
 			this.person = person;
 			this.amount = amount;
 			this.note = note;
 			this.avatar = avatar;
             this.paidBack = paidBack;
             this.avatarLetter= avatarLetter;
+            this.date = date;
 		}
 	}
 }

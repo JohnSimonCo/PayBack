@@ -1,20 +1,9 @@
 package com.johnsimon.payback;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by John on 2014-09-23.
- */
 public class ColorPalette {
 	private static ColorPalette instance = null;
 

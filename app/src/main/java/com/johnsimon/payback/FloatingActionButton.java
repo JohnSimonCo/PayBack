@@ -143,12 +143,6 @@ public class FloatingActionButton extends View {
         }
     }
 
-    public void listenTo(AbsListView listView) {
-        if (null != listView) {
-            listView.setOnScrollListener(new DirectionScrollListener(this));
-        }
-    }
-
     public int darkenColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);

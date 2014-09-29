@@ -3,6 +3,7 @@
 
     <style name="AppTheme" parent="Theme.Red">
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:actionBarStyle">@style/AppTheme_ActionBar</item>
     </style>
 
 </resources>

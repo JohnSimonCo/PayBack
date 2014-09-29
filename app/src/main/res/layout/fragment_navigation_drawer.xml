@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:choiceMode="singleChoice"
+    android:paddingTop="@dimen/navigation_drawer_padding"
     android:divider="@color/gray_oncolor_very_light"
     android:dividerHeight="1dp"
     android:background="#eee"

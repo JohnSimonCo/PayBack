@@ -26,4 +26,7 @@
 
     <dimen name="create_start_margin">72dp</dimen>
 
+    <dimen name="action_bar_height">56dp</dimen>
+    <dimen name="navigation_drawer_padding">8dp</dimen>
+
 </resources>
