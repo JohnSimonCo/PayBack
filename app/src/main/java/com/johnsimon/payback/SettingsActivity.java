@@ -52,7 +52,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.accent_color));
+        tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
 
     }
 

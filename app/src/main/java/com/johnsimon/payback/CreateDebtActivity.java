@@ -57,7 +57,7 @@ public class CreateDebtActivity extends Activity {
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.accent_color));
+        tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
 
         setContentView(R.layout.activity_create_debt);
 

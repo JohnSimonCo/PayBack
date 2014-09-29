@@ -48,7 +48,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 	    SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.accent_color));
+        tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
 
         navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();

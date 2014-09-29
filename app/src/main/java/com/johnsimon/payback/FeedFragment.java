@@ -1,6 +1,5 @@
 package com.johnsimon.payback;
 
-import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +28,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
-        final ListView listView = (ListView) rootView.findViewById(R.id.feed_list);
+        final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
         View headerView = getActivity().getLayoutInflater().inflate(R.layout.feed_list_header, null);
 
@@ -54,7 +53,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 			debts = Resource.data.personalizedFeed(person);
 		}
 
-		total_debt = (TextView) headerView.findViewById(R.id.total_debt);
+        total_debt = (TextView) headerView.findViewById(R.id.total_debt);
 
 		displayTotalDebt();
 
@@ -126,13 +125,11 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		adapter.notifyDataSetChanged();
 		displayTotalDebt();
 	}
-
 	public void displayTotalDebt() {
 		int debt = AppData.totalDebt(debts);
 
 		total_debt.setText(Debt.totalString(debt, getResources().getString(R.string.even)));
 	}
-
 	@Override
 	public void onDelete(Debt debt) {
 		Resource.debts.remove(debt);
