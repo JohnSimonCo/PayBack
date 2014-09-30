@@ -2,8 +2,8 @@
 <resources>
 
     <dimen name="navigation_drawer_width">340dp</dimen>
-    <dimen name="list_header_height">296dp</dimen>
-    <dimen name="list_header_image_height">260dp</dimen>
+    <dimen name="list_header_height">206dp</dimen>
+    <dimen name="list_header_image_height">170dp</dimen>
 
     <dimen name="feed_header_balance_text_size">24sp</dimen>
     <dimen name="feed_header_title_text_size">30sp</dimen>

@@ -2,6 +2,7 @@ package com.johnsimon.payback;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence title;
+    private CharSequence subtitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,10 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         actionBar = getActionBar();
 
 		Resource.fetchData(this);
-
-        //WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-        //welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
+        if (Resource.isFirstRun()) {
+ //           WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+ //           welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
+        }
 
 	    setContentView(R.layout.activity_feed);
 
@@ -52,6 +55,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
         navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();
+        subtitle = getString(R.string.all);
 
         // Set up the drawer.
         navigationDrawerFragment.setUp(
@@ -63,15 +67,18 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		// update the main content by replacing fragments
+
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
 				.commit();
 
         if(item.type == NavigationDrawerItem.Type.All) {
-            actionBar.setSubtitle(R.string.all);
+            subtitle = getString(R.string.all);
         } else if(item.type == NavigationDrawerItem.Type.Person) {
-            actionBar.setSubtitle(item.title);
+            subtitle = item.title;
         }
+
+        actionBar.setSubtitle(subtitle);
     }
 
     public void restoreActionBar() {
@@ -79,6 +86,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(title);
+        actionBar.setSubtitle(subtitle);
     }
 
 

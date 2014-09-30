@@ -33,7 +33,6 @@ public class Resource {
 	public static ArrayList<Debt> debts;
 	public static ArrayList<Contact> contacts;
 
-	public static boolean isFirstRun = false;
 	private static Activity context;
 	private static SharedPreferences preferences;
 
@@ -50,7 +49,6 @@ public class Resource {
 		people = data.people;
 		debts = data.debts;
 
-		isFirstRun = isFirstRun();
 		if(people.size() == 0) {
 			ColorPalette palette = ColorPalette.getInstance(context);
 			Person john = new Person("John Rapp", palette);

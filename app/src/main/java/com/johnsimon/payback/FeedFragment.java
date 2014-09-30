@@ -7,9 +7,14 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
+import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -30,7 +35,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
-        View headerView = getActivity().getLayoutInflater().inflate(R.layout.feed_list_header, null);
+        RelativeLayout headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);//TODO getActivity().getLayoutInflater().inflate(R.layout.feed_list_header, null);
 
 		final boolean showAll;
 		final Person person;
@@ -87,7 +92,10 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 			}
 		});
 
-        listView.addHeaderView(headerView, null, false);
+        View footer = new View(getActivity());
+        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
+        listView.addHeaderView(footer, null, false);
+
         listView.setEmptyView(inflater.inflate(R.layout.list_empty_view, null));
 
 		final FeedFragment self = this;
@@ -100,6 +108,14 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 				dialog.editCallback = self;
             }
         });
+
+        int headerHeight = headerView.getLayoutParams().height;//getActivity().getResources().getDimensionPixelSize(R.dimen.header_height);
+        QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
+                headerView, -headerHeight, null, 0);
+        // Setting to true will slide the header and/or footer into view or slide out of view based
+        // on what is visible in the idle scroll state
+        scrollListener.setCanSlideInIdleScrollState(false);
+        listView.setOnScrollListener(scrollListener);
 
 		return rootView;
 	}
