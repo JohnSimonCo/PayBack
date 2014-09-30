@@ -3,6 +3,7 @@ package com.johnsimon.payback;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,9 +67,14 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		holder.amount.setText(debt.amountAsString);
 		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
-        //TODO start using holder.avaterLetter instead of drawing on bitmap
-		if(owner.color != null) {
-			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
+        holder.date.setText(" - " + DateUtils.getRelativeTimeSpanString(
+                debt.timestamp,
+                System.currentTimeMillis(),
+                DateUtils.SECOND_IN_MILLIS,
+                DateUtils.FORMAT_ABBREV_ALL ));
+
+        if(owner.color != null) {
+            holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
             holder.avatarLetter.setVisibility(View.VISIBLE);
             holder.avatarLetter.setText(owner.name.substring(0, 1).toUpperCase());
             //Set avatar as image like some stupid faggot
@@ -77,6 +83,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
         }
+
 
 		if (debt.isPaidBack) {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));
