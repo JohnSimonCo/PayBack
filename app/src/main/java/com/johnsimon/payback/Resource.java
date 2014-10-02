@@ -140,26 +140,26 @@ public class Resource {
 	private static ArrayList<Contact> getAllContacts(Context ctx) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		if(cursor.getCount() > 0) {
-			while(cursor.moveToNext()) {
+		if (cursor.getCount() > 0) {
+			while (cursor.moveToNext()) {
 				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
 				//If it's not an email adress
-				if(name != null && !name.matches(".*@.*\\..*")) {
+				if (name != null && !name.matches(".*@.*\\..*")) {
 					//Make sure it's unique
 					boolean unique = true;
 					//First search in people (since that list is generally smaller)
 					for (Person person: people) {
-						if(person.name.equals(name)) unique = false;
+						if (person.name.equals(name)) unique = false;
 					}
 					//If not found, continue to search in contacts
-					if(unique) {
+					if (unique) {
 						for (Contact contact : contacts) {
-							if(contact.name.equals(name)) unique = false;
+							if (contact.name.equals(name)) unique = false;
 						}
 					}
 					//If unique, add to contacts
-					if(unique) {
+					if (unique) {
 						contacts.add(new Contact(name, photoURI));
 					}
 				}
