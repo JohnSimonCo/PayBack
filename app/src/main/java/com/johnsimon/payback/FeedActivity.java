@@ -83,9 +83,9 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 			if(intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
 				uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
 				intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-			} else if(args.containsKey(ARG_PERSON_ID)) {
-				uuid = args.getString(ARG_PERSON_ID);
-			}
+		//	} else if(args.containsKey(ARG_PERSON_ID)) {
+		//		uuid = args.getString(ARG_PERSON_ID);
+		//	}
 			Person person = Resource.data.findPerson(UUID.fromString(uuid));
 		}
 	}
