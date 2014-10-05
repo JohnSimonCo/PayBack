@@ -124,7 +124,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		return msg;
 	}
 
-	void processIntent(Intent intent) {
+	public void processIntent(Intent intent) {
 		NdefMessage msg = (NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
 		NdefRecord[] records = msg.getRecords();
 
