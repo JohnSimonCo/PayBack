@@ -25,7 +25,6 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		for(Person person : people) {
 			items.add(new NavigationDrawerItem(person.toString(), person.id, null));
 		}
-
 	}
 
 	@Override

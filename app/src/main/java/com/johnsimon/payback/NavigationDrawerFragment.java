@@ -182,6 +182,11 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+	public void setSelectedPerson(Person p) {
+		adapter.selectPerson(p);
+		adapter.notifyDataSetChanged();
+	}
+
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
 

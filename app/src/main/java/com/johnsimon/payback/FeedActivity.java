@@ -77,17 +77,15 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		if (intent.getBooleanExtra(FeedFragment.ARG_ALL, false)) {
 			//navigationDrawerFragment.
 			actionBar.setSubtitle(R.string.all);
-			NavigationDrawerFragment.mCurrentSelectedPosition = 0;
-		} else {
-			String uuid = null;
-			if(intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
-				uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-				intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-			}
-		// else if(args.containsKey(ARG_PERSON_ID)) {
-		//		uuid = args.getString(ARG_PERSON_ID);
-		//	}
+			navigationDrawerFragment.setSelectedPerson(null);
+
+		} else if (intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
+			String uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+			intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+
 			Person person = Resource.data.findPerson(UUID.fromString(uuid));
+			actionBar.setSubtitle(person.name);
+			navigationDrawerFragment.setSelectedPerson(person);
 		}
 	}
 
@@ -100,10 +98,10 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 				.commit();
 
         if(item.type == NavigationDrawerItem.Type.All) {
-            subtitle = getString(R.string.all);
-        } else if(item.type == NavigationDrawerItem.Type.Person) {
-            subtitle = item.title;
-        }
+			subtitle = getString(R.string.all);
+		} else if(item.type == NavigationDrawerItem.Type.Person) {
+			subtitle = item.title;
+		}
 
         actionBar.setSubtitle(subtitle);
     }
