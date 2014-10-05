@@ -52,10 +52,10 @@ public class Resource {
 		if(people.size() == 0) {
 			ColorPalette palette = ColorPalette.getInstance(context);
 			Person john = new Person("John Rapp", palette);
-			Person simon = new Person("Simon Halvdansson", palette);
-			Person agge = new Person("Agge Eklöf", palette);
 			people.add(john);
+			Person simon = new Person("Simon Halvdansson", palette);
 			people.add(simon);
+			Person agge = new Person("Agge Eklöf", palette);
 			people.add(agge);
 
 			//#perfmatters
