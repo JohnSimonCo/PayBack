@@ -114,23 +114,23 @@ public class Resource {
 		preferences.edit().putString(SAVE_KEY_APP_DATA, JSON).apply();
 	}
 
-    /*  Method to detect if it's the first time the user uses the app.
-        Will return true if a preference with the key "FIRST_TIME"
-        already exists.  */
-    public static boolean isFirstRun() {
-        if (preferences.getBoolean(SAVE_KEY_FIRST_RUN, true)) {
-            preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
-            return true;
-        } else {
-            return false;
-        }
-    }
+	/*  Method to detect if it's the first time the user uses the app.
+		Will return true if a preference with the key "FIRST_TIME"
+		already exists.  */
+	public static boolean isFirstRun() {
+		if(preferences.getBoolean(SAVE_KEY_FIRST_RUN, true)) {
+			preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public static String prefix(String prefix) {
 		return prefix + "_";
 	}
 	public static String arg(String prefix, String arg) {
-			return ARG_PREFIX + prefix + "_" + arg;
+		return ARG_PREFIX + prefix + "_" + arg;
 	}
 
 	public static String getCurrency() {
@@ -140,26 +140,26 @@ public class Resource {
 	private static ArrayList<Contact> getAllContacts(Context ctx) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		if (cursor.getCount() > 0) {
-			while (cursor.moveToNext()) {
+		if(cursor.getCount() > 0) {
+			while(cursor.moveToNext()) {
 				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
 				//If it's not an email adress
-				if (name != null && !name.matches(".*@.*\\..*")) {
+				if(name != null && !name.matches(".*@.*\\..*")) {
 					//Make sure it's unique
 					boolean unique = true;
 					//First search in people (since that list is generally smaller)
-					for (Person person: people) {
-						if (person.name.equals(name)) unique = false;
+					for(Person person: people) {
+						if(person.name.equals(name)) unique = false;
 					}
 					//If not found, continue to search in contacts
-					if (unique) {
-						for (Contact contact : contacts) {
-							if (contact.name.equals(name)) unique = false;
+					if(unique) {
+						for(Contact contact : contacts) {
+							if(contact.name.equals(name)) unique = false;
 						}
 					}
 					//If unique, add to contacts
-					if (unique) {
+					if(unique) {
 						contacts.add(new Contact(name, photoURI));
 					}
 				}
@@ -192,7 +192,7 @@ public class Resource {
 		v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		final int targtetHeight = v.getMeasuredHeight();
 
-		if (animate) {
+		if(animate) {
 			v.getLayoutParams().height = 0;
 			v.setVisibility(View.VISIBLE);
 			Animation a = new Animation() {
@@ -231,11 +231,11 @@ public class Resource {
 	public static void collapse(final View v, boolean animate, int msPerDp) {
 		final int initialHeight = v.getMeasuredHeight();
 
-		if (animate) {
+		if(animate) {
 			Animation a = new Animation() {
 				@Override
 				protected void applyTransformation(float interpolatedTime, Transformation t) {
-					if (interpolatedTime == 1){
+					if(interpolatedTime == 1){
 						v.setVisibility(View.GONE);
 					} else {
 						v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
@@ -260,12 +260,12 @@ public class Resource {
 	}
 
 	public static Person getPerson(String name) {
-		for (Person person : people) {
+		for(Person person : people) {
 			if(person.name.equals(name)) return person;
 		}
 
 		Person person = null;
-		for (Contact c : contacts) {
+		for(Contact c : contacts) {
 			if(c.name.equals(name)) {
 				contacts.remove(c);
 				if(c.photoURI != null) {
@@ -284,10 +284,10 @@ public class Resource {
 
 	public static ArrayList<String> getAllNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		for (Person person : people) {
+		for(Person person : people) {
 			names.add(person.name);
 		}
-		for (Contact contact : contacts) {
+		for(Contact contact : contacts) {
 			names.add(contact.name);
 		}
 
@@ -301,62 +301,62 @@ public class Resource {
 		return (int) (dp * ctx.getResources().getDisplayMetrics().density + 0.5f);
 	}
 
-    public static void doListAnimation(final View view, int offset) {
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+	public static void doListAnimation(final View view, int offset) {
+		view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
-        view.setAlpha(0f);
+		view.setAlpha(0f);
 
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
-                "alpha", 1);
-        animAlpha.setDuration(450);
-        animAlpha.setStartDelay(offset);
-        animAlpha.start();
+		ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
+				"alpha", 1);
+		animAlpha.setDuration(450);
+		animAlpha.setStartDelay(offset);
+		animAlpha.start();
 
-        view.setRotation(20f);
+		view.setRotation(20f);
 
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
-                "rotation", 0f);
-        rotation.setDuration(350);
-        rotation.setStartDelay(offset);
-        rotation.start();
+		ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
+				"rotation", 0f);
+		rotation.setDuration(350);
+		rotation.setStartDelay(offset);
+		rotation.start();
 
-        view.setTranslationY(620f);
+		view.setTranslationY(620f);
 
-        ObjectAnimator animY = ObjectAnimator.ofFloat(view,
-                "translationY", 0);
-        animY.setDuration(450);
-        animY.setStartDelay(offset);
+		ObjectAnimator animY = ObjectAnimator.ofFloat(view,
+				"translationY", 0);
+		animY.setDuration(450);
+		animY.setStartDelay(offset);
 
-        animY.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
+		animY.addListener(new AnimatorListenerAdapter() {
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				view.setLayerType(View.LAYER_TYPE_NONE, null);
+			}
+		});
 
-        animY.start();
-    }
+		animY.start();
+	}
 
-    public static void animateHardwareFadeIn(final View view, int duration, int offset) {
+	public static void animateHardwareFadeIn(final View view, int duration, int offset) {
 
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+		view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
-        view.setAlpha(0f);
+		view.setAlpha(0f);
 
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
-                "alpha", 1);
-        animAlpha.setDuration(duration);
-        animAlpha.setStartDelay(offset);
+		ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
+				"alpha", 1);
+		animAlpha.setDuration(duration);
+		animAlpha.setStartDelay(offset);
 
-        animAlpha.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.VISIBLE);
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
+		animAlpha.addListener(new AnimatorListenerAdapter() {
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				view.setVisibility(View.VISIBLE);
+				view.setLayerType(View.LAYER_TYPE_NONE, null);
+			}
+		});
 
-        animAlpha.start();
+		animAlpha.start();
 
-    }
+	}
 }
