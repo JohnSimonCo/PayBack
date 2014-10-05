@@ -127,6 +127,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		NdefMessage msg = (NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
 		NdefRecord[] records = msg.getRecords();
 
+		Resource.toast(this, "Got some shit");
 		Resource.toast(this, Resource.getContents(records[0]));
 
 
