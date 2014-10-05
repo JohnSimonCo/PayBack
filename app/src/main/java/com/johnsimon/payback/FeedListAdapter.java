@@ -67,11 +67,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		holder.amount.setText(debt.amountAsString);
 		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
-        holder.date.setText(" - " + DateUtils.getRelativeTimeSpanString(
-                debt.timestamp,
-                System.currentTimeMillis(),
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_ALL ));
+        holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));
 
         if(owner.color != null) {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));

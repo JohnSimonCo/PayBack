@@ -49,6 +49,7 @@
     <string name="bytime">Latest</string>
     <string name="byamount">By amount</string>
     <string name="clear">Clear</string>
+    <string name="justnow">Just now</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

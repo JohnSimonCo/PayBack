@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.nfc.NdefRecord;
 import android.provider.ContactsContract;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -369,5 +370,18 @@ public class Resource {
 
 	public static String getContents(NdefRecord record) {
 		return new String(record.getPayload());
+	}
+
+	public static CharSequence getRelativeTimeString(Context ctx, long timestamp) {
+		long now = System.currentTimeMillis();
+		return (now - timestamp < 60000)
+				?	ctx.getString(R.string.justnow)
+				:	DateUtils.getRelativeTimeSpanString(
+						timestamp,
+						now,
+						DateUtils.SECOND_IN_MILLIS,
+						DateUtils.FORMAT_ABBREV_ALL);
+
+
 	}
 }
