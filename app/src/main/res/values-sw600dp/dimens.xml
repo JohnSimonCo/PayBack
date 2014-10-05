@@ -15,6 +15,6 @@
     <dimen name="action_bar_height">56dp</dimen>
     <dimen name="navigation_drawer_padding">0dp</dimen>
 
-    <dimen name="feed_list_item_extra_margin">16dp</dimen>
+    <dimen name="feed_list_item_extra_margin">32dp</dimen>
 
 </resources>
