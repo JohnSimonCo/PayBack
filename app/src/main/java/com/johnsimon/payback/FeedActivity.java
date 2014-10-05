@@ -7,6 +7,9 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -20,7 +23,7 @@ import java.util.UUID;
 
 //public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
 //http://developer.android.com/reference/android/text/format/DateUtils.html#getRelativeTimeSpanString%28long%29
-public class FeedActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class FeedActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, NfcAdapter.CreateNdefMessageCallback {
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
@@ -168,4 +171,9 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         super.onRestoreInstanceState(savedInstanceState);
         animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
     }
+
+	@Override
+	public NdefMessage createNdefMessage(NfcEvent event) {
+		return null;
+	}
 }
