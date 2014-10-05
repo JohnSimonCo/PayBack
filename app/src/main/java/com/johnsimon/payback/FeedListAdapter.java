@@ -80,7 +80,6 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
         }
 
-
 		if (debt.isPaidBack) {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));
 			holder.note.setTextColor(context.getResources().getColor(R.color.gray_oncolor_light));

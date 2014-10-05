@@ -182,8 +182,8 @@ public class CreateDebtActivity extends Activity {
 					Intent intent = new Intent(ctx, FeedActivity.class)
 							.putExtra(FeedActivity.ARG_GOTO_PERSON_ID, person.id.toString());
 
+					finishAffinity();
 					startActivity(intent, ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
-					finish();
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}
