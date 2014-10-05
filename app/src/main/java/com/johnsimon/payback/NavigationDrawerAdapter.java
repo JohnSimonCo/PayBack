@@ -28,10 +28,10 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	public void selectPerson(Person person) {
-		for(int postion = 0, l = items.size(); postion < l; postion++) {
-			NavigationDrawerItem item = items.get(postion);
+		for(int i = 0, l = items.size(); i < l; i++) {
+			NavigationDrawerItem item = items.get(i);
 			if(person == null && item == allItem || person != null && item.personId == person.id) {
-				NavigationDrawerFragment.mCurrentSelectedPosition = postion;
+				NavigationDrawerFragment.mCurrentSelectedPosition = i;
 				break;
 			}
 		}

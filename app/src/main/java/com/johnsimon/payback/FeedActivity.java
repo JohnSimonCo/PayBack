@@ -88,7 +88,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 		} else if (intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
 			String uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-			intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
 
 			Person person = Resource.data.findPerson(UUID.fromString(uuid));
 			actionBar.setSubtitle(person.name);
