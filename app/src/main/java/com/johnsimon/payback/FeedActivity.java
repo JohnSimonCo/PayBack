@@ -34,6 +34,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
     private NavigationDrawerFragment navigationDrawerFragment;
 
+	NfcAdapter nfcAdapter;
+
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -67,6 +69,11 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		        R.id.navigation_drawer,
 		        (DrawerLayout) findViewById(R.id.drawer_layout)
         );
+
+		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		if (nfcAdapter != null) {
+			nfcAdapter.setNdefPushMessageCallback(this, this);
+		}
     }
 
 	@Override
@@ -89,6 +96,35 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		}
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		// Check to see that the Activity started due to an Android Beam
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+			processIntent(getIntent());
+		}
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		// onResume gets called after this to handle the intent
+		setIntent(intent);
+	}
+
+	/**
+	 * Parses the NDEF Message from the intent and prints to the TextView
+	 */
+	void processIntent(Intent intent) {
+		/*textView = (TextView) findViewById(R.id.textView);
+		Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
+				NfcAdapter.EXTRA_NDEF_MESSAGES);
+		// only one message sent during the beam
+		NdefMessage msg = (NdefMessage) rawMsgs[0];
+		// record 0 contains the MIME type, record 1 is the AAR, if present
+		textView.setText(new String(msg.getRecords()[0].getPayload()));
+		*/
+	}
+
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		// update the main content by replacing fragments
@@ -108,7 +144,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(title);
         actionBar.setSubtitle(subtitle);

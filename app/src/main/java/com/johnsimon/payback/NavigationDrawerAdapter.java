@@ -27,6 +27,16 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		}
 	}
 
+	public void selectPerson(Person person) {
+		for(int postion = 0, l = items.size(); postion < l; postion++) {
+			NavigationDrawerItem item = items.get(postion);
+			if(person == null && item == allItem || person != null && item.personId == person.id) {
+				NavigationDrawerFragment.mCurrentSelectedPosition = postion;
+				break;
+			}
+		}
+	}
+
 	@Override
 	public int getCount() {
 		return items.size();
