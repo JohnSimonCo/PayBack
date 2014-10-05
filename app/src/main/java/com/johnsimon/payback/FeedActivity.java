@@ -2,28 +2,20 @@ package com.johnsimon.payback;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.PopupMenu;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.UUID;
-
-import static android.nfc.NdefRecord.createMime;
 
 //public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
 //http://developer.android.com/reference/android/text/format/DateUtils.html#getRelativeTimeSpanString%28long%29
@@ -115,11 +107,9 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
-		String text = ("Beam me up, Android!\n\n" +
-				"Beam Time: " + System.currentTimeMillis());
 		NdefMessage msg = new NdefMessage(
-				new NdefRecord[] {createMime(
-						"application/vnd.com.johnsimon.payback", text.getBytes())
+				new NdefRecord[] {
+						Resource.createRecord("Test")
 						/**
 						 * The Android Application Record (AAR) is commented out. When a device
 						 * receives a push with an AAR in it, the application specified in the AAR
@@ -135,6 +125,10 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 	void processIntent(Intent intent) {
 		NdefMessage msg = (NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
+		NdefRecord[] records = msg.getRecords();
+
+		Resource.toast(this, Resource.getContents(records[0]));
+
 
 		// record 0 contains the MIME type, record 1 is the AAR, if present
 		//textView.setText(new String(msg.getRecords()[0].getPayload()));
@@ -156,6 +150,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
         actionBar.setSubtitle(subtitle);
     }
+
+
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();

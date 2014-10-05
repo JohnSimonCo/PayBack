@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.nfc.NdefRecord;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.view.animation.Animation;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
+
+import static android.nfc.NdefRecord.createMime;
 
 public class Resource {
 	private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
@@ -93,12 +96,12 @@ public class Resource {
 		*/
 
 
-		/*
+		/* Non-Censored Version
 		Person druggie = new Person("Random druggie", UUID.randomUUID());
-		Person dealer = new Person("Ma hagsätra dealer", UUID.randomUUID());
-		Person ica = new Person("killen på ica", UUID.randomUUID());
 		people.add(druggie);
+		Person dealer = new Person("Ma hagsätra dealer", UUID.randomUUID());
 		people.add(dealer);
+		Person ica = new Person("killen på ica", UUID.randomUUID());
 		people.add(ica);
 
 		debts.add(new Debt(druggie, -2000, "weed an sum white shit"));
@@ -358,5 +361,13 @@ public class Resource {
 
 		animAlpha.start();
 
+	}
+
+	public static NdefRecord createRecord(String contents) {
+		return createMime("application/vnd.com.johnsimon.payback", contents.getBytes());
+	}
+
+	public static String getContents(NdefRecord record) {
+		return new String(record.getPayload());
 	}
 }

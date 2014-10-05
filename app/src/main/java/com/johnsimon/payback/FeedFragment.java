@@ -43,7 +43,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 			npe.printStackTrace();
 		}
 
-        RelativeLayout headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);//TODO getActivity().getLayoutInflater().inflate(R.layout.feed_list_header, null);
+        RelativeLayout headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);
 
 		final boolean showAll;
 		final Person person;
