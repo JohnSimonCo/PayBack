@@ -3,5 +3,6 @@
 
     <dimen name="feed_list_item_extra_margin">96dp</dimen>
     <dimen name="feed_left_margin">168dp</dimen>
+    <dimen name="fab_right_margin">88dp</dimen>
 
 </resources>
