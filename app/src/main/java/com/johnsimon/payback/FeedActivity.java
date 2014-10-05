@@ -16,6 +16,8 @@ import android.widget.PopupMenu;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.UUID;
+
 //public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
 //http://developer.android.com/reference/android/text/format/DateUtils.html#getRelativeTimeSpanString%28long%29
 public class FeedActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -63,6 +65,27 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		        (DrawerLayout) findViewById(R.id.drawer_layout)
         );
     }
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		Intent intent = getIntent();
+		if (intent.getBooleanExtra(FeedFragment.ARG_ALL, false)) {
+			//navigationDrawerFragment.
+			actionBar.setSubtitle(R.string.all);
+			NavigationDrawerFragment.mCurrentSelectedPosition = 0;
+		} else {
+			String uuid = null;
+			if(intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
+				uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+				intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+			} else if(args.containsKey(ARG_PERSON_ID)) {
+				uuid = args.getString(ARG_PERSON_ID);
+			}
+			Person person = Resource.data.findPerson(UUID.fromString(uuid));
+		}
+	}
 
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {

@@ -1,5 +1,6 @@
 package com.johnsimon.payback;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 	private ArrayList<Debt> debts;
 	private FeedListAdapter adapter;
+	private ActionBar actionBar;
 
 	private TextView total_debt;
 
@@ -35,13 +37,19 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
+		try {
+			actionBar = getActivity().getActionBar();
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+		}
+
         RelativeLayout headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);//TODO getActivity().getLayoutInflater().inflate(R.layout.feed_list_header, null);
 
 		final boolean showAll;
 		final Person person;
 		Intent intent = getActivity().getIntent();
 		Bundle args = getArguments();
-		if(args.getBoolean(ARG_ALL, false)) {
+		if(args.getBoolean(ARG_ALL, false)){
 			showAll = true;
 			person = null;
 			debts = Resource.debts;
