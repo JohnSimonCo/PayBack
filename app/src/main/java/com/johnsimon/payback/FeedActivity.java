@@ -107,6 +107,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
+		Resource.toast(this, "Sending some shit");
 		NdefMessage msg = new NdefMessage(
 				new NdefRecord[] {
 						Resource.createRecord("Test")
@@ -118,7 +119,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 						 * activity starts when receiving a beamed message. For now, this code
 						 * uses the tag dispatch system.
 						 */
-						//,NdefRecord.createApplicationRecord("com.example.android.beam")
+						,NdefRecord.createApplicationRecord("com.johnsimon.payback")
 				});
 		return msg;
 	}
@@ -129,7 +130,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 		Resource.toast(this, "Got some shit");
 		Resource.toast(this, Resource.getContents(records[0]));
-
 
 		// record 0 contains the MIME type, record 1 is the AAR, if present
 		//textView.setText(new String(msg.getRecords()[0].getPayload()));
