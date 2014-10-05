@@ -28,10 +28,7 @@
     <color name="color1">#31B579</color>
     <color name="color2">#547BCA</color>
     <color name="color3">#DE5948</color>
-    <color name="color4">#E5AF4F</color>
-    <color name="color5">#845E85</color>
-    <color name="color6">#546172</color>
-    <color name="color7">#AE6B24</color>
-    <color name="color8">#AEB857</color>
+    <color name="color4">#845E85</color>
+    <color name="color6">#AE6B24</color>
 
 </resources>
