@@ -71,13 +71,14 @@ public class MaterialMenuIcon extends MaterialMenuBase {
         params.bottomMargin = 0;
         params.topMargin = 0;
         view.setLayoutParams(params);
-        view.setPadding(Resource.getPx(16, activity), view.getPaddingTop(), view.getPaddingRight(), view.getPaddingBottom());
+        view.setPadding(Resource.getPx(16, activity), view.getPaddingTop(), Resource.getPx(10, activity), view.getPaddingBottom());
 
         ActionBar actionBar = activity.getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setIcon(drawable);
+
     }
 
     @Override
