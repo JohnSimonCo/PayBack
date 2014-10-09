@@ -3,18 +3,26 @@ package com.johnsimon.payback;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Interpolator;
 
+import com.balysv.materialmenu.MaterialMenu;
+import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.balysv.materialmenu.MaterialMenuIcon;
+import com.balysv.materialmenu.MaterialMenuView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.Random;
 import java.util.UUID;
 
 //public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
@@ -38,6 +46,9 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     private CharSequence title;
     private CharSequence subtitle;
 
+    private MaterialMenuIcon materialMenu;
+    private boolean lastOpen = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +62,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         }
 
 	    setContentView(R.layout.activity_feed);
+
+        materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
 	    SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
@@ -70,6 +83,9 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(this, this);
 		}
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
 	@Override
@@ -152,8 +168,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         actionBar.setSubtitle(subtitle);
     }
 
-
-
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -161,7 +175,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         actionBar.setTitle(title);
         actionBar.setSubtitle(subtitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,8 +190,51 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (navigationDrawerFragment.openDrawer != lastOpen) {
+            if (navigationDrawerFragment.openDrawer) {
+                materialMenu.animateState(MaterialMenuDrawable.IconState.ARROW);
+            } else {
+                materialMenu.animateState(MaterialMenuDrawable.IconState.BURGER);
+            }
+            lastOpen = navigationDrawerFragment.openDrawer;
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        boolean result = super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == android.R.id.home) {
+            if (navigationDrawerFragment.openDrawer) {
+                materialMenu.animatePressedState(MaterialMenuDrawable.IconState.BURGER);
+                navigationDrawerFragment.openDrawer = false;
+            } else {
+                materialMenu.animatePressedState(MaterialMenuDrawable.IconState.ARROW);
+                navigationDrawerFragment.openDrawer = true;
+            }
+
+            //We're using the animating flag to avoid doing onDrawerSlide
+            // calculations when animating the drawer sliding.
+            navigationDrawerFragment.isAnimatingSlide = true;
+
+            //Using a delay handler is necessary because the user can "catch"
+            // the animtion before it's finished thereby never resetting the
+            // flag since onDrawerClosed/Opened never is called.
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    navigationDrawerFragment.isAnimatingSlide = false;
+                }
+            }, 300);
+
+        }
+
+        return result;
     }
 
 	/*  This method is called by /res/navigation_drawer_list_footer.xml
@@ -211,12 +267,18 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
+        materialMenu.onSaveInstanceState(outState);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        materialMenu.syncState(savedInstanceState);
     }
 
 }

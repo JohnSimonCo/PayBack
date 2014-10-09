@@ -58,6 +58,10 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    public boolean openDrawer = false;
+    private float lastSlideOffset = 1000;
+    public boolean isAnimatingSlide = false;
+
     public NavigationDrawerFragment() {
     }
 
@@ -119,7 +123,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout = drawerLayout;
 
         // set a custom shadow that overlays the main content when the drawer opens
-//        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
         ActionBar actionBar = getActionBar();
@@ -131,7 +135,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_navigation_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.drawable.thin,                  /* http://upload.wikimedia.org/wikipedia/en/3/34/Dirtyjobslogo.JPG  <- Thanks for the tip Mike Rowe!*/
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -141,6 +145,9 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
+
+                openDrawer = false;
+                isAnimatingSlide = false;
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
@@ -152,6 +159,9 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
 
+                openDrawer = true;
+                isAnimatingSlide = false;
+
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
@@ -162,6 +172,26 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                if (!isAnimatingSlide()) {
+                    if (getLastSlideOffset() == 1000) {
+                        setLastSlideOffset(slideOffset);
+                    } else {
+                        if (slideOffset > getLastSlideOffset()) {
+                            openDrawer = true;
+                            getActivity().invalidateOptionsMenu();
+                        } else {
+                            openDrawer = false;
+                            getActivity().invalidateOptionsMenu();
+                        }
+                        setLastSlideOffset(slideOffset);
+                    }
+                }
+                super.onDrawerSlide(drawerView, slideOffset);
             }
         };
 
@@ -180,6 +210,18 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    private void setLastSlideOffset(float offset) {
+        lastSlideOffset = offset;
+    }
+
+    private float getLastSlideOffset() {
+        return lastSlideOffset;
+    }
+
+    private boolean isAnimatingSlide() {
+        return isAnimatingSlide;
     }
 
 	public void setSelectedPerson(Person p) {
