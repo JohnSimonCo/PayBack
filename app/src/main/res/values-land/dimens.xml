@@ -2,6 +2,6 @@
 <resources>
 
     <dimen name="action_bar_height">48dp</dimen>
-    <dimen name="navigation_drawer_padding">8dp</dimen>
+    <dimen name="navigation_drawer_padding">18dp</dimen>
 
 </resources>

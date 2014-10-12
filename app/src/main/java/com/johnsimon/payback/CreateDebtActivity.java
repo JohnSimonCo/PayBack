@@ -197,8 +197,8 @@ public class CreateDebtActivity extends Activity {
         Animation inFromTop = AnimationUtils.loadAnimation(this, R.anim.in_from_top);
         createHeader.startAnimation(inFromTop);
         create_fab.startAnimation(inFromTop);
-        Resource.animateHardwareFadeIn(createHeaderContent, 300, 800);
-        Resource.animateHardwareFadeIn(floatLabelNote, 300, 800);
+        Resource.animateHardwareFadeIn(createHeaderContent, 500, 800);
+        Resource.animateHardwareFadeIn(floatLabelNote, 500, 800);
 
     }
 

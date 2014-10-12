@@ -2,9 +2,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:background="@drawable/selector_navigation_drawer_list_item"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
     android:paddingLeft="@dimen/base_padding"
     android:paddingRight="@dimen/base_padding"
     android:layout_width="match_parent"
@@ -13,13 +12,13 @@
     <RelativeLayout
         android:layout_gravity="center_vertical"
         android:layout_marginRight="16dp"
-        android:layout_width="44dp"
-        android:layout_height="44dp">
+        android:layout_width="40dp"
+        android:layout_height="40dp">
 
         <ImageView
             android:background="@drawable/ic_ic_person_placeholder_outline"
-            android:layout_width="44dp"
-            android:layout_height="44dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
 
         <ImageView
             android:background="@null"
@@ -27,15 +26,15 @@
             android:layout_marginLeft="2dp"
             android:src="@drawable/ic_person_placeholder"
             android:id="@+id/navigation_drawer_list_item_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_width="36dp"
+            android:layout_height="36dp" />
 
     </RelativeLayout>
 
     <com.johnsimon.payback.RobotoMediumTextView
         android:layout_gravity="center_vertical"
         android:textColor="@color/gray_text_light"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:id="@+id/navigation_drawer_list_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

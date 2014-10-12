@@ -1,6 +1,7 @@
 package com.johnsimon.payback;
 
 import android.app.ActionBar;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -96,7 +97,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 					intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
 				}
 
-				startActivity(intent);
+				startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), android.R.anim.fade_in, android.R.anim.fade_out).toBundle());
 			}
 		});
 
@@ -117,7 +118,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
             }
         });
 
-        int headerHeight = headerView.getLayoutParams().height;//getActivity().getResources().getDimensionPixelSize(R.dimen.header_height);
+        int headerHeight = headerView.getLayoutParams().height;
         QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
                 headerView, -headerHeight, null, 0);
         // Setting to true will slide the header and/or footer into view or slide out of view based

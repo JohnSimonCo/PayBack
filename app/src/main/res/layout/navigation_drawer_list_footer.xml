@@ -7,6 +7,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/gray_oncolor_very_light"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
     <Button
         android:id="@+id/navigation_drawer_footer_people"
         style="@style/navigation_drawer_footer"
@@ -17,11 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
 
-    <View
-        android:background="@color/gray_oncolor_very_light"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
-
     <Button
         android:id="@+id/navigation_drawer_footer_settings"
         style="@style/navigation_drawer_footer"
@@ -31,11 +33,6 @@
         android:text="@string/action_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
-
-    <View
-        android:background="@color/gray_oncolor_very_light"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
 
     <Button
         android:id="@+id/navigation_drawer_footer_about"

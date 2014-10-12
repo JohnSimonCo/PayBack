@@ -13,7 +13,7 @@
     <dimen name="fab_create_right_margin">24dp</dimen>
 
     <dimen name="action_bar_height">56dp</dimen>
-    <dimen name="navigation_drawer_padding">0dp</dimen>
+    <dimen name="navigation_drawer_padding">10dp</dimen>
 
     <dimen name="feed_list_item_extra_margin">32dp</dimen>
     <dimen name="feed_left_margin">104dp</dimen>
