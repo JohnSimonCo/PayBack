@@ -161,8 +161,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
 			subtitle = item.title;
 		}
-
-        actionBar.setSubtitle(subtitle);
     }
 
     public void restoreActionBar() {
