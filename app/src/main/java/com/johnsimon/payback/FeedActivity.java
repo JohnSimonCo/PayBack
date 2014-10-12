@@ -84,8 +84,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 			nfcAdapter.setNdefPushMessageCallback(this, this);
 		}
 
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
     }
 
 	@Override
@@ -274,6 +272,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
+        navigationDrawerFragment.openDrawer = navigationDrawerFragment.isDrawerOpen();
     }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
