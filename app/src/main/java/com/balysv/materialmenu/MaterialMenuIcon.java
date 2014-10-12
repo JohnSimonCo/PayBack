@@ -24,6 +24,7 @@ import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.johnsimon.payback.FeedActivity;
 import com.johnsimon.payback.Resource;
 
 import static com.balysv.materialmenu.MaterialMenuDrawable.DEFAULT_PRESSED_DURATION;
@@ -70,14 +71,25 @@ public class MaterialMenuIcon extends MaterialMenuBase {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         params.bottomMargin = 0;
         params.topMargin = 0;
-        view.setLayoutParams(params);
-        view.setPadding(Resource.getPx(16, activity), view.getPaddingTop(), Resource.getPx(10, activity), view.getPaddingBottom());
 
         ActionBar actionBar = activity.getActionBar();
+
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setIcon(drawable);
+
+        if (activity instanceof FeedActivity) {
+            view.setPadding(Resource.getPx(16, activity), view.getPaddingTop(), Resource.getPx(10, activity), view.getPaddingBottom());
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        } else {
+            view.setPadding(0, view.getPaddingTop(),view.getPaddingRight(), view.getPaddingBottom());
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            params.leftMargin = 0;
+        }
+
+        view.setLayoutParams(params);
+
+
 
     }
 

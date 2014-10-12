@@ -83,7 +83,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(this, this);
 		}
-
     }
 
 	@Override

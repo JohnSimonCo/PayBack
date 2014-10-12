@@ -33,7 +33,7 @@
         <activity
             android:name="com.johnsimon.payback.CreateDebtActivity"
             android:icon="@drawable/ic_actionbar_left"
-            android:label="@string/title_activity_create_debt"
+            android:label=""
             android:theme="@style/AppTheme_NoActionBarBorder" >
         </activity>
         <activity

@@ -1,9 +1,11 @@
 package com.johnsimon.payback;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.balysv.materialmenu.MaterialMenuIcon;
 import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
 import com.micromobs.android.floatlabel.FloatLabelEditText;
 import com.micromobs.android.floatlabel.FloatLabelEditTextDark;
@@ -66,8 +70,6 @@ public class CreateDebtActivity extends Activity {
 
 		Intent intent = getIntent();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
 		floatLabelAmount = (FloatLabelEditText) findViewById(R.id.create_float_label_amount);
 		floatLabelNote = (FloatLabelEditTextDark) findViewById(R.id.create_float_label_note);
 		floatLabelName = (FloatLabelAutoCompleteTextView) findViewById(R.id.create_float_label_name);
@@ -83,7 +85,7 @@ public class CreateDebtActivity extends Activity {
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
-		if(intent.hasExtra(ARG_TIMESTAMP)) {
+		if (intent.hasExtra(ARG_TIMESTAMP)) {
 			editingDebt = Resource.data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.owner.name);
@@ -210,15 +212,30 @@ public class CreateDebtActivity extends Activity {
             }
         });
 
+        final MaterialMenuIcon materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
-        LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
-        LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
+        if (savedInstanceState == null) {
 
-        Animation inFromTop = AnimationUtils.loadAnimation(this, R.anim.in_from_top);
-        createHeader.startAnimation(inFromTop);
-        create_fab.startAnimation(inFromTop);
-        Resource.animateHardwareFadeIn(createHeaderContent, 500, 800);
-        Resource.animateHardwareFadeIn(floatLabelNote, 500, 800);
+            materialMenu.setState(MaterialMenuDrawable.IconState.BURGER);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    materialMenu.animateState(MaterialMenuDrawable.IconState.ARROW);
+                }
+            }, 600);
+
+            LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
+            LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
+
+            Animation inFromTop = AnimationUtils.loadAnimation(this, R.anim.in_from_top);
+            createHeader.startAnimation(inFromTop);
+            create_fab.startAnimation(inFromTop);
+            Resource.animateHardwareFadeIn(createHeaderContent, 500, 800);
+            Resource.animateHardwareFadeIn(floatLabelNote, 500, 800);
+        } else {
+            materialMenu.setState(MaterialMenuDrawable.IconState.ARROW);
+        }
 
     }
 
