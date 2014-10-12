@@ -364,6 +364,29 @@ public class Resource {
 
 	}
 
+    public static void animateHardwareFadeOut(final View view, int duration, int offset) {
+
+        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+        view.setAlpha(1f);
+
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
+                "alpha", 0);
+        animAlpha.setDuration(duration);
+        animAlpha.setStartDelay(offset);
+
+        animAlpha.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.VISIBLE);
+                view.setLayerType(View.LAYER_TYPE_NONE, null);
+            }
+        });
+
+        animAlpha.start();
+
+    }
+
 	public static NdefRecord createRecord(String contents) {
 		return createMime("application/vnd.com.johnsimon.payback", contents.getBytes());
 	}

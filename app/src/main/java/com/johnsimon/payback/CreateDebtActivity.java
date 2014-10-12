@@ -58,6 +58,8 @@ public class CreateDebtActivity extends Activity {
 
 	private Debt editingDebt = null;
 
+    private MaterialMenuIcon materialMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,18 +203,26 @@ public class CreateDebtActivity extends Activity {
 						floatLabelNoteEditText.getText().toString().trim()
 					);
 
-					Intent intent = new Intent(ctx, FeedActivity.class)
+					final Intent intent = new Intent(ctx, FeedActivity.class)
 							.putExtra(FeedActivity.ARG_GOTO_PERSON_ID, person.id.toString());
 
-					finishAffinity();
-					startActivity(intent, ActivityOptions.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle());
+                    animateAway(false);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            finishAffinity();
+                            startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
+                        }
+                    }, 300);
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}
             }
         });
 
-        final MaterialMenuIcon materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
         if (savedInstanceState == null) {
 
@@ -284,14 +294,64 @@ public class CreateDebtActivity extends Activity {
             return true;
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
-                finish();
+                animateAway(true);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    }
+                }, 300);
             } else {
-                startActivity(new Intent(this, FeedActivity.class));
-                finishAffinity();
+
+                animateAway(true);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
+                        finishAffinity();
+                    }
+                }, 300);
+
             }
 
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        animateAway(false);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        }, 300);
+    }
+
+    public void animateAway(boolean animatePress) {
+        if (animatePress) {
+            materialMenu.animatePressedState(MaterialMenuDrawable.IconState.BURGER);
+        } else {
+            materialMenu.animateState(MaterialMenuDrawable.IconState.BURGER);
+        }
+
+        LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
+        LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
+
+        Animation outToTop = AnimationUtils.loadAnimation(this, R.anim.out_to_top);
+        outToTop.setFillAfter(true);
+        createHeader.startAnimation(outToTop);
+        create_fab.startAnimation(outToTop);
+        Resource.animateHardwareFadeOut(createHeaderContent, 400, 0);
+        Resource.animateHardwareFadeOut(floatLabelNote, 400, 0);
+    }
+
 }
