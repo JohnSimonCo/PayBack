@@ -3,9 +3,6 @@ package com.johnsimon.payback;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/**
- * Created by John on 2014-09-02.
- */
 public class DebtSerializable {
 	public UUID ownerId;
 	public float amount;

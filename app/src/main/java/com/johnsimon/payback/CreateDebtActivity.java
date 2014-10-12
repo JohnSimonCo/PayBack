@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -21,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 
 import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
 import com.micromobs.android.floatlabel.FloatLabelEditText;
@@ -118,6 +121,23 @@ public class CreateDebtActivity extends Activity {
 			clearEditText.setVisibility(View.GONE);
 		}
 
+        final ScrollView mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
+
+        floatLabelNoteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, boolean hasFocus) {
+
+                if (hasFocus) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainScrollView.smoothScrollTo(0, mainScrollView.getBottom());
+                        }
+                    }, 200);
+                }
+            }
+        });
+
 		floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -148,7 +168,7 @@ public class CreateDebtActivity extends Activity {
 			@Override
 			public void onValid() {
 				//Some dirty Simme-style validation up in here
-				if(floatLabelAmountEditText.getText().equals("0")) return;
+				if (floatLabelAmountEditText.getText().equals("0")) return;
 				create_fab.setActive(true);
 				create_fab.setAlpha(1f);
 			}
