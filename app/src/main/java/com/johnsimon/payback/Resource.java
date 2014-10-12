@@ -185,11 +185,11 @@ public class Resource {
 	}
 
 	public static void expand(final View v) {
-		expand(v, true, 3);
+		expand(v, true, 4);
 	}
 
 	public static void expand(final View v, boolean b) {
-		expand(v, b, 3);
+		expand(v, b, 4);
 	}
 
 	public static void expand(final View v, boolean animate, int msPerDp) {
@@ -225,11 +225,11 @@ public class Resource {
 	}
 
 	public static void collapse(final View v) {
-		collapse(v, true, 3);
+		collapse(v, true, 4);
 	}
 
 	public static void collapse(final View v, boolean b) {
-		collapse(v, b, 3);
+		collapse(v, b, 4);
 	}
 
 	public static void collapse(final View v, boolean animate, int msPerDp) {
