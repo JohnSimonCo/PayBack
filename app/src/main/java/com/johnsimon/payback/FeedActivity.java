@@ -14,15 +14,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Interpolator;
 
-import com.balysv.materialmenu.MaterialMenu;
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.balysv.materialmenu.MaterialMenuIcon;
-import com.balysv.materialmenu.MaterialMenuView;
+import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import java.util.Random;
+import java.util.ArrayList;
 import java.util.UUID;
 
 //public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
@@ -32,13 +32,19 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
 	public static String ARG_GOTO_PERSON_ID = Resource.arg(ARG_PREFIX, "GOTO_PERSON");
+
+	public static String SAVE_PERSON_ID = "SAVE_PERSON_ID";
+
     public static boolean animateListItems = true;
+
+	public static ArrayList<Debt> feed;
+	public static Person person;
 
     private ActionBar actionBar;
 
     private NavigationDrawerFragment navigationDrawerFragment;
 
-	NfcAdapter nfcAdapter;
+	private NfcAdapter nfcAdapter;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -83,6 +89,10 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(this, this);
 		}
+
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+				.build();
+		ImageLoader.getInstance().init(config);
     }
 
 	@Override
@@ -90,17 +100,42 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		super.onStart();
 
 		Intent intent = getIntent();
-		if (intent.getBooleanExtra(FeedFragment.ARG_ALL, false)) {
-			actionBar.setSubtitle(R.string.all);
-			navigationDrawerFragment.setSelectedPerson(null);
 
-		} else if (intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
-			String uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
+		if(intent.hasExtra(ARG_GOTO_PERSON_ID)) {
+			intent.removeExtra(ARG_GOTO_PERSON_ID);
 
-			Person person = Resource.data.findPerson(UUID.fromString(uuid));
-			actionBar.setSubtitle(person.name);
+			showPerson(intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID));
+
 			navigationDrawerFragment.setSelectedPerson(person);
+		} else {
+			showAll();
+
+			navigationDrawerFragment.setSelectedPerson(null);
 		}
+
+		setSubtitle();
+	}
+
+	private void showPerson(UUID uuid) {
+		person = Resource.data.findPerson(uuid);
+		feed = Resource.data.personalizedFeed(person);
+	}
+	private void showPerson(String personId) {
+		showPerson(UUID.fromString(personId));
+	}
+	private void showAll() {
+		person = null;
+		feed = Resource.debts;
+	}
+	private void setSubtitle() {
+		subtitle = isAll()
+			? getString(R.string.all)
+			: person.name;
+		actionBar.setSubtitle(subtitle);
+	}
+
+	public static boolean isAll() {
+		return person == null;
 	}
 
 	@Override
@@ -120,47 +155,29 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
-		Resource.toast(this, "Sending some shit");
-		NdefMessage msg = new NdefMessage(
-				new NdefRecord[] {
-						Resource.createRecord("Test")
-						/**
-						 * The Android Application Record (AAR) is commented out. When a device
-						 * receives a push with an AAR in it, the application specified in the AAR
-						 * is guaranteed to run. The AAR overrides the tag dispatch system.
-						 * You can add it back in to guarantee that this
-						 * activity starts when receiving a beamed message. For now, this code
-						 * uses the tag dispatch system.
-						 */
-						,NdefRecord.createApplicationRecord("com.johnsimon.payback")
-				});
-		return msg;
+		return isAll() ? null : Resource.createMessage(feed);
 	}
 
 	public void processIntent(Intent intent) {
-		NdefMessage msg = (NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
-		NdefRecord[] records = msg.getRecords();
+		NdefMessage message = (NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
+		Debt[] debts = Resource.readMessage(message);
 
-		Resource.toast(this, "Got some shit");
-		Resource.toast(this, Resource.getContents(records[0]));
-
-		// record 0 contains the MIME type, record 1 is the AAR, if present
-		//textView.setText(new String(msg.getRecords()[0].getPayload()));
+		Resource.toast(this, "Sent " + debts.length + " debts via NFC");
 	}
 
 	@Override
     public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
-		// update the main content by replacing fragments
+		if(item.type == NavigationDrawerItem.Type.All) {
+			showAll();
+		} else if(item.type == NavigationDrawerItem.Type.Person) {
+			showPerson(item.personId);
+		}
+
+		setSubtitle();
 
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
 				.commit();
-
-        if(item.type == NavigationDrawerItem.Type.All) {
-			subtitle = getString(R.string.all);
-		} else if(item.type == NavigationDrawerItem.Type.Person) {
-			subtitle = item.title;
-		}
     }
 
     public void restoreActionBar() {
@@ -262,7 +279,11 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
-        materialMenu.onSaveInstanceState(outState);
+		materialMenu.onSaveInstanceState(outState);
+
+		if(person != null) {
+			outState.putString(SAVE_PERSON_ID, person.id.toString());
+		}
     }
 
     @Override
@@ -270,7 +291,16 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         super.onRestoreInstanceState(savedInstanceState);
         animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
         navigationDrawerFragment.openDrawer = navigationDrawerFragment.isDrawerOpen();
-    }
+
+		String personId = savedInstanceState.getString(SAVE_PERSON_ID, null);
+		if(personId == null) {
+			showAll();
+		} else {
+			showPerson(personId);
+		}
+
+		setSubtitle();
+	}
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
