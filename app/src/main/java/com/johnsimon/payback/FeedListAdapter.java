@@ -2,6 +2,7 @@ package com.johnsimon.payback;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -11,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -77,7 +82,15 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
         } else {
             holder.avatarLetter.setVisibility(View.GONE);
 
-            holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
+			final ViewHolder finalHolder = holder;
+			ImageLoader.getInstance().loadImage(owner.photoURI.replaceAll("/photo$", ""), new SimpleImageLoadingListener() {
+				@Override
+				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+					finalHolder.avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
+				}
+			});
+			Resource.toast(context, owner.photoURI.replaceAll("/photo$", ""));
+
         }
 
 		if (debt.isPaidBack) {

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
@@ -406,5 +407,33 @@ public class Resource {
 						DateUtils.FORMAT_ABBREV_ALL);
 
 
+	}
+
+	public static NdefMessage createMessage(ArrayList<Debt> feed) {
+		Debt[] debts = feed.toArray(new Debt[feed.size()]);
+		String JSON = new Gson().toJson(debts, Debt[].class);
+		return new NdefMessage(
+				new NdefRecord[] {
+						Resource.createRecord(JSON)
+						/**
+						 * The Android Application Record (AAR) is commented out. When a device
+						 * receives a push with an AAR in it, the application specified in the AAR
+						 * is guaranteed to run. The AAR overrides the tag dispatch system.
+						 * You can add it back in to guarantee that this
+						 * activity starts when receiving a beamed message. For now, this code
+						 * uses the tag dispatch system.
+						 */
+
+				});
+	}
+
+	public static Debt[] readMessage(NdefMessage message) {
+		NdefRecord[] records = message.getRecords();
+		String JSON = Resource.getContents(records[0]);
+
+		// record 0 contains the MIME type, record 1 is the AAR, if present
+		//textView.setText(new String(msg.getRecords()[0].getPayload()));
+
+		return new Gson().fromJson(JSON, Debt[].class);
 	}
 }

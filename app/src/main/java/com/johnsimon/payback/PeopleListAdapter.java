@@ -43,6 +43,7 @@ public class PeopleListAdapter extends ArrayAdapter<Debt> {
 
 		if(debt.owner.color != null) {
 			//TODO Set avatar as image like some stupid faggot
+
 		} else {
 			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
 		}

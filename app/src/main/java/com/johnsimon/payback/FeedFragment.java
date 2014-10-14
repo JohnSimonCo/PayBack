@@ -1,6 +1,5 @@
 package com.johnsimon.payback;
 
-import android.app.ActionBar;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
@@ -19,17 +18,12 @@ import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-	public final static String ARG_ALL = Resource.arg(ARG_PREFIX, "ARG_ALL");
-	public final static String ARG_PERSON_ID = Resource.arg(ARG_PREFIX, "ARG_PERSON_ID");
-
 	private ArrayList<Debt> debts;
 	private FeedListAdapter adapter;
-	private ActionBar actionBar;
 
 	private TextView total_debt;
 
@@ -38,43 +32,10 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
-		try {
-			actionBar = getActivity().getActionBar();
-		} catch (NullPointerException npe) {
-			npe.printStackTrace();
-		}
-
         RelativeLayout headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);
 
-		final boolean showAll;
-		final Person person;
-
-		Intent intent = getActivity().getIntent();
-		Bundle args = getArguments();
-
-		if (args.getBoolean(ARG_ALL, false)){
-			showAll = true;
-			person = null;
-			debts = Resource.debts;
-
-		} else {
-			showAll = false;
-			String uuid = null;
-
-			if (intent.hasExtra(FeedActivity.ARG_GOTO_PERSON_ID)) {
-				uuid = intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-				intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-			} else if (args.containsKey(ARG_PERSON_ID)) {
-				uuid = args.getString(ARG_PERSON_ID);
-			}
-			person = Resource.data.findPerson(UUID.fromString(uuid));
-			debts = Resource.data.personalizedFeed(person);
-
-		}
-
-        intent.removeExtra(ARG_ALL);
-        intent.removeExtra(FeedActivity.ARG_GOTO_PERSON_ID);
-        intent.removeExtra(ARG_PERSON_ID);
+		debts = FeedActivity.feed;
+		final Person person = FeedActivity.person;
 
         total_debt = (TextView) headerView.findViewById(R.id.total_debt);
 
@@ -102,7 +63,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 				Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
 					.putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
-				if(!showAll) {
+				if(!FeedActivity.isAll()) {
 					intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
 				}
 
@@ -140,14 +101,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 	public static FeedFragment newInstance(NavigationDrawerItem item) {
 		FeedFragment fragment = new FeedFragment();
-		Bundle args = new Bundle();
 
-		if(item.type == NavigationDrawerItem.Type.All) {
-			args.putBoolean(ARG_ALL, true);
-		} else if(item.type == NavigationDrawerItem.Type.Person) {
-			args.putString(ARG_PERSON_ID, item.personId.toString());
-		}
-		fragment.setArguments(args);
 		return fragment;
 	}
 
