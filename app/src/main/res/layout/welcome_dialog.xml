@@ -15,7 +15,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="160dp">
 
             <ImageView
                 android:src="@drawable/art"
@@ -43,6 +43,7 @@
         </RelativeLayout>
 
         <com.johnsimon.payback.RobotoMediumTextView
+            android:paddingBottom="8dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="16dp"
@@ -53,29 +54,27 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="8dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.micromobs.android.floatlabel.FloatLabelEditText
-                android:id="@+id/welcome_currency_edit_float"
-                android:textColorHint="@color/gray_text_light"
-                android:textColor="@color/gray_text_normal"
-                android:inputType="textCapWords"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-
-                floatlabel:hint="@string/welcome_currency_hint"
-                floatlabel:textSize="17sp"
-                floatlabel:textColorHintFocused="@color/gray_text_light"
-                floatlabel:textColorHintUnFocused="@color/gray_text_light"    />
-
-            <Spinner
-                android:layout_marginTop="24dp"
-                android:layout_gravity="right"
+            <com.johnsimon.payback.NDSpinner
                 android:id="@+id/welcome_currency_spinner"
-                android:layout_width="80dp"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"    />
+
+            <com.johnsimon.payback.RobotoMediumTextView
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:textSize="18sp"
+                android:id="@+id/welcome_currency_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
@@ -89,7 +88,7 @@
             android:layout_width="94dp"
             android:layout_height="42dp"
             android:background="?android:attr/selectableItemBackground"
-            android:textColor="@color/green_disabled"
+            android:textColor="@color/green_strong"
             android:clickable="false"
             android:textSize="16sp"/>
 

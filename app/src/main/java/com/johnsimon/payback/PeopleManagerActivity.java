@@ -1,11 +1,17 @@
 package com.johnsimon.payback;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.balysv.materialmenu.MaterialMenuIcon;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -31,6 +37,9 @@ public class PeopleManagerActivity extends Activity {
 
         setContentView(R.layout.activity_people_manager);
 
+		MaterialMenuIcon materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+		materialMenu.setState(MaterialMenuDrawable.IconState.ARROW);
+
 		listView = (DragSortListView) findViewById(R.id.people_listview);
 
 
@@ -52,13 +61,18 @@ public class PeopleManagerActivity extends Activity {
 
     }
 
-	private DragSortListView.DropListener onDrop = new DragSortListView.DropListener()
-	{
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private DragSortListView.DropListener onDrop = new DragSortListView.DropListener() {
 		@Override
-		public void drop(int from, int to)
-		{
-			if (from != to)
-			{
+		public void drop(int from, int to) {
+			if (from != to) {
 				String item = adapter.getItem(from);
 				adapter.remove(item);
 				adapter.insert(item, to);

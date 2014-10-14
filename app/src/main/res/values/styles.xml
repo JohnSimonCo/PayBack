@@ -8,6 +8,10 @@
 
     </style>
 
+    <style name="AppTheme_Normal" parent="@style/AppTheme">
+        <item name="android:homeAsUpIndicator">@drawable/ab_transparent_up_indicator</item>
+    </style>
+
     <style name="AppTheme_ActionBar_SubtitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle">
         <item name="android:textColor">@color/actionbar_subtitle_color</item>
     </style>

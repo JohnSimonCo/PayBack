@@ -28,6 +28,7 @@ import static android.nfc.NdefRecord.createMime;
 public class Resource {
 	private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
 	private final static String SAVE_KEY_APP_DATA = "APP_DATA";
+	private final static String SAVE_KEY_CURRENCY = "CURRENCY_SAVE_KEY";
 
 	private final static String PACKAGE_NAME = "se.jrp.deptapp";
 	private final static String ARG_PREFIX = PACKAGE_NAME + ".ARG_";
@@ -40,10 +41,8 @@ public class Resource {
 	private static Activity context;
 	private static SharedPreferences preferences;
 
-	private final static String currencySymbol = Currency.getInstance(Locale.getDefault()).getSymbol();
-
 	public static void fetchData(Activity context) {
-		if(data != null) return;
+		if (data != null) return;
 
 		Resource.context = context;
 		Resource.preferences = context.getPreferences(Context.MODE_PRIVATE);
@@ -53,7 +52,7 @@ public class Resource {
 		people = data.people;
 		debts = data.debts;
 
-		if(people.size() == 0) {
+		if (people.size() == 0) {
 			ColorPalette palette = ColorPalette.getInstance(context);
 			Person john = new Person("John Rapp", palette);
 			people.add(john);
@@ -137,8 +136,12 @@ public class Resource {
 		return ARG_PREFIX + prefix + "_" + arg;
 	}
 
+	public static void setCurrency(String currency) {
+		preferences.edit().putString(SAVE_KEY_CURRENCY, currency).apply();
+	}
+
 	public static String getCurrency() {
-		return currencySymbol;
+		return preferences.getString(SAVE_KEY_CURRENCY, "$");
 	}
 
 	private static ArrayList<Contact> getAllContacts(Context ctx) {

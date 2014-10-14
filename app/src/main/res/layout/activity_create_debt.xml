@@ -72,23 +72,25 @@
 
                         <RadioGroup
                             android:id="@+id/create_radio"
-                            android:layout_marginRight="16dp"
+                            android:layout_marginRight="12dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
                             <RadioButton
                                 android:id="@+id/create_radio_they_owe"
-                                android:textSize="19dp"
+                                android:textSize="18dp"
                                 android:checked="true"
                                 android:textColor="@android:color/white"
+                                android:fontFamily="sans-serif-condensed"
                                 android:text="@string/they_owe"
                                 android:layout_width="match_parent"
                                 android:layout_height="36dp" />
 
                             <RadioButton
                                 android:id="@+id/create_radio_i_owe"
-                                android:textSize="19dp"
+                                android:textSize="18dp"
                                 android:textColor="@android:color/white"
+                                android:fontFamily="sans-serif-condensed"
                                 android:text="@string/i_owe"
                                 android:layout_width="match_parent"
                                 android:layout_height="36dp" />
@@ -105,7 +107,7 @@
 
                             floatlabel:fitScreenWidth="full"
                             floatlabel:hint="@string/amount"
-                            floatlabel:textSize="18dp"
+                            floatlabel:textSize="17dp"
                             floatlabel:textColorHintFocused="@color/gray_oncolor_very_light"
                             floatlabel:textColorHintUnFocused="@color/gray_oncolor_very_light"   />
 

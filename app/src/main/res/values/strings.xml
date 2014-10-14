@@ -50,6 +50,7 @@
     <string name="byamount">By amount</string>
     <string name="clear">Clear</string>
     <string name="justnow">Just now</string>
+    <string name="done">Done</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -89,6 +90,7 @@
         <item>£</item>
         <item>¥</item>
         <item>Kr</item>
+        <item>Custom</item>
     </string-array>
 
     <string name="title_activity_people_manager">People</string>

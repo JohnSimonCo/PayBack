@@ -38,15 +38,14 @@
         </activity>
         <activity
             android:name="com.johnsimon.payback.SettingsActivity"
+            android:parentActivityName=".FeedActivity"
+            android:theme="@style/AppTheme_Normal"
             android:label="@string/pref_settings" />
         <activity
             android:name="com.johnsimon.payback.PeopleManagerActivity"
-            android:label="@string/title_activity_people_manager"
-            android:parentActivityName="com.johnsimon.payback.FeedActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.johnsimon.payback.FeedActivity" />
-        </activity>
+            android:parentActivityName=".FeedActivity"
+            android:theme="@style/AppTheme_Normal"
+            android:label="@string/title_activity_people_manager"   />
     </application>
 
 </manifest>
