@@ -44,10 +44,9 @@ public class ColorPalette {
 	}
 
 	public static ColorPalette getInstance(Context context) {
-		if(instance != null) {
-			return instance;
-		} else {
-			return (instance = new ColorPalette(context.getResources()));
+		if(instance == null) {
+			instance = new ColorPalette(context.getResources());
 		}
+		return instance;
 	}
 }
