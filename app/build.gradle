@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         applicationId "com.johnsimon.payback"
         minSdkVersion 16
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
@@ -22,7 +22,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile 'com.android.support:support-v4:19+'
+    compile 'com.android.support:appcompat-v7:21.0.+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
 }
