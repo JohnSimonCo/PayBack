@@ -69,7 +69,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
 		holder.person.setText(owner.name);
 		holder.note.setText(debt.note == null ? resources.getString(R.string.cash) : debt.note);
-		holder.amount.setText(debt.amountAsString);
+        holder.amount.setText(debt.amountAsString);
 		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
 
         holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));

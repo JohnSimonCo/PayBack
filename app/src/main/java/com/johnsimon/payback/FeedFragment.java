@@ -2,6 +2,7 @@ package com.johnsimon.payback;
 
 import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,10 +23,10 @@ import java.util.ArrayList;
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-	private ArrayList<Debt> debts;
-	private FeedListAdapter adapter;
+	public static ArrayList<Debt> debts;
+	public static FeedListAdapter adapter;
 
-	private TextView total_debt;
+	public static TextView total_debt;
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
         total_debt = (TextView) headerView.findViewById(R.id.total_debt);
 
-		displayTotalDebt();
+		displayTotalDebt(getActivity());
 
 		adapter = new FeedListAdapter(getActivity(), debts);
         listView.setAdapter(adapter);
@@ -111,19 +112,19 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		Resource.commit();
 		adapter.animationDebt = debt;
 		adapter.notifyDataSetChanged();
-		displayTotalDebt();
+		displayTotalDebt(getActivity());
 	}
-	public void displayTotalDebt() {
+	public static void displayTotalDebt(Context ctx) {
 		int debt = AppData.totalDebt(debts);
 
-		total_debt.setText(Debt.totalString(debt, getResources().getString(R.string.even)));
+		total_debt.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
 	}
 	@Override
 	public void onDelete(Debt debt) {
 		Resource.debts.remove(debt);
 		Resource.commit();
 		adapter.notifyDataSetChanged();
-		displayTotalDebt();
+		displayTotalDebt(getActivity());
 	}
 
 	@Override

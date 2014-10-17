@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.graphics.Typeface;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +21,15 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 	private AlertDialog alertDialog;
 	private boolean hasNfc = false;
 	private String currency, lastSpinnerValue;
+    private boolean listenForSpinnerSelect = false;
+
+    private final String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
 
 	private NDSpinner currencySpinner;
 	private TextView welcomeCirrencyPreview;
 
 	@Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -35,6 +39,14 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
         final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
         welcome_continue.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "robotomedium.ttf"));
+
+        Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            public void run() {
+                listenForSpinnerSelect = true;
+            }
+        };
+        handler.postDelayed(r, 300);
 
 		currencySpinner = (NDSpinner) rootView.findViewById(R.id.welcome_currency_spinner);
 
@@ -54,19 +66,24 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 		} else {
 			welcome_continue.setText(R.string.welcome_got_it);
 		}
+
 		final WelcomeDialogFragment self = this;
 		currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				if (pos == parent.getCount() - 1) {
-					// "Custom"
-					CustomCurrencyDialogFragment fragment = new CustomCurrencyDialogFragment();
-					fragment.completeCallback = self;
-					fragment.show(getFragmentManager(), "CustomCurrencyDialogFragment");
-				} else {
-					Object item = parent.getItemAtPosition(pos);
-					lastSpinnerValue = item.toString();
-					setCurrency(lastSpinnerValue);
-				}
+
+                if (listenForSpinnerSelect || savedInstanceState == null) {
+                    if (pos == parent.getCount() - 1) {
+                        // "Custom"
+                        CustomCurrencyDialogFragment fragment = new CustomCurrencyDialogFragment();
+                        fragment.completeCallback = self;
+                        fragment.show(getFragmentManager(), "CustomCurrencyDialogFragment");
+                    } else {
+                        Object item = parent.getItemAtPosition(pos);
+                        lastSpinnerValue = item.toString();
+                        setCurrency(lastSpinnerValue);
+                    }
+                }
+
 			}
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
@@ -77,6 +94,20 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 		alertDialog = builder.create();
 		alertDialog.setCancelable(false);
         return alertDialog;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            setCurrency(savedInstanceState.getString(CURRENCY_SAVE_KEY));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENCY_SAVE_KEY, currency);
     }
 
 	private void setCurrency(String currency) {
@@ -95,6 +126,15 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 			}
 
 			Resource.setCurrency(currency);
+
+            int length = FeedFragment.debts.size();
+            for (int i = 0; i < length; i++) {
+                FeedFragment.debts.get(i).amountAsString = Debt.amountString(FeedFragment.debts.get(i).amount);
+            }
+
+
+            FeedFragment.adapter.notifyDataSetChanged();
+            FeedFragment.displayTotalDebt(getActivity());
 
 			alertDialog.cancel();
 		}
