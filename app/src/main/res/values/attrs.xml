@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="FloatingActionButton">
-        <attr name="drawable" format="integer"/>
-        <attr name="color" format="color"/>
-        <attr name="shadowRadius" format="float"/>
-        <attr name="shadowDx" format="float"/>
-        <attr name="shadowDy" format="float"/>
-        <attr name="shadowColor" format="integer"/>
+        <attr name="fab_drawable" format="integer"/>
+        <attr name="fab_color" format="color"/>
+        <attr name="fab_shadowRadius" format="float"/>
+        <attr name="fab_shadowDx" format="float"/>
+        <attr name="fab_shadowDy" format="float"/>
+        <attr name="fab_shadowColor" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="FloatLabelEditText">
@@ -29,4 +29,7 @@
         <attr name="textColorHintFocused" format="color"/>
         <attr name="textColorHintUnFocused" format="color"/>
     </declare-styleable>
+
+
+
 </resources>
