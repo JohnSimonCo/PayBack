@@ -73,7 +73,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
         navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();
-        subtitle = getString(R.string.all);
 
         // Set up the drawer.
         navigationDrawerFragment.setUp(
@@ -89,18 +88,17 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
 				.build();
 		ImageLoader.getInstance().init(config);
+
+		readIntent();
     }
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
+	private void readIntent() {
 		Intent intent = getIntent();
 
 		if(intent.hasExtra(ARG_GOTO_PERSON_ID)) {
-			intent.removeExtra(ARG_GOTO_PERSON_ID);
-
 			showPerson(intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID));
+
+			intent.removeExtra(ARG_GOTO_PERSON_ID);
 		} else {
 			showAll();
 		}
