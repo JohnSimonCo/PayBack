@@ -14,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.balysv.materialmenu.MaterialMenuIcon;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -36,8 +34,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 	public static ArrayList<Debt> feed;
 	public static Person person;
 
-    private ActionBar actionBar;
-
     private NavigationDrawerFragment navigationDrawerFragment;
 
 	private NfcAdapter nfcAdapter;
@@ -48,14 +44,11 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     private CharSequence title;
     private CharSequence subtitle;
 
-    private MaterialMenuIcon materialMenu;
     private boolean lastOpen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        actionBar = getActionBar();
 
 		Resource.fetchData(this);
         if (Resource.isFirstRun()) {
@@ -64,8 +57,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         }
 
 	    setContentView(R.layout.activity_feed);
-
-        materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
 	    SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
@@ -104,8 +95,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		}
 
 		navigationDrawerFragment.setSelectedPerson(person);
-
-		setSubtitle();
 	}
 
 	private void showPerson(UUID uuid) {
@@ -120,13 +109,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 		person = null;
 		feed = Resource.debts;
 	}
-	private void setSubtitle() {
-		subtitle = isAll()
-			? getString(R.string.all)
-			: person.name;
-		actionBar.setSubtitle(subtitle);
-	}
-
 	public static boolean isAll() {
 		return person == null;
 	}
@@ -167,8 +149,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 			showPerson(item.personId);
 		}
 
-		setSubtitle();
-
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
 				.commit();
@@ -200,11 +180,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         super.onPrepareOptionsMenu(menu);
 
         if (navigationDrawerFragment.openDrawer != lastOpen) {
-            if (navigationDrawerFragment.openDrawer) {
-                materialMenu.animateState(MaterialMenuDrawable.IconState.ARROW);
-            } else {
-                materialMenu.animateState(MaterialMenuDrawable.IconState.BURGER);
-            }
             lastOpen = navigationDrawerFragment.openDrawer;
         }
         return true;
@@ -216,10 +191,8 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 
         if (item.getItemId() == android.R.id.home) {
             if (navigationDrawerFragment.openDrawer) {
-                materialMenu.animatePressedState(MaterialMenuDrawable.IconState.BURGER);
                 navigationDrawerFragment.openDrawer = false;
             } else {
-                materialMenu.animatePressedState(MaterialMenuDrawable.IconState.ARROW);
                 navigationDrawerFragment.openDrawer = true;
             }
 
@@ -273,7 +246,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
-		materialMenu.onSaveInstanceState(outState);
 
 		if(person != null) {
 			outState.putString(SAVE_PERSON_ID, person.id.toString());
@@ -293,11 +265,6 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 			showPerson(personId);
 		}
 
-		setSubtitle();
 	}
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        materialMenu.syncState(savedInstanceState);
-    }
+
 }
