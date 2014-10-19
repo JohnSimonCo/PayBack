@@ -27,11 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
-import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.balysv.materialmenu.MaterialMenuIcon;
-import com.micromobs.android.floatlabel.FloatLabelAutoCompleteTextView;
-import com.micromobs.android.floatlabel.FloatLabelEditText;
-import com.micromobs.android.floatlabel.FloatLabelEditTextDark;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class CreateDebtActivity extends Activity {
@@ -43,10 +38,6 @@ public class CreateDebtActivity extends Activity {
 	public static String ARG_TIMESTAMP = Resource.arg(ARG_PREFIX, "AMOUNT");
 
 	//Views
-	private FloatLabelEditText floatLabelAmount;
-	private FloatLabelEditTextDark floatLabelNote;
-	private FloatLabelAutoCompleteTextView floatLabelName;
-
 	private EditText floatLabelAmountEditText;
 	private EditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
@@ -58,7 +49,6 @@ public class CreateDebtActivity extends Activity {
 
 	private Debt editingDebt = null;
 
-    private MaterialMenuIcon materialMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +62,9 @@ public class CreateDebtActivity extends Activity {
 
 		Intent intent = getIntent();
 
-		floatLabelAmount = (FloatLabelEditText) findViewById(R.id.create_float_label_amount);
-		floatLabelNote = (FloatLabelEditTextDark) findViewById(R.id.create_float_label_note);
-		floatLabelName = (FloatLabelAutoCompleteTextView) findViewById(R.id.create_float_label_name);
-
 		floatLabelAmountEditText = floatLabelAmount.getEditText();
 		floatLabelNoteEditText = floatLabelNote.getEditText();
-		floatLabelNameAutoCompleteTextView = floatLabelName.getEditText();
+		floatLabelNameAutoCompleteTextView = findViewById(R.id.create_edittext_name);
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
@@ -222,16 +208,13 @@ public class CreateDebtActivity extends Activity {
             }
         });
 
-        materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
         if (savedInstanceState == null) {
-
-            materialMenu.setState(MaterialMenuDrawable.IconState.BURGER);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    materialMenu.animateState(MaterialMenuDrawable.IconState.ARROW);
+                    //materialMenu.animateState(MaterialMenuDrawable.IconState.ARROW);
                 }
             }, 600);
 
@@ -242,9 +225,9 @@ public class CreateDebtActivity extends Activity {
             createHeader.startAnimation(inFromTop);
             create_fab.startAnimation(inFromTop);
             Resource.animateHardwareFadeIn(createHeaderContent, 500, 800);
-            Resource.animateHardwareFadeIn(floatLabelNote, 500, 800);
+//TODO            Resource.animateHardwareFadeIn(floatLabelNote, 500, 800);
         } else {
-            materialMenu.setState(MaterialMenuDrawable.IconState.ARROW);
+
         }
 
     }
@@ -338,9 +321,9 @@ public class CreateDebtActivity extends Activity {
 
     public void animateAway(boolean animatePress) {
         if (animatePress) {
-            materialMenu.animatePressedState(MaterialMenuDrawable.IconState.BURGER);
+
         } else {
-            materialMenu.animateState(MaterialMenuDrawable.IconState.BURGER);
+
         }
 
         LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
@@ -351,7 +334,7 @@ public class CreateDebtActivity extends Activity {
         createHeader.startAnimation(outToTop);
         create_fab.startAnimation(outToTop);
         Resource.animateHardwareFadeOut(createHeaderContent, 400, 0);
-        Resource.animateHardwareFadeOut(floatLabelNote, 400, 0);
+     //TODO   Resource.animateHardwareFadeOut(floatLabelNote, 400, 0);
     }
 
 }

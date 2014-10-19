@@ -23,18 +23,14 @@
 
     </LinearLayout>
 
-    <com.micromobs.android.floatlabel.FloatLabelEditTextDark
+    <android.support.v7.internal.widget.TintEditText
         android:id="@+id/custom_currency_dialog_float_label"
         android:textColorHint="@color/gray_text_very_light"
         android:textColor="@color/gray_text_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        floatlabel:fitScreenWidth="full"
-        floatlabel:hint="@string/welcome_currency_hint"
-        floatlabel:textSize="18sp"
-        floatlabel:textColorHintFocused="@color/gray_text_light"
-        floatlabel:textColorHintUnFocused="@color/gray_text_light"  />
+        android:hint="@string/welcome_currency_hint"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"

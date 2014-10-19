@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.micromobs.android.floatlabel.FloatLabelEditTextDark;
 
 public class CustomCurrencyDialogFragment extends DialogFragment {
 
@@ -31,8 +30,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		Button dialogCustomCurrencyCancel = (Button) rootView.findViewById(R.id.dialog_custom_currency_cancel);
 		dialogCustomCurrencyCancel.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
 
-		FloatLabelEditTextDark customCurrencyDialogFloatLabel = (FloatLabelEditTextDark) rootView.findViewById(R.id.custom_currency_dialog_float_label);
-		customCurrencyEditText = customCurrencyDialogFloatLabel.getEditText();
+		customCurrencyEditText = rootView.findViewById(R.id.);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
 		new RequiredValidator(new EditText[] {customCurrencyEditText}, new ValidatorListener() {
