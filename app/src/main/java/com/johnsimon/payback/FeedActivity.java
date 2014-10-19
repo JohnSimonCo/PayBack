@@ -135,6 +135,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 	@Override
 	public void onResume() {
 		super.onResume();
+
 		// Check to see that the Activity started due to an Android Beam
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 			processIntent(getIntent());
@@ -300,5 +301,4 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
         super.onPostCreate(savedInstanceState);
         materialMenu.syncState(savedInstanceState);
     }
-
 }
