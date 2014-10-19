@@ -115,6 +115,7 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 	private void showPerson(String personId) {
 		showPerson(UUID.fromString(personId));
 	}
+	
 	private void showAll() {
 		person = null;
 		feed = Resource.debts;
