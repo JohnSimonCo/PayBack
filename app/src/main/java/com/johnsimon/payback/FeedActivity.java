@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.View;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.balysv.materialmenu.MaterialMenuIcon;
-import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -25,8 +23,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.ArrayList;
 import java.util.UUID;
 
-//public static CharSequence getRelativeTimeSpanString (long time, long now, long minResolution)
-//http://developer.android.com/reference/android/text/format/DateUtils.html#getRelativeTimeSpanString%28long%29
 public class FeedActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, NfcAdapter.CreateNdefMessageCallback {
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
@@ -105,13 +101,11 @@ public class FeedActivity extends Activity implements NavigationDrawerFragment.N
 			intent.removeExtra(ARG_GOTO_PERSON_ID);
 
 			showPerson(intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID));
-
-			navigationDrawerFragment.setSelectedPerson(person);
 		} else {
 			showAll();
-
-			navigationDrawerFragment.setSelectedPerson(null);
 		}
+
+		navigationDrawerFragment.setSelectedPerson(person);
 
 		setSubtitle();
 	}
