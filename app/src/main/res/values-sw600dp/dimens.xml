@@ -19,4 +19,6 @@
     <dimen name="feed_left_margin">104dp</dimen>
     <dimen name="fab_right_margin">24dp</dimen>
 
+    <dimen name="create_start_margin">64dp</dimen>
+
 </resources>

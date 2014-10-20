@@ -1,11 +1,12 @@
 package com.johnsimon.payback;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -20,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -29,7 +29,7 @@ import android.support.v7.internal.widget.TintEditText;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 
-public class CreateDebtActivity extends Activity {
+public class CreateDebtActivity extends ActionBarActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
@@ -41,6 +41,7 @@ public class CreateDebtActivity extends Activity {
 	private TintEditText floatLabelAmountEditText;
 	private TintEditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
+    private Toolbar toolbar;
 
 	private RadioGroup radioGroup;
 	private FloatingActionButton create_fab;
@@ -48,7 +49,6 @@ public class CreateDebtActivity extends Activity {
 	private RequiredValidator validator;
 
 	private Debt editingDebt = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,10 @@ public class CreateDebtActivity extends Activity {
         tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
 
         setContentView(R.layout.activity_create_debt);
+
+        toolbar = (Toolbar) findViewById(R.id.create_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Intent intent = getIntent();
 
@@ -191,43 +195,13 @@ public class CreateDebtActivity extends Activity {
 					final Intent intent = new Intent(ctx, FeedActivity.class)
 							.putExtra(FeedActivity.ARG_GOTO_PERSON_ID, person.id.toString());
 
-                    animateAway(false);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            finishAffinity();
-                            startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
-                        }
-                    }, 300);
+                    finishAffinity();
+                    startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}
             }
         });
-
-
-        if (savedInstanceState == null) {
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //materialMenu.animateState(MaterialMenuDrawable.IconState.ARROW);
-                }
-            }, 600);
-
-            Toolbar createHeader = (Toolbar) findViewById(R.id.create_header);
-            LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
-
-            Animation inFromTop = AnimationUtils.loadAnimation(this, R.anim.in_from_top);
-            createHeader.startAnimation(inFromTop);
-            create_fab.startAnimation(inFromTop);
-            Resource.animateHardwareFadeIn(createHeaderContent, 500, 800);
-//TODO            Resource.animateHardwareFadeIn(floatLabelNote, 500, 800);
-        } else {
-
-        }
 
     }
 
@@ -276,27 +250,13 @@ public class CreateDebtActivity extends Activity {
             return true;
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
-                animateAway(true);
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    }
-                }, 300);
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             } else {
 
-                animateAway(true);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
-                        finishAffinity();
-                    }
-                }, 300);
+                startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
+                finishAffinity();
 
             }
 
@@ -305,35 +265,5 @@ public class CreateDebtActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        animateAway(false);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            }
-        }, 300);
-    }
-
-    public void animateAway(boolean animatePress) {
-        if (animatePress) {
-
-        } else {
-
-        }
-
-        LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
-        LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
-
-        Animation outToTop = AnimationUtils.loadAnimation(this, R.anim.out_to_top);
-        outToTop.setFillAfter(true);
-        createHeader.startAnimation(outToTop);
-        create_fab.startAnimation(outToTop);
-        Resource.animateHardwareFadeOut(createHeaderContent, 400, 0);
-     //TODO   Resource.animateHardwareFadeOut(floatLabelNote, 400, 0);
-    }
 
 }
