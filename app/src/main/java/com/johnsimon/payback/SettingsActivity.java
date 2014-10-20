@@ -2,7 +2,6 @@ package com.johnsimon.payback;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.Ringtone;
@@ -13,17 +12,12 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 
 
-import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.balysv.materialmenu.MaterialMenuIcon;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.List;
@@ -56,9 +50,6 @@ public class SettingsActivity extends PreferenceActivity {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
-
-		MaterialMenuIcon materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
-		materialMenu.setState(MaterialMenuDrawable.IconState.ARROW);
 
     }
 

@@ -1,9 +1,20 @@
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true"    >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/feed_toolbar"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/primary_color" />
 
     <!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
     <android.support.v4.widget.DrawerLayout
@@ -12,8 +23,6 @@
         android:layout_height="match_parent"
         tools:context="com.johnsimon.payback.FeedActivity">
 
-        <!-- As the main content view, the view below consumes the entire
-             space available using match_parent in both dimensions. -->
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
@@ -36,4 +45,4 @@
 
     </android.support.v4.widget.DrawerLayout>
 
-</FrameLayout>
+</LinearLayout>

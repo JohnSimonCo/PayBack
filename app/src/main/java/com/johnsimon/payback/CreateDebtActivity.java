@@ -1,14 +1,12 @@
 package com.johnsimon.payback;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -22,12 +20,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
+import android.support.v7.internal.widget.TintEditText;
+
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.shamanland.fab.FloatingActionButton;
 
 public class CreateDebtActivity extends Activity {
 
@@ -38,8 +38,8 @@ public class CreateDebtActivity extends Activity {
 	public static String ARG_TIMESTAMP = Resource.arg(ARG_PREFIX, "AMOUNT");
 
 	//Views
-	private EditText floatLabelAmountEditText;
-	private EditText floatLabelNoteEditText;
+	private TintEditText floatLabelAmountEditText;
+	private TintEditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
 
 	private RadioGroup radioGroup;
@@ -62,9 +62,9 @@ public class CreateDebtActivity extends Activity {
 
 		Intent intent = getIntent();
 
-		floatLabelAmountEditText = floatLabelAmount.getEditText();
-		floatLabelNoteEditText = floatLabelNote.getEditText();
-		floatLabelNameAutoCompleteTextView = findViewById(R.id.create_edittext_name);
+		floatLabelAmountEditText = (TintEditText) findViewById(R.id.create_edittext_amount);
+		floatLabelNoteEditText = (TintEditText) findViewById(R.id.create_edittext_note);
+		floatLabelNameAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.create_edittext_name);
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
@@ -147,7 +147,6 @@ public class CreateDebtActivity extends Activity {
 
 		create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 		create_fab.setColor(getResources().getColor(android.R.color.white));
-		create_fab.setDrawable(getResources().getDrawable(R.drawable.ic_fab_check));
 
 		final Context ctx = this;
 
@@ -159,13 +158,13 @@ public class CreateDebtActivity extends Activity {
 			public void onValid() {
 				//Some dirty Simme-style validation up in here
 				if (floatLabelAmountEditText.getText().equals("0")) return;
-				create_fab.setActive(true);
+				create_fab.setActivated(true);
 				create_fab.setAlpha(1f);
 			}
 
 			@Override
 			public void onInvalid() {
-				create_fab.setActive(false);
+				create_fab.setActivated(false);
 				create_fab.setAlpha(0.6f);
 			}
 		});
@@ -181,7 +180,7 @@ public class CreateDebtActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-				if (create_fab.mActive) {
+				if (create_fab.isActivated()) {
 					Person person = saveDebt(
 						floatLabelNameAutoCompleteTextView.getText().toString().trim(),
 						radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
@@ -218,7 +217,7 @@ public class CreateDebtActivity extends Activity {
                 }
             }, 600);
 
-            LinearLayout createHeader = (LinearLayout) findViewById(R.id.create_header);
+            Toolbar createHeader = (Toolbar) findViewById(R.id.create_header);
             LinearLayout createHeaderContent = (LinearLayout) findViewById(R.id.create_header_content);
 
             Animation inFromTop = AnimationUtils.loadAnimation(this, R.anim.in_from_top);

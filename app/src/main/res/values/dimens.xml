@@ -10,12 +10,10 @@
     <dimen name="feed_left_margin">72dp</dimen>
     <dimen name="feed_header_bottom_margin">64dp</dimen>
 
-    <!--The FAB has built in margins that are 8dp on all sides. 72 - (8*2) = 56. The result is therefore a 56dp button.-->
-    <dimen name="fab_size">72dp</dimen>
     <dimen name="fab_bottom_margin">-36dp</dimen>
     <dimen name="feed_image_gradient_bottom_margin">36dp</dimen>
     <dimen name="base_padding">16dp</dimen>
-    <dimen name="fab_right_margin">8dp</dimen>
+    <dimen name="fab_right_margin">16dp</dimen>
     <dimen name="list_header_height">176dp</dimen>
     <dimen name="list_header_image_height">140dp</dimen>
 
@@ -24,7 +22,6 @@
 
     <dimen name="create_start_margin">72dp</dimen>
 
-    <dimen name="action_bar_height">56dp</dimen>
     <dimen name="navigation_drawer_padding">18dp</dimen>
 
     <dimen name="feed_list_item_extra_margin">0dp</dimen>

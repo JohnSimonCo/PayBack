@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.support.v7.internal.widget.TintEditText;
 
 public class CustomCurrencyDialogFragment extends DialogFragment {
 
 	public CustomCurrencySelectedCallback completeCallback;
 
-	private EditText customCurrencyEditText;
+	private TintEditText customCurrencyEditText;
 	private AlertDialog alertDialog;
 
 	@Override
@@ -30,7 +30,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		Button dialogCustomCurrencyCancel = (Button) rootView.findViewById(R.id.dialog_custom_currency_cancel);
 		dialogCustomCurrencyCancel.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
 
-		customCurrencyEditText = rootView.findViewById(R.id.);
+		customCurrencyEditText = (TintEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
 		new RequiredValidator(new EditText[] {customCurrencyEditText}, new ValidatorListener() {

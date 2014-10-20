@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	    SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
+        setSupportActionBar(toolbar);
 
         navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();
@@ -153,12 +157,13 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 				.commit();
     }
 
+    @Override
+    public void onShowGlobalContextActionBar() {
+        getSupportActionBar().setTitle(R.string.app_name);
+    }
+
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(title);
-        actionBar.setSubtitle(subtitle);
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
@@ -178,39 +183,13 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if (navigationDrawerFragment.openDrawer != lastOpen) {
-            lastOpen = navigationDrawerFragment.openDrawer;
-        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean result = super.onOptionsItemSelected(item);
-
-        if (item.getItemId() == android.R.id.home) {
-            if (navigationDrawerFragment.openDrawer) {
-                navigationDrawerFragment.openDrawer = false;
-            } else {
-                navigationDrawerFragment.openDrawer = true;
-            }
-
-            //We're using the animating flag to avoid doing onDrawerSlide
-            // calculations when animating the drawer sliding.
-            navigationDrawerFragment.isAnimatingSlide = true;
-
-            //Using a delay handler is necessary because the user can "catch"
-            // the animtion before it's finished thereby never resetting the
-            // flag since onDrawerClosed/Opened never is called.
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    navigationDrawerFragment.isAnimatingSlide = false;
-                }
-            }, 300);
-
-        }
 
         return result;
     }
@@ -242,6 +221,12 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
     @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        navigationDrawerFragment.mDrawerToggle.syncState();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
@@ -255,7 +240,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
-        navigationDrawerFragment.openDrawer = navigationDrawerFragment.isDrawerOpen();
 
 		String personId = savedInstanceState.getString(SAVE_PERSON_ID, null);
 		if(personId == null) {

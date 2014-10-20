@@ -1,79 +1,85 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"  >
-
-    <ListView
-        android:divider="@null"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@android:id/list"   />
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/feed_list_header_master"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_header_height">
+        android:layout_height="match_parent"  >
 
-        <ImageView
-            android:scaleType="centerCrop"
-            android:src="@drawable/art"
+        <ListView
+            android:divider="@null"
+            android:scrollbars="none"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/list_header_image_height" />
+            android:layout_height="match_parent"
+            android:id="@android:id/list"   />
 
-        <ImageView
-            android:layout_marginBottom="@dimen/feed_image_gradient_bottom_margin"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/feed_image_gradient"
-            android:layout_width="match_parent"
-            android:layout_height="140dp" />
-
-        <ImageView
-            android:layout_marginBottom="24dp"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/feed_image_bottom_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="12dp" />
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/feed_list_header_master"
             android:orientation="vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="@dimen/feed_left_margin"
-            android:layout_marginLeft="@dimen/feed_left_margin"
-            android:layout_marginBottom="@dimen/feed_header_bottom_margin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_header_height">
 
-            <com.johnsimon.payback.RobotoMediumTextView
-                android:id="@+id/feed_header_balance"
-                android:textSize="@dimen/feed_header_balance_text_size"
-                android:textColor="#fff"
-                android:text="@string/balance"
+            <ImageView
+                android:scaleType="centerCrop"
+                android:src="@drawable/art"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_header_image_height" />
+
+            <ImageView
+                android:layout_marginBottom="@dimen/feed_image_gradient_bottom_margin"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/feed_image_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="140dp" />
+
+            <ImageView
+                android:layout_marginBottom="28dp"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/feed_image_bottom_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/feed_left_margin"
+                android:layout_marginLeft="@dimen/feed_left_margin"
+                android:layout_marginBottom="@dimen/feed_header_bottom_margin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" >
 
-            <com.johnsimon.payback.RobotoMediumTextView
-                android:id="@+id/total_debt"
-                android:textSize="@dimen/feed_header_title_text_size"
-                android:textStyle="bold"
-                android:textColor="#fff"
+                <com.johnsimon.payback.RobotoMediumTextView
+                    android:id="@+id/feed_header_balance"
+                    android:textSize="@dimen/feed_header_balance_text_size"
+                    android:textColor="#fff"
+                    android:text="@string/balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.johnsimon.payback.RobotoMediumTextView
+                    android:id="@+id/total_debt"
+                    android:textSize="@dimen/feed_header_title_text_size"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <com.shamanland.fab.FloatingActionButton
+                android:id="@+id/feed_fab"
+                android:src="@drawable/ic_action_content_new"
+                android:layout_marginEnd="@dimen/fab_right_margin"
+                android:layout_marginRight="@dimen/fab_right_margin"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
+                app:floatingActionButtonColor="@color/accent_color"
+                app:floatingActionButtonSize="normal"
                 android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <com.johnsimon.payback.FloatingActionButton
-            android:id="@+id/feed_fab"
-            android:layout_marginEnd="@dimen/fab_right_margin"
-            android:layout_marginRight="@dimen/fab_right_margin"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_width="@dimen/fab_size"
-            android:layout_height="@dimen/fab_size"/>
-
+        </RelativeLayout>
     </RelativeLayout>
-
-
-
-</RelativeLayout>
+</LinearLayout>

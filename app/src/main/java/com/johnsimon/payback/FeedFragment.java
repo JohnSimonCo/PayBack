@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
+import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -55,8 +58,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
         handler.postDelayed(r, 400);
 
         FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
-        fab.setColor(getResources().getColor(R.color.accent_color));
-        fab.setDrawable(getResources().getDrawable(R.drawable.ic_action_content_new));
 
         fab.setOnClickListener(new View.OnClickListener() {
 			@Override

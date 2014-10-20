@@ -1,26 +1,19 @@
 package com.johnsimon.payback;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.Menu;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.balysv.materialmenu.MaterialMenuIcon;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-
-public class PeopleManagerActivity extends Activity {
+public class PeopleManagerActivity extends ActionBarActivity {
 
 	DragSortListView listView;
 	ArrayAdapter<String> adapter;
@@ -37,11 +30,10 @@ public class PeopleManagerActivity extends Activity {
 
         setContentView(R.layout.activity_people_manager);
 
-		MaterialMenuIcon materialMenu = new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
-		materialMenu.setState(MaterialMenuDrawable.IconState.ARROW);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.people_toolbar);
+        setSupportActionBar(toolbar);
 
 		listView = (DragSortListView) findViewById(R.id.people_listview);
-
 
 		listView.setAdapter(adapter);
 		listView.setDropListener(onDrop);

@@ -8,8 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,7 +45,7 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
-    private ActionBarDrawerToggle mDrawerToggle;
+    public ActionBarDrawerToggle mDrawerToggle;
 
 	private NavigationDrawerAdapter adapter;
 
@@ -57,10 +56,6 @@ public class NavigationDrawerFragment extends Fragment {
     public static int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-
-    public boolean openDrawer = false;
-    private float lastSlideOffset = 1000;
-    public boolean isAnimatingSlide = false;
 
     public NavigationDrawerFragment() {
     }
@@ -122,22 +117,11 @@ public class NavigationDrawerFragment extends Fragment {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        // mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                    /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.thin,                  /* http://upload.wikimedia.org/wikipedia/en/3/34/Dirtyjobslogo.JPG  <- Thanks for the tip Mike Rowe!*/
-                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+                getActivity(),
+                mDrawerLayout,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
         ) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -145,9 +129,6 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
-                openDrawer = false;
-                isAnimatingSlide = false;
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
@@ -158,10 +139,6 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
-                openDrawer = true;
-                isAnimatingSlide = false;
-
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
@@ -173,28 +150,7 @@ public class NavigationDrawerFragment extends Fragment {
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-                if (!isAnimatingSlide()) {
-                    if (getLastSlideOffset() == 1000) {
-                        setLastSlideOffset(slideOffset);
-                    } else {
-                        if (slideOffset > getLastSlideOffset()) {
-                            openDrawer = true;
-                            getActivity().invalidateOptionsMenu();
-                        } else {
-                            openDrawer = false;
-                            getActivity().invalidateOptionsMenu();
-                        }
-                        setLastSlideOffset(slideOffset);
-                    }
-                }
-                super.onDrawerSlide(drawerView, slideOffset);
-            }
         };
-
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
@@ -210,18 +166,6 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    private void setLastSlideOffset(float offset) {
-        lastSlideOffset = offset;
-    }
-
-    private float getLastSlideOffset() {
-        return lastSlideOffset;
-    }
-
-    private boolean isAnimatingSlide() {
-        return isAnimatingSlide;
     }
 
 	public void setSelectedPerson(Person p) {
@@ -293,15 +237,7 @@ public class NavigationDrawerFragment extends Fragment {
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-        actionBar.setSubtitle(null);
-    }
-
-    private ActionBar getActionBar() {
-        return getActivity().getActionBar();
+        mCallbacks.onShowGlobalContextActionBar();
     }
 
     /**
@@ -312,5 +248,7 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(NavigationDrawerItem item);
+
+        void onShowGlobalContextActionBar();
     }
 }

@@ -24,7 +24,7 @@
     </LinearLayout>
 
     <android.support.v7.internal.widget.TintEditText
-        android:id="@+id/custom_currency_dialog_float_label"
+        android:id="@+id/custom_currency_dialog_edittext"
         android:textColorHint="@color/gray_text_very_light"
         android:textColor="@color/gray_text_light"
         android:layout_width="wrap_content"
