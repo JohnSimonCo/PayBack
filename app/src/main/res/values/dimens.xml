@@ -20,7 +20,11 @@
     <dimen name="feed_header_balance_text_size">20sp</dimen>
     <dimen name="feed_header_title_text_size">26sp</dimen>
 
-    <dimen name="create_start_margin">0dp</dimen>
+    <dimen name="create_start_margin">56dp</dimen>
+    <dimen name="create_start_margin_small">0dp</dimen>
+
+    <dimen name="create_right_margin">48dp</dimen>
+    <dimen name="create_right_margin_small">0dp</dimen>
 
     <dimen name="navigation_drawer_padding">18dp</dimen>
 

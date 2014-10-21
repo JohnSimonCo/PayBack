@@ -28,10 +28,10 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:paddingStart="@dimen/create_start_margin"
-                    android:paddingLeft="@dimen/create_start_margin"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/create_start_margin_small"
+                    android:paddingLeft="@dimen/create_start_margin_small"
+                    android:paddingRight="@dimen/create_right_margin_small"
+                    android:paddingEnd="@dimen/create_right_margin_small"
                     android:paddingTop="?attr/actionBarSize"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -43,6 +43,8 @@
                         android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
+                            style="@style/Widget.AppCompat.EditText"
+                            android:singleLine="true"
                             android:id="@+id/create_edittext_name"
                             android:textColorHint="@color/gray_oncolor_very_light"
                             android:textColor="@android:color/white"
@@ -99,6 +101,7 @@
                         </RadioGroup>
 
                         <android.support.v7.internal.widget.TintEditText
+                            android:singleLine="true"
                             android:id="@+id/create_edittext_amount"
                             android:textColorHint="@color/gray_oncolor_very_light"
                             android:textColor="@android:color/white"
@@ -114,8 +117,12 @@
             </android.support.v7.widget.Toolbar>
 
         <android.support.v7.internal.widget.TintEditText
+            android:singleLine="true"
             android:layout_marginTop="24dp"
             android:layout_marginLeft="@dimen/create_start_margin"
+            android:layout_marginStart="@dimen/create_start_margin"
+            android:paddingRight="@dimen/create_right_margin"
+            android:paddingEnd="@dimen/create_right_margin"
             android:id="@+id/create_edittext_note"
             android:textColorHint="@color/gray_text_very_light"
             android:textColor="@color/gray_text_light"
@@ -129,7 +136,7 @@
         <com.shamanland.fab.FloatingActionButton
             app:floatingActionButtonColor="@android:color/white"
             app:floatingActionButtonSize="normal"
-            android:layout_marginTop="172dp"
+            android:layout_marginTop="186dp"
             android:id="@+id/create_fab"
             android:src="@drawable/ic_check"
             android:layout_alignParentRight="true"
