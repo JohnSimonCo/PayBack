@@ -252,10 +252,10 @@ public class CreateDebtActivity extends ActionBarActivity {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
 
                 finish();
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
             } else {
 
-                startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
+                startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
                 finishAffinity();
 
             }
@@ -264,6 +264,12 @@ public class CreateDebtActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
+	}
 
 
 }

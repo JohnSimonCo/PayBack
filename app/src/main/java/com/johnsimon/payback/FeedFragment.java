@@ -69,7 +69,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 					intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
 				}
 
-				startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.fade_in, R.anim.fade_out).toBundle());
+				startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
 			}
 		});
 
