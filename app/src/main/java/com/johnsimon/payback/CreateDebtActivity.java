@@ -196,7 +196,11 @@ public class CreateDebtActivity extends ActionBarActivity {
 							.putExtra(FeedActivity.ARG_GOTO_PERSON_ID, person.id.toString());
 
                     finishAffinity();
-                    startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.fade_in, R.anim.fade_out).toBundle());
+                    if (Resource.isLOrAbove()) {
+                        startActivity(intent);
+                    } else {
+                        startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
+                    }
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}
@@ -252,10 +256,16 @@ public class CreateDebtActivity extends ActionBarActivity {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
 
                 finish();
-                overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
+                if (!Resource.isLOrAbove()) {
+                    overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
+                }
             } else {
+                if (Resource.isLOrAbove()) {
+                    startActivity(new Intent(getApplicationContext(), FeedActivity.class));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
+                }
 
-                startActivity(new Intent(getApplicationContext(), FeedActivity.class), ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
                 finishAffinity();
 
             }
@@ -268,8 +278,8 @@ public class CreateDebtActivity extends ActionBarActivity {
 	@Override
 	public void onBackPressed() {
 		finish();
-		overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
+        if (!Resource.isLOrAbove()) {
+            overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
+        }
 	}
-
-
 }

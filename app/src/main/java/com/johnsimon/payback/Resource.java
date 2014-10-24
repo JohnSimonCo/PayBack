@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -389,6 +390,10 @@ public class Resource {
 
         animAlpha.start();
 
+    }
+
+    public static boolean isLOrAbove() {
+        return Build.VERSION.SDK_INT >= 21;
     }
 
 	public static NdefRecord createRecord(String contents) {
