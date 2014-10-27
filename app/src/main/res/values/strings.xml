@@ -51,6 +51,7 @@
     <string name="clear">Clear</string>
     <string name="justnow">Just now</string>
     <string name="done">Done</string>
+    <string name="welcome_currency">Select the currency you would like to use</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

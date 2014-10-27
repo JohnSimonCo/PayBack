@@ -32,6 +32,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.people_toolbar);
         setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		listView = (DragSortListView) findViewById(R.id.people_listview);
 

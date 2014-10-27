@@ -1,157 +1,157 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:id="@+id/create_scroll_view"
     tools:context="se.jrp.deptapp.CreateDebtActivity"   >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.Toolbar
-                android:paddingBottom="32dp"
-                android:id="@+id/create_toolbar"
+            <LinearLayout
                 android:orientation="vertical"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:minHeight="?attr/actionBarSize"
-                android:background="@color/primary_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:paddingStart="@dimen/create_start_margin_small"
-                    android:paddingLeft="@dimen/create_start_margin_small"
-                    android:paddingRight="@dimen/create_right_margin_small"
-                    android:paddingEnd="@dimen/create_right_margin_small"
-                    android:paddingTop="?attr/actionBarSize"
+                <android.support.v7.widget.Toolbar
+                    android:paddingBottom="32dp"
+                    android:id="@+id/create_toolbar"
                     android:orientation="vertical"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    android:minHeight="?attr/actionBarSize"
+                    android:background="@color/primary_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <RelativeLayout
-                        android:paddingBottom="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <AutoCompleteTextView
-                            style="@style/Widget.AppCompat.EditText"
-                            android:inputType="textCapWords"
-                            android:singleLine="true"
-                            android:id="@+id/create_edittext_name"
-                            android:textColorHint="@color/gray_oncolor_very_light"
-                            android:textColor="@android:color/white"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/person_hint"
-                            android:textSize="20dp" />
-
-                        <ImageButton
-                            android:id="@+id/create_clear"
-                            android:contentDescription="@string/clear"
-                            android:background="@drawable/flat_white_selector"
-                            android:src="@drawable/ic_clear"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentBottom="true"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"/>
-
-                    </RelativeLayout>
-
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/create_start_margin_small"
+                        android:paddingLeft="@dimen/create_start_margin_small"
+                        android:paddingRight="@dimen/create_right_margin_small"
+                        android:paddingEnd="@dimen/create_right_margin_small"
+                        android:paddingTop="?attr/actionBarSize"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <RadioGroup
-                            android:id="@+id/create_radio"
-                            android:orientation="vertical"
-                            android:layout_marginRight="12dp"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:paddingBottom="6dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <android.support.v7.internal.widget.TintRadioButton
-                                app:theme="@style/ThemeOverlay.AppCompat.Light"
-                                android:id="@+id/create_radio_they_owe"
-                                android:textSize="18dp"
-                                android:checked="true"
+                            <AutoCompleteTextView
+                                style="@style/Widget.AppCompat.EditText"
+                                android:inputType="textCapWords"
+                                android:singleLine="true"
+                                android:id="@+id/create_edittext_name"
+                                android:textColorHint="@color/gray_oncolor_very_light"
                                 android:textColor="@android:color/white"
-                                android:fontFamily="sans-serif-condensed"
-                                android:text="@string/they_owe"
                                 android:layout_width="match_parent"
-                                android:layout_height="36dp" />
+                                android:layout_height="wrap_content"
+                                android:hint="@string/person_hint"
+                                android:textSize="20dp" />
 
-                            <android.support.v7.internal.widget.TintRadioButton
-                                app:theme="@style/ThemeOverlay.AppCompat.Light"
-                                android:id="@+id/create_radio_i_owe"
-                                android:textSize="18dp"
-                                android:textColor="@android:color/white"
-                                android:fontFamily="sans-serif-condensed"
-                                android:text="@string/i_owe"
-                                android:layout_width="match_parent"
-                                android:layout_height="36dp" />
+                            <ImageButton
+                                android:id="@+id/create_clear"
+                                android:contentDescription="@string/clear"
+                                android:background="@drawable/flat_white_selector"
+                                android:src="@drawable/ic_clear"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"/>
 
-                        </RadioGroup>
+                        </RelativeLayout>
 
-                        <android.support.v7.internal.widget.TintEditText
-                            app:theme="@style/ThemeOverlay.AppCompat.Light"
-                            style="@style/Widget.AppCompat.EditText"
-                            android:singleLine="true"
-                            android:id="@+id/create_edittext_amount"
-                            android:textColorHint="@color/gray_oncolor_very_light"
-                            android:textColor="@android:color/white"
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/amount"
-                            android:textSize="17dp" />
+                            android:layout_height="wrap_content">
+
+                            <RadioGroup
+                                android:id="@+id/create_radio"
+                                android:orientation="vertical"
+                                android:layout_marginRight="12dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <android.support.v7.internal.widget.TintRadioButton
+                                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    android:id="@+id/create_radio_they_owe"
+                                    android:textSize="18dp"
+                                    android:checked="true"
+                                    android:textColor="@android:color/white"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="@string/they_owe"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp" />
+
+                                <android.support.v7.internal.widget.TintRadioButton
+                                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    android:id="@+id/create_radio_i_owe"
+                                    android:textSize="18dp"
+                                    android:textColor="@android:color/white"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="@string/i_owe"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp" />
+
+                            </RadioGroup>
+
+                            <android.support.v7.internal.widget.TintEditText
+                                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                style="@style/Widget.AppCompat.EditText"
+                                android:singleLine="true"
+                                android:id="@+id/create_edittext_amount"
+                                android:textColorHint="@color/gray_oncolor_very_light"
+                                android:textColor="@android:color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/amount"
+                                android:textSize="17dp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </android.support.v7.widget.Toolbar>
 
-            </android.support.v7.widget.Toolbar>
+                <android.support.v7.internal.widget.TintEditText
+                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                    android:inputType="textCapSentences"
+                    android:singleLine="true"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="@dimen/create_start_margin"
+                    android:layout_marginStart="@dimen/create_start_margin"
+                    android:layout_marginRight="@dimen/create_right_margin"
+                    android:layout_marginEnd="@dimen/create_right_margin"
+                    android:id="@+id/create_edittext_note"
+                    android:textColorHint="@color/gray_text_very_light"
+                    android:textColor="@color/gray_text_light"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/note"
+                    android:textSize="18sp" />
 
-        <android.support.v7.internal.widget.TintEditText
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:inputType="textCapSentences"
-            android:singleLine="true"
-            android:layout_marginTop="24dp"
-            android:layout_marginLeft="@dimen/create_start_margin"
-            android:layout_marginStart="@dimen/create_start_margin"
-            android:layout_marginRight="@dimen/create_right_margin"
-            android:layout_marginEnd="@dimen/create_right_margin"
-            android:id="@+id/create_edittext_note"
-            android:textColorHint="@color/gray_text_very_light"
-            android:textColor="@color/gray_text_light"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/note"
-            android:textSize="18sp" />
+            </LinearLayout>
 
-        </LinearLayout>
+            <com.shamanland.fab.FloatingActionButton
+                app:floatingActionButtonColor="@android:color/white"
+                app:floatingActionButtonSize="normal"
+                android:layout_marginTop="@dimen/create_fab_top_margin"
+                android:id="@+id/create_fab"
+                android:src="@drawable/ic_check"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/fab_create_right_margin"
+                android:layout_marginRight="@dimen/fab_create_right_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <com.shamanland.fab.FloatingActionButton
-            app:floatingActionButtonColor="@android:color/white"
-            app:floatingActionButtonSize="normal"
-            android:layout_marginTop="186dp"
-            android:id="@+id/create_fab"
-            android:src="@drawable/ic_check"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/fab_create_right_margin"
-            android:layout_marginRight="@dimen/fab_create_right_margin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </RelativeLayout>
-</ScrollView>
+        </RelativeLayout>
+    </ScrollView>

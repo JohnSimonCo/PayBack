@@ -22,4 +22,6 @@
     <dimen name="create_start_margin">72dp</dimen>
     <dimen name="create_start_margin_small">16dp</dimen>
 
+    <dimen name="create_fab_top_margin">184dp</dimen>
+
 </resources>

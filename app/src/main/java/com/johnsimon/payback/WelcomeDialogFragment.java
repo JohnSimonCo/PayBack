@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class WelcomeDialogFragment extends DialogFragment implements CustomCurrencyDialogFragment.CustomCurrencySelectedCallback {
@@ -34,6 +35,8 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View rootView = inflater.inflate(R.layout.welcome_dialog, null);
+
+		boolean currencyOnly = getArguments().getBoolean("SETTINGS", false);
 
 		welcomeCirrencyPreview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
 
@@ -88,6 +91,14 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
+
+		if (currencyOnly) {
+			RelativeLayout rl = (RelativeLayout) rootView.findViewById(R.id.welcome_header);
+			rl.setVisibility(View.GONE);
+
+			TextView welcome_information_text = (TextView) rootView.findViewById(R.id.welcome_information_text);
+			welcome_information_text.setText(R.string.welcome_currency);
+		}
 
 		setCancelable(false);
 

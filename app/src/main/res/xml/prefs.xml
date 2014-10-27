@@ -1,14 +1,28 @@
-<PreferenceScreen
-    android:fitsSystemWindows="@bool/kitkat"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/pref_general"  >
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
 
-        <ListPreference
-            android:title="@string/currency"
-            android:entries="@array/currencyDisplay"
-            android:entryValues="@array/currencyReturn"
-            android:key="pref_currency" />
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-    </PreferenceCategory>
-</PreferenceScreen>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    />-->
+
+    <PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+        <PreferenceCategory
+            android:title="@string/pref_general"  >
+
+            <Preference
+                android:title="@string/currency"
+                android:key="pref_currency" />
+
+        </PreferenceCategory>
+    </PreferenceScreen>
+<!--</LinearLayout>-->

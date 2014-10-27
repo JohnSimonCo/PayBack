@@ -3,6 +3,7 @@ package com.johnsimon.payback;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -28,6 +29,8 @@ import android.support.v7.internal.widget.TintEditText;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
+
+import at.markushi.ui.RevealColorView;
 
 public class CreateDebtActivity extends ActionBarActivity {
 
