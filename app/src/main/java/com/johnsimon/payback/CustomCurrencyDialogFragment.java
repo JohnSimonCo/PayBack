@@ -30,8 +30,19 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		Button dialogCustomCurrencyCancel = (Button) rootView.findViewById(R.id.dialog_custom_currency_cancel);
 		dialogCustomCurrencyCancel.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
 
+		dialogCustomCurrencyCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				alertDialog.cancel();
+			}
+		});
+
 		customCurrencyEditText = (TintEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
+
+		if (customCurrencyEditText.getText().toString().equals("")) {
+			disableButton(dialogCustomCurrencyConfirm);
+		}
 
 		new RequiredValidator(new EditText[] {customCurrencyEditText}, new ValidatorListener() {
 			@Override

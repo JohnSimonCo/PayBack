@@ -29,15 +29,27 @@
 
     </LinearLayout>
 
+    <com.johnsimon.payback.RobotoMediumTextView
+        android:text="200 Kr"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:id="@+id/dialog_custom_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="@color/green_strong"
+        android:textSize="20sp" />
 
     <com.johnsimon.payback.RobotoMediumTextView
         android:text="Content"
         android:id="@+id/dialog_custom_content"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:textColor="#999999"
         android:textSize="18sp"
-        android:padding="8dp"/>
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="6dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

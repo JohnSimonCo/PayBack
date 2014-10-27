@@ -1,10 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="se.jrp.deptapp.FeedActivity" >
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      tools:context="se.jrp.deptapp.FeedActivity">
 
     <item
         android:id="@+id/menu_filter"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:icon="@drawable/ic_action_filter"
         android:title="@string/filter"  >
 

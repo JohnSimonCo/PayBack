@@ -89,10 +89,11 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 			}
 		});
 
+		setCancelable(false);
+
 		builder.setView(rootView);
 
 		alertDialog = builder.create();
-		alertDialog.setCancelable(false);
         return alertDialog;
     }
 

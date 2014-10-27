@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -77,6 +78,17 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 				alertDialog.cancel();
 			}
 		});
+
+		RobotoMediumTextView dialog_custom_amount = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_amount);
+		if (debt.amount < 0) {
+			//negative
+			dialog_custom_amount.setText(debt.amountAsString);
+			dialog_custom_amount.setTextColor(getResources().getColor(R.color.red));
+		} else {
+			dialog_custom_amount.setText(debt.amountAsString);
+			dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
+		}
+
 
         RobotoMediumTextView dialog_custom_title = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_title);
         RobotoMediumTextView dialog_custom_content = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_content);

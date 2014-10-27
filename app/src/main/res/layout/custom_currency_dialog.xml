@@ -27,7 +27,9 @@
         android:id="@+id/custom_currency_dialog_edittext"
         android:textColorHint="@color/gray_text_very_light"
         android:textColor="@color/gray_text_light"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_height="wrap_content"
         android:hint="@string/welcome_currency_hint"
         android:textSize="18sp" />

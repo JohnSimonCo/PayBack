@@ -61,7 +61,6 @@
 
             <com.johnsimon.payback.NDSpinner
                 android:layout_marginTop="8dp"
-                style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
                 android:id="@+id/welcome_currency_spinner"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"    />
