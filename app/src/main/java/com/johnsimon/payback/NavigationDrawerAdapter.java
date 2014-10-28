@@ -80,16 +80,14 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		}
 
-        if (item.image == null) {
-			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_person_placeholder)));
-        } else {
-            holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
-        }
-
 		Person owner = item.owner;
 
 		if(owner.color != null) {
-			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(owner.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
+			holder.avatar.setImageDrawable(
+                    new RoundedAvatarDrawable(
+                            new AvatarPlaceholderDrawable(owner.color).toBitmap(
+                                    Resource.getPx(36, context), Resource.getPx(36, context))));
+
 			holder.avatarLetter.setVisibility(View.VISIBLE);
 			holder.avatarLetter.setText(owner.name.substring(0, 1).toUpperCase());
 			//Set avatar as image like some stupid faggot

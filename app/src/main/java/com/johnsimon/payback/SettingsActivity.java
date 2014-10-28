@@ -2,6 +2,7 @@ package com.johnsimon.payback;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.Ringtone;
@@ -43,6 +44,8 @@ public class SettingsActivity extends MaterialPreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+    public static Preference pref_currency;
+
 	@Override
 	protected int getPreferencesXmlId() {
 		return R.xml.prefs;
@@ -64,7 +67,8 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-		Preference pref_currency = findPreference("pref_currency");
+		pref_currency = findPreference("pref_currency");
+
 		pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -132,6 +136,11 @@ public class SettingsActivity extends MaterialPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+
+            if (preference.getKey().equals("pref_currency")) {
+                preference.setSummary(Resource.getCurrency());
+                return true;
+            }
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in

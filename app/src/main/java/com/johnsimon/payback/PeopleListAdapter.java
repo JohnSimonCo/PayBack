@@ -1,6 +1,7 @@
 package com.johnsimon.payback;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
 import java.util.ArrayList;
 
-public class PeopleListAdapter extends ArrayAdapter<Debt> {
+public class PeopleListAdapter extends ArrayAdapter<Person> {
 	private final Activity context;
-	private final ArrayList<Debt> list;
+	private final ArrayList<Person> list;
 
-	public PeopleListAdapter(Activity context, ArrayList<Debt> list) {
+	public PeopleListAdapter(Activity context, ArrayList<Person> list) {
 		super(context, R.layout.feed_list_item, list);
 		this.context = context;
 		this.list = list;
@@ -29,35 +33,50 @@ public class PeopleListAdapter extends ArrayAdapter<Debt> {
 			convertView = inflater.inflate(R.layout.people_list_item, null);
 
 			holder = new ViewHolder(
-					(TextView) convertView.findViewById(R.id.list_item_paid_back),
-					(ImageView) convertView.findViewById(R.id.list_item_avatar)
+					(TextView) convertView.findViewById(R.id.people_list_item_name),
+					(ImageView) convertView.findViewById(R.id.people_list_item_avatar),
+                    (TextView) convertView.findViewById(R.id.people_list_item_avatar_letter)
 			);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Debt debt = list.get(position);
+		Person person = list.get(position);
 
-		holder.person.setText(debt.owner.name);
+		holder.name.setText(person.name);
 
-		if(debt.owner.color != null) {
-			//TODO Set avatar as image like some stupid faggot
+        if(person.color != null) {
+            holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(person.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
+            holder.avatarLetter.setVisibility(View.VISIBLE);
+            holder.avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
+            //Set avatar as image like some stupid faggot
+        } else {
+            holder.avatarLetter.setVisibility(View.GONE);
 
-		} else {
-			holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_772b5027830c46519a7fd8bccf4c2c94)));
-		}
+            final ViewHolder finalHolder = holder;
+            ImageLoader.getInstance().loadImage(person.photoURI.replaceAll("/photo$", ""), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    finalHolder.avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
+                }
+            });
+            Resource.toast(context, person.photoURI.replaceAll("/photo$", ""));
+
+        }
 
 		return convertView;
 	}
 
 	static class ViewHolder {
-		public TextView person;
+		public TextView name;
 		public ImageView avatar;
+        public TextView avatarLetter;
 
-		ViewHolder(TextView person, ImageView avatar) {
-			this.person = person;
+		ViewHolder(TextView name, ImageView avatar, TextView avatarLetter) {
+			this.name = name;
 			this.avatar = avatar;
+            this.avatarLetter = avatarLetter;
 		}
 	}
 }

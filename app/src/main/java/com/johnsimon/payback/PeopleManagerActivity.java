@@ -1,23 +1,22 @@
 package com.johnsimon.payback;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.ArrayList;
+
 public class PeopleManagerActivity extends ActionBarActivity {
 
-	DragSortListView listView;
-	ArrayAdapter<String> adapter;
+	private DragSortListView listView;
+	private PeopleListAdapter adapter;
+    private ArrayList<Person> people;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,9 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		listView.setAdapter(adapter);
 		listView.setDropListener(onDrop);
 		listView.setRemoveListener(onRemove);
+        listView.setEmptyView(getLayoutInflater().inflate(R.layout.people_manager_empty_view, null));
+
+
 
 		DragSortController controller = new DragSortController(listView);
 	//	controller.setDragHandleId(R.id.imageView1);
@@ -76,7 +78,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		@Override
 		public void drop(int from, int to) {
 			if (from != to) {
-				String item = adapter.getItem(from);
+				Person item = adapter.getItem(from);
 				adapter.remove(item);
 				adapter.insert(item, to);
 			}

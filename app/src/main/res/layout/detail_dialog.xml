@@ -18,7 +18,9 @@
             android:layout_height="wrap_content"
             android:textColor="#474747"
             android:textSize="22sp"
-            android:padding="8dp"/>
+            android:paddingRight="8dp"
+            android:paddingTop="8dp"
+            android:paddingLeft="8dp"/>
 
         <ImageButton
             android:id="@+id/detail_dialog_overflow"
@@ -31,7 +33,6 @@
 
     <com.johnsimon.payback.RobotoMediumTextView
         android:text="200 Kr"
-        android:paddingTop="8dp"
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
         android:id="@+id/dialog_custom_amount"

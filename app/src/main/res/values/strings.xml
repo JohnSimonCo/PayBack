@@ -53,6 +53,7 @@
     <string name="done">Done</string>
     <string name="welcome_currency">Select the currency you would like to use</string>
     <string name="add_person">Add person</string>
+    <string name="people_empty_text">No people added yet</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
