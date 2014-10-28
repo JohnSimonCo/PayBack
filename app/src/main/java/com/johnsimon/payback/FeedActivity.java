@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -30,6 +32,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public static String SAVE_PERSON_ID = "SAVE_PERSON_ID";
 
     public static boolean animateListItems = true;
+    public static Toolbar toolbar;
 
 	public static ArrayList<Debt> feed;
 	public static Person person;
@@ -42,9 +45,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence title;
-    private CharSequence subtitle;
-
-    private boolean lastOpen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
         setSupportActionBar(toolbar);
 
         navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -180,14 +180,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean result = super.onOptionsItemSelected(item);
 
@@ -224,6 +216,13 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         navigationDrawerFragment.mDrawerToggle.syncState();
+
+        if (animateListItems) {
+            Animation toolbarEnter = AnimationUtils.loadAnimation(this, R.anim.feed_toolbar_enter);
+            toolbar.startAnimation(toolbarEnter);
+            toolbarEnter.setStartOffset(200);
+            FeedFragment.headerView.startAnimation(toolbarEnter);
+        }
     }
 
     @Override

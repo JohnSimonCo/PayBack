@@ -1,8 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.johnsimon.payback.PeopleManagerActivity" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.johnsimon.payback.PeopleManagerActivity">
+
+    <item
+        android:id="@+id/action_add_person"
+        android:title="@string/add_person"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_person_add"   />
+
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        app:showAsAction="never" />
 </menu>

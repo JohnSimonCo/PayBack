@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,6 +28,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 	public static ArrayList<Debt> debts;
 	public static FeedListAdapter adapter;
+    public static RelativeLayout headerView;
 
 	public static TextView total_debt;
 
@@ -34,7 +37,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
-        RelativeLayout headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);
+        headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);
 
 		debts = FeedActivity.feed;
 		final Person person = FeedActivity.person;
@@ -74,9 +77,9 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 			}
 		});
 
-        View footer = new View(getActivity());
-        footer.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
-        listView.addHeaderView(footer, null, false);
+        View header = new View(getActivity());
+        header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
+        listView.addHeaderView(header, null, false);
 
         listView.setEmptyView(inflater.inflate(R.layout.list_empty_view, null));
 
