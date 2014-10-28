@@ -219,9 +219,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
         if (animateListItems) {
             Animation toolbarEnter = AnimationUtils.loadAnimation(this, R.anim.feed_toolbar_enter);
+            Animation headerEnter = AnimationUtils.loadAnimation(this, R.anim.feed_header_enter);
             toolbar.startAnimation(toolbarEnter);
-            toolbarEnter.setStartOffset(200);
-            FeedFragment.headerView.startAnimation(toolbarEnter);
+            FeedFragment.headerView.startAnimation(headerEnter);
         }
     }
 

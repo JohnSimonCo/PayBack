@@ -2,9 +2,9 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <translate
-        android:fromYDelta="-100%"
+        android:fromYDelta="-120%"
         android:toYDelta="0%"
-        android:duration="@android:integer/config_shortAnimTime"
+        android:duration="@android:integer/config_longAnimTime"
         android:interpolator="@android:interpolator/decelerate_quad"    />
 
 </set>
