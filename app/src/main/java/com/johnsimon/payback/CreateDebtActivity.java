@@ -3,11 +3,9 @@ package com.johnsimon.payback;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -16,8 +14,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -29,8 +25,6 @@ import android.support.v7.internal.widget.TintEditText;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
-
-import at.markushi.ui.RevealColorView;
 
 public class CreateDebtActivity extends ActionBarActivity {
 

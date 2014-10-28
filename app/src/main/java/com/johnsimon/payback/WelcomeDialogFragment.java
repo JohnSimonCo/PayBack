@@ -23,11 +23,12 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 	private boolean hasNfc = false;
 	private String currency, lastSpinnerValue;
     private boolean listenForSpinnerSelect = false;
+	private boolean currencyOnly;
 
     private final String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
 
 	private NDSpinner currencySpinner;
-	private TextView welcomeCirrencyPreview;
+	private TextView welcomeCurrencyPreview;
 
 	@Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -36,9 +37,14 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
         View rootView = inflater.inflate(R.layout.welcome_dialog, null);
 
-		boolean currencyOnly = getArguments().getBoolean("SETTINGS", false);
+		currencyOnly = false;
+		Bundle args = getArguments();
+		if (args != null) {
+			currencyOnly = getArguments().getBoolean("SETTINGS", false);
+		}
 
-		welcomeCirrencyPreview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
+
+		welcomeCurrencyPreview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
 
         final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
         welcome_continue.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "robotomedium.ttf"));
@@ -64,10 +70,10 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
 		welcome_continue.setOnClickListener(clickListener);
 
-		if (hasNfc) {
-			welcome_continue.setText(R.string.welcome_continue);
-		} else {
+		if (!hasNfc || currencyOnly) {
 			welcome_continue.setText(R.string.welcome_got_it);
+		} else {
+			welcome_continue.setText(R.string.welcome_continue);
 		}
 
 		final WelcomeDialogFragment self = this;
@@ -100,7 +106,9 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 			welcome_information_text.setText(R.string.welcome_currency);
 		}
 
-		setCancelable(false);
+		if (!currencyOnly) {
+			setCancelable(false);
+		}
 
 		builder.setView(rootView);
 
@@ -124,7 +132,7 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
 	private void setCurrency(String currency) {
 		this.currency = currency;
-		welcomeCirrencyPreview.setText(this.currency);
+		welcomeCurrencyPreview.setText(this.currency);
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -132,7 +140,8 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 		public void onClick(View v) {
 			//Button was disabled when no currency so we're free
 			//to continue since the user was able to press the button
-			if (hasNfc) {
+
+			if (!(!hasNfc || currencyOnly)) {
 				WelcomeNfcDialogFragment welcomeNfcDialogFragment = new WelcomeNfcDialogFragment();
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
