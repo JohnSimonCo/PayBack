@@ -42,6 +42,14 @@ public class PeopleManagerActivity extends ActionBarActivity {
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.people_manager_empty_view, null));
 
 
+        /*
+            adapter.addAll(people) ger NullPointerException,
+            antar att Resource.people är null och vet inte
+            riktigt hur man får igång den.
+         */
+        people = Resource.people;
+        adapter.addAll(people);
+        adapter.notifyDataSetChanged();
 
 		DragSortController controller = new DragSortController(listView);
 	//	controller.setDragHandleId(R.id.imageView1);

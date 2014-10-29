@@ -3,9 +3,6 @@ package com.johnsimon.payback;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/**
- * Created by John on 2014-06-04.
- */
 public class AppData {
 	public ArrayList<Person> people;
 	public ArrayList<Debt> debts;

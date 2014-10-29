@@ -23,7 +23,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	private final Activity context;
 
-	NavigationDrawerAdapter(Activity context, ArrayList<Person> people) {
+	public NavigationDrawerAdapter(Activity context, ArrayList<Person> people) {
 		this.context = context;
 
 		items.add(allItem);
