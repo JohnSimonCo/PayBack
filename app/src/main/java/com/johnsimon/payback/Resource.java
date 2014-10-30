@@ -142,6 +142,26 @@ public class Resource {
 		preferences.edit().putString(SAVE_KEY_CURRENCY, currency).apply();
 	}
 
+	public static int calculateTotalPlus() {
+		int sum = 0;
+		for (int i = 0; i < debts.size(); i++) {
+			if (debts.get(i).amount > 0) {
+				sum += debts.get(i).amount;
+			}
+		}
+		return sum;
+	}
+
+	public static int calculateTotalMinus() {
+		int sum = 0;
+		for (int i = 0; i < debts.size(); i++) {
+			if (debts.get(i).amount < 0) {
+				sum += debts.get(i).amount;
+			}
+		}
+		return sum;
+	}
+
 	public static String getCurrency() {
 		return preferences.getString(SAVE_KEY_CURRENCY, "$");
 	}

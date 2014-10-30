@@ -45,7 +45,14 @@
         android:textColor="@color/gray_text_light"
         android:textSize="18sp"
         android:id="@+id/people_list_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/people_list_item_handle"
+        android:src="@drawable/ic_action_filter"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

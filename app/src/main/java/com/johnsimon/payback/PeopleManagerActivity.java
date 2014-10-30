@@ -47,7 +47,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.people_manager_empty_view, null));
 
 		DragSortController controller = new DragSortController(listView);
-	//	controller.setDragHandleId(R.id.imageView1);
+		controller.setDragHandleId(R.id.people_list_item_handle);
 		//controller.setClickRemoveId(R.id.);
 		controller.setRemoveEnabled(false);
 		controller.setSortEnabled(true);

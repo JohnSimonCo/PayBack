@@ -69,15 +69,15 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int i, View view, ViewGroup viewGroup) {
+	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
-		boolean isSelected = i == NavigationDrawerFragment.mCurrentSelectedPosition;
+		boolean isSelected = position == NavigationDrawerFragment.mCurrentSelectedPosition;
 
-		if(i == 0) {
+		if(position == 0) {
 			return getAllView(view, isSelected);
 		}
 
-		NavigationDrawerItem item = items.get(--i);
+		NavigationDrawerItem item = items.get(--position);
 
 		if (view == null) {
 			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);

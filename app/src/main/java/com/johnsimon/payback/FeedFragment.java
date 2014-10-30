@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
         total_debt = (TextView) headerView.findViewById(R.id.total_debt);
 
-		displayTotalDebt(getActivity());
+		displayTotalDebt(getResources());
 
 		adapter = new FeedListAdapter(getActivity(), debts);
         listView.setAdapter(adapter);
@@ -117,19 +118,19 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		Resource.commit();
 		adapter.animationDebt = debt;
 		adapter.notifyDataSetChanged();
-		displayTotalDebt(getActivity());
+		displayTotalDebt(getResources());
 	}
-	public static void displayTotalDebt(Context ctx) {
+	public static void displayTotalDebt(Resources res) {
 		int debt = AppData.totalDebt(debts);
 
-		total_debt.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
+		total_debt.setText(Debt.totalString(debt, res.getString(R.string.even)));
 	}
 	@Override
 	public void onDelete(Debt debt) {
 		Resource.debts.remove(debt);
 		Resource.commit();
 		adapter.notifyDataSetChanged();
-		displayTotalDebt(getActivity());
+		displayTotalDebt(getResources());
 	}
 
 	@Override
