@@ -1,6 +1,9 @@
 package com.johnsimon.payback;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -57,6 +61,8 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+	private static RobotoMediumTextView headerPlus;
+	private static RobotoMediumTextView headerMinus;
 
     public static int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -108,32 +114,49 @@ public class NavigationDrawerFragment extends Fragment {
 
 		View headerView = inflater.inflate(R.layout.navigation_drawer_list_header, null);
 
-		LinearLayout headerTextContainer = (LinearLayout) headerView.findViewById(R.id.navigation_drawer_header_text_container);
+		final LinearLayout headerTextContainer = (LinearLayout) headerView.findViewById(R.id.navigation_drawer_header_text_container);
 		RobotoMediumTextView headerName = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_name);
-		RobotoMediumTextView headerPlus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_plus);
-		RobotoMediumTextView headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
+		headerPlus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_plus);
+		headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
 		final ImageButton headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
+
+		updateBalance();
+		updateName();
+
+		headerTextContainer.setTranslationY(Resource.getPx(64, getActivity()));
 
 		headerArrow.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View view) {
 				if (inHeaderDetailScreen) {
 					//Spin to down arrow
-					RotateAnimation anim = new RotateAnimation(180.0f, 0.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
-					anim.setInterpolator(new AccelerateDecelerateInterpolator());
-					anim.setDuration(200);
-					anim.setFillAfter(true);
-					headerArrow.setAnimation(anim);
-					headerArrow.startAnimation(anim);
+					view.setRotation(180f);
+
+					ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
+							"rotation", 360f);
+					rotation.setDuration(300);
+					rotation.start();
+
+					headerTextContainer.setTranslationY(0);
+
+					ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(64, getActivity()));
+					animY.setDuration(400);
+					animY.start();
 
 					inHeaderDetailScreen = false;
 				} else {
-					RotateAnimation anim = new RotateAnimation(0.0f, 180.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
-					anim.setInterpolator(new AccelerateDecelerateInterpolator());
-					anim.setDuration(200);
-					anim.setFillAfter(true);
-					headerArrow.setAnimation(anim);
-					headerArrow.startAnimation(anim);
+					view.setRotation(0f);
+
+					ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
+							"rotation", 180f);
+					rotation.setDuration(300);
+					rotation.start();
+
+					headerTextContainer.setTranslationY(Resource.getPx(64, getActivity()));
+
+					ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
+					animY.setDuration(400);
+					animY.start();
 
 					inHeaderDetailScreen = true;
 				}
@@ -145,6 +168,15 @@ public class NavigationDrawerFragment extends Fragment {
 
         return mDrawerListView;
     }
+
+	public static void updateBalance() {
+		headerPlus.setText("+ " + Resource.calculateTotalPlus() + Resource.getCurrency());
+		headerMinus.setText(" " + Resource.calculateTotalMinus() + Resource.getCurrency());
+	}
+
+	private void updateName() {
+
+	}
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);

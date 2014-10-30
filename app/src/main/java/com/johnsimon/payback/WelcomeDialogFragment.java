@@ -153,7 +153,7 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
             }
 
             FeedFragment.adapter.notifyDataSetChanged();
-            FeedFragment.displayTotalDebt(getActivity());
+            FeedFragment.displayTotalDebt(getResources());
 			if (SettingsActivity.pref_currency != null) {
 				SettingsActivity.pref_currency.setSummary(currency);
 			}

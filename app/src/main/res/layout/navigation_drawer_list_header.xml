@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"    >
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:orientation="vertical"
         android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="128dp">
 
         <ImageView
             android:scaleType="centerCrop"
             android:src="@drawable/navigation_drawer_image"
             android:layout_width="match_parent"
-            android:layout_height="120dp"/>
+            android:layout_height="128dp"/>
 
         <LinearLayout
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/navigation_drawer_header_text_container"
             android:orientation="vertical"
             android:paddingLeft="72dp"
@@ -30,6 +30,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:text="Simon Halvdansson"
+                android:textStyle="bold"
                 android:paddingBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

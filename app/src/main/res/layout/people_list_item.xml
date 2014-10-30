@@ -51,7 +51,7 @@
 
     <ImageView
         android:id="@+id/people_list_item_handle"
-        android:background="@color/primary_color"
+        android:src="@drawable/ic_action_filter"
         android:layout_width="48dp"
         android:layout_height="match_parent"/>
 
