@@ -26,7 +26,15 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	public NavigationDrawerAdapter(Activity context, ArrayList<Person> people) {
 		this.context = context;
 
-		items.add(allItem);
+		setItems(people);
+	}
+
+	public void updatePeople(ArrayList<Person> people) {
+		items.clear();
+		setItems(people);
+	}
+
+	private void setItems(ArrayList<Person> people) {
 		for(Person person : people) {
 			items.add(new NavigationDrawerItem(person.toString(), person.id, null, person));
 		}
@@ -43,13 +51,16 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	@Override
+	//One for allItem
 	public int getCount() {
-		return items.size();
+		return items.size() + 1;
 	}
 
 	@Override
 	public NavigationDrawerItem getItem(int i) {
-		return items.get(i);
+		return i == 0
+			? allItem
+			: items.get(--i);
 	}
 
 	@Override
@@ -60,12 +71,13 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
-		NavigationDrawerItem item = getItem(i);
 		boolean isSelected = i == NavigationDrawerFragment.mCurrentSelectedPosition;
 
-		if(item == allItem) {
+		if(i == 0) {
 			return getAllView(view, isSelected);
 		}
+
+		NavigationDrawerItem item = items.get(--i);
 
 		if (view == null) {
 			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);

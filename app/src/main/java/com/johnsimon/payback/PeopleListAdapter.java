@@ -16,8 +16,8 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.util.ArrayList;
 
 public class PeopleListAdapter extends ArrayAdapter<Person> {
+	public final ArrayList<Person> list;
 	private final Activity context;
-	private final ArrayList<Person> list;
 
 	public PeopleListAdapter(Activity context, ArrayList<Person> list) {
 		super(context, R.layout.feed_list_item, list);

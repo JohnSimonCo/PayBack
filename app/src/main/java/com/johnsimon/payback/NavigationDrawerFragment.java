@@ -4,6 +4,7 @@ package com.johnsimon.payback;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class NavigationDrawerFragment extends Fragment {
      */
     public ActionBarDrawerToggle mDrawerToggle;
 
-	private NavigationDrawerAdapter adapter;
+	public static NavigationDrawerAdapter adapter;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -103,7 +104,7 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerListView;
     }
 
-    public boolean isDrawerOpen() {
+	public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 

@@ -14,6 +14,10 @@ import java.util.ArrayList;
 
 public class PeopleManagerActivity extends ActionBarActivity {
 
+	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
+	public static String ARG_FROM_PEOPLE_MANAGER = Resource.arg(ARG_PREFIX, "PEOPLE_MANAGER");
+
+
 	private DragSortListView listView;
 	private PeopleListAdapter adapter;
 
@@ -80,9 +84,17 @@ public class PeopleManagerActivity extends ActionBarActivity {
 			Person item = adapter.getItem(from);
 			adapter.remove(item);
 			adapter.insert(item, to);
+
+			commitChange();
 		}
 		}
 	};
+
+	private void commitChange() {
+		Resource.people = adapter.list;
+		NavigationDrawerFragment.adapter.updatePeople(Resource.people);
+		NavigationDrawerFragment.adapter.notifyDataSetChanged();
+	}
 /*
 	private DragSortListView.RemoveListener onRemove = new DragSortListView.RemoveListener()
 	{
