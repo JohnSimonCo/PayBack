@@ -95,14 +95,12 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			holder.avatarLetter.setVisibility(View.GONE);
 
 			final ViewHolder finalHolder = holder;
-			ImageLoader.getInstance().loadImage(owner.photoURI.replaceAll("/photo$", ""), new SimpleImageLoadingListener() {
+			ThumbnailLoader.getInstance().load(owner.photoURI, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 					finalHolder.avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
 				}
 			});
-			Resource.toast(context, owner.photoURI.replaceAll("/photo$", ""));
-
 		}
 
 		holder.title.setText(item.title);

@@ -49,20 +49,18 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
         if(person.color != null) {
             holder.avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(person.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
             holder.avatarLetter.setVisibility(View.VISIBLE);
-            holder.avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
+            holder.avatarLetter.setText(person.getAvatarLetter());
             //Set avatar as image like some stupid faggot
         } else {
             holder.avatarLetter.setVisibility(View.GONE);
 
-            final ViewHolder finalHolder = holder;
-            ImageLoader.getInstance().loadImage(person.photoURI.replaceAll("/photo$", ""), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    finalHolder.avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
-                }
-            });
-            Resource.toast(context, person.photoURI.replaceAll("/photo$", ""));
-
+			final ViewHolder finalHolder = holder;
+			ThumbnailLoader.getInstance().load(person.photoURI, new SimpleImageLoadingListener() {
+				@Override
+				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+					finalHolder.avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
+				}
+			});
         }
 
 		return convertView;

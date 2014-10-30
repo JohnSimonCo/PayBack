@@ -28,4 +28,7 @@ public class Person {
 	public String toString() {
 		return name;
 	}
+	public String getAvatarLetter() {
+		return name.substring(0, 1).toUpperCase();
+	}
 }
