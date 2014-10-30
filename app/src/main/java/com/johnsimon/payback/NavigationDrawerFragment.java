@@ -128,7 +128,9 @@ public class NavigationDrawerFragment extends Fragment {
 		updateBalance();
 		updateName();
 
-		headerTextContainer.setTranslationY(Resource.getPx(64, getActivity()));
+		headerTextContainer.setTranslationY(Resource.getPx(58, getActivity()));
+        headerPlus.setAlpha(0f);
+        headerMinus.setAlpha(0f);
 
 		headerArrow.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -162,7 +164,7 @@ public class NavigationDrawerFragment extends Fragment {
 
             headerTextContainer.setTranslationY(0);
 
-            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(64, getActivity()));
+            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(58, getActivity()));
             animY.setDuration(300);
             animY.start();
 
@@ -178,6 +180,18 @@ public class NavigationDrawerFragment extends Fragment {
             scaleX.start();
             scaleY.start();
 
+            headerPlus.setAlpha(1f);
+            headerMinus.setAlpha(1f);
+
+            ObjectAnimator alphaP = ObjectAnimator.ofFloat(headerPlus, "alpha", 0f);
+            ObjectAnimator alphaM = ObjectAnimator.ofFloat(headerMinus, "alpha", 0f);
+
+            alphaP.setDuration(300);
+            alphaM.setDuration(300);
+
+            alphaP.start();
+            alphaM.start();
+
             inHeaderDetailScreen = false;
         } else {
             headerArrow.setRotation(0f);
@@ -187,7 +201,7 @@ public class NavigationDrawerFragment extends Fragment {
             rotation.setDuration(300);
             rotation.start();
 
-            headerTextContainer.setTranslationY(Resource.getPx(64, getActivity()));
+            headerTextContainer.setTranslationY(Resource.getPx(58, getActivity()));
 
             ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
             animY.setDuration(300);
@@ -204,6 +218,18 @@ public class NavigationDrawerFragment extends Fragment {
 
             scaleX.start();
             scaleY.start();
+
+            headerPlus.setAlpha(0f);
+            headerMinus.setAlpha(0f);
+
+            ObjectAnimator alphaP = ObjectAnimator.ofFloat(headerPlus, "alpha", 1f);
+            ObjectAnimator alphaM = ObjectAnimator.ofFloat(headerMinus, "alpha", 1f);
+
+            alphaP.setDuration(300);
+            alphaM.setDuration(300);
+
+            alphaP.start();
+            alphaM.start();
 
             inHeaderDetailScreen = true;
         }
