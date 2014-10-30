@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -464,4 +465,19 @@ public class Resource {
 
 		return new Gson().fromJson(JSON, Debt[].class);
 	}
+
+    public static class AmountComparator implements Comparator<Debt> {
+        @Override
+        public int compare(Debt debt1, Debt debt2) {
+            return Math.round(debt1.amount - debt2.amount);
+        }
+    }
+
+    public static class TimeComparator implements Comparator<Debt> {
+        @Override
+        public int compare(Debt debt1, Debt debt2) {
+            return Math.round(debt1.timestamp - debt2.timestamp);
+        }
+    }
+
 }

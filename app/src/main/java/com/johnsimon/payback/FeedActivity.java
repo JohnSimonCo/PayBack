@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 public class FeedActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, NfcAdapter.CreateNdefMessageCallback {
@@ -37,6 +38,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public static ArrayList<Debt> feed;
 	public static Person person;
 
+    private MenuItem filterTime;
+    private MenuItem filterAmount;
+
     private NavigationDrawerFragment navigationDrawerFragment;
 
 	private NfcAdapter nfcAdapter;
@@ -52,8 +56,8 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 		Resource.fetchData(this);
         if (Resource.isFirstRun()) {
- //           WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
- //           welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
+            WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+            welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
         }
 
 	    setContentView(R.layout.activity_feed);
@@ -176,6 +180,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.feed, menu);
+
+            filterTime = menu.findItem(R.id.menu_filter_time);
+            filterAmount = menu.findItem(R.id.menu_filter_amount);
+
             restoreActionBar();
             return true;
         }
@@ -185,6 +193,21 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean result = super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.menu_filter_time:
+                item.setChecked(true);
+                filterAmount.setChecked(false);
+                sortTime();
+                break;
+
+            case R.id.menu_filter_amount:
+                item.setChecked(true);
+                filterTime.setChecked(false);
+                sortAmount();
+                break;
+
+        }
 
         return result;
     }
@@ -203,10 +226,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 			case R.id.navigation_drawer_footer_about:
-		//		AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-		//		aboutDialogFragment.show(getFragmentManager(), "about_dialog");
-
-				WelcomeDialogFragment aboutDialogFragment = new WelcomeDialogFragment();
+				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
 				aboutDialogFragment.show(getFragmentManager(), "about_dialog");
 				break;
 
@@ -233,6 +253,8 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
         super.onSaveInstanceState(outState);
         outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
 
+        outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
+
 		if(person != null) {
 			outState.putString(SAVE_PERSON_ID, person.id.toString());
 		}
@@ -243,6 +265,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
         super.onRestoreInstanceState(savedInstanceState);
         animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
 
+        if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
+            sortAmount();
+        }
+
 		String personId = savedInstanceState.getString(SAVE_PERSON_ID, null);
 		if(personId == null) {
 			showAll();
@@ -251,4 +277,14 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		}
 
 	}
+
+    public void sortAmount() {
+        Collections.sort(feed, new Resource.AmountComparator());
+
+    }
+
+    public void sortTime() {
+        Collections.sort(feed, new Resource.TimeComparator());
+    }
+
 }

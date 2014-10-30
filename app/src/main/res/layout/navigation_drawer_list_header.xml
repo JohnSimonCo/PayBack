@@ -17,6 +17,7 @@
             android:layout_height="128dp"/>
 
         <LinearLayout
+            android:paddingRight="56dp"
             android:layout_marginTop="20dp"
             android:id="@+id/navigation_drawer_header_text_container"
             android:orientation="vertical"
@@ -28,15 +29,14 @@
                 android:id="@+id/navigation_drawer_header_name"
                 android:paddingTop="6dp"
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:text="Simon Halvdansson"
-                android:textStyle="bold"
                 android:paddingBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.johnsimon.payback.RobotoMediumTextView
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_plus"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:text="+ 2000 Kr"    />
 
             <com.johnsimon.payback.RobotoMediumTextView
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_minus"
                 android:layout_height="wrap_content"

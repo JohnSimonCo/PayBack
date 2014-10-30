@@ -62,8 +62,12 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
-	private static RobotoMediumTextView headerPlus;
-	private static RobotoMediumTextView headerMinus;
+
+    private ImageButton headerArrow;
+    private LinearLayout headerTextContainer;
+    private RobotoMediumTextView headerName;
+    private static RobotoMediumTextView headerPlus;
+    private static RobotoMediumTextView headerMinus;
 
     public static int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -115,11 +119,11 @@ public class NavigationDrawerFragment extends Fragment {
 
 		View headerView = inflater.inflate(R.layout.navigation_drawer_list_header, null);
 
-		final LinearLayout headerTextContainer = (LinearLayout) headerView.findViewById(R.id.navigation_drawer_header_text_container);
-		RobotoMediumTextView headerName = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_name);
+		headerTextContainer = (LinearLayout) headerView.findViewById(R.id.navigation_drawer_header_text_container);
+		headerName = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_name);
 		headerPlus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_plus);
 		headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
-		final ImageButton headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
+		headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
 
 		updateBalance();
 		updateName();
@@ -128,46 +132,81 @@ public class NavigationDrawerFragment extends Fragment {
 
 		headerArrow.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view) {
-				if (inHeaderDetailScreen) {
-					//Spin to down arrow
-					view.setRotation(180f);
-
-					ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
-							"rotation", 360f);
-					rotation.setDuration(300);
-					rotation.start();
-
-					headerTextContainer.setTranslationY(0);
-
-					ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(64, getActivity()));
-					animY.setDuration(400);
-					animY.start();
-
-					inHeaderDetailScreen = false;
-				} else {
-					view.setRotation(0f);
-
-					ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
-							"rotation", 180f);
-					rotation.setDuration(300);
-					rotation.start();
-
-					headerTextContainer.setTranslationY(Resource.getPx(64, getActivity()));
-
-					ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
-					animY.setDuration(400);
-					animY.start();
-
-					inHeaderDetailScreen = true;
-				}
+			public void onClick(View v) {
+                handleArrowRotation();
 			}
 		});
+
+        headerTextContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleArrowRotation();
+            }
+        });
 
 
 		mDrawerListView.addHeaderView(headerView);
 
         return mDrawerListView;
+    }
+
+    public void handleArrowRotation() {
+        if (inHeaderDetailScreen) {
+            //Spin to down arrow
+            headerArrow.setRotation(180f);
+
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,
+                    "rotation", 360f);
+            rotation.setDuration(300);
+            rotation.start();
+
+            headerTextContainer.setTranslationY(0);
+
+            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(64, getActivity()));
+            animY.setDuration(300);
+            animY.start();
+
+            headerTextContainer.setScaleX(1.1f);
+            headerTextContainer.setScaleY(1.1f);
+
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(headerTextContainer, "scaleX", 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(headerTextContainer, "scaleY", 1f);
+
+            scaleX.setDuration(300);
+            scaleY.setDuration(300);
+
+            scaleX.start();
+            scaleY.start();
+
+            inHeaderDetailScreen = false;
+        } else {
+            headerArrow.setRotation(0f);
+
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,
+                    "rotation", 180f);
+            rotation.setDuration(300);
+            rotation.start();
+
+            headerTextContainer.setTranslationY(Resource.getPx(64, getActivity()));
+
+            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
+            animY.setDuration(300);
+            animY.start();
+
+            headerTextContainer.setScaleX(1f);
+            headerTextContainer.setScaleY(1f);
+
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(headerTextContainer, "scaleX", 1.1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(headerTextContainer, "scaleY", 1.1f);
+
+            scaleX.setDuration(300);
+            scaleY.setDuration(300);
+
+            scaleX.start();
+            scaleY.start();
+
+            inHeaderDetailScreen = true;
+        }
     }
 
 	public static void updateBalance() {
@@ -176,7 +215,8 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void updateName() {
-
+        //TODO get user name here
+        headerName.setText("Simon Halvdansson");
 	}
 
     public boolean isDrawerOpen() {
