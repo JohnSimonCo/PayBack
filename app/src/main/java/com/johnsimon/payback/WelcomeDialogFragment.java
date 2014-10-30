@@ -43,7 +43,6 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 			currencyOnly = getArguments().getBoolean("SETTINGS", false);
 		}
 
-
 		welcomeCurrencyPreview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
 
         final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
@@ -153,10 +152,11 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
                 FeedFragment.debts.get(i).amountAsString = Debt.amountString(FeedFragment.debts.get(i).amount);
             }
 
-
             FeedFragment.adapter.notifyDataSetChanged();
             FeedFragment.displayTotalDebt(getActivity());
-            SettingsActivity.pref_currency.setSummary(currency);
+			if (SettingsActivity.pref_currency != null) {
+				SettingsActivity.pref_currency.setSummary(currency);
+			}
 
 			alertDialog.cancel();
 		}

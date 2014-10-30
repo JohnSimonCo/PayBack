@@ -16,7 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 /**
@@ -56,6 +61,7 @@ public class NavigationDrawerFragment extends Fragment {
     public static int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+	private boolean inHeaderDetailScreen = false;
 
     public NavigationDrawerFragment() {
     }
@@ -87,7 +93,7 @@ public class NavigationDrawerFragment extends Fragment {
             Bundle savedInstanceState) {
 
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	        @Override
 	        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		        selectItem(position);
@@ -99,6 +105,43 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
 		mDrawerListView.addFooterView(inflater.inflate(R.layout.navigation_drawer_list_footer, null));
+
+		View headerView = inflater.inflate(R.layout.navigation_drawer_list_header, null);
+
+		LinearLayout headerTextContainer = (LinearLayout) headerView.findViewById(R.id.navigation_drawer_header_text_container);
+		RobotoMediumTextView headerName = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_name);
+		RobotoMediumTextView headerPlus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_plus);
+		RobotoMediumTextView headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
+		final ImageButton headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
+
+		headerArrow.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (inHeaderDetailScreen) {
+					//Spin to down arrow
+					RotateAnimation anim = new RotateAnimation(180.0f, 0.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+					anim.setInterpolator(new AccelerateDecelerateInterpolator());
+					anim.setDuration(200);
+					anim.setFillAfter(true);
+					headerArrow.setAnimation(anim);
+					headerArrow.startAnimation(anim);
+
+					inHeaderDetailScreen = false;
+				} else {
+					RotateAnimation anim = new RotateAnimation(0.0f, 180.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+					anim.setInterpolator(new AccelerateDecelerateInterpolator());
+					anim.setDuration(200);
+					anim.setFillAfter(true);
+					headerArrow.setAnimation(anim);
+					headerArrow.startAnimation(anim);
+
+					inHeaderDetailScreen = true;
+				}
+			}
+		});
+
+
+		mDrawerListView.addHeaderView(headerView);
 
         return mDrawerListView;
     }
@@ -174,6 +217,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
     private void selectItem(int position) {
+		position -= mDrawerListView.getHeaderViewsCount();
         mCurrentSelectedPosition = position;
 
         if (mDrawerListView != null) {

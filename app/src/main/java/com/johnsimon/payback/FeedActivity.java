@@ -58,10 +58,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	    setContentView(R.layout.activity_feed);
 
-	    SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
-
         toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
         setSupportActionBar(toolbar);
 
@@ -77,6 +73,13 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(this, this);
+		}
+
+		View feed_activity_status_bar_pusher = findViewById(R.id.feed_activity_status_bar_pusher);
+
+		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0) {
+			feed_activity_status_bar_pusher.getLayoutParams().height = getResources().getDimensionPixelSize(resourceId);
 		}
 
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
@@ -248,5 +251,4 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		}
 
 	}
-
 }

@@ -58,10 +58,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int i, View view, ViewGroup viewGroup) {
+	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
-		NavigationDrawerItem item = getItem(i);
-		boolean isSelected = i == NavigationDrawerFragment.mCurrentSelectedPosition;
+
+		NavigationDrawerItem item = getItem(position);
+		boolean isSelected = position == NavigationDrawerFragment.mCurrentSelectedPosition;
 
 		if(item == allItem) {
 			return getAllView(view, isSelected);

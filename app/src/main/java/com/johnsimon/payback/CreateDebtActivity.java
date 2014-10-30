@@ -105,6 +105,7 @@ public class CreateDebtActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				floatLabelNameAutoCompleteTextView.setText("");
+				floatLabelNameAutoCompleteTextView.requestFocus();
 			}
 		});
 
