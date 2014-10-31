@@ -30,7 +30,7 @@
 
     </RelativeLayout>
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:text="@string/all"
         android:layout_gravity="center_vertical"
         android:textColor="@color/gray_text_light"

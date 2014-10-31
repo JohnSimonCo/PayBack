@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
-            <com.johnsimon.payback.RobotoMediumTextView
+            <com.johnsimon.payback.util.RobotoMediumTextView
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingBottom="16dp"
@@ -41,7 +41,7 @@
 
         </RelativeLayout>
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:id="@+id/welcome_information_text"
             android:paddingBottom="8dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -61,13 +61,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.johnsimon.payback.NDSpinner
+            <com.johnsimon.payback.view.NDSpinner
                 android:layout_marginTop="8dp"
                 android:id="@+id/welcome_currency_spinner"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"    />
 
-            <com.johnsimon.payback.RobotoMediumTextView
+            <com.johnsimon.payback.util.RobotoMediumTextView
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"

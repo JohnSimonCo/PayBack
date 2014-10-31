@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/welcome_using_nfc"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:textColor="@color/gray_text_light"

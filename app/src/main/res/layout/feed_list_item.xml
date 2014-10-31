@@ -53,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
 
-            <com.johnsimon.payback.RobotoMediumTextView
+            <com.johnsimon.payback.util.RobotoMediumTextView
                 android:textColor="@color/gray_text_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <com.johnsimon.payback.RobotoMediumTextView
+                <com.johnsimon.payback.util.RobotoMediumTextView
                     android:layout_weight="1"
                     android:textSize="14sp"
                     android:textColor="@color/gray_text_light"
@@ -79,7 +79,7 @@
                     android:ellipsize="end"
                     android:id="@+id/list_item_note"    />
 
-                <com.johnsimon.payback.RobotoMediumTextView
+                <com.johnsimon.payback.util.RobotoMediumTextView
                     android:textSize="14sp"
                     android:textColor="@color/gray_text_very_light"
                     android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
 
     </LinearLayout>
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:visibility="gone"
         android:id="@+id/list_item_paid_back"
         android:paddingBottom="12dp"

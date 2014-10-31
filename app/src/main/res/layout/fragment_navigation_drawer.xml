@@ -9,4 +9,4 @@
     android:divider="@null"
     android:dividerHeight="0dp"
     android:background="#eee"
-    tools:context="com.johnsimon.payback.NavigationDrawerFragment" />
+    tools:context="com.johnsimon.payback.adapter.NavigationDrawerFragment" />

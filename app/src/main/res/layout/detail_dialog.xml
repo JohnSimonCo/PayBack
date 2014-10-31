@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="Title"
             android:id="@+id/dialog_custom_title"
             android:layout_weight="1"
@@ -31,7 +31,7 @@
 
     </LinearLayout>
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:text="200 Kr"
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
@@ -41,7 +41,7 @@
         android:textColor="@color/green_strong"
         android:textSize="20sp" />
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:text="Content"
         android:id="@+id/dialog_custom_content"
         android:layout_width="wrap_content"

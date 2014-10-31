@@ -40,7 +40,7 @@
 
     </RelativeLayout>
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:layout_gravity="center_vertical"
         android:textColor="@color/gray_text_light"
         android:textSize="18sp"

@@ -17,7 +17,7 @@
         android:layout_width="62dp"
         android:layout_height="62dp"    />
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:layout_gravity="center_horizontal"
         android:textSize="23sp"
         android:textColor="@android:color/white"

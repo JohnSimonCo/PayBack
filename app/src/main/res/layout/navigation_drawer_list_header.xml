@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.johnsimon.payback.RobotoMediumTextView
+            <com.johnsimon.payback.util.RobotoMediumTextView
                 android:id="@+id/navigation_drawer_header_name"
                 android:paddingTop="6dp"
                 android:textColor="@android:color/white"
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <com.johnsimon.payback.RobotoMediumTextView
+            <com.johnsimon.payback.util.RobotoMediumTextView
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_plus"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:text="+ 2000 Kr"    />
 
-            <com.johnsimon.payback.RobotoMediumTextView
+            <com.johnsimon.payback.util.RobotoMediumTextView
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_minus"

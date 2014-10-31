@@ -20,7 +20,7 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppThemeParent" >
         <activity
-            android:name="com.johnsimon.payback.FeedActivity"
+            android:name=".ui.FeedActivity"
             android:launchMode="singleTask"
             android:label="@string/app_name"
             android:theme="@style/AppThemeParent" >
@@ -31,19 +31,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.johnsimon.payback.CreateDebtActivity"
+            android:name=".ui.CreateDebtActivity"
             android:icon="@drawable/ic_actionbar_left"
             android:label=""
             android:theme="@style/AppThemeParent" >
         </activity>
         <activity
-            android:name="com.johnsimon.payback.SettingsActivity"
-            android:parentActivityName=".FeedActivity"
+            android:name=".ui.SettingsActivity"
+            android:parentActivityName=".ui.FeedActivity"
             android:theme="@style/AppThemeParent"
             android:label="@string/pref_settings" />
         <activity
-            android:name="com.johnsimon.payback.PeopleManagerActivity"
-            android:parentActivityName=".FeedActivity"
+            android:name=".ui.PeopleManagerActivity"
+            android:parentActivityName=".ui.FeedActivity"
             android:theme="@style/AppThemeParent"
             android:label="@string/title_activity_people_manager"   />
     </application>

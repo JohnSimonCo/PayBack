@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="Currency"
             android:layout_weight="1"
             android:layout_width="0dp"

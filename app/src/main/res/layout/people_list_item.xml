@@ -44,7 +44,7 @@
 
     </RelativeLayout>
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:gravity="center_vertical"
         android:layout_toRightOf="@id/people_list_item_avatar_layout"
         android:layout_gravity="center_vertical"

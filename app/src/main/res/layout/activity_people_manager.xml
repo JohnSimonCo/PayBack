@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.johnsimon.payback.PeopleManagerActivity">
+    tools:context="com.johnsimon.payback.ui.PeopleManagerActivity">
 
     <android.support.v7.widget.Toolbar
         xmlns:app="http://schemas.android.com/apk/res-auto"

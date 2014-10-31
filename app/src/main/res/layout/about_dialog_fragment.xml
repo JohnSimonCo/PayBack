@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="@string/author_johnsimon"
             style="@style/library_author"
             android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="@string/author_rad"
             style="@style/library_author"
             android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="@string/author_fab"
             style="@style/library_author"
             android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="@string/author_sbt"
             style="@style/library_author"
             android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.RobotoMediumTextView
+        <com.johnsimon.payback.util.RobotoMediumTextView
             android:text="@string/author_afl"
             style="@style/library_author"
             android:layout_width="wrap_content"
