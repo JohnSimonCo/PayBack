@@ -2,6 +2,7 @@ package com.johnsimon.payback.ui;
 
 import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.johnsimon.payback.adapter.FeedListAdapter;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.BlurUtils;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 
@@ -35,7 +37,9 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 	public static FeedListAdapter adapter;
     public static RelativeLayout headerView;
 
-	public static TextView total_debt;
+	public static TextView totalDebtTextView;
+    public static View feed_header_balance_blur_medium;
+    public static View feed_header_balance_blur_full;
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,9 +51,11 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		debts = FeedActivity.feed;
 		final Person person = FeedActivity.person;
 
-        total_debt = (TextView) headerView.findViewById(R.id.total_debt);
+        totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
+        //TODO  feed_header_balance_blur_medium = rootView.findViewById(R.id.feed_header_balance_blur_medium);
+        //TODO  feed_header_balance_blur_full = rootView.findViewById(R.id.feed_header_balance_blur_full);
 
-		displayTotalDebt(getResources());
+		displayTotalDebt(getActivity());
 
 		adapter = new FeedListAdapter(getActivity(), debts);
         listView.setAdapter(adapter);
@@ -122,19 +128,20 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		Resource.commit();
 		adapter.animationDebt = debt;
 		adapter.notifyDataSetChanged();
-		displayTotalDebt(getResources());
+		displayTotalDebt(getActivity());
 	}
-	public static void displayTotalDebt(Resources res) {
+	public static void displayTotalDebt(Context ctx) {
 		int debt = AppData.totalDebt(debts);
 
-		total_debt.setText(Debt.totalString(debt, res.getString(R.string.even)));
+        //TODO        BlurUtils.crossBlur(totalDebtTextView, feed_header_balance_blur_medium, feed_header_balance_blur_full, ctx);
+		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
 	}
 	@Override
 	public void onDelete(Debt debt) {
 		Resource.debts.remove(debt);
 		Resource.commit();
 		adapter.notifyDataSetChanged();
-		displayTotalDebt(getResources());
+		displayTotalDebt(getActivity());
 	}
 
 	@Override

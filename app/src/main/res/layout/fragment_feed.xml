@@ -53,14 +53,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <com.johnsimon.payback.util.RobotoMediumTextView
-                android:id="@+id/total_debt"
-                android:textSize="@dimen/feed_header_title_text_size"
-                android:textStyle="bold"
-                android:textColor="#fff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
+            <!--
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">-->
+
+                <com.johnsimon.payback.util.RobotoMediumTextView
+                    android:id="@+id/total_debt"
+                    android:textSize="@dimen/feed_header_title_text_size"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+<!--
+                <View
+                    android:id="@+id/feed_header_balance_blur_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"    />
+
+                <View
+                    android:id="@+id/feed_header_balance_blur_full"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"    />
+
+            </RelativeLayout>
+-->
         </LinearLayout>
 
         <com.shamanland.fab.FloatingActionButton

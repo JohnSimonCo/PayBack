@@ -17,22 +17,34 @@ import android.view.animation.DecelerateInterpolator;
 
 public class BlurUtils {
 
-    public static void crossBlur(final View normalLayout, final View blurMediumView, final View blurFullView, Context ctx) {
+    /**
+     *
+     * Cross blurs two views within a duration of 600 milliseconds.
+     *
+     * initialView -> blurMediumView -> blurFullView ->
+     *
+     * @param initialView Initial user-visible view. Is also used after the animation.
+     * @param blurMediumView View that is visible half thruoght the cross-fade.
+     * @param blurFullView The fully blurred view, used between the blurMediumViews
+     * @param ctx Context used for creating initializing RenderScript and BitmapDrawables
+     *
+     */
+    public static void crossBlur(final View initialView, final View blurMediumView, final View blurFullView, Context ctx) {
 
         //Enable drawing cache to enable copying view to bitmap
-        normalLayout.setDrawingCacheEnabled(true);
+        initialView.setDrawingCacheEnabled(true);
 
         //Force measure to refresh view
-        normalLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        initialView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        normalLayout.layout(0, 0, normalLayout.getMeasuredWidth(), normalLayout.getMeasuredHeight());
+        initialView.layout(0, 0, initialView.getMeasuredWidth(), initialView.getMeasuredHeight());
 
         //Build the drawing cache
-        normalLayout.buildDrawingCache(true);
-        Bitmap viewBitmap = Bitmap.createBitmap(normalLayout.getDrawingCache());
+        initialView.buildDrawingCache(true);
+        Bitmap viewBitmap = Bitmap.createBitmap(initialView.getDrawingCache());
 
         //Disable drawing cache now that we're done
-        normalLayout.setDrawingCacheEnabled(false);
+        initialView.setDrawingCacheEnabled(false);
 
         //Blur both bitmaps with different radiouses
         viewBitmap = fastblur(viewBitmap, 8, ctx);
@@ -47,15 +59,15 @@ public class BlurUtils {
         ViewGroup.LayoutParams blurredParams2 = blurMediumView.getLayoutParams();
 
         ///... so we can match the width
-        blurredParams.width = normalLayout.getWidth();
-        blurredParams2.width = normalLayout.getWidth();
+        blurredParams.width = initialView.getWidth();
+        blurredParams2.width = initialView.getWidth();
 
         //Now apply the effect
         blurFullView.setLayoutParams(blurredParams);
         blurMediumView.setLayoutParams(blurredParams);
 
         //Now for the crossfade, first we set the initial states...
-        normalLayout.setAlpha(0f);
+        initialView.setAlpha(0f);
         blurMediumView.setAlpha(0f);
 
         //... then we set up the initial animator
@@ -71,7 +83,7 @@ public class BlurUtils {
             public void onAnimationEnd(Animator animation) {
                 //Now start the second crossfade when the first one is done
                 blurMediumView.animate().withLayer().alpha(0).setDuration(300).setInterpolator(new DecelerateInterpolator());
-                normalLayout.animate().withLayer().alpha(1).setDuration(300).setInterpolator(new DecelerateInterpolator());
+                initialView.animate().withLayer().alpha(1).setDuration(300).setInterpolator(new DecelerateInterpolator());
             }
 
             @Override
