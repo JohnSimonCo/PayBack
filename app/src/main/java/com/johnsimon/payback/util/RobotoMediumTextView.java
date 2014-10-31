@@ -10,7 +10,7 @@ public class RobotoMediumTextView extends TextView {
 
     public RobotoMediumTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-		setTypeface(FontCache.get(getContext(), "robotomedium.ttf"));
+		setTypeface(FontCache.get(getContext(), FontCache.RobotoMedium));
     }
 
     public RobotoMediumTextView(Context context, AttributeSet attrs) {

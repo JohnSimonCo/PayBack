@@ -482,5 +482,13 @@ public class Resource {
         }
     }
 
+    public static class AlphabeticalComparator implements Comparator<Person> {
+        @Override
+        public int compare(Person person1, Person person2) {
+            return person1.name.compareToIgnoreCase(person2.name);
+        }
+    }
+
+
 
 }

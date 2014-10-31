@@ -4,10 +4,10 @@
     tools:context="com.johnsimon.payback.ui.PeopleManagerActivity">
 
     <item
-        android:id="@+id/action_add_person"
-        android:title="@string/add_person"
+        android:id="@+id/action_sort_az"
+        android:title="@string/sort_az"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_person_add"   />
+        android:icon="@drawable/ic_action_az"   />
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
