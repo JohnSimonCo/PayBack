@@ -41,8 +41,8 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
         Button dialog_custom_confirm = (Button) rootView.findViewById(R.id.dialog_custom_confirm);
         Button dialog_custom_cancel = (Button) rootView.findViewById(R.id.dialog_custom_cancel);
 
-        dialog_custom_confirm.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
-        dialog_custom_cancel.setTypeface(FontCache.get(getActivity(), "robotomedium.ttf"));
+        dialog_custom_confirm.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+        dialog_custom_cancel.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		if (debt.isPaidBack) {
 			dialog_custom_confirm.setText(R.string.undo_pay_back);
