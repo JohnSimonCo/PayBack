@@ -196,15 +196,15 @@ public class CreateDebtActivity extends ActionBarActivity {
 						floatLabelNoteEditText.getText().toString().trim()
 					);
 
-					final Intent intent = new Intent(ctx, FeedActivity.class)
-							.putExtra(FeedActivity.ARG_GOTO_PERSON_ID, person.id.toString());
+					final Intent intent = new Intent(ctx, FeedActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                    finishAffinity();
+					FeedActivity.person = person;
+
                     if (Resource.isLOrAbove()) {
-                        startActivity(intent);
-                    } else {
-                        startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
-                    }
+						startActivity(intent);
+					} else {
+						startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
+					}
 				} else {
 					Resource.toast(ctx, getString(R.string.create_fab_error));
 				}

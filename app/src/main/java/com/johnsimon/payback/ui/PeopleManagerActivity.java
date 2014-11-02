@@ -15,10 +15,11 @@ import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.UUID;
+
 public class PeopleManagerActivity extends ActionBarActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
-
 
 	private PeopleListAdapter adapter;
 
@@ -38,7 +39,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		adapter = new PeopleListAdapter(this, Resource.people);
+		adapter = new PeopleListAdapter(this);
 
 		DragSortListView listView = (DragSortListView) findViewById(R.id.people_listview);
 
@@ -58,7 +59,6 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		listView.setFloatViewManager(controller);
 		listView.setOnTouchListener(controller);
 		listView.setDragEnabled(true);
-
     }
 
     @Override
@@ -84,21 +84,13 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	private DragSortListView.DropListener onDrop = new DragSortListView.DropListener() {
 		@Override
 		public void drop(int from, int to) {
-		if (from != to) {
-			Person item = adapter.getItem(from);
-			adapter.remove(item);
-			adapter.insert(item, to);
-
-			commitChange();
-		}
+			if (from != to) {
+				Person item = adapter.getItem(from);
+				adapter.remove(item);
+				adapter.insert(item, to);
+			}
 		}
 	};
-
-	private void commitChange() {
-		Resource.people = adapter.list;
-		NavigationDrawerFragment.adapter.updatePeople(Resource.people);
-		NavigationDrawerFragment.adapter.notifyDataSetChanged();
-	}
 
 	@Override
 	public void onBackPressed() {
@@ -106,8 +98,10 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	}
 
 	public void returnToFeed() {
-		finishAffinity();
-		Intent intent = new Intent(this, FeedActivity.class);
+		Intent intent = new Intent(this, FeedActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		if(!Resource.people.contains(FeedActivity.person)) {
+			FeedActivity.person = null;
+		}
 
 		startActivity(intent);
 	}

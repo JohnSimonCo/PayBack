@@ -20,13 +20,13 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.util.ArrayList;
 
 public class PeopleListAdapter extends ArrayAdapter<Person> {
-	public final ArrayList<Person> list;
+	public final ArrayList<Person> people;
 	private final Activity context;
 
-	public PeopleListAdapter(Activity context, ArrayList<Person> list) {
-		super(context, R.layout.feed_list_item, list);
+	public PeopleListAdapter(Activity context) {
+		super(context, R.layout.feed_list_item);
 		this.context = context;
-		this.list = list;
+		this.people = Resource.people;
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -46,7 +46,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Person person = list.get(position);
+		Person person = people.get(position);
 
 		holder.name.setText(person.name);
 

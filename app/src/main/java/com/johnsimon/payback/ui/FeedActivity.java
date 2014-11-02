@@ -62,13 +62,20 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
             welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
         }
 
+		if(isAll()) {
+			feed = Resource.debts;
+		} else {
+			feed = Resource.data.personalizedFeed(person);
+		}
+
 	    setContentView(R.layout.activity_feed);
 
         toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
         setSupportActionBar(toolbar);
 
-        navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        title = getTitle();
+		navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
+		navigationDrawerFragment.setSelectedPerson(person);
+		title = getTitle();
 
         // Set up the drawer.
         navigationDrawerFragment.setUp(
@@ -91,8 +98,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
 				.build();
 		ImageLoader.getInstance().init(config);
-
-		readIntent();
     }
 
 	private void readIntent() {
@@ -251,10 +256,11 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
         outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
 
         outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
-
+		/*
 		if(person != null) {
 			outState.putString(SAVE_PERSON_ID, person.id.toString());
 		}
+		*/
     }
 
     @Override
@@ -266,13 +272,14 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
             sortAmount();
         }
 
+		/*
 		String personId = savedInstanceState.getString(SAVE_PERSON_ID, null);
 		if(personId == null) {
 			showAll();
 		} else {
 			showPerson(personId);
 		}
-
+		*/
 	}
 
 	public void sortTime() {

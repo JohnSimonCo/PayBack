@@ -43,6 +43,9 @@ public class AppData {
 	public Person findPerson(UUID id) {
 		return findPerson(people, id);
 	}
+	public Person findPerson(String id) {
+		return findPerson(people, UUID.fromString(id));
+	}
 
 	public static Person findPerson(ArrayList<Person> people, UUID id) {
 		for(Person p : people) {
