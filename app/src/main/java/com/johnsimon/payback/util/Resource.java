@@ -471,7 +471,7 @@ public class Resource {
     public static class AmountComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt1.amount - debt2.amount);
+            return Math.round(debt2.amount - debt1.amount);
         }
     }
 

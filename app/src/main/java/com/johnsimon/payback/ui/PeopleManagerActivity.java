@@ -15,12 +15,16 @@ import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class PeopleManagerActivity extends ActionBarActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 
 	private PeopleListAdapter adapter;
+	private ArrayList<Person> people;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,8 @@ public class PeopleManagerActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		adapter = new PeopleListAdapter(this, Resource.people);
+		people = Resource.people;
+		adapter = new PeopleListAdapter(this, people);
 
 		DragSortListView listView = (DragSortListView) findViewById(R.id.people_listview);
 
@@ -75,6 +80,11 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		switch (item.getItemId()) {
 			case android.R.id.home :
 				returnToFeed();
+				break;
+
+			case R.id.action_sort_az:
+				Collections.sort(people, new Resource.AlphabeticalComparator());
+				adapter.notifyDataSetChanged();
 				break;
 
 		}
