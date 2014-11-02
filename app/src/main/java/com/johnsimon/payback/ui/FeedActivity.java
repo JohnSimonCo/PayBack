@@ -15,7 +15,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.adapter.NavigationDrawerFragment;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
@@ -178,19 +177,16 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!navigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.feed, menu);
+		// Only show items in the action bar relevant to this screen
+		// if the drawer is not showing. Otherwise, let the drawer
+		// decide what to show in the action bar.
+		getMenuInflater().inflate(R.menu.feed, menu);
 
-            filterTime = menu.findItem(R.id.menu_filter_time);
-            filterAmount = menu.findItem(R.id.menu_filter_amount);
+		filterTime = menu.findItem(R.id.menu_filter_time);
+		filterAmount = menu.findItem(R.id.menu_filter_amount);
 
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+		restoreActionBar();
+		return true;
     }
 
     @Override
@@ -279,13 +275,14 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	}
 
+	public void sortTime() {
+		Collections.sort(FeedFragment.debts, new Resource.TimeComparator());
+	}
+
     public void sortAmount() {
-        Collections.sort(feed, new Resource.AmountComparator());
-
-    }
-
-    public void sortTime() {
-        Collections.sort(feed, new Resource.TimeComparator());
+		Resource.toast(this, "amount");
+        Collections.sort(FeedFragment.debts, new Resource.AmountComparator());
+		FeedFragment.adapter.notifyDataSetChanged();
     }
 
 }

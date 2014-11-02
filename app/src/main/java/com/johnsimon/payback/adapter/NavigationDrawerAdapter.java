@@ -15,6 +15,7 @@ import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.drawable.RoundedAvatarDrawable;
+import com.johnsimon.payback.ui.NavigationDrawerFragment;
 import com.johnsimon.payback.util.ThumbnailLoader;
 import com.johnsimon.payback.util.Resource;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;

@@ -1,4 +1,4 @@
-package com.johnsimon.payback.adapter;
+package com.johnsimon.payback.ui;
 
 
 import android.animation.ObjectAnimator;
@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;

@@ -8,7 +8,6 @@ import android.view.MenuItem;
 
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.adapter.NavigationDrawerFragment;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
 import com.mobeta.android.dslv.DragSortController;

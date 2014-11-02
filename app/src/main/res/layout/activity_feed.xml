@@ -40,7 +40,7 @@
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:name="com.johnsimon.payback.adapter.NavigationDrawerFragment"
+        android:name="com.johnsimon.payback.ui.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
 
