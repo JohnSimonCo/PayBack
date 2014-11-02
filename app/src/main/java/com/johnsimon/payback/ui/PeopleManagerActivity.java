@@ -109,7 +109,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 	public void returnToFeed() {
 		finishAffinity();
-		
+
 	}
 
 	/*
