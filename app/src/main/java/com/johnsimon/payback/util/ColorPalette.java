@@ -17,7 +17,9 @@ public class ColorPalette {
 			resources.getColor(R.color.color2),
 			resources.getColor(R.color.color3),
             resources.getColor(R.color.color4),
-            resources.getColor(R.color.color5)
+			resources.getColor(R.color.color5),
+			resources.getColor(R.color.color6),
+			resources.getColor(R.color.color7)
 		};
 	}
 

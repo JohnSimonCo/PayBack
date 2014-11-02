@@ -1,24 +1,19 @@
 package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.drawable.RoundedAvatarDrawable;
 import com.johnsimon.payback.ui.NavigationDrawerFragment;
-import com.johnsimon.payback.util.ThumbnailLoader;
 import com.johnsimon.payback.util.Resource;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.makeramen.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -88,7 +83,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 			holder = new ViewHolder(
 				(TextView) view.findViewById(R.id.navigation_drawer_list_item_text),
-				(ImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
+				(RoundedImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
 				(TextView) view.findViewById(R.id.navigation_drawer_list_item_avatar_letter)
 			);
 			view.setTag(holder);
@@ -98,7 +93,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		Person owner = item.owner;
 
-		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter, context.getResources());
 
 		holder.title.setText(item.title);
 
@@ -118,15 +113,13 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 			holder = new ViewHolder(
 					(TextView) view.findViewById(R.id.navigation_drawer_list_item_text),
-					(ImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
+					(RoundedImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
 					null
 			);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-
-		holder.avatar.setImageDrawable(new RoundedAvatarDrawable(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_people_placeholder)));
 
 		holder.title.setText(R.string.all);
 
@@ -141,10 +134,10 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		public TextView title;
-        public ImageView avatar;
+        public RoundedImageView avatar;
 		public TextView avatarLetter;
 
-		ViewHolder(TextView title, ImageView avatar, TextView avatarLetter) {
+		ViewHolder(TextView title, RoundedImageView avatar, TextView avatarLetter) {
 			this.title = title;
             this.avatar = avatar;
 			this.avatarLetter = avatarLetter;

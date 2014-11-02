@@ -1,7 +1,6 @@
 package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.drawable.RoundedAvatarDrawable;
-import com.johnsimon.payback.util.ThumbnailLoader;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.makeramen.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -38,7 +34,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 
 			holder = new ViewHolder(
 					(TextView) convertView.findViewById(R.id.people_list_item_name),
-					(ImageView) convertView.findViewById(R.id.people_list_item_avatar),
+					(RoundedImageView) convertView.findViewById(R.id.people_list_item_avatar),
                     (TextView) convertView.findViewById(R.id.people_list_item_avatar_letter)
 			);
 			convertView.setTag(holder);
@@ -50,17 +46,17 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 
 		holder.name.setText(person.name);
 
-		Resource.createProfileImage(person, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(person, holder.avatar, holder.avatarLetter, context.getResources());
 
 		return convertView;
 	}
 
 	static class ViewHolder {
 		public TextView name;
-		public ImageView avatar;
+		public RoundedImageView avatar;
         public TextView avatarLetter;
 
-		ViewHolder(TextView name, ImageView avatar, TextView avatarLetter) {
+		ViewHolder(TextView name, RoundedImageView avatar, TextView avatarLetter) {
 			this.name = name;
 			this.avatar = avatar;
             this.avatarLetter = avatarLetter;

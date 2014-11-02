@@ -74,7 +74,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home :
+			case android.R.id.home:
 				returnToFeed();
 				break;
 

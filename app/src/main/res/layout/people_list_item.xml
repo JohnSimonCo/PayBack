@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#eee"
-    android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:paddingLeft="@dimen/base_padding"
-    android:paddingRight="@dimen/base_padding"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="#eee"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="@dimen/base_padding"
+                android:paddingRight="@dimen/base_padding"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_centerVertical="true"
@@ -24,13 +25,15 @@
             android:layout_width="40dp"
             android:layout_height="40dp" />
 
-        <ImageView
-            android:background="@null"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="2dp"
+        <com.makeramen.RoundedImageView
             android:id="@+id/people_list_item_avatar"
             android:layout_width="36dp"
-            android:layout_height="36dp" />
+            android:layout_height="36dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="18dip"
+            app:riv_oval="true" />
 
         <TextView
             android:visibility="gone"

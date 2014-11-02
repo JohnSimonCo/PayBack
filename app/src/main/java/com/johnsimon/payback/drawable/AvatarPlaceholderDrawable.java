@@ -29,12 +29,4 @@ public class AvatarPlaceholderDrawable extends Drawable {
 		//return PixelFormat.OPAQUE;
 	}
 
-	public Bitmap toBitmap(int widthPixels, int heightPixels) {
-		Bitmap mutableBitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(mutableBitmap);
-		setBounds(0, 0, widthPixels, heightPixels);
-		draw(canvas);
-
-		return mutableBitmap;
-	}
 }

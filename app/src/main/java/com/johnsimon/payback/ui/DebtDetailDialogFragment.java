@@ -19,6 +19,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
+import com.makeramen.RoundedImageView;
 
 public class DebtDetailDialogFragment extends DialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
@@ -140,10 +141,10 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 			}
 		});
 
-		ImageView avatar = (ImageView) rootView.findViewById(R.id.detail_dialog_avatar);
+		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
 		TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
 
-		Resource.createProfileImage(debt.owner, avatar, avatarLetter);
+		Resource.createProfileImage(debt.owner, avatar, avatarLetter, getResources());
 
         builder.setView(rootView);
 

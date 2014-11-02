@@ -1,6 +1,7 @@
 package com.johnsimon.payback.ui;
 
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Fragment;
@@ -130,7 +131,7 @@ public class NavigationDrawerFragment extends Fragment {
 		updateBalance();
 		updateName();
 
-		headerTextContainer.setTranslationY(Resource.getPx(58, getActivity()));
+		headerTextContainer.setTranslationY(Resource.getPx(58, getActivity().getResources()));
         headerPlus.setAlpha(0f);
         headerMinus.setAlpha(0f);
 
@@ -157,6 +158,12 @@ public class NavigationDrawerFragment extends Fragment {
     public void handleArrowRotation() {
         if (inHeaderDetailScreen) {
             //Spin to down arrow
+
+			headerArrow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			headerTextContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			headerPlus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			headerMinus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
             headerArrow.setRotation(180f);
 
             ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,
@@ -166,7 +173,7 @@ public class NavigationDrawerFragment extends Fragment {
 
             headerTextContainer.setTranslationY(0);
 
-            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(58, getActivity()));
+            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(58, getActivity().getResources()));
             animY.setDuration(300);
             animY.start();
 
@@ -194,8 +201,39 @@ public class NavigationDrawerFragment extends Fragment {
             alphaP.start();
             alphaM.start();
 
+			alphaM.addListener(new Animator.AnimatorListener() {
+				@Override
+				public void onAnimationStart(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					headerArrow.setLayerType(View.LAYER_TYPE_NONE, null);
+					headerTextContainer.setLayerType(View.LAYER_TYPE_NONE, null);
+					headerPlus.setLayerType(View.LAYER_TYPE_NONE, null);
+					headerMinus.setLayerType(View.LAYER_TYPE_NONE, null);
+				}
+
+				@Override
+				public void onAnimationCancel(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animator animation) {
+
+				}
+			});
+
             inHeaderDetailScreen = false;
         } else {
+
+			headerArrow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			headerTextContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			headerPlus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			headerMinus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
             headerArrow.setRotation(0f);
 
             ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,
@@ -203,7 +241,7 @@ public class NavigationDrawerFragment extends Fragment {
             rotation.setDuration(300);
             rotation.start();
 
-            headerTextContainer.setTranslationY(Resource.getPx(58, getActivity()));
+            headerTextContainer.setTranslationY(Resource.getPx(58, getActivity().getResources()));
 
             ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
             animY.setDuration(300);
@@ -232,6 +270,31 @@ public class NavigationDrawerFragment extends Fragment {
 
             alphaP.start();
             alphaM.start();
+
+			alphaM.addListener(new Animator.AnimatorListener() {
+				@Override
+				public void onAnimationStart(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					headerArrow.setLayerType(View.LAYER_TYPE_NONE, null);
+					headerTextContainer.setLayerType(View.LAYER_TYPE_NONE, null);
+					headerPlus.setLayerType(View.LAYER_TYPE_NONE, null);
+					headerMinus.setLayerType(View.LAYER_TYPE_NONE, null);
+				}
+
+				@Override
+				public void onAnimationCancel(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animator animation) {
+
+				}
+			});
 
             inHeaderDetailScreen = true;
         }

@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -99,11 +100,13 @@ public class CreateDebtActivity extends ActionBarActivity {
 			floatLabelAmountEditText.requestFocus();
 		}
 
+		Resources res = getResources();
+
 		floatLabelNameAutoCompleteTextView.setPadding(
-			Resource.getPx(8, this),
-			Resource.getPx(8, this),
-			Resource.getPx(42, this),
-			Resource.getPx(8, this)
+			Resource.getPx(8, res),
+			Resource.getPx(8, res),
+			Resource.getPx(42, res),
+			Resource.getPx(8, res)
 		);
 
 		final ImageButton clearEditText = (ImageButton) findViewById(R.id.create_clear);

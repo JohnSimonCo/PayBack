@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
@@ -27,7 +28,7 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
-import com.johnsimon.payback.drawable.RoundedAvatarDrawable;
+import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
@@ -335,8 +336,8 @@ public class Resource {
     //Enter size in dp, returns it in px
     // http://stackoverflow.com/questions/5255184/android-and-setting-width-and-height-programmatically-in-dp-units
     // (lookin' professional n' shit)
-    public static int getPx(int dp, Context ctx) {
-        return (int) (dp * ctx.getResources().getDisplayMetrics().density + 0.5f);
+    public static int getPx(int dp, Resources res) {
+        return (int) (dp * res.getDisplayMetrics().density + 0.5f);
     }
 
     public static void doListAnimation(final View view, int offset) {
@@ -474,9 +475,9 @@ public class Resource {
         return new Gson().fromJson(JSON, Debt[].class);
     }
 
-	public static void createProfileImage(Person person, final ImageView avatar, TextView avatarLetter) {
+	public static void createProfileImage(Person person, final RoundedImageView avatar, TextView avatarLetter, final Resources resources) {
 		if(person.color != null) {
-			avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(person.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
+			avatar.setImageDrawable(new AvatarPlaceholderDrawable(person.color));
 			avatarLetter.setVisibility(View.VISIBLE);
 			avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
 		} else {
@@ -485,7 +486,7 @@ public class Resource {
 			ThumbnailLoader.getInstance().load(person.photoURI, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
+					avatar.setImageBitmap(loadedImage);
 				}
 			});
 		}
@@ -511,7 +512,5 @@ public class Resource {
             return person1.name.compareToIgnoreCase(person2.name);
         }
     }
-
-
 
 }

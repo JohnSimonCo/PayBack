@@ -2,23 +2,18 @@ package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.drawable.RoundedAvatarDrawable;
-import com.johnsimon.payback.util.ThumbnailLoader;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Resource;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.makeramen.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -46,7 +41,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 					(TextView) convertView.findViewById(R.id.list_item_person),
 					(TextView) convertView.findViewById(R.id.list_item_amount),
 					(TextView) convertView.findViewById(R.id.list_item_note),
-                    (ImageView) convertView.findViewById(R.id.list_item_avatar),
+                    (RoundedImageView) convertView.findViewById(R.id.list_item_avatar),
                     (TextView) convertView.findViewById(R.id.list_item_paid_back),
                     (TextView) convertView.findViewById(R.id.list_item_avatar_letter),
                     (TextView) convertView.findViewById(R.id.list_item_date)
@@ -76,7 +71,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
         holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));
 
-		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter, resources);
 
 		if (debt.isPaidBack) {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));
@@ -117,12 +112,12 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 		public TextView person;
 		public TextView amount;
 		public TextView note;
-		public ImageView avatar;
+		public RoundedImageView avatar;
 		public TextView paidBack;
         public TextView avatarLetter;
         public TextView date;
 
-		ViewHolder(TextView person, TextView amount, TextView note, ImageView avatar, TextView paidBack, TextView avatarLetter, TextView date) {
+		ViewHolder(TextView person, TextView amount, TextView note, RoundedImageView avatar, TextView paidBack, TextView avatarLetter, TextView date) {
 			this.person = person;
 			this.amount = amount;
 			this.note = note;
