@@ -71,7 +71,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 
         holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));
 
-		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter, resources);
+		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
 
 		if (debt.isPaidBack) {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));

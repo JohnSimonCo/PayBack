@@ -144,7 +144,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
 		TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
 
-		Resource.createProfileImage(debt.owner, avatar, avatarLetter, getResources());
+		Resource.createProfileImage(debt.owner, avatar, avatarLetter);
 
         builder.setView(rootView);
 
