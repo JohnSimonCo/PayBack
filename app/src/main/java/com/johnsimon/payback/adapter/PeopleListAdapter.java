@@ -23,10 +23,10 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 	public final ArrayList<Person> people;
 	private final Activity context;
 
-	public PeopleListAdapter(Activity context) {
-		super(context, R.layout.feed_list_item);
+	public PeopleListAdapter(Activity context, ArrayList<Person> people) {
+		super(context, R.layout.feed_list_item, people);
 		this.context = context;
-		this.people = Resource.people;
+		this.people = people;
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

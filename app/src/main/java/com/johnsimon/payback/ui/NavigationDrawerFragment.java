@@ -110,7 +110,10 @@ public class NavigationDrawerFragment extends Fragment {
 	        }
         });
 	    adapter = new NavigationDrawerAdapter(getActivity(), Resource.people);
-	    selectItem(mCurrentSelectedPosition);
+
+		setSelectedPerson(FeedActivity.person);
+		selectItem(mCurrentSelectedPosition);
+
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 

@@ -150,9 +150,9 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
 			Resource.setCurrency(currency);
 
-            int length = FeedFragment.debts.size();
+            int length = FeedActivity.feed.size();
             for (int i = 0; i < length; i++) {
-                FeedFragment.debts.get(i).amountAsString = Debt.amountString(FeedFragment.debts.get(i).amount);
+				FeedActivity.feed.get(i).amountAsString = Debt.amountString(FeedActivity.feed.get(i).amount);
             }
 
             FeedFragment.adapter.notifyDataSetChanged();

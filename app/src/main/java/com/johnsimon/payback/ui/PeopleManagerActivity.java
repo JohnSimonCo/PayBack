@@ -40,7 +40,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		adapter = new PeopleListAdapter(this);
+		adapter = new PeopleListAdapter(this, Resource.people);
 
 		DragSortListView listView = (DragSortListView) findViewById(R.id.people_listview);
 
@@ -104,11 +104,12 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	}
 
 	public void returnToFeed() {
-		Intent intent = new Intent(this, FeedActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Intent intent = new Intent(this, FeedActivity.class);
 		if(!Resource.people.contains(FeedActivity.person)) {
 			FeedActivity.person = null;
 		}
 
+		finishAffinity();
 		startActivity(intent);
 	}
 

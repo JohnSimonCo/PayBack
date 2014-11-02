@@ -196,7 +196,8 @@ public class CreateDebtActivity extends ActionBarActivity {
 						floatLabelNoteEditText.getText().toString().trim()
 					);
 
-					final Intent intent = new Intent(ctx, FeedActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					finishAffinity();
+					final Intent intent = new Intent(ctx, FeedActivity.class);
 
 					FeedActivity.person = person;
 

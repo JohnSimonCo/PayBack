@@ -41,10 +41,14 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	public void selectPerson(Person person) {
+		if(person == null) {
+			NavigationDrawerFragment.mCurrentSelectedPosition = 0;
+			return;
+		}
 		for(int i = 0, l = items.size(); i < l; i++) {
 			NavigationDrawerItem item = items.get(i);
-			if(person == null && item == allItem || person != null && item.personId == person.id) {
-				NavigationDrawerFragment.mCurrentSelectedPosition = i;
+			if(item.personId == person.id) {
+				NavigationDrawerFragment.mCurrentSelectedPosition = i + 1;
 				break;
 			}
 		}

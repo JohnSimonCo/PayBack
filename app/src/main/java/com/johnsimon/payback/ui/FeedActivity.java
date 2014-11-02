@@ -34,33 +34,33 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	public static String SAVE_PERSON_ID = "SAVE_PERSON_ID";
 
-    public static boolean animateListItems = true;
-    public static Toolbar toolbar;
+	public static boolean animateListItems = true;
+	public static Toolbar toolbar;
 
+	public static Person person = null;
 	public static ArrayList<Debt> feed;
-	public static Person person;
 
-    private MenuItem filterTime;
-    private MenuItem filterAmount;
+	private MenuItem filterTime;
+	private MenuItem filterAmount;
 
-    private NavigationDrawerFragment navigationDrawerFragment;
+	private NavigationDrawerFragment navigationDrawerFragment;
 
 	private NfcAdapter nfcAdapter;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence title;
+	/**
+	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+	 */
+	private CharSequence title;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
 		Resource.fetchData(this);
-        if (Resource.isFirstRun()) {
-            WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-            welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
-        }
+		if (Resource.isFirstRun()) {
+			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
+		}
 
 		if(isAll()) {
 			feed = Resource.debts;
@@ -68,20 +68,19 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 			feed = Resource.data.personalizedFeed(person);
 		}
 
-	    setContentView(R.layout.activity_feed);
+		setContentView(R.layout.activity_feed);
 
-        toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
-        setSupportActionBar(toolbar);
+		toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
+		setSupportActionBar(toolbar);
 
 		navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-		navigationDrawerFragment.setSelectedPerson(person);
 		title = getTitle();
 
-        // Set up the drawer.
-        navigationDrawerFragment.setUp(
-		        R.id.navigation_drawer,
-		        (DrawerLayout) findViewById(R.id.drawer_layout)
-        );
+		// Set up the drawer.
+		navigationDrawerFragment.setUp(
+				R.id.navigation_drawer,
+				(DrawerLayout) findViewById(R.id.drawer_layout)
+		);
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (nfcAdapter != null) {
@@ -98,8 +97,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
 				.build();
 		ImageLoader.getInstance().init(config);
-    }
+	}
 
+	/*
 	private void readIntent() {
 		Intent intent = getIntent();
 
@@ -126,6 +126,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		person = null;
 		feed = Resource.debts;
 	}
+	*/
 	public static boolean isAll() {
 		return person == null;
 	}
@@ -159,29 +160,31 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	@Override
-    public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
+	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		if(item.type == NavigationDrawerItem.Type.All) {
-			showAll();
+			person = null;
+			feed = Resource.debts;
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
-			showPerson(item.personId);
+			person = item.owner;
+			feed = Resource.data.personalizedFeed(person);
 		}
 
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
 				.commit();
-    }
+	}
 
-    @Override
-    public void onShowGlobalContextActionBar() {
-        getSupportActionBar().setTitle(R.string.app_name);
-    }
+	@Override
+	public void onShowGlobalContextActionBar() {
+		getSupportActionBar().setTitle(R.string.app_name);
+	}
 
-    public void restoreActionBar() {
-        getSupportActionBar().setTitle(title);
-    }
+	public void restoreActionBar() {
+		getSupportActionBar().setTitle(title);
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Only show items in the action bar relevant to this screen
 		// if the drawer is not showing. Otherwise, let the drawer
 		// decide what to show in the action bar.
@@ -192,27 +195,27 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 		restoreActionBar();
 		return true;
-    }
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = super.onOptionsItemSelected(item);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean result = super.onOptionsItemSelected(item);
 
-        switch (item.getItemId()) {
-            case R.id.menu_filter_time:
-                item.setChecked(true);
-                sortTime();
-                break;
+		switch (item.getItemId()) {
+			case R.id.menu_filter_time:
+				item.setChecked(true);
+				sortTime();
+				break;
 
-            case R.id.menu_filter_amount:
-            	item.setChecked(true);
-                sortAmount();
-                break;
+			case R.id.menu_filter_amount:
+				item.setChecked(true);
+				sortAmount();
+				break;
 
-        }
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 	/*  This method is called by /res/navigation_drawer_list_footer.xml
 		to either navigate to settings or show the "About screen". New
@@ -237,40 +240,40 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		}
 	}
 
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        navigationDrawerFragment.mDrawerToggle.syncState();
+	@Override
+	public void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		navigationDrawerFragment.mDrawerToggle.syncState();
 
-        if (animateListItems) {
-            Animation toolbarEnter = AnimationUtils.loadAnimation(this, R.anim.feed_toolbar_enter);
-            Animation headerEnter = AnimationUtils.loadAnimation(this, R.anim.feed_header_enter);
-            toolbar.startAnimation(toolbarEnter);
-            FeedFragment.headerView.startAnimation(headerEnter);
-        }
-    }
+		if (animateListItems) {
+			Animation toolbarEnter = AnimationUtils.loadAnimation(this, R.anim.feed_toolbar_enter);
+			Animation headerEnter = AnimationUtils.loadAnimation(this, R.anim.feed_header_enter);
+			toolbar.startAnimation(toolbarEnter);
+			FeedFragment.headerView.startAnimation(headerEnter);
+		}
+	}
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
 
-        outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
+		outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
 		/*
 		if(person != null) {
 			outState.putString(SAVE_PERSON_ID, person.id.toString());
 		}
 		*/
-    }
+	}
 
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
 
-        if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
-            sortAmount();
-        }
+		if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
+			sortAmount();
+		}
 
 		/*
 		String personId = savedInstanceState.getString(SAVE_PERSON_ID, null);
@@ -283,13 +286,13 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	public void sortTime() {
-		Collections.sort(FeedFragment.debts, new Resource.TimeComparator());
+		Collections.sort(feed, new Resource.TimeComparator());
 		FeedFragment.adapter.notifyDataSetChanged();
 	}
 
-    public void sortAmount() {
-        Collections.sort(FeedFragment.debts, new Resource.AmountComparator());
+	public void sortAmount() {
+		Collections.sort(feed, new Resource.AmountComparator());
 		FeedFragment.adapter.notifyDataSetChanged();
-    }
+	}
 
 }

@@ -33,7 +33,6 @@ import java.util.ArrayList;
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-	public static ArrayList<Debt> debts;
 	public static FeedListAdapter adapter;
     public static RelativeLayout headerView;
 
@@ -48,7 +47,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
         headerView = (RelativeLayout) rootView.findViewById(R.id.feed_list_header_master);
 
-		debts = FeedActivity.feed;
 		final Person person = FeedActivity.person;
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
@@ -57,7 +55,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 		displayTotalDebt(getActivity());
 
-		adapter = new FeedListAdapter(getActivity(), debts);
+		adapter = new FeedListAdapter(getActivity(), FeedActivity.feed);
         listView.setAdapter(adapter);
 
         //We're done animating.
@@ -98,7 +96,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(debts.get(position - listView.getHeaderViewsCount()));
+				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get(position - listView.getHeaderViewsCount()));
                 dialog.show(getFragmentManager().beginTransaction(), "dialog");
 				dialog.paidBackCallback = self;
 				dialog.editCallback = self;
@@ -131,7 +129,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		displayTotalDebt(getActivity());
 	}
 	public static void displayTotalDebt(Context ctx) {
-		int debt = AppData.totalDebt(debts);
+		int debt = AppData.totalDebt(FeedActivity.feed);
 
         //TODO        BlurUtils.crossBlur(totalDebtTextView, feed_header_balance_blur_medium, feed_header_balance_blur_full, ctx);
 		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
