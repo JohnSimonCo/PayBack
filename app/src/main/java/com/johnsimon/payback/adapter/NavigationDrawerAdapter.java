@@ -99,26 +99,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		Person owner = item.owner;
 
-		if(owner.color != null) {
-			holder.avatar.setImageDrawable(
-                    new RoundedAvatarDrawable(
-                            new AvatarPlaceholderDrawable(owner.color).toBitmap(
-                                    Resource.getPx(36, context), Resource.getPx(36, context))));
-
-			holder.avatarLetter.setVisibility(View.VISIBLE);
-			holder.avatarLetter.setText(owner.name.substring(0, 1).toUpperCase());
-			//Set avatar as image like some stupid faggot
-		} else {
-			holder.avatarLetter.setVisibility(View.GONE);
-
-			final ViewHolder finalHolder = holder;
-			ThumbnailLoader.getInstance().load(owner.photoURI, new SimpleImageLoadingListener() {
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					finalHolder.avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
-				}
-			});
-		}
+		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
 
 		holder.title.setText(item.title);
 

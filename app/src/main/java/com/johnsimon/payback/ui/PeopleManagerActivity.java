@@ -24,7 +24,6 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 
 	private PeopleListAdapter adapter;
-	private ArrayList<Person> people;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		people = Resource.people;
-		adapter = new PeopleListAdapter(this, people);
+		adapter = new PeopleListAdapter(this, Resource.people);
 
 		DragSortListView listView = (DragSortListView) findViewById(R.id.people_listview);
 
@@ -83,7 +81,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 				break;
 
 			case R.id.action_sort_az:
-				Collections.sort(people, new Resource.AlphabeticalComparator());
+				Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
 				adapter.notifyDataSetChanged();
 				break;
 
