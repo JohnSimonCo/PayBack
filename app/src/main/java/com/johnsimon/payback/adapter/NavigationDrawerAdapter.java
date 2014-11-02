@@ -93,7 +93,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		Person owner = item.owner;
 
-		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter, context.getResources());
 
 		holder.title.setText(item.title);
 

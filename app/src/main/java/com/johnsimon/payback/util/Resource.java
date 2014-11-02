@@ -475,7 +475,7 @@ public class Resource {
         return new Gson().fromJson(JSON, Debt[].class);
     }
 
-	public static void createProfileImage(Person person, final RoundedImageView avatar, TextView avatarLetter) {
+	public static void createProfileImage(Person person, final RoundedImageView avatar, TextView avatarLetter, final Resources resources) {
 		if(person.color != null) {
 			avatar.setImageDrawable(new AvatarPlaceholderDrawable(person.color));
 			avatarLetter.setVisibility(View.VISIBLE);

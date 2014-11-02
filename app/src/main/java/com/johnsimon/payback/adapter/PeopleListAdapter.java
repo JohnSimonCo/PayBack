@@ -46,7 +46,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 
 		holder.name.setText(person.name);
 
-		Resource.createProfileImage(person, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(person, holder.avatar, holder.avatarLetter, context.getResources());
 
 		return convertView;
 	}
