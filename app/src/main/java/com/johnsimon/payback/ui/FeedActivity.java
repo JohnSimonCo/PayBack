@@ -200,13 +200,11 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
         switch (item.getItemId()) {
             case R.id.menu_filter_time:
                 item.setChecked(true);
-                filterAmount.setChecked(false);
                 sortTime();
                 break;
 
             case R.id.menu_filter_amount:
-                item.setChecked(true);
-                filterTime.setChecked(false);
+            	item.setChecked(true);
                 sortAmount();
                 break;
 

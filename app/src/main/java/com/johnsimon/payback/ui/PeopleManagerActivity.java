@@ -75,6 +75,9 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case android.R.id.home :
+				returnToFeed();
+				break;
 
 		}
 		return super.onOptionsItemSelected(item);
@@ -98,7 +101,18 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		NavigationDrawerFragment.adapter.updatePeople(Resource.people);
 		NavigationDrawerFragment.adapter.notifyDataSetChanged();
 	}
-/*
+
+	@Override
+	public void onBackPressed() {
+		returnToFeed();
+	}
+
+	public void returnToFeed() {
+		finishAffinity();
+		
+	}
+
+	/*
 	private DragSortListView.RemoveListener onRemove = new DragSortListView.RemoveListener()
 	{
 		@Override
