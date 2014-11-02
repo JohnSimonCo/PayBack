@@ -12,4 +12,14 @@
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
+    <style name="SpinnerNormal" parent="@android:style/Widget.Material.Light.Spinner"   />
+
+    <style name="Elevation4DP">
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="Elevation2DP">
+        <item name="android:elevation">2dp</item>
+    </style>
+
 </resources>

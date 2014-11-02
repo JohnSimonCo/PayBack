@@ -20,7 +20,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 	private final Activity context;
 
 	public PeopleListAdapter(Activity context, ArrayList<Person> people) {
-		super(context, R.layout.feed_list_item, people);
+		super(context, R.layout.people_list_item, people);
 		this.context = context;
 		this.people = people;
 	}

@@ -62,7 +62,7 @@
             android:layout_height="wrap_content">
 
             <com.johnsimon.payback.view.NDSpinner
-                style="@android:style/Widget.Holo.Light.Spinner"
+                style="@style/SpinnerNormal"
                 android:layout_marginTop="8dp"
                 android:id="@+id/welcome_currency_spinner"
                 android:layout_width="110dp"
