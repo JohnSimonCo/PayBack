@@ -45,6 +45,7 @@
 
                             <AutoCompleteTextView
                                 style="@style/Widget.AppCompat.EditText"
+                                android:imeOptions="flagNoExtractUi"
                                 android:inputType="textCapWords"
                                 android:singleLine="true"
                                 android:id="@+id/create_edittext_name"
@@ -106,6 +107,7 @@
                             <android.support.v7.internal.widget.TintEditText
                                 app:theme="@style/ThemeOverlay.AppCompat.Light"
                                 style="@style/Widget.AppCompat.EditText"
+                                android:imeOptions="flagNoExtractUi"
                                 android:singleLine="true"
                                 android:id="@+id/create_edittext_amount"
                                 android:textColorHint="@color/gray_oncolor_very_light"
@@ -123,6 +125,7 @@
 
                 <android.support.v7.internal.widget.TintEditText
                     app:theme="@style/ThemeOverlay.AppCompat.Light"
+                    android:imeOptions="flagNoExtractUi"
                     android:inputType="textCapSentences"
                     android:singleLine="true"
                     android:layout_marginTop="24dp"
