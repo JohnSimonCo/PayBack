@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.os.Build;
@@ -15,7 +16,9 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,6 +26,9 @@ import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.drawable.RoundedAvatarDrawable;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -468,10 +474,27 @@ public class Resource {
         return new Gson().fromJson(JSON, Debt[].class);
     }
 
+	public static void createProfileImage(Person person, final ImageView avatar, TextView avatarLetter) {
+		if(person.color != null) {
+			avatar.setImageDrawable(new RoundedAvatarDrawable(new AvatarPlaceholderDrawable(person.color).toBitmap(Resource.getPx(36, context), Resource.getPx(36, context))));
+			avatarLetter.setVisibility(View.VISIBLE);
+			avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
+		} else {
+			avatarLetter.setVisibility(View.GONE);
+
+			ThumbnailLoader.getInstance().load(person.photoURI, new SimpleImageLoadingListener() {
+				@Override
+				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+					avatar.setImageDrawable(new RoundedAvatarDrawable(loadedImage));
+				}
+			});
+		}
+	}
+
     public static class AmountComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt1.amount - debt2.amount);
+            return Math.round(debt2.amount - debt1.amount);
         }
     }
 

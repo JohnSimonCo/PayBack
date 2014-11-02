@@ -284,10 +284,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	public void sortTime() {
 		Collections.sort(FeedFragment.debts, new Resource.TimeComparator());
+		FeedFragment.adapter.notifyDataSetChanged();
 	}
 
     public void sortAmount() {
-		Resource.toast(this, "amount");
         Collections.sort(FeedFragment.debts, new Resource.AmountComparator());
 		FeedFragment.adapter.notifyDataSetChanged();
     }

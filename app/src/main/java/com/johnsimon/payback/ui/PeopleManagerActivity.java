@@ -15,7 +15,8 @@ import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class PeopleManagerActivity extends ActionBarActivity {
 
@@ -75,6 +76,11 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		switch (item.getItemId()) {
 			case android.R.id.home :
 				returnToFeed();
+				break;
+
+			case R.id.action_sort_az:
+				Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
+				adapter.notifyDataSetChanged();
 				break;
 
 		}

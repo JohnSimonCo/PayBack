@@ -10,10 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
 
@@ -136,6 +139,11 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 				popupMenu.show();
 			}
 		});
+
+		ImageView avatar = (ImageView) rootView.findViewById(R.id.detail_dialog_avatar);
+		TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
+
+		Resource.createProfileImage(debt.owner, avatar, avatarLetter);
 
         builder.setView(rootView);
 
