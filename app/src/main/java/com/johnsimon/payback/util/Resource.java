@@ -502,7 +502,7 @@ public class Resource {
     public static class TimeComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt1.timestamp - debt2.timestamp);
+            return Math.round(debt2.timestamp - debt1.timestamp);
         }
     }
 
