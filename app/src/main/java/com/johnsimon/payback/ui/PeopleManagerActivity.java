@@ -1,5 +1,6 @@
 package com.johnsimon.payback.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +18,8 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 public class PeopleManagerActivity extends ActionBarActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
-	public static String ARG_FROM_PEOPLE_MANAGER = Resource.arg(ARG_PREFIX, "PEOPLE_MANAGER");
 
 
-	private DragSortListView listView;
 	private PeopleListAdapter adapter;
 
     @Override
@@ -41,7 +40,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 		adapter = new PeopleListAdapter(this, Resource.people);
 
-		listView = (DragSortListView) findViewById(R.id.people_listview);
+		DragSortListView listView = (DragSortListView) findViewById(R.id.people_listview);
 
 		listView.setAdapter(adapter);
 		listView.setDropListener(onDrop);
@@ -108,7 +107,9 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 	public void returnToFeed() {
 		finishAffinity();
+		Intent intent = new Intent(this, FeedActivity.class);
 
+		startActivity(intent);
 	}
 
 	/*
