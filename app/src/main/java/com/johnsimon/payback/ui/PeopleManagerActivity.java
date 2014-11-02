@@ -109,6 +109,8 @@ public class PeopleManagerActivity extends ActionBarActivity {
 			FeedActivity.person = null;
 		}
 
+		Resource.commit();
+
 		finishAffinity();
 		startActivity(intent);
 	}
