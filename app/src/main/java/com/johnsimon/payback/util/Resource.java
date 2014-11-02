@@ -29,6 +29,8 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.makeramen.RoundedImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class Resource {
     private static Activity context;
     private static SharedPreferences preferences;
 
-    public static void fetchData(Activity context) {
+    public static void init(Activity context) {
         if (data != null) return;
 
         Resource.context = context;
@@ -84,6 +86,9 @@ public class Resource {
             commit();
         }
         contacts = Resource.getAllContacts(context);
+
+		//Default configuration
+		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
 
 
 
@@ -426,14 +431,6 @@ public class Resource {
         return Build.VERSION.SDK_INT >= 21;
     }
 
-    public static NdefRecord createRecord(String contents) {
-        return createMime("application/vnd.com.johnsimon.payback", contents.getBytes());
-    }
-
-    public static String getContents(NdefRecord record) {
-        return new String(record.getPayload());
-    }
-
     public static CharSequence getRelativeTimeString(Context ctx, long timestamp) {
         long now = System.currentTimeMillis();
         return (now - timestamp < 60000)
@@ -445,34 +442,6 @@ public class Resource {
                 DateUtils.FORMAT_ABBREV_ALL);
 
 
-    }
-
-    public static NdefMessage createMessage(ArrayList<Debt> feed) {
-        Debt[] debts = feed.toArray(new Debt[feed.size()]);
-        String JSON = new Gson().toJson(debts, Debt[].class);
-        return new NdefMessage(
-                new NdefRecord[]{
-                        Resource.createRecord(JSON)
-                        /**
-                         * The Android Application Record (AAR) is commented out. When a device
-                         * receives a push with an AAR in it, the application specified in the AAR
-                         * is guaranteed to run. The AAR overrides the tag dispatch system.
-                         * You can add it back in to guarantee that this
-                         * activity starts when receiving a beamed message. For now, this code
-                         * uses the tag dispatch system.
-                         */
-
-                });
-    }
-
-    public static Debt[] readMessage(NdefMessage message) {
-        NdefRecord[] records = message.getRecords();
-        String JSON = Resource.getContents(records[0]);
-
-        // record 0 contains the MIME type, record 1 is the AAR, if present
-        //textView.setText(new String(msg.getRecords()[0].getPayload()));
-
-        return new Gson().fromJson(JSON, Debt[].class);
     }
 
 	public static void createProfileImage(Person person, final RoundedImageView avatar, TextView avatarLetter) {

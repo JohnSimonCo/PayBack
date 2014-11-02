@@ -20,15 +20,15 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.UUID;
 
-public class FeedActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, NfcAdapter.CreateNdefMessageCallback {
+public class FeedActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
@@ -49,6 +49,8 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	private NfcAdapter nfcAdapter;
 
+	Beamer beamer;
+
 	/**
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
@@ -59,7 +61,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Resource.fetchData(this);
+		Resource.init(this);
 		if (Resource.isFirstRun()) {
 			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
 			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
@@ -86,8 +88,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		);
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		beamer = new Beamer(this);
 		if (nfcAdapter != null) {
-			nfcAdapter.setNdefPushMessageCallback(this, this);
+			nfcAdapter.setNdefPushMessageCallback(beamer, this);
 		}
 
 		View feed_activity_status_bar_pusher = findViewById(R.id.feed_activity_status_bar_pusher);
@@ -96,10 +99,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		if (resourceId > 0) {
 			feed_activity_status_bar_pusher.getLayoutParams().height = getResources().getDimensionPixelSize(resourceId);
 		}
-
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-				.build();
-		ImageLoader.getInstance().init(config);
 	}
 
 	/*
@@ -138,8 +137,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public void onResume() {
 		super.onResume();
 
+		Resource.toast(this, getIntent().getAction());
+		Resource.toast(this, getIntent().hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES));
 		// Check to see that the Activity started due to an Android Beam
-		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+		if(getIntent().hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)) {
 			processIntent(getIntent());
 		}
 	}
@@ -150,16 +151,8 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		setIntent(intent);
 	}
 
-	@Override
-	public NdefMessage createNdefMessage(NfcEvent event) {
-		return isAll() ? null : Resource.createMessage(feed);
-	}
-
 	public void processIntent(Intent intent) {
-		NdefMessage message = (NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0];
-		Debt[] debts = Resource.readMessage(message);
-
-		Resource.toast(this, "Sent " + debts.length + " debts via NFC");
+		beamer.processNdefMessage((NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0]);
 	}
 
 	@Override
