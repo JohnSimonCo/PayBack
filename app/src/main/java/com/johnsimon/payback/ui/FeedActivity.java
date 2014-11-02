@@ -1,9 +1,11 @@
 package com.johnsimon.payback.ui;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -52,6 +54,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	 */
 	private CharSequence title;
 
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,7 +73,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 		setContentView(R.layout.activity_feed);
 
-		toolbar = (Toolbar) findViewById(R.id.feed_toolbar);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);

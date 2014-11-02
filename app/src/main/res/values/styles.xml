@@ -39,7 +39,7 @@
 
     <style name="navigation_drawer_footer">
         <item name="android:paddingLeft">16dp</item>
-        <item name="android:background">@drawable/selector_navigation_drawer_footer_item</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textSize">14sp</item>
@@ -47,6 +47,10 @@
         <item name="android:textColor">@color/gray_text_normal</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:drawablePadding">16dp</item>
+    </style>
+
+    <style name="RippleBackground">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
 </resources>
