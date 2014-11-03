@@ -1,7 +1,6 @@
 package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,27 +67,27 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View view, ViewGroup viewGroup) {
+	public View getView(int position, View convertView, ViewGroup viewGroup) {
 		ViewHolder holder;
 		boolean isSelected = position == NavigationDrawerFragment.mCurrentSelectedPosition;
 
 		if(position == 0) {
-			return getAllView(view, isSelected);
+			return getAllView(convertView, isSelected);
 		}
 
 		NavigationDrawerItem item = items.get(--position);
 
-		if (view == null) {
-			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
+		if (convertView == null) {
+			convertView = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
 
 			holder = new ViewHolder(
-				(TextView) view.findViewById(R.id.navigation_drawer_list_item_text),
-				(RoundedImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
-				(TextView) view.findViewById(R.id.navigation_drawer_list_item_avatar_letter)
+				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_text),
+				(RoundedImageView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar),
+				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar_letter)
 			);
-			view.setTag(holder);
+			convertView.setTag(holder);
 		} else {
-			holder = (ViewHolder) view.getTag();
+			holder = (ViewHolder) convertView.getTag();
 		}
 
 		Person owner = item.owner;
@@ -97,13 +96,16 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		holder.title.setText(item.title);
 
-		if(isSelected) {
+        //As per the new design guidelines
+		if (isSelected) {
 			holder.title.setTypeface(null, Typeface.BOLD);
+            holder.title.setTextColor(context.getResources().getColor(R.color.green));
 		} else {
 			holder.title.setTypeface(null, Typeface.NORMAL);
+            holder.title.setTextColor(context.getResources().getColor(R.color.gray_text_light));
 		}
 
-		return view;
+		return convertView;
 	}
 
 	public View getAllView(View view, boolean isSelected) {
@@ -123,11 +125,13 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		holder.title.setText(R.string.all);
 
-		if(isSelected) {
-			holder.title.setTypeface(null, Typeface.BOLD);
-		} else {
-			holder.title.setTypeface(null, Typeface.NORMAL);
-		}
+        if (isSelected) {
+            holder.title.setTypeface(null, Typeface.BOLD);
+            holder.title.setTextColor(context.getResources().getColor(R.color.green));
+        } else {
+            holder.title.setTypeface(null, Typeface.NORMAL);
+            holder.title.setTextColor(context.getResources().getColor(R.color.gray_text_light));
+        }
 
 		return view;
 	}

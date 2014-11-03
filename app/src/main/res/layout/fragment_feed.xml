@@ -27,7 +27,7 @@
             android:layout_gravity="bottom"
             android:src="@drawable/feed_image_gradient"
             android:layout_width="match_parent"
-            android:layout_height="140dp" />
+            android:layout_height="@dimen/list_header_image_height" />
 
         <ImageView
             android:layout_marginBottom="28dp"
@@ -67,6 +67,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginEnd="@dimen/fab_right_margin"
             android:layout_marginRight="@dimen/fab_right_margin"
+            android:layout_marginBottom="4dp"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             layout="@layout/feed_fab"   />

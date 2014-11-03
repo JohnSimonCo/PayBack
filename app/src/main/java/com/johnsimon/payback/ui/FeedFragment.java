@@ -40,6 +40,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 	public static TextView totalDebtTextView;
 
+    private final Person person = FeedActivity.person;
+
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,8 +49,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
         headerView = (FrameLayout) rootView.findViewById(R.id.feed_list_header_master);
-
-		final Person person = FeedActivity.person;
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
 
@@ -66,6 +66,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
         };
         handler.postDelayed(r, 400);
 
+        //FAB is different on L
         if (Resource.isLOrAbove()) {
             final ImageButton fab = (ImageButton) headerView.findViewById(R.id.feed_fab_l);
 
@@ -76,44 +77,12 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
                 }
             });
 
-            // Finally, enable clipping to the outline, using the provider we set above
             fab.setClipToOutline(true);
 
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
-                            .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
-
-                    if(!FeedActivity.isAll()) {
-                        intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
-                    }
-                    if (Resource.isLOrAbove()) {
-                        startActivity(intent);
-                    } else {
-                        startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
-                    }
-                }
-            });
+            fab.setOnClickListener(fabClickListener);
         } else {
             FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
-
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
-                            .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
-
-                    if(!FeedActivity.isAll()) {
-                        intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
-                    }
-                    if (Resource.isLOrAbove()) {
-                        startActivity(intent);
-                    } else {
-                        startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
-                    }
-                }
-            });
+            fab.setOnClickListener(fabClickListener);
         }
 
         View header = new View(getActivity());
@@ -179,4 +148,21 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 		startActivity(intent);
 	}
+
+    private View.OnClickListener fabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
+                    .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
+
+            if(!FeedActivity.isAll()) {
+                intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
+            }
+            if (Resource.isLOrAbove()) {
+                startActivity(intent);
+            } else {
+                startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
+            }
+        }
+    };
 }
