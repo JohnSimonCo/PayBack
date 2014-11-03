@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"  >
 
@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:id="@android:id/list"   />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/feed_list_header_master"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -24,21 +24,21 @@
 
         <ImageView
             android:layout_marginBottom="@dimen/feed_image_gradient_bottom_margin"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:src="@drawable/feed_image_gradient"
             android:layout_width="match_parent"
             android:layout_height="140dp" />
 
         <ImageView
             android:layout_marginBottom="28dp"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:src="@drawable/feed_image_bottom_shadow"
             android:layout_width="match_parent"
             android:layout_height="8dp" />
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/feed_left_margin"
             android:layout_marginLeft="@dimen/feed_left_margin"
             android:layout_marginBottom="@dimen/feed_header_bottom_margin"
@@ -64,7 +64,12 @@
         </LinearLayout>
 
         <include
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="@dimen/fab_right_margin"
+            android:layout_marginRight="@dimen/fab_right_margin"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
             layout="@layout/feed_fab"   />
 
-    </RelativeLayout>
-</RelativeLayout>
+    </FrameLayout>
+</FrameLayout>

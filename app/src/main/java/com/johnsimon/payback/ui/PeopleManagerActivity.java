@@ -68,6 +68,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         SimpleFloatViewManager simpleFloatViewManager = new SimpleFloatViewManager(listView);
         simpleFloatViewManager.setBackgroundColor(Color.TRANSPARENT);
         listView.setFloatViewManager(simpleFloatViewManager);
+
     }
 
     @Override

@@ -18,6 +18,7 @@
     <color name="primary_color">#cc4339</color>
     <color name="primary_color_darker">#a7332b</color>
     <color name="accent_color">#ff9800</color>
+    <color name="accent_color_darker">#cc7a00</color>
 
     <color name="white_on_red_selector">#66ffffff</color>
     <color name="apptheme_greenedittext_color">#8db69e</color>

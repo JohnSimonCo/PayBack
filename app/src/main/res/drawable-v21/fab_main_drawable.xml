@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true">
+        <ripple android:color="@color/green">
+            <item>
+                <shape>
+                    <solid android:color="@color/green" />
+                </shape>
+            </item>
+        </ripple>
+    </item>
+
+    <item>
+        <ripple android:color="@color/accent_color">
+            <item>
+                <shape>
+                    <solid android:color="@color/accent_color" />
+                </shape>
+            </item>
+        </ripple>
+    </item>
+
+</selector>

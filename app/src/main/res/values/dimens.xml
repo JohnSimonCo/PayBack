@@ -30,5 +30,6 @@
 
     <dimen name="feed_list_item_extra_margin">0dp</dimen>
     <dimen name="create_fab_top_margin">172dp</dimen>
+    <dimen name="fab_size">72dp</dimen>
 
 </resources>
