@@ -31,6 +31,8 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
@@ -39,6 +41,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
     public static FrameLayout headerView;
 
 	public static TextView totalDebtTextView;
+    public static TextView feed_header_balance;
 
     private final Person person = FeedActivity.person;
 
@@ -49,6 +52,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
 
         headerView = (FrameLayout) rootView.findViewById(R.id.feed_list_header_master);
+        feed_header_balance = (TextView) headerView.findViewById(R.id.feed_header_balance);
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
 
@@ -129,6 +133,12 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 	}
 	public static void displayTotalDebt(Context ctx) {
 		int debt = AppData.totalDebt(FeedActivity.feed);
+
+        if (debt == 0) {
+            feed_header_balance.setVisibility(View.GONE);
+        } else {
+            feed_header_balance.setVisibility(View.VISIBLE);
+        }
 
 		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
 	}

@@ -42,7 +42,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
-	private MenuItem filterTime;
 	private MenuItem filterAmount;
 
 	private NavigationDrawerFragment navigationDrawerFragment;
@@ -186,7 +185,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		// decide what to show in the action bar.
 		getMenuInflater().inflate(R.menu.feed, menu);
 
-		filterTime = menu.findItem(R.id.menu_filter_time);
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
 
 		restoreActionBar();

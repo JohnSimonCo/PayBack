@@ -22,6 +22,8 @@
                     android:paddingBottom="32dp"
                     android:id="@+id/create_toolbar"
                     android:orientation="vertical"
+                    app:contentInsetRight="@dimen/create_right_margin_small"
+                    app:contentInsetLeft="@dimen/create_start_margin_small"
                     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     android:minHeight="?attr/actionBarSize"
@@ -30,10 +32,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:paddingStart="@dimen/create_start_margin_small"
-                        android:paddingLeft="@dimen/create_start_margin_small"
-                        android:paddingRight="@dimen/create_right_margin_small"
-                        android:paddingEnd="@dimen/create_right_margin_small"
+                        android:layout_marginLeft="@dimen/create_start_margin_small"
                         android:paddingTop="?attr/actionBarSize"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
