@@ -10,4 +10,8 @@
         android:id="@+id/detail_dialog_delete"
         android:title="@string/delete"    />
 
+    <item
+        android:id="@+id/detail_dialog_change"
+        android:title="@string/change_person"    />
+
 </menu>

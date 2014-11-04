@@ -54,6 +54,8 @@
     <string name="welcome_currency">Select the currency you would like to use</string>
     <string name="sort_az">Sort </string>
     <string name="people_empty_text">No people added yet</string>
+    <string name="select_person">Select a person</string>
+    <string name="change_person">Change person</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
