@@ -17,9 +17,6 @@ import java.util.ArrayList;
 
 import static android.nfc.NdefRecord.createMime;
 
-/**
- * Created by John on 2014-11-02.
- */
 public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	private Activity context;
 
@@ -34,9 +31,8 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 
 	public void processNdefMessage(NdefMessage message) {
 		Debt[] debts = readMessage(message);
-
-		context.finish();
-		Resource.toast(context, "Sent " + debts.length + " debts via NFC");
+		Resource.toast(context, "Received " + debts.length + " debts via NFC");
+		
 	}
 
 

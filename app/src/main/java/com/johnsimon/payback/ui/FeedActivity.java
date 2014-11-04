@@ -139,7 +139,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		Resource.toast(this, getIntent().getAction());
 		Resource.toast(this, getIntent().hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES));
 		// Check to see that the Activity started due to an Android Beam
-		if(getIntent().hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)) {
+		if(getIntent().getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
 			processIntent(getIntent());
 		}
 	}
