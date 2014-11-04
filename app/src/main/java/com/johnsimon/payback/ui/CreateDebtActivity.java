@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Outline;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -48,7 +50,6 @@ public class CreateDebtActivity extends ActionBarActivity {
     private Toolbar toolbar;
 
 	private RadioGroup radioGroup;
-	private FloatingActionButton create_fab;
 
 	private RequiredValidator validator;
 
@@ -156,66 +157,98 @@ public class CreateDebtActivity extends ActionBarActivity {
 			}
 		});
 
-		create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
-		create_fab.setColor(getResources().getColor(android.R.color.white));
+        if (Resource.isLOrAbove()) {
+            final ImageButton create_fab = (ImageButton) findViewById(R.id.create_fab_l);
 
-		final Context ctx = this;
+            create_fab.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setOval(0, 0, create_fab.getWidth(), create_fab.getHeight());
+                }
+            });
 
-		validator = new RequiredValidator(new EditText[] {
-				floatLabelNameAutoCompleteTextView,
-				floatLabelAmountEditText
-		}, new ValidatorListener() {
-			@Override
-			public void onValid() {
-				//Some dirty Simme-style validation up in here
-				if (floatLabelAmountEditText.getText().equals("0")) return;
-				create_fab.setActivated(true);
-				create_fab.setAlpha(1f);
-			}
+            create_fab.setClipToOutline(true);
 
-			@Override
-			public void onInvalid() {
-				create_fab.setActivated(false);
-				create_fab.setAlpha(0.6f);
-			}
-		});
+            validator = new RequiredValidator(new EditText[] {
+                    floatLabelNameAutoCompleteTextView,
+                    floatLabelAmountEditText
+            }, new ValidatorListener() {
+                @Override
+                public void onValid() {
+                    if (floatLabelAmountEditText.getText().equals("0")) return;
+                    create_fab.setActivated(true);
+                    create_fab.setAlpha(1f);
+                }
 
-		floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(
+                @Override
+                public void onInvalid() {
+                    create_fab.setActivated(false);
+                    create_fab.setAlpha(0.6f);
+                }
+            });
+
+            create_fab.setOnClickListener(fabClickListener);
+        } else {
+            final FloatingActionButton create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
+
+            validator = new RequiredValidator(new EditText[] {
+                    floatLabelNameAutoCompleteTextView,
+                    floatLabelAmountEditText
+            }, new ValidatorListener() {
+                @Override
+                public void onValid() {
+                    if (floatLabelAmountEditText.getText().equals("0")) return;
+                    create_fab.setActivated(true);
+                    create_fab.setAlpha(1f);
+                }
+
+                @Override
+                public void onInvalid() {
+                    create_fab.setActivated(false);
+                    create_fab.setAlpha(0.6f);
+                }
+            });
+
+            create_fab.setOnClickListener(fabClickListener);
+        }
+
+        floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(
 				this,
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
 				Resource.getAllNames()
 		));
 
-		create_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-				if (create_fab.isActivated()) {
-					Person person = saveDebt(
-						floatLabelNameAutoCompleteTextView.getText().toString().trim(),
-						radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
-						Float.parseFloat(floatLabelAmountEditText.getText().toString()),
-						floatLabelNoteEditText.getText().toString().trim()
-					);
-
-					finishAffinity();
-					final Intent intent = new Intent(ctx, FeedActivity.class);
-
-					FeedActivity.person = person;
-
-                    if (Resource.isLOrAbove()) {
-						startActivity(intent);
-					} else {
-						startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
-					}
-				} else {
-					Resource.toast(ctx, getString(R.string.create_fab_error));
-				}
-            }
-        });
 
     }
+
+    private View.OnClickListener fabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if (v.isActivated()) {
+                Person person = saveDebt(
+                        floatLabelNameAutoCompleteTextView.getText().toString().trim(),
+                        radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
+                        Float.parseFloat(floatLabelAmountEditText.getText().toString()),
+                        floatLabelNoteEditText.getText().toString().trim()
+                );
+
+                finishAffinity();
+                final Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
+
+                FeedActivity.person = person;
+
+                if (Resource.isLOrAbove()) {
+                    startActivity(intent);
+                } else {
+                    startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
+                }
+            } else {
+                Resource.toast(getApplicationContext(), getString(R.string.create_fab_error));
+            }
+        }
+    };
 
 	public Person saveDebt(String name, boolean iOwe, float amount, String note) {
 		if(iOwe) {

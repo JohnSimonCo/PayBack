@@ -143,18 +143,15 @@
 
             </LinearLayout>
 
-            <com.shamanland.fab.FloatingActionButton
-                app:floatingActionButtonColor="@android:color/white"
-                app:floatingActionButtonSize="normal"
-                android:layout_marginTop="@dimen/create_fab_top_margin"
-                android:id="@+id/create_fab"
-                android:src="@drawable/ic_check"
+            <include
+                layout="@layout/create_fab"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/create_fab_top_margin"
                 android:layout_marginEnd="@dimen/fab_create_right_margin"
                 android:layout_marginRight="@dimen/fab_create_right_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="@dimen/fab_size"
+                android:layout_height="@dimen/fab_size"    />
 
         </RelativeLayout>
     </ScrollView>
