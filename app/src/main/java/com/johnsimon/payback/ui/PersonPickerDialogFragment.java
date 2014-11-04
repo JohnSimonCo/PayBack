@@ -20,19 +20,20 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.FontCache;
 
 public class PersonPickerDialogFragment extends DialogFragment {
 
 	public PersonSelectedCallback completeCallback = null;
-
-	private AutoCompleteTextView autoCompleteTextView;
 	private AlertDialog alertDialog;
-	public static Debt debt;
+	public static String title;
 
-	public static PersonPickerDialogFragment newInstance(Debt debt) {
-		PersonPickerDialogFragment.debt = debt;
+	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
+
+	public static PersonPickerDialogFragment newInstance(String title) {
+		PersonPickerDialogFragment.title = title;
 		return new PersonPickerDialogFragment();
 	}
 
@@ -45,6 +46,11 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 		View rootView = inflater.inflate(R.layout.person_picker_dialog, null);
 
+		RobotoMediumTextView person_picker_dialog_title = (RobotoMediumTextView) rootView.findViewById(R.id.person_picker_dialog_title);
+		if (!title.equals(USE_DEFAULT_TITLE)) {
+			person_picker_dialog_title.setText(title);
+		}
+
 		final Button confirmButton = (Button) rootView.findViewById(R.id.dialog_select_person_confirm);
 		Button cancelButton = (Button) rootView.findViewById(R.id.dialog_select_person_cancel);
 		cancelButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
@@ -56,7 +62,7 @@ public class PersonPickerDialogFragment extends DialogFragment {
 			}
 		});
 
-		autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
+		AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
 		autoCompleteTextView.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
 		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
@@ -111,13 +117,12 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		@Override
 		public void onClick(View v) {
 			//TODO set person here from the ACTV
-			completeCallback.onSelected(debt, null);
+			completeCallback.onSelected(null);
 			alertDialog.cancel();
 		}
 	};
 
 	public interface PersonSelectedCallback {
-		public void onSelected(Debt debt, Person person);
+		public void onSelected(Person person);
 	}
-
 }
