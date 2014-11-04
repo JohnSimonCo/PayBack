@@ -39,7 +39,7 @@
 
         <Button
             android:textAllCaps="true"
-            android:text="@android:string/cancel"
+            android:text="@string/cancel"
             android:id="@+id/dialog_select_person_cancel"
             android:layout_width="88dp"
             android:layout_height="36dp"

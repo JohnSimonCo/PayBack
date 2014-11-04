@@ -25,7 +25,7 @@
 
         <Button
             android:textAllCaps="true"
-            android:text="@android:string/cancel"
+            android:text="@string/cancel"
             android:id="@+id/confirm_delete_cancel"
             android:layout_width="88dp"
             android:layout_height="36dp"

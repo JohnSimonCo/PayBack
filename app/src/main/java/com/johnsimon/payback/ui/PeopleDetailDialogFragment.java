@@ -19,7 +19,8 @@ import com.makeramen.RoundedImageView;
 public class PeopleDetailDialogFragment extends DialogFragment {
 	public static Person person;
 
-	public EditPersonCallback confirm = null;
+	public EditPersonCallback editPersonCallback = null;
+	private AlertDialog alertDialog;
 
 	public static PeopleDetailDialogFragment newInstance(Person person) {
 		PeopleDetailDialogFragment.person = person;
@@ -55,7 +56,9 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 
 		builder.setView(rootView);
 
-		return builder.create();
+		alertDialog = builder.create();
+
+		return alertDialog;
 	}
 
 	private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -96,6 +99,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 						@Override
 						public void onConfirm() {
 							Resource.data.delete(person);
+							cancel();
 						}
 					};
 
@@ -108,6 +112,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 		@Override
 		public void onSelected(String name) {
 			person.name = name;
+			cancel();
 		}
 	};
 
@@ -130,13 +135,18 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 				@Override
 				public void onConfirm() {
 					Resource.data.merge(person, other);
+					cancel();
 				}
 			};
-
 		}
 	};
 
+	private void cancel() {
+		editPersonCallback.onEdit();
+		alertDialog.cancel();
+	}
+
 	public interface EditPersonCallback {
-		public void onConfirm();
+		public void onEdit();
 	}
 }

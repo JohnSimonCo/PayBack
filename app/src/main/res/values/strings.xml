@@ -60,9 +60,10 @@
     <string name="merge_to">Merge to</string>
     <string name="merge">Merge</string>
     <string name="name">Name</string>
-    <string name="delete_person_text">Delete person</string>
+    <string name="delete_person_text">Delete person?</string>
     <string name="merge_confirm_text_format">Merge all entries from %1$s to %2$s?</string>
     <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="you">You</string>
 
     <!-- About -->
