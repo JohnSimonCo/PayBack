@@ -308,8 +308,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void updateName() {
-        //TODO get user name here
-        headerName.setText("Simon Halvdansson");
+        headerName.setText(Resource.userName);
 	}
 
     public boolean isDrawerOpen() {
