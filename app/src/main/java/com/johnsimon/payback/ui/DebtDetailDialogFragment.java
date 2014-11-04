@@ -172,7 +172,10 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			//TODO skriv koden för det
+			Person person = Resource.getOrCreatePerson(name);
+
+			Resource.data.move(debt, person);
+			Resource.commit();
 		}
 	};
 

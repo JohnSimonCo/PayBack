@@ -111,7 +111,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback renameCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			person.name = name;
+			Resource.data.rename(person, name);
 			cancel();
 		}
 	};

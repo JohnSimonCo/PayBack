@@ -115,4 +115,12 @@ public class AppData {
 		people.remove(person);
 	}
 
+	public void move(Debt debt, Person person) {
+		debt.owner = person;
+	}
+
+	public void rename(Person person, String name) {
+		person.name = name;
+	}
+
 }
