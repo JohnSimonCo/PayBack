@@ -90,13 +90,13 @@ public class AppData {
 		return null;
 	}
 
-	public void merge(Person target, Person other) {
+	public void merge(Person from, Person to) {
 		for(Debt debt : debts) {
-			if(debt.owner == other) {
-				debt.owner = target;
+			if(debt.owner == from) {
+				debt.owner = to;
 			}
 		}
-		people.remove(other);
+		people.remove(from);
 	}
 	public void delete(Person person) {
 		//#perfmatters
