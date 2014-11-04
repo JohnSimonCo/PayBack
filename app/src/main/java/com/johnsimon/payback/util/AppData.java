@@ -91,7 +91,28 @@ public class AppData {
 	}
 
 	public void merge(Person target, Person other) {
+		for(Debt debt : debts) {
+			if(debt.owner == other) {
+				debt.owner = target;
+			}
+		}
+		people.remove(other);
+	}
+	public void delete(Person person) {
+		//#perfmatters
+		int push = -1;
+		Debt[] remove = new Debt[debts.size()];
+		for(Debt debt : debts) {
+			if(debt.owner == person) {
+				remove[++push] = debt;
+			}
+		}
 
+		for(int i = 0; i < push; i++) {
+			debts.remove(remove[i]);
+		}
+
+		people.remove(person);
 	}
 
 }
