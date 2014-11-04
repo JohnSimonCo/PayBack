@@ -30,7 +30,6 @@
                 android:paddingTop="6dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:text="Simon Halvdansson"
                 android:paddingBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -40,16 +39,14 @@
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_plus"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="+ 2000 Kr"    />
+                android:layout_width="wrap_content"   />
 
             <com.johnsimon.payback.util.RobotoMediumTextView
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_minus"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="- 1200 Kr"    />
+                android:layout_width="wrap_content"   />
 
         </LinearLayout>
 

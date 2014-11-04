@@ -15,10 +15,11 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.FontCache;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 
-public class ConfirmDeleteDialogFragment extends DialogFragment {
+public class ConfirmDialogFragment extends DialogFragment {
 
-	public ConfirmDeleteCallback confirmDelete = null;
-	public final static String DELTE_TEXT = "DELETE_TEXT_KEY";
+	public ConfirmCallback confirm = null;
+	public final static String INFO_TEXT = "INFO_TEXT_KEY";
+	public final static String CONFIRM_TEXT = "CONFIRM_TEXT_KEY";
 
 	private AlertDialog alertDialog;
 
@@ -29,21 +30,13 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 
 		View rootView = inflater.inflate(R.layout.confirm_delete_dialog, null);
 
-		RobotoMediumTextView confirm_delete_dialog_text = (RobotoMediumTextView) rootView.findViewById(R.id.confirm_delete_dialog_text);
 
-		String text = getArguments().getString(DELTE_TEXT);
-		if (TextUtils.isEmpty(text)) {
-			confirm_delete_dialog_text.setVisibility(View.GONE);
-		} else {
-			confirm_delete_dialog_text.setText(text);
-		}
 
 		Button confirm_delete_cancel = (Button) rootView.findViewById(R.id.confirm_delete_cancel);
 		Button confirm_delete_confirm = (Button) rootView.findViewById(R.id.confirm_delete_confirm);
 
 		confirm_delete_cancel.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 		confirm_delete_confirm.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
-		confirm_delete_dialog_text.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		confirm_delete_cancel.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -55,10 +48,27 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 		confirm_delete_confirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				confirmDelete.onDelete();
+				confirm.onConfirm();
 				alertDialog.cancel();
 			}
 		});
+
+		RobotoMediumTextView confirm_delete_dialog_text = (RobotoMediumTextView) rootView.findViewById(R.id.confirm_delete_dialog_text);
+		confirm_delete_dialog_text.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+
+		String text = getArguments().getString(INFO_TEXT);
+		if (TextUtils.isEmpty(text)) {
+			confirm_delete_dialog_text.setVisibility(View.GONE);
+		} else {
+			confirm_delete_dialog_text.setText(text);
+		}
+
+		String confirmText = getArguments().getString(CONFIRM_TEXT);
+		if (TextUtils.isEmpty(confirmText)) {
+			confirm_delete_confirm.setText(R.string.confirm);
+		} else {
+			confirm_delete_confirm.setText(confirmText);
+		}
 
 		builder.setView(rootView);
 
@@ -67,8 +77,8 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 		return alertDialog;
 	}
 
-	public interface ConfirmDeleteCallback {
-		public void onDelete();
+	public interface ConfirmCallback {
+		public void onConfirm();
 	}
 
 }

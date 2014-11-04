@@ -4,25 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.support.v7.internal.widget.TintEditText;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
-import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
 
@@ -91,17 +81,18 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 					personPickerDialogFragmentMerge.completeCallback = mergeCallback;
 					break;
 				case R.id.person_detail_dialog_delete:
-					ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment();
+					ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
 
 					Bundle argsDelete = new Bundle();
-					argsDelete.putString(ConfirmDeleteDialogFragment.DELTE_TEXT, getResources().getString(R.string.delete_person_text));
-					confirmDeleteDialogFragment.setArguments(argsDelete);
+					argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_person_text));
+					argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
+					confirmDialogFragment.setArguments(argsDelete);
 
-					confirmDeleteDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
+					confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
 
-					confirmDeleteDialogFragment.confirmDelete = new ConfirmDeleteDialogFragment.ConfirmDeleteCallback() {
+					confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
 						@Override
-						public void onDelete() {
+						public void onConfirm() {
 							Resource.data.delete(person);
 						}
 					};
@@ -121,7 +112,26 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback mergeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			Resource.data.merge(person, Resource.data.findPerson(name));
+			Person other = Resource.data.findPerson(name);
+
+			ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+
+			Bundle argsDelete = new Bundle();
+			String confirmFormat = getString(R.string.merge_confirm_text_format);
+			argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, String.format(confirmFormat, person.name, other.name));
+			argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.merge));
+			confirmDialogFragment.setArguments(argsDelete);
+
+			confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
+
+			confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
+				@Override
+				public void onConfirm() {
+					Resource.data.delete(person);
+				}
+			};
+
+			Resource.data.merge(person, other);
 		}
 	};
 }

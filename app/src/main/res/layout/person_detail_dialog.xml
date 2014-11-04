@@ -73,7 +73,7 @@
         android:id="@+id/person_detail_dialog_merge"
         style="@style/PersonDetailDialogListItem"
         android:drawableLeft="@drawable/ic_action_merge"
-        android:text="@string/merge"
+        android:text="@string/merge_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
 

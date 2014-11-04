@@ -11,6 +11,7 @@
         android:textColor="@color/gray_text_light"
         android:id="@+id/confirm_delete_dialog_text"
         android:layout_width="wrap_content"
+        android:textSize="18sp"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
@@ -32,7 +33,7 @@
 
         <Button
             android:textAllCaps="true"
-            android:text="@string/delete"
+            android:text="@string/confirm"
             android:id="@+id/confirm_delete_confirm"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
