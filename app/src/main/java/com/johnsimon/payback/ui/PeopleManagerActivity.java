@@ -69,6 +69,13 @@ public class PeopleManagerActivity extends ActionBarActivity {
 				Person person = adapter.getItem(position);
 				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
 				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");
+				peopleDetailDialogFragment.editPersonCallback = new PeopleDetailDialogFragment.EditPersonCallback() {
+
+					@Override
+					public void onEdit() {
+						adapter.notifyDataSetChanged();
+					}
+				};
 			}
 		});
 
