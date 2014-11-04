@@ -236,7 +236,7 @@ public class Resource {
 	}
 
 	private static String getUserName() {
-
+		return null;
 	}
 
     public static class AmountComparator implements Comparator<Debt> {
