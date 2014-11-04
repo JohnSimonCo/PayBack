@@ -40,4 +40,6 @@
     <dimen name="feed_name_size">20sp</dimen>
     <dimen name="feed_info_size">14sp</dimen>
 
+    <dimen name="toolbar_inset">48dp</dimen>
+
 </resources>
