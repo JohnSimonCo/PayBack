@@ -200,8 +200,12 @@ public class Resource {
 
 	private static String getUserName(Context context) {
 		Cursor cursor = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-		cursor.moveToFirst();
-		return cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+		if(cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			return cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+		}
+
+		return null;
 	}
 
 	public static Person getOrCreatePerson(String name) {
