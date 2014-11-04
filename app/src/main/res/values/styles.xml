@@ -43,10 +43,21 @@
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/gray_text_light</item>
-        <item name="android:fontFamily">sans-serif</item>
         <item name="android:drawablePadding">16dp</item>
+    </style>
+
+    <style name="PersonDetailDialogListItem">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textColor">@color/gray_text_light</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:drawablePadding">24dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+
     </style>
 
     <style name="RippleBackground">

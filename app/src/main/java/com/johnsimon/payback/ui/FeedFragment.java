@@ -34,7 +34,7 @@ import com.shamanland.fab.FloatingActionButton;
 import org.w3c.dom.Text;
 
 
-public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback, PersonPickerDialogFragment.PersonSelectedCallback {
+public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public static FeedListAdapter adapter;
@@ -177,17 +177,5 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 				.putExtra(CreateDebtActivity.ARG_TIMESTAMP, debt.timestamp);
 
 		startActivity(intent);
-	}
-
-	@Override
-	public void onChange(Debt debt) {
-		PersonPickerDialogFragment personPickerDialogFragment = PersonPickerDialogFragment.newInstance(debt);
-		personPickerDialogFragment.show(getFragmentManager(), "person_dialog");
-		personPickerDialogFragment.completeCallback = self;
-	}
-
-	@Override
-	public void onSelected(Debt debt, Person person) {
-		//TODO handle moving here
 	}
 }

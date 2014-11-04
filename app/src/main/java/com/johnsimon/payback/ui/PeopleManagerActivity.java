@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.R;
@@ -52,7 +54,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		controller.setDragHandleId(R.id.people_list_item_handle);
 		controller.setRemoveEnabled(false);
 		controller.setSortEnabled(true);
-		controller.setDragInitMode(1); //Magic number: "Jag vet inte. Det är antagligen en flagga internt eller nånting" - Simme '14
+		controller.setDragInitMode(DragSortController.ON_DRAG);
 
 		listView.setFloatViewManager(controller);
 		listView.setOnTouchListener(controller);
@@ -61,6 +63,15 @@ public class PeopleManagerActivity extends ActionBarActivity {
         SimpleFloatViewManager simpleFloatViewManager = new SimpleFloatViewManager(listView);
         simpleFloatViewManager.setBackgroundColor(Color.TRANSPARENT);
         listView.setFloatViewManager(simpleFloatViewManager);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Person person = adapter.getItem(position);
+				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
+				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");
+			}
+		});
 
     }
 
@@ -117,14 +128,4 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		startActivity(intent);
 	}
 
-	/*
-	private DragSortListView.RemoveListener onRemove = new DragSortListView.RemoveListener()
-	{
-		@Override
-		public void remove(int which)
-		{
-		adapter.remove(adapter.getItem(which));
-		}
-	};
-*/
 }

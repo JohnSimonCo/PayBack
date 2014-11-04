@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
@@ -27,6 +28,8 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	public PaidBackCallback paidBackCallback = null;
 	public EditCallback editCallback = null;
 	public AlertDialog alertDialog;
+
+	private DebtDetailDialogFragment self = this;
 
 	public static DebtDetailDialogFragment newInstance(Debt debt) {
 		DebtDetailDialogFragment.debt = debt;
@@ -133,9 +136,11 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 								return true;
 							case R.id.detail_dialog_change:
-								if(editCallback != null) {
-									editCallback.onChange(debt);
-								}
+
+								PersonPickerDialogFragment personPickerDialogFragment = PersonPickerDialogFragment.newInstance(PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+								personPickerDialogFragment.show(getFragmentManager(), "person_dialog");
+								personPickerDialogFragment.completeCallback = changePersonCallback;
+
 								alertDialog.cancel();
 								return true;
 
@@ -159,6 +164,13 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
         return alertDialog;
     }
 
+	public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
+		@Override
+		public void onSelected(Person person) {
+			//TODO move debt to this person
+		}
+	};
+
 	@Override
 	public void onComplete() {
 		if(paidBackCallback != null) {
@@ -173,6 +185,5 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	public interface EditCallback {
 		public void onDelete(Debt debt);
 		public void onEdit(Debt debt);
-		public void onChange(Debt debt);
 	}
 }
