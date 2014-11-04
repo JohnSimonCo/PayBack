@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
@@ -15,8 +16,10 @@ import com.johnsimon.payback.util.RobotoMediumTextView;
 
 public class ConfirmDeleteDialogFragment extends DialogFragment {
 
-	//public ConfirmDeleteCallback confirmDelete = null;
+	public ConfirmDeleteCallback confirmDelete = null;
 	public final static String DELTE_TEXT = "DELETE_TEXT_KEY";
+
+	private AlertDialog alertDialog;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -34,13 +37,33 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 			confirm_delete_dialog_text.setText(text);
 		}
 
+		Button confirm_delete_cancel = (Button) rootView.findViewById(R.id.confirm_delete_cancel);
+		Button confirm_delete_confirm = (Button) rootView.findViewById(R.id.confirm_delete_confirm);
 
+		confirm_delete_cancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				alertDialog.cancel();
+			}
+		});
+
+		confirm_delete_confirm.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				confirmDelete.onDelete();
+				alertDialog.cancel();
+			}
+		});
 
 		builder.setView(rootView);
 
-		final AlertDialog ad = builder.create();
+		alertDialog = builder.create();
 
-		return ad;
+		return alertDialog;
+	}
+
+	public interface ConfirmDeleteCallback {
+		public void onDelete();
 	}
 
 }

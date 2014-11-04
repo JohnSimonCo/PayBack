@@ -23,7 +23,7 @@
         <Button
             android:textAllCaps="true"
             android:text="@android:string/cancel"
-            android:id="@+id/dialog_custom_currency_cancel"
+            android:id="@+id/confirm_delete_cancel"
             android:layout_width="88dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackground"
@@ -32,8 +32,8 @@
 
         <Button
             android:textAllCaps="true"
-            android:text="@string/done"
-            android:id="@+id/dialog_custom_currency_confirm"
+            android:text="@string/delete"
+            android:id="@+id/confirm_delete_confirm"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"

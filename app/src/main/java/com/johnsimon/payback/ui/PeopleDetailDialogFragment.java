@@ -81,6 +81,17 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 					personPickerDialogFragmentMerge.completeCallback = mergeCallback;
 					break;
 				case R.id.person_detail_dialog_delete:
+					ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment();
+					Bundle args = new Bundle();
+					args.putString(ConfirmDeleteDialogFragment.DELTE_TEXT, getResources().getString(R.string.delete_person_text));
+					confirmDeleteDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
+
+					confirmDeleteDialogFragment.confirmDelete = new ConfirmDeleteDialogFragment.ConfirmDeleteCallback() {
+						@Override
+						public void onDelete() {
+							Resource.data.delete(person);
+						}
+					};
 
 					break;
 			}
