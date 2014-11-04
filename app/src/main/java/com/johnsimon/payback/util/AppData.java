@@ -61,7 +61,6 @@ public class AppData {
 		return sum;
 	}
 
-/*
 	public Person findPerson(UUID id) {
 		return findPerson(people, id);
 	}
@@ -75,7 +74,13 @@ public class AppData {
 		}
 		return null;
 	}
-*/
+
+	public Person findPersonByName(String name) {
+		for(Person p : people) {
+			if(p.name.equals(name)) return p;
+		}
+		return null;
+	}
 
 	public Debt findDebt(long timestamp) {
 		for (Debt debt : debts) {
@@ -83,6 +88,10 @@ public class AppData {
 		}
 
 		return null;
+	}
+
+	public void merge(Person target, Person other) {
+
 	}
 
 }

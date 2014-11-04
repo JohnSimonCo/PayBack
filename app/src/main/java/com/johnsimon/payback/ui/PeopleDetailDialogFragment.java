@@ -27,9 +27,7 @@ import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
 
 public class PeopleDetailDialogFragment extends DialogFragment {
-
 	public static Person person;
-	private PeopleDetailDialogFragment self = this;
 
 	public static PeopleDetailDialogFragment newInstance(Person person) {
 		PeopleDetailDialogFragment.person = person;
@@ -91,15 +89,15 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 
 	public PersonPickerDialogFragment.PersonSelectedCallback renameCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
-		public void onSelected(Person person) {
-
+		public void onSelected(String name) {
+			person.name = name;
 		}
 	};
 
 	public PersonPickerDialogFragment.PersonSelectedCallback mergeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
-		public void onSelected(Person person) {
-
+		public void onSelected(String name) {
+			Resource.data.merge(person, Resource.data.findPerson(name));
 		}
 	};
 }

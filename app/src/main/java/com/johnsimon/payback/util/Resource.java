@@ -195,10 +195,14 @@ public class Resource {
 	}
 
 	public static Person getOrCreatePerson(String name) {
-		for (Person person : people) {
-			if (person.name.equals(name)) return person;
+		//Try to find existing person
+		Person person = data.findPersonByName(name);
+		if(person != null) {
+			return person;
 		}
 
+		//Create new person
+		//Attempt to find link
 		Contact link = null;
 		for (Contact contact : contacts) {
 			if (contact.name.equals(name)) {
@@ -206,7 +210,8 @@ public class Resource {
 				break;
 			}
 		}
-		Person person = new Person(name, link, ColorPalette.getInstance(context));
+		//Create person and add to people
+		person = new Person(name, link, ColorPalette.getInstance(context));
 		people.add(person);
 		return person;
 	}

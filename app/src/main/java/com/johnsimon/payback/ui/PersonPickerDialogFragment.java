@@ -32,6 +32,8 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
 
+	private AutoCompleteTextView autoCompleteTextView;
+
 	public static PersonPickerDialogFragment newInstance(String title) {
 		PersonPickerDialogFragment.title = title;
 		return new PersonPickerDialogFragment();
@@ -62,15 +64,14 @@ public class PersonPickerDialogFragment extends DialogFragment {
 			}
 		});
 
-		AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
+		autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
 		autoCompleteTextView.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
 		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				Resource.getAllNames()
-		));
+				Resource.getAllNames()));
 
 		if (autoCompleteTextView.getText().toString().equals("")) {
 			disableButton(confirmButton);
@@ -116,13 +117,12 @@ public class PersonPickerDialogFragment extends DialogFragment {
 	private View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			//TODO set person here from the ACTV
-			completeCallback.onSelected(null);
+			completeCallback.onSelected(autoCompleteTextView.getText().toString());
 			alertDialog.cancel();
 		}
 	};
 
 	public interface PersonSelectedCallback {
-		public void onSelected(Person person);
+		public void onSelected(String name);
 	}
 }
