@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/currency"
+            android:text="@string/select_person"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,15 +22,16 @@
 
     </LinearLayout>
 
-    <android.support.v7.internal.widget.TintEditText
-        android:id="@+id/custom_currency_dialog_edittext"
+    <AutoCompleteTextView
+        style="@style/Widget.AppCompat.EditText"
+        android:id="@+id/select_person_actv"
         android:textColorHint="@color/gray_text_very_light"
         android:textColor="@color/gray_text_light"
         android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_height="wrap_content"
-        android:hint="@string/welcome_currency_hint"
+        android:hint="@string/person_hint"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -43,7 +44,7 @@
         <Button
             android:textAllCaps="true"
             android:text="@android:string/cancel"
-            android:id="@+id/dialog_custom_currency_cancel"
+            android:id="@+id/dialog_select_person_cancel"
             android:layout_width="88dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackground"
@@ -53,7 +54,7 @@
         <Button
             android:textAllCaps="true"
             android:text="@string/done"
-            android:id="@+id/dialog_custom_currency_confirm"
+            android:id="@+id/dialog_select_person_confirm"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
