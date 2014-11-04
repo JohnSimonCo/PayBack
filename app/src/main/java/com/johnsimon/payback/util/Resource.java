@@ -41,6 +41,8 @@ public class Resource {
     public static ArrayList<Debt> debts;
 	public static ArrayList<Contact> contacts;
 
+	public static String userName;
+
     private static Activity context;
     private static SharedPreferences preferences;
 
@@ -231,6 +233,10 @@ public class Resource {
 		}
 
 		return names;
+	}
+
+	private static String getUserName() {
+
 	}
 
     public static class AmountComparator implements Comparator<Debt> {
