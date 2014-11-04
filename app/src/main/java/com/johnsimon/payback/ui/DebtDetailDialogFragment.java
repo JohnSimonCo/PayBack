@@ -25,8 +25,7 @@ import com.makeramen.RoundedImageView;
 public class DebtDetailDialogFragment extends DialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
 	public static Debt debt;
-	public PaidBackCallback paidBackCallback = null;
-	public EditCallback editCallback = null;
+	public Callback callback = null;
 	public AlertDialog alertDialog;
 
 	private DebtDetailDialogFragment self = this;
@@ -122,15 +121,15 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 						switch (item.getItemId()) {
 							case R.id.detail_dialog_edit:
-								if(editCallback != null) {
-									editCallback.onEdit(debt);
+								if(callback != null) {
+									callback.onEdit(debt);
 								}
 								alertDialog.cancel();
 
 								return true;
 							case R.id.detail_dialog_delete:
-								if(editCallback != null) {
-									editCallback.onDelete(debt);
+								if(callback != null) {
+									callback.onDelete(debt);
 								}
 								alertDialog.cancel();
 
@@ -172,26 +171,23 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			Person person = Resource.getOrCreatePerson(name);
-
-			Resource.data.move(debt, person);
-			Resource.commit();
+			if(callback != null) {
+				callback.onMove(debt, Resource.getOrCreatePerson(name));
+			}
 		}
 	};
 
 	@Override
 	public void onComplete() {
-		if(paidBackCallback != null) {
-			paidBackCallback.onPaidBack(debt);
+		if(callback != null) {
+			callback.onPaidBack(debt);
 		}
 	}
 
-	public interface PaidBackCallback {
+	public interface Callback {
 		public void onPaidBack(Debt debt);
-	}
-
-	public interface EditCallback {
 		public void onDelete(Debt debt);
 		public void onEdit(Debt debt);
+		public void onMove(Debt debt, Person person);
 	}
 }

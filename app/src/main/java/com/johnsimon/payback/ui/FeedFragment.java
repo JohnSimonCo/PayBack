@@ -31,10 +31,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
-
-public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
+public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public static FeedListAdapter adapter;
@@ -103,8 +100,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get(position - listView.getHeaderViewsCount()));
                 dialog.show(getFragmentManager().beginTransaction(), "dialog");
-				dialog.paidBackCallback = self;
-				dialog.editCallback = self;
+				dialog.callback = self;
             }
         });
 
@@ -168,6 +164,14 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		Resource.commit();
 		adapter.notifyDataSetChanged();
 		displayTotalDebt(getActivity());
+	}
+
+	@Override
+	public void onMove(Debt debt, Person person) {
+		Resource.data.move(debt, person);
+		Resource.commit();
+		//TODO complete this
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
