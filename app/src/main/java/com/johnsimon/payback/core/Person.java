@@ -7,23 +7,30 @@ import java.util.UUID;
 public class Person {
 	public String name;
 	public UUID id;
-	public String photoURI;
+	public Contact link;
 	public Integer color;
 
-	public Person(String name, String photoURI, Integer color, UUID id) {
+	//Used for deserialization
+	public Person(String name, UUID id, Contact link, Integer color) {
 		this.name = name;
 		this.id = id;
-		this.photoURI = photoURI;
+		this.link = link;
 		this.color = color;
 	}
-	private Person(String name, String photoURI, Integer color) {
-		this(name, photoURI, color, UUID.randomUUID());
+	//Used for creating a person with a contact link
+	public Person(String name, Contact link, ColorPalette palette) {
+		this(name, UUID.randomUUID(), link, palette.nextColor());
 	}
-	public Person(String name, String photoURI) {
-		this(name, photoURI, null);
-	}
+	//Used for creating a person without a contact link
 	public Person(String name, ColorPalette palette) {
-		this(name, null, palette.nextColor());
+		this(name, null, palette);
+	}
+
+	public boolean isLinked() {
+		return link != null;
+	}
+	public boolean hasImage() {
+		return isLinked() && link.photoURI != null;
 	}
 
 	@Override

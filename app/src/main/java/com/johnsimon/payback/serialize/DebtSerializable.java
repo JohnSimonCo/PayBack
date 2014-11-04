@@ -1,4 +1,4 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.serialize;
 
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
@@ -23,6 +23,13 @@ public class DebtSerializable {
 	}
 
 	public Debt extract(ArrayList<Person> people) {
-		return new Debt(AppData.findPerson(people, ownerId), amount, note, timestamp, isPaidBack);
+		return new Debt(owner(people), amount, note, timestamp, isPaidBack);
+	}
+
+	private Person owner(ArrayList<Person> people) {
+		for(Person person : people) {
+			if(person.id.equals(ownerId)) return person;
+		}
+		return null;
 	}
 }

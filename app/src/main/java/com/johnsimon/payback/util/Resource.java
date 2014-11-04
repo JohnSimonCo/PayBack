@@ -1,28 +1,20 @@
 package com.johnsimon.payback.util;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.johnsimon.payback.serialize.AppDataSerializable;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
@@ -36,8 +28,6 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static android.nfc.NdefRecord.createMime;
-
 public class Resource {
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
     private final static String SAVE_KEY_APP_DATA = "APP_DATA";
@@ -49,7 +39,7 @@ public class Resource {
     public static AppData data = null;
     public static ArrayList<Person> people;
     public static ArrayList<Debt> debts;
-    public static ArrayList<Contact> contacts;
+	public static ArrayList<Contact> contacts;
 
     private static Activity context;
     private static SharedPreferences preferences;
@@ -60,8 +50,10 @@ public class Resource {
         Resource.context = context;
         Resource.preferences = context.getPreferences(Context.MODE_PRIVATE);
 
+		contacts = getContacts(context);
+
         String JSON = preferences.getString(SAVE_KEY_APP_DATA, null);
-        data = JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract();
+        data = JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract(contacts);
         people = data.people;
         debts = data.debts;
 
@@ -85,47 +77,9 @@ public class Resource {
 
             commit();
         }
-        contacts = Resource.getAllContacts(context);
 
 		//Default configuration
 		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
-
-
-
-		/* Censored Version
-        if(isFirstRun(preferences)) {
-			Person john = new Person("John Rapp", UUID.randomUUID());
-			Person simon = new Person("Simon Halvdansson", UUID.randomUUID());
-			Person agge = new Person("Agge Eklöf", UUID.randomUUID());
-			people.add(john);
-			people.add(simon);
-			people.add(agge);
-
-			debts.add(new Debt(john, 100, "Dyr kebab"));
-			debts.add(new Debt(simon, -200, "Pokemonkort"));
-			debts.add(new Debt(simon, -1000, "Glömde kortet på ICA"));
-			debts.add(new Debt(agge, 40, null));
-			debts.add(new Debt(john, 200, "Lampor till dator"));
-			debts.add(new Debt(agge, 2.5f, "Äpple delat på 2"));
-			commit();
-		}
-		*/
-
-
-		/* Non-Censored Version
-		Person druggie = new Person("Random druggie", UUID.randomUUID());
-		people.add(druggie);
-		Person dealer = new Person("Ma hagsätra dealer", UUID.randomUUID());
-		people.add(dealer);
-		Person ica = new Person("killen på ica", UUID.randomUUID());
-		people.add(ica);
-
-		debts.add(new Debt(druggie, -2000, "weed an sum white shit"));
-		debts.add(new Debt(dealer, -20000, "100 l moskovskaya, ingen grossistrabbat :/"));
-		debts.add(new Debt(ica, 350, "sög av mig"));
-		debts.add(new Debt(ica, -10, "snabbt knull"));
-		debts.add(new Debt(ica, 500, "hand job på plattan"));
-		*/
     }
 
     public static void commit() {
@@ -157,59 +111,8 @@ public class Resource {
         preferences.edit().putString(SAVE_KEY_CURRENCY, currency).apply();
     }
 
-    public static int calculateTotalPlus() {
-        int sum = 0;
-        for (int i = 0; i < debts.size(); i++) {
-            if (debts.get(i).amount > 0) {
-                sum += debts.get(i).amount;
-            }
-        }
-        return sum;
-    }
-
-    public static int calculateTotalMinus() {
-        int sum = 0;
-        for (int i = 0; i < debts.size(); i++) {
-            if (debts.get(i).amount < 0) {
-                sum += debts.get(i).amount;
-            }
-        }
-        return sum;
-    }
-
     public static String getCurrency() {
         return preferences.getString(SAVE_KEY_CURRENCY, "$");
-    }
-
-    private static ArrayList<Contact> getAllContacts(Context ctx) {
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
-        Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-                //If it's not an email adress
-                if (name != null && !name.matches(".*@.*\\..*")) {
-                    //Make sure it's unique
-                    boolean unique = true;
-                    //First search in people (since that list is generally smaller)
-                    for (Person person : people) {
-                        if (person.name.equals(name)) unique = false;
-                    }
-                    //If not found, continue to search in contacts
-                    if (unique) {
-                        for (Contact contact : contacts) {
-                            if (contact.name.equals(name)) unique = false;
-                        }
-                    }
-                    //If unique, add to contacts
-                    if (unique) {
-                        contacts.add(new Contact(name, photoURI));
-                    }
-                }
-            }
-        }
-        return contacts;
     }
 
     public static void toast(Context context, String text) {
@@ -224,207 +127,11 @@ public class Resource {
         toast(context, Integer.toString(i));
     }
 
-    public static void expand(final View v) {
-        expand(v, true, 4);
-    }
-
-    public static void expand(final View v, boolean b) {
-        expand(v, b, 4);
-    }
-
-    public static void expand(final View v, boolean animate, int msPerDp) {
-        v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        final int targtetHeight = v.getMeasuredHeight();
-
-        if (animate) {
-            v.getLayoutParams().height = 0;
-            v.setVisibility(View.VISIBLE);
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    v.getLayoutParams().height = interpolatedTime == 1
-                            ? LinearLayout.LayoutParams.WRAP_CONTENT
-                            : (int) (targtetHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            // 0.333dp/ms
-            a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
-            v.startAnimation(a);
-        } else {
-            v.setVisibility(View.VISIBLE);
-            v.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-            v.requestLayout();
-        }
-    }
-
-    public static void collapse(final View v) {
-        collapse(v, true, 4);
-    }
-
-    public static void collapse(final View v, boolean b) {
-        collapse(v, b, 4);
-    }
-
-    public static void collapse(final View v, boolean animate, int msPerDp) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        if (animate) {
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if (interpolatedTime == 1) {
-                        v.setVisibility(View.GONE);
-                    } else {
-                        v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                        v.requestLayout();
-                    }
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            // 0.333dp/ms
-            a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density) * msPerDp);
-            v.startAnimation(a);
-        } else {
-            v.setVisibility(View.GONE);
-            v.getLayoutParams().height = 0;
-            v.requestLayout();
-        }
-    }
-
-    public static Person getPerson(String name) {
-        for (Person person : people) {
-            if (person.name.equals(name)) return person;
-        }
-
-        Person person = null;
-        for (Contact c : contacts) {
-            if (c.name.equals(name)) {
-                contacts.remove(c);
-                if (c.photoURI != null) {
-                    //Will be handled later otherwise
-                    person = new Person(c.name, c.photoURI);
-                }
-                break;
-            }
-        }
-        if (person == null) {
-            person = new Person(name, ColorPalette.getInstance(context));
-        }
-        people.add(person);
-        return person;
-    }
-
-    public static ArrayList<String> getAllNames() {
-        ArrayList<String> names = new ArrayList<String>();
-        for (Person person : people) {
-            names.add(person.name);
-        }
-        for (Contact contact : contacts) {
-            names.add(contact.name);
-        }
-
-        return names;
-    }
-
     //Enter size in dp, returns it in px
     // http://stackoverflow.com/questions/5255184/android-and-setting-width-and-height-programmatically-in-dp-units
     // (lookin' professional n' shit)
     public static int getPx(int dp, Resources res) {
         return (int) (dp * res.getDisplayMetrics().density + 0.5f);
-    }
-
-    public static void doListAnimation(final View view, int offset) {
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        view.setAlpha(0f);
-
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
-                "alpha", 1);
-        animAlpha.setDuration(450);
-        animAlpha.setStartDelay(offset);
-        animAlpha.start();
-
-        view.setRotation(20f);
-
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(view,
-                "rotation", 0f);
-        rotation.setDuration(350);
-        rotation.setStartDelay(offset);
-        rotation.start();
-
-        view.setTranslationY(620f);
-
-        ObjectAnimator animY = ObjectAnimator.ofFloat(view,
-                "translationY", 0);
-        animY.setDuration(450);
-        animY.setStartDelay(offset);
-
-        animY.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-        animY.start();
-    }
-
-    public static void animateHardwareFadeIn(final View view, int duration, int offset) {
-
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        view.setAlpha(0f);
-
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
-                "alpha", 1);
-        animAlpha.setDuration(duration);
-        animAlpha.setStartDelay(offset);
-
-        animAlpha.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.VISIBLE);
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-        animAlpha.start();
-
-    }
-
-    public static void animateHardwareFadeOut(final View view, int duration, int offset) {
-
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        view.setAlpha(1f);
-
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view,
-                "alpha", 0);
-        animAlpha.setDuration(duration);
-        animAlpha.setStartDelay(offset);
-
-        animAlpha.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.VISIBLE);
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-        animAlpha.start();
-
     }
 
     public static boolean isLOrAbove() {
@@ -436,29 +143,89 @@ public class Resource {
         return (now - timestamp < 60000)
                 ? ctx.getString(R.string.justnow)
                 : DateUtils.getRelativeTimeSpanString(
-                timestamp,
-                now,
-                DateUtils.SECOND_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_ALL);
-
-
+					timestamp,
+					now,
+					DateUtils.SECOND_IN_MILLIS,
+					DateUtils.FORMAT_ABBREV_ALL);
     }
 
 	public static void createProfileImage(Person person, final RoundedImageView avatar, TextView avatarLetter) {
-		if(person.color != null) {
-			avatar.setImageDrawable(new AvatarPlaceholderDrawable(person.color));
-			avatarLetter.setVisibility(View.VISIBLE);
-			avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
-		} else {
+		if(person.hasImage()) {
 			avatarLetter.setVisibility(View.GONE);
 
-			ThumbnailLoader.getInstance().load(person.photoURI, new SimpleImageLoadingListener() {
+			ThumbnailLoader.getInstance().load(person.link.photoURI, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 					avatar.setImageBitmap(loadedImage);
 				}
 			});
+		} else {
+			avatar.setImageDrawable(new AvatarPlaceholderDrawable(person.color));
+			avatarLetter.setVisibility(View.VISIBLE);
+			avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
 		}
+	}
+
+	public static ArrayList<Contact> getContacts(Context context) {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
+		Cursor cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		if (cursor.getCount() > 0) {
+			while (cursor.moveToNext()) {
+				//Get contact info
+				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+				long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+
+				//Exlude email adresses
+				if(name == null || name.matches(".*@.*\\..*")) continue;
+
+				//Test if the name is unique
+				boolean unique = true;
+				for (Contact contact : contacts) {
+					if (contact.name.equals(name)) unique = false;
+				}
+
+				//Exlude non-unique contacts
+				if(!unique) continue;
+
+				contacts.add(new Contact(name, photoURI, id));
+			}
+		}
+		return contacts;
+	}
+
+	public static Person getOrCreatePerson(String name) {
+		for (Person person : people) {
+			if (person.name.equals(name)) return person;
+		}
+
+		Contact link = null;
+		for (Contact contact : contacts) {
+			if (contact.name.equals(name)) {
+				link = contact;
+				break;
+			}
+		}
+		Person person = new Person(name, link, ColorPalette.getInstance(context));
+		people.add(person);
+		return person;
+	}
+
+	//Returns all unique names (from people and contacts)
+	public static ArrayList<String> getAllNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (Person person : people) {
+			if(!names.contains(person.name)) {
+				names.add(person.name);
+			}
+		}
+		for (Contact contact : contacts) {
+			if(!names.contains(contact.name)) {
+				names.add(contact.name);
+			}
+		}
+
+		return names;
 	}
 
     public static class AmountComparator implements Comparator<Debt> {
@@ -481,5 +248,4 @@ public class Resource {
             return person1.name.compareToIgnoreCase(person2.name);
         }
     }
-
 }

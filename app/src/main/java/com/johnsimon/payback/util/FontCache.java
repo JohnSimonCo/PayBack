@@ -11,6 +11,7 @@ public class FontCache {
 
 	private static HashMap<String, Typeface> cache = new HashMap<String, Typeface>();
 
+	/* UnsupportedOperationException WTF? */
 	public static Typeface get(Context ctx, String fontName) throws UnsupportedOperationException {
 
         if(cache.containsKey(fontName)) {

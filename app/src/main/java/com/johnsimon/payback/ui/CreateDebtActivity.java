@@ -2,7 +2,6 @@ package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Outline;
@@ -263,12 +262,12 @@ public class CreateDebtActivity extends ActionBarActivity {
 
 		Person person;
 		if(editingDebt == null) {
-			person = Resource.getPerson(name);
+			person = Resource.getOrCreatePerson(name);
 			Resource.debts.add(0, new Debt(person, amount, note));
 		} else {
 			person = editingDebt.owner.name.equals(name)
 				? editingDebt.owner
-				: Resource.getPerson(name);
+				: Resource.getOrCreatePerson(name);
 
 			editingDebt.edit(person, amount, note);
 		}

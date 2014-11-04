@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.util.Animator;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
@@ -52,7 +54,7 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
                 if (list.size() != 0) {
                     offset++;
                 }
-                Resource.doListAnimation(convertView, (offset * 60));
+                Animator.doListAnimation(convertView, (offset * 60));
             }
 
 			convertView.setTag(holder);
@@ -82,10 +84,10 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 			if (holder.paidBack.getVisibility() == View.GONE) {
 
 				if (animationDebt == debt) {
-					Resource.expand(holder.paidBack);
+					Animator.expand(holder.paidBack);
 					animationDebt = null;
 				} else {
-					Resource.expand(holder.paidBack, false);
+					Animator.expand(holder.paidBack, false);
 				}
 			}
 		} else {
@@ -97,10 +99,10 @@ public class FeedListAdapter extends ArrayAdapter<Debt> {
 			if (holder.paidBack.getVisibility() == View.VISIBLE) {
 
 				if (animationDebt == debt) {
-					Resource.collapse(holder.paidBack);
+					Animator.collapse(holder.paidBack);
 					animationDebt = null;
 				} else {
-					Resource.collapse(holder.paidBack, false);
+					Animator.collapse(holder.paidBack, false);
 				}
 			}
 		}

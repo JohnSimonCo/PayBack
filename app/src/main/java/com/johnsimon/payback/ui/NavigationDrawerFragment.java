@@ -301,8 +301,8 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 	public static void updateBalance() {
-		headerPlus.setText("+ " + Resource.calculateTotalPlus() + " " + Resource.getCurrency());
-		headerMinus.setText(" " + Resource.calculateTotalMinus() + " " + Resource.getCurrency());
+		headerPlus.setText("+ " + Resource.data.calculateTotalPlus() + " " + Resource.getCurrency());
+		headerMinus.setText(" " + Resource.data.calculateTotalMinus() + " " + Resource.getCurrency());
 	}
 
 	private void updateName() {

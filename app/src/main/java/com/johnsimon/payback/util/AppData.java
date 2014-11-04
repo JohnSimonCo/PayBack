@@ -1,5 +1,6 @@
 package com.johnsimon.payback.util;
 
+import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 
@@ -15,7 +16,7 @@ public class AppData {
 		this.debts = new ArrayList<Debt>();
 	}
 
-	public AppData(ArrayList people, ArrayList debts) {
+	public AppData(ArrayList<Person> people, ArrayList<Debt> debts) {
 		this.people = people;
 		this.debts = debts;
 	}
@@ -40,6 +41,27 @@ public class AppData {
 		return total;
 	}
 
+	public int calculateTotalPlus() {
+		int sum = 0;
+		for (int i = 0; i < debts.size(); i++) {
+			if (debts.get(i).amount > 0) {
+				sum += debts.get(i).amount;
+			}
+		}
+		return sum;
+	}
+
+	public int calculateTotalMinus() {
+		int sum = 0;
+		for (int i = 0; i < debts.size(); i++) {
+			if (debts.get(i).amount < 0) {
+				sum += debts.get(i).amount;
+			}
+		}
+		return sum;
+	}
+
+/*
 	public Person findPerson(UUID id) {
 		return findPerson(people, id);
 	}
@@ -53,6 +75,7 @@ public class AppData {
 		}
 		return null;
 	}
+*/
 
 	public Debt findDebt(long timestamp) {
 		for (Debt debt : debts) {
