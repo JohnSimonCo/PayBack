@@ -18,6 +18,8 @@
 
     <AutoCompleteTextView
         style="@style/Widget.AppCompat.EditText"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="textCapWords"
         android:id="@+id/select_person_actv"
         android:textColorHint="@color/gray_text_very_light"
         android:textColor="@color/gray_text_light"

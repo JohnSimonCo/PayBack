@@ -112,7 +112,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback mergeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			Person other = Resource.data.findPerson(name);
+			Person other = Resource.data.findPersonByName(name);
 
 			ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
 
