@@ -137,7 +137,12 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 								return true;
 							case R.id.detail_dialog_change:
 
-								PersonPickerDialogFragment personPickerDialogFragment = PersonPickerDialogFragment.newInstance(PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+								PersonPickerDialogFragment personPickerDialogFragment = new PersonPickerDialogFragment();
+
+								Bundle args = new Bundle();
+								args.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+								personPickerDialogFragment.setArguments(args);
+
 								personPickerDialogFragment.show(getFragmentManager(), "person_dialog");
 								personPickerDialogFragment.completeCallback = changePersonCallback;
 

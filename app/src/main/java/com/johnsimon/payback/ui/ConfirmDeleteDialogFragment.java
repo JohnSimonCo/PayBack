@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.FontCache;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 
 public class ConfirmDeleteDialogFragment extends DialogFragment {
@@ -39,6 +40,10 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 
 		Button confirm_delete_cancel = (Button) rootView.findViewById(R.id.confirm_delete_cancel);
 		Button confirm_delete_confirm = (Button) rootView.findViewById(R.id.confirm_delete_confirm);
+
+		confirm_delete_cancel.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+		confirm_delete_confirm.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+		confirm_delete_dialog_text.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		confirm_delete_cancel.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -71,19 +71,32 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 		public void onClick(View view) {
 			switch (view.getId()) {
 				case R.id.person_detail_dialog_rename:
-					PersonPickerDialogFragment personPickerDialogFragmentRename = PersonPickerDialogFragment.newInstance(getResources().getString(R.string.rename));
+					PersonPickerDialogFragment personPickerDialogFragmentRename = new PersonPickerDialogFragment();
+
+					Bundle argsRename = new Bundle();
+					argsRename.putString(PersonPickerDialogFragment.TITLE_KEY, getResources().getString(R.string.rename));
+					personPickerDialogFragmentRename.setArguments(argsRename);
+
 					personPickerDialogFragmentRename.show(getFragmentManager(), "people_detail_dialog_rename");
 					personPickerDialogFragmentRename.completeCallback = renameCallback;
 					break;
 				case R.id.person_detail_dialog_merge:
-					PersonPickerDialogFragment personPickerDialogFragmentMerge = PersonPickerDialogFragment.newInstance(PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+					PersonPickerDialogFragment personPickerDialogFragmentMerge = new PersonPickerDialogFragment();
+
+					Bundle argsMerge = new Bundle();
+					argsMerge.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+					personPickerDialogFragmentMerge.setArguments(argsMerge);
+
 					personPickerDialogFragmentMerge.show(getFragmentManager(), "people_detail_dialog_merge");
 					personPickerDialogFragmentMerge.completeCallback = mergeCallback;
 					break;
 				case R.id.person_detail_dialog_delete:
 					ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment();
-					Bundle args = new Bundle();
-					args.putString(ConfirmDeleteDialogFragment.DELTE_TEXT, getResources().getString(R.string.delete_person_text));
+
+					Bundle argsDelete = new Bundle();
+					argsDelete.putString(ConfirmDeleteDialogFragment.DELTE_TEXT, getResources().getString(R.string.delete_person_text));
+					confirmDeleteDialogFragment.setArguments(argsDelete);
+
 					confirmDeleteDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
 
 					confirmDeleteDialogFragment.confirmDelete = new ConfirmDeleteDialogFragment.ConfirmDeleteCallback() {

@@ -24,20 +24,18 @@ import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.FontCache;
 
+import java.util.ArrayList;
+
 public class PersonPickerDialogFragment extends DialogFragment {
 
 	public PersonSelectedCallback completeCallback = null;
 	private AlertDialog alertDialog;
-	public static String title;
+	private String title;
 
 	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
+	public final static String TITLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_TITLE_KEY";
 
 	private AutoCompleteTextView autoCompleteTextView;
-
-	public static PersonPickerDialogFragment newInstance(String title) {
-		PersonPickerDialogFragment.title = title;
-		return new PersonPickerDialogFragment();
-	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,9 +46,19 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 		View rootView = inflater.inflate(R.layout.person_picker_dialog, null);
 
+		Bundle args = getArguments();
+		if (args != null) {
+			title = args.getString(TITLE_KEY, USE_DEFAULT_TITLE);
+		}
+
+		boolean useOnlyContacts = false;
+
 		RobotoMediumTextView person_picker_dialog_title = (RobotoMediumTextView) rootView.findViewById(R.id.person_picker_dialog_title);
 		if (!title.equals(USE_DEFAULT_TITLE)) {
 			person_picker_dialog_title.setText(title);
+			if (title.equals(getResources().getString(R.string.rename))) {
+				useOnlyContacts = true;
+			}
 		}
 
 		final Button confirmButton = (Button) rootView.findViewById(R.id.dialog_select_person_confirm);
@@ -67,11 +75,18 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
 		autoCompleteTextView.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
+		ArrayList<String> people;
+
+		if (useOnlyContacts) {
+			people = Resource.getContactNames();
+		} else {
+			people = Resource.getAllNames();
+		}
 		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				Resource.getAllNames()));
+				people));
 
 		if (autoCompleteTextView.getText().toString().equals("")) {
 			disableButton(confirmButton);
