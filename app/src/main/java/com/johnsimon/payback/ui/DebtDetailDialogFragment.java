@@ -166,8 +166,8 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 	public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
-		public void onSelected(Person person) {
-			//TODO move debt to this person
+		public void onSelected(String name) {
+
 		}
 	};
 
