@@ -8,6 +8,8 @@
     android:padding="16dp"  >
 
     <com.johnsimon.payback.util.RobotoMediumTextView
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:textColor="@color/gray_text_light"
         android:id="@+id/confirm_delete_dialog_text"
         android:layout_width="wrap_content"

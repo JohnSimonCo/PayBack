@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -308,7 +309,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void updateName() {
-        headerName.setText(Resource.userName);
+        headerName.setText(TextUtils.isEmpty(Resource.userName) ? Resource.userName : getString(R.string.you));
 	}
 
     public boolean isDrawerOpen() {

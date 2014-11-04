@@ -19,6 +19,8 @@ import com.makeramen.RoundedImageView;
 public class PeopleDetailDialogFragment extends DialogFragment {
 	public static Person person;
 
+	public EditPersonCallback confirm = null;
+
 	public static PeopleDetailDialogFragment newInstance(Person person) {
 		PeopleDetailDialogFragment.person = person;
 		return new PeopleDetailDialogFragment();
@@ -134,4 +136,8 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 			Resource.data.merge(person, other);
 		}
 	};
+
+	public interface EditPersonCallback {
+		public void onConfirm();
+	}
 }
