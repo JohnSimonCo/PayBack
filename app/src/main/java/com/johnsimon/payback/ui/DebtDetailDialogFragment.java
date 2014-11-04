@@ -132,6 +132,13 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 								alertDialog.cancel();
 
 								return true;
+							case R.id.detail_dialog_change:
+								if(editCallback != null) {
+									editCallback.onChange(debt);
+								}
+								alertDialog.cancel();
+								return true;
+
 							default:
 								return false;
 						}
@@ -166,5 +173,6 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	public interface EditCallback {
 		public void onDelete(Debt debt);
 		public void onEdit(Debt debt);
+		public void onChange(Debt debt);
 	}
 }

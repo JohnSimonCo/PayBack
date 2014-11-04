@@ -4,24 +4,37 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.v7.internal.widget.TintEditText;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.RequiredValidator;
+import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.FontCache;
 
 public class PersonPickerDialogFragment extends DialogFragment {
 
-	public PersonSelectedCallback completeCallback;
+	public PersonSelectedCallback completeCallback = null;
 
 	private AutoCompleteTextView autoCompleteTextView;
 	private AlertDialog alertDialog;
+	public static Debt debt;
+
+	public static PersonPickerDialogFragment newInstance(Debt debt) {
+		PersonPickerDialogFragment.debt = debt;
+		return new PersonPickerDialogFragment();
+	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -46,19 +59,31 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
 		autoCompleteTextView.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
+		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
+				getActivity(),
+				R.layout.autocomplete_list_item,
+				R.id.autocomplete_list_item_title,
+				Resource.getAllNames()
+		));
+
 		if (autoCompleteTextView.getText().toString().equals("")) {
 			disableButton(confirmButton);
 		}
 
-		new RequiredValidator(new EditText[] {autoCompleteTextView}, new ValidatorListener() {
+		autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onValid() {
-				enableButton(confirmButton);
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
-
 			@Override
-			public void onInvalid() {
-				disableButton(confirmButton);
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (TextUtils.isEmpty(s.toString())) {
+					disableButton(confirmButton);
+				} else {
+					enableButton(confirmButton);
+				}
 			}
 		});
 
@@ -85,13 +110,14 @@ public class PersonPickerDialogFragment extends DialogFragment {
 	private View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			completeCallback.onSelected(autoCompleteTextView.getText().toString());
+			//TODO set person here from the ACTV
+			completeCallback.onSelected(debt, null);
 			alertDialog.cancel();
 		}
 	};
 
 	public interface PersonSelectedCallback {
-		public void onSelected(String currency);
+		public void onSelected(Debt debt, Person person);
 	}
 
 }

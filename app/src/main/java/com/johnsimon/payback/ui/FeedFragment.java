@@ -34,7 +34,7 @@ import com.shamanland.fab.FloatingActionButton;
 import org.w3c.dom.Text;
 
 
-public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback {
+public class FeedFragment extends Fragment implements DebtDetailDialogFragment.PaidBackCallback, DebtDetailDialogFragment.EditCallback, PersonPickerDialogFragment.PersonSelectedCallback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public static FeedListAdapter adapter;
@@ -44,6 +44,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
     public static TextView feed_header_balance;
 
     private final Person person = FeedActivity.person;
+
+	private final FeedFragment self = this;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -142,6 +144,24 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 
 		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
 	}
+
+	private View.OnClickListener fabClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
+					.putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
+
+			if(!FeedActivity.isAll()) {
+				intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
+			}
+			if (Resource.isLOrAbove()) {
+				startActivity(intent);
+			} else {
+				startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
+			}
+		}
+	};
+
 	@Override
 	public void onDelete(Debt debt) {
 		Resource.debts.remove(debt);
@@ -159,20 +179,15 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.P
 		startActivity(intent);
 	}
 
-    private View.OnClickListener fabClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
-                    .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
+	@Override
+	public void onChange(Debt debt) {
+		PersonPickerDialogFragment personPickerDialogFragment = PersonPickerDialogFragment.newInstance(debt);
+		personPickerDialogFragment.show(getFragmentManager(), "person_dialog");
+		personPickerDialogFragment.completeCallback = self;
+	}
 
-            if(!FeedActivity.isAll()) {
-                intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
-            }
-            if (Resource.isLOrAbove()) {
-                startActivity(intent);
-            } else {
-                startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
-            }
-        }
-    };
+	@Override
+	public void onSelected(Debt debt, Person person) {
+		//TODO handle moving here
+	}
 }

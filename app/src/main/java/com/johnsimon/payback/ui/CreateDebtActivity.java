@@ -49,7 +49,6 @@ public class CreateDebtActivity extends ActionBarActivity {
 	private TintEditText floatLabelAmountEditText;
 	private TintEditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
-    private Toolbar toolbar;
 
 	private RadioGroup radioGroup;
 
@@ -68,7 +67,7 @@ public class CreateDebtActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_create_debt);
 
-        toolbar = (Toolbar) findViewById(R.id.create_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.create_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
