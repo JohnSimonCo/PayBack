@@ -1,10 +1,12 @@
 package com.johnsimon.payback.ui;
 
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Outline;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -55,7 +57,8 @@ public class CreateDebtActivity extends ActionBarActivity {
 
 	private Debt editingDebt = null;
 
-    @Override
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -87,10 +90,10 @@ public class CreateDebtActivity extends ActionBarActivity {
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.owner.name);
 
-			floatLabelAmountEditText.setText(Float.toString(Math.abs(editingDebt.amount)));
+			floatLabelAmountEditText.setText(Float.toString(Math.abs(editingDebt.amount)).replaceAll("\\.0*$", ""));
 
 			floatLabelNoteEditText.setText(editingDebt.note);
-			//Assume the user wants to change the note
+			//Assume that the user wants to change the note
 			floatLabelNoteEditText.setSelection(floatLabelNoteEditText.getText().length());
 			floatLabelNoteEditText.requestFocus();
 

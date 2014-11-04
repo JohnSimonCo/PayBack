@@ -99,35 +99,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 			feed_activity_status_bar_pusher.getLayoutParams().height = getResources().getDimensionPixelSize(resourceId);
 		}
 	}
-
-	/*
-	private void readIntent() {
-		Intent intent = getIntent();
-
-		if(intent.hasExtra(ARG_GOTO_PERSON_ID)) {
-			showPerson(intent.getStringExtra(FeedActivity.ARG_GOTO_PERSON_ID));
-
-			intent.removeExtra(ARG_GOTO_PERSON_ID);
-		} else {
-			showAll();
-		}
-
-		navigationDrawerFragment.setSelectedPerson(person);
-	}
-
-	private void showPerson(UUID uuid) {
-		person = Resource.data.findPerson(uuid);
-		feed = Resource.data.personalizedFeed(person);
-	}
-	private void showPerson(String personId) {
-		showPerson(UUID.fromString(personId));
-	}
-	
-	private void showAll() {
-		person = null;
-		feed = Resource.debts;
-	}
-	*/
 	public static boolean isAll() {
 		return person == null;
 	}
@@ -253,11 +224,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
 
 		outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
-		/*
-		if(person != null) {
-			outState.putString(SAVE_PERSON_ID, person.id.toString());
-		}
-		*/
 	}
 
 	@Override
@@ -268,15 +234,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
 			sortAmount();
 		}
-
-		/*
-		String personId = savedInstanceState.getString(SAVE_PERSON_ID, null);
-		if(personId == null) {
-			showAll();
-		} else {
-			showPerson(personId);
-		}
-		*/
 	}
 
 	public void sortTime() {

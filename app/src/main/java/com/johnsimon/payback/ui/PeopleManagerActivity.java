@@ -1,17 +1,12 @@
 package com.johnsimon.payback.ui;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.R;
@@ -22,7 +17,6 @@ import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleFloatViewManager;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class PeopleManagerActivity extends ActionBarActivity {
@@ -51,7 +45,6 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 		listView.setAdapter(adapter);
 		listView.setDropListener(onDrop);
-        listView.setOnDragListener(onDrag);
 		//listView.setRemoveListener(onRemove);
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.people_manager_empty_view, null));
 
@@ -95,30 +88,6 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-    final Context ctx = this;
-
-    private DragSortListView.OnDragListener onDrag = new DragSortListView.OnDragListener() {
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-
-            Resource.toast(ctx, "HEJ");
-
-            if (Resource.isLOrAbove()) {
-
-                Resource.toast(ctx, event.getAction());
-
-                if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
-                    v.setElevation(8);
-                } else if (event.getAction() == DragEvent.ACTION_DROP || event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
-                    v.setElevation(0);
-                }
-
-            }
-            return false;
-        }
-    };
 
 	private DragSortListView.DropListener onDrop = new DragSortListView.DropListener() {
 		@Override
