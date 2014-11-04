@@ -235,8 +235,20 @@ public class Resource {
 		return names;
 	}
 
-	private static String getUserName() {
+	//Returns all unique contact names
+	public static ArrayList<String> getContactNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (Contact contact : contacts) {
+			if(!names.contains(contact.name)) {
+				names.add(contact.name);
+			}
+		}
 
+		return names;
+	}
+
+	private static String getUserName() {
+		return null;
 	}
 
     public static class AmountComparator implements Comparator<Debt> {
