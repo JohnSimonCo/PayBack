@@ -62,6 +62,7 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		}
 
 		final Button confirmButton = (Button) rootView.findViewById(R.id.dialog_select_person_confirm);
+		confirmButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 		Button cancelButton = (Button) rootView.findViewById(R.id.dialog_select_person_cancel);
 		cancelButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 

@@ -74,6 +74,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 					@Override
 					public void onEdit() {
 						adapter.notifyDataSetChanged();
+						Resource.commit();
 					}
 				};
 			}
