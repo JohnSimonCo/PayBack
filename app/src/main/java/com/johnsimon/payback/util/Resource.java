@@ -80,6 +80,8 @@ public class Resource {
             commit();
         }
 
+		userName = getUserName(context);
+
 		//Default configuration
 		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
     }
@@ -168,7 +170,7 @@ public class Resource {
 		}
 	}
 
-	public static ArrayList<Contact> getContacts(Context context) {
+	private static ArrayList<Contact> getContacts(Context context) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		Cursor cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		if (cursor.getCount() > 0) {
@@ -194,6 +196,12 @@ public class Resource {
 			}
 		}
 		return contacts;
+	}
+
+	private static String getUserName(Context context) {
+		Cursor cursor = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+		cursor.moveToFirst();
+		return cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
 	}
 
 	public static Person getOrCreatePerson(String name) {
@@ -245,10 +253,6 @@ public class Resource {
 		}
 
 		return names;
-	}
-
-	private static String getUserName() {
-		return null;
 	}
 
     public static class AmountComparator implements Comparator<Debt> {
