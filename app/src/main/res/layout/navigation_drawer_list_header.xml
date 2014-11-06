@@ -17,7 +17,7 @@
             android:layout_height="128dp"/>
 
         <LinearLayout
-            android:paddingRight="56dp"
+            android:layout_marginRight="48dp"
             android:layout_marginTop="26dp"
             android:id="@+id/navigation_drawer_header_text_container"
             android:orientation="vertical"

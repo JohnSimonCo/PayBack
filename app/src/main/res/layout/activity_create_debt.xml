@@ -19,7 +19,7 @@
 
                 <android.support.v7.widget.Toolbar
                     style="@style/Elevation4DP"
-                    android:paddingBottom="32dp"
+                    android:paddingBottom="24dp"
                     android:id="@+id/create_toolbar"
                     android:orientation="vertical"
                     app:contentInsetRight="@dimen/create_right_margin_small"
@@ -43,18 +43,25 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <AutoCompleteTextView
-                                style="@style/Widget.AppCompat.EditText"
-                                android:imeOptions="flagNoExtractUi"
-                                android:inputType="textCapWords"
-                                android:singleLine="true"
-                                android:id="@+id/create_edittext_name"
-                                android:textColorHint="@color/gray_oncolor_very_light"
-                                android:textColor="@android:color/white"
+                            <com.johnsimon.payback.view.FloatLabelLayout
+                                app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel.DarkBackground"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/person_hint"
-                                android:textSize="20dp" />
+                                android:layout_height="wrap_content">
+
+                                <AutoCompleteTextView
+                                    style="@style/Widget.AppCompat.EditText"
+                                    android:imeOptions="flagNoExtractUi"
+                                    android:inputType="textCapWords"
+                                    android:singleLine="true"
+                                    android:id="@+id/create_edittext_name"
+                                    android:textColorHint="@color/gray_oncolor_very_light"
+                                    android:textColor="@android:color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/person_hint"
+                                    android:textSize="20dp" />
+
+                            </com.johnsimon.payback.view.FloatLabelLayout>
 
                             <ImageButton
                                 android:id="@+id/create_clear"
@@ -104,18 +111,25 @@
 
                             </RadioGroup>
 
-                            <android.support.v7.internal.widget.TintEditText
-                                app:theme="@style/ThemeOverlay.AppCompat.Light"
-                                style="@style/Widget.AppCompat.EditText"
-                                android:imeOptions="flagNoExtractUi"
-                                android:singleLine="true"
-                                android:id="@+id/create_edittext_amount"
-                                android:textColorHint="@color/gray_oncolor_very_light"
-                                android:textColor="@android:color/white"
+                            <com.johnsimon.payback.view.FloatLabelLayout
+                                app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel.DarkBackground"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/amount"
-                                android:textSize="17dp" />
+                                android:layout_height="wrap_content">
+
+                                <android.support.v7.internal.widget.TintEditText
+                                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    style="@style/Widget.AppCompat.EditText"
+                                    android:imeOptions="flagNoExtractUi"
+                                    android:singleLine="true"
+                                    android:id="@+id/create_edittext_amount"
+                                    android:textColorHint="@color/gray_oncolor_very_light"
+                                    android:textColor="@android:color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/amount"
+                                    android:textSize="17dp" />
+
+                            </com.johnsimon.payback.view.FloatLabelLayout>
 
                         </LinearLayout>
 
@@ -124,20 +138,19 @@
                 </android.support.v7.widget.Toolbar>
 
                 <com.johnsimon.payback.view.FloatLabelLayout
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="@dimen/create_start_margin"
+                    android:layout_marginStart="@dimen/create_start_margin"
+                    android:layout_marginRight="@dimen/create_right_margin"
+                    android:layout_marginEnd="@dimen/create_right_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
+                    android:layout_height="wrap_content">
 
                     <android.support.v7.internal.widget.TintEditText
                         app:theme="@style/ThemeOverlay.AppCompat.Light"
                         android:imeOptions="flagNoExtractUi"
                         android:inputType="textCapSentences"
                         android:singleLine="true"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginLeft="@dimen/create_start_margin"
-                        android:layout_marginStart="@dimen/create_start_margin"
-                        android:layout_marginRight="@dimen/create_right_margin"
-                        android:layout_marginEnd="@dimen/create_right_margin"
                         android:id="@+id/create_edittext_note"
                         android:textColorHint="@color/gray_text_very_light"
                         android:textColor="@color/gray_text_light"

@@ -37,6 +37,6 @@
     <color name="color7">#4DD0E1</color>
     <color name="color8">#00C853</color>
 
-    <color name="float_label">#888888</color>
+    <color name="float_label_dark">#ccc</color>
 
 </resources>
