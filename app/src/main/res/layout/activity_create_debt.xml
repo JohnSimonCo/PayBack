@@ -123,23 +123,30 @@
 
                 </android.support.v7.widget.Toolbar>
 
-                <android.support.v7.internal.widget.TintEditText
-                    app:theme="@style/ThemeOverlay.AppCompat.Light"
-                    android:imeOptions="flagNoExtractUi"
-                    android:inputType="textCapSentences"
-                    android:singleLine="true"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginLeft="@dimen/create_start_margin"
-                    android:layout_marginStart="@dimen/create_start_margin"
-                    android:layout_marginRight="@dimen/create_right_margin"
-                    android:layout_marginEnd="@dimen/create_right_margin"
-                    android:id="@+id/create_edittext_note"
-                    android:textColorHint="@color/gray_text_very_light"
-                    android:textColor="@color/gray_text_light"
+                <com.johnsimon.payback.view.FloatLabelLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/note"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="16dp">
+
+                    <android.support.v7.internal.widget.TintEditText
+                        app:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:imeOptions="flagNoExtractUi"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginLeft="@dimen/create_start_margin"
+                        android:layout_marginStart="@dimen/create_start_margin"
+                        android:layout_marginRight="@dimen/create_right_margin"
+                        android:layout_marginEnd="@dimen/create_right_margin"
+                        android:id="@+id/create_edittext_note"
+                        android:textColorHint="@color/gray_text_very_light"
+                        android:textColor="@color/gray_text_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/note"
+                        android:textSize="18sp" />
+
+                </com.johnsimon.payback.view.FloatLabelLayout>
 
             </LinearLayout>
 

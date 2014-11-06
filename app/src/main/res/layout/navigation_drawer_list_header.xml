@@ -21,8 +21,8 @@
             android:layout_marginTop="26dp"
             android:id="@+id/navigation_drawer_header_text_container"
             android:orientation="vertical"
-            android:paddingLeft="72dp"
-            android:layout_width="wrap_content"
+            android:layout_marginRight="72dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.johnsimon.payback.util.RobotoMediumTextView
