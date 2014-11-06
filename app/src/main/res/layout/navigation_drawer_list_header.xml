@@ -21,13 +21,16 @@
             android:layout_marginTop="26dp"
             android:id="@+id/navigation_drawer_header_text_container"
             android:orientation="vertical"
-            android:layout_marginRight="72dp"
+            android:paddingLeft="72dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.johnsimon.payback.util.RobotoMediumTextView
                 android:id="@+id/navigation_drawer_header_name"
                 android:paddingTop="6dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:paddingBottom="8dp"
