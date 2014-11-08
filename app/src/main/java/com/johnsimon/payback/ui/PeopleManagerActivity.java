@@ -1,7 +1,11 @@
 package com.johnsimon.payback.ui;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,13 +31,23 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 	private PeopleListAdapter adapter;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		SystemBarTintManager tintManager = new SystemBarTintManager(this);
-		tintManager.setStatusBarTintEnabled(true);
-		tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+        if (Resource.isLOrAbove()) {
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.title_activity_people_manager), BitmapFactory.decodeResource(getResources(),
+                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setTintColor(getResources().getColor(R.color.primary_color));
+        } else {
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+        }
 
         setContentView(R.layout.activity_people_manager);
 

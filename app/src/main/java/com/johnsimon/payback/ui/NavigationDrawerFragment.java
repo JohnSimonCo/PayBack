@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.FontCache;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.Resource;
 
@@ -119,7 +121,17 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
-		mDrawerListView.addFooterView(inflater.inflate(R.layout.navigation_drawer_list_footer, null));
+        View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
+
+        Button footerPeople = (Button) footerView.findViewById(R.id.navigation_drawer_footer_people);
+        Button footerSettings = (Button) footerView.findViewById(R.id.navigation_drawer_footer_settings);
+        Button footerAbout = (Button) footerView.findViewById(R.id.navigation_drawer_footer_about);
+
+        footerPeople.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+        footerSettings.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+        footerAbout.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
+
+		mDrawerListView.addFooterView(footerView);
 
 		View headerView = inflater.inflate(R.layout.navigation_drawer_list_header, null);
 
@@ -149,7 +161,6 @@ public class NavigationDrawerFragment extends Fragment {
                 handleArrowRotation();
             }
         });
-
 
 		mDrawerListView.addHeaderView(headerView);
 

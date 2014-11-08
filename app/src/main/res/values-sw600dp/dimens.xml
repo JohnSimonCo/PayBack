@@ -3,6 +3,7 @@
 
     <dimen name="navigation_drawer_width">350dp</dimen>
     <dimen name="list_header_height">206dp</dimen>
+    <dimen name="list_header_height_full">210dp</dimen>
     <dimen name="list_header_image_height">170dp</dimen>
 
     <dimen name="feed_header_balance_text_size">24sp</dimen>
@@ -25,7 +26,7 @@
     <dimen name="create_right_margin">48dp</dimen>
     <dimen name="create_right_margin_small">0dp</dimen>
 
-    <dimen name="create_fab_top_margin">186dp</dimen>
+    <dimen name="create_fab_top_margin">196dp</dimen>
 
     <dimen name="feed_avatar_full_size">48dp</dimen>
     <dimen name="feed_avatar_size">44dp</dimen>
@@ -34,5 +35,8 @@
 
     <dimen name="feed_name_size">22sp</dimen>
     <dimen name="feed_info_size">16sp</dimen>
+
+    <dimen name="feed_fab_bottom_margin">14dp</dimen>
+
 
 </resources>

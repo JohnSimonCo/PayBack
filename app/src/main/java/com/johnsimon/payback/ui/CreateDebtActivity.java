@@ -1,9 +1,11 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,9 +62,18 @@ public class CreateDebtActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+        if (Resource.isLOrAbove()) {
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
+                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setTintColor(getResources().getColor(R.color.primary_color));
+        } else {
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+        }
 
         setContentView(R.layout.activity_create_debt);
 

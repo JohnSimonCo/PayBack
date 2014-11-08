@@ -14,7 +14,7 @@ public class FontCache {
 	/* UnsupportedOperationException WTF? */
 	public static Typeface get(Context ctx, String fontName) throws UnsupportedOperationException {
 
-        if(cache.containsKey(fontName)) {
+        if (cache.containsKey(fontName)) {
             return cache.get(fontName);
         } else {
 

@@ -61,7 +61,7 @@
 
         <ImageButton
             android:id="@+id/detail_dialog_overflow"
-            android:background="?android:attr/selectableItemBackground"
+            style="@style/RippleBackground"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_more_vert"    />

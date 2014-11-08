@@ -59,7 +59,7 @@
             android:layout_alignParentRight="true"
             android:contentDescription="Arrow"
             android:src="@drawable/ic_action_arrow_up"
-            style="@style/RippleBackground"
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="48dp"
             android:layout_height="48dp"/>
 

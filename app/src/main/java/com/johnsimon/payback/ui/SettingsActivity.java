@@ -1,8 +1,10 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -50,15 +52,25 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 		return R.xml.prefs;
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 		setEnabledActionBarShadow(true);
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+        if (Resource.isLOrAbove()) {
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.action_settings), BitmapFactory.decodeResource(getResources(),
+                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setTintColor(getResources().getColor(R.color.primary_color));
+        } else {
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
+        }
 
     }
 

@@ -13,7 +13,7 @@
         android:id="@+id/feed_list_header_master"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_header_height">
+        android:layout_height="@dimen/list_header_height_full">
 
         <ImageView
             style="@style/Elevation2DP"
@@ -23,6 +23,7 @@
             android:layout_height="@dimen/list_header_image_height" />
 
         <ImageView
+            style="@style/Elevation2DP"
             android:layout_marginBottom="@dimen/feed_image_gradient_bottom_margin"
             android:layout_gravity="bottom"
             android:src="@drawable/feed_image_gradient"
@@ -30,13 +31,15 @@
             android:layout_height="@dimen/list_header_image_height" />
 
         <ImageView
-            android:layout_marginBottom="28dp"
+            style="@style/Elevation2DP"
+            android:layout_marginBottom="32dp"
             android:layout_gravity="bottom"
             android:src="@drawable/feed_image_bottom_shadow"
             android:layout_width="match_parent"
             android:layout_height="8dp" />
 
         <LinearLayout
+            style="@style/Elevation2DP"
             android:orientation="vertical"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/feed_left_margin"
@@ -67,7 +70,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginEnd="@dimen/fab_right_margin"
             android:layout_marginRight="@dimen/fab_right_margin"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/feed_fab_bottom_margin"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             layout="@layout/feed_fab"   />

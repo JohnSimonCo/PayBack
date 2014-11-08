@@ -1,7 +1,9 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
@@ -24,6 +26,7 @@ import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +62,12 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        if (Resource.isLOrAbove()) {
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
+                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+
+        }
 
 		Resource.init(this);
 		if (Resource.isFirstRun()) {
@@ -98,6 +107,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		if (resourceId > 0) {
 			feed_activity_status_bar_pusher.getLayoutParams().height = getResources().getDimensionPixelSize(resourceId);
 		}
+        if (!Resource.isLOrAbove()) {
+            feed_activity_status_bar_pusher.setBackgroundColor(getResources().getColor(R.color.primary_color_darker));
+        }
 	}
 	public static boolean isAll() {
 		return person == null;
@@ -220,8 +232,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
-
-		outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
+        if (filterAmount != null) {
+            outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
+        }
 	}
 
 	@Override

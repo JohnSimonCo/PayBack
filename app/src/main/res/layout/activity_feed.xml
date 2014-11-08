@@ -13,7 +13,7 @@
         
         <View
             android:id="@+id/feed_activity_status_bar_pusher"
-            android:background="@color/primary_color_darker"
+            android:background="@color/primary_color"
             android:layout_width="match_parent"
             android:layout_height="25dp"    />
 
