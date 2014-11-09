@@ -40,7 +40,6 @@
 
         </activity>
         <activity
-            android:windowSoftInputMode="adjustPan|adjustResize"
             android:name=".ui.CreateDebtActivity"
             android:icon="@drawable/ic_actionbar_left"
             android:label=""
