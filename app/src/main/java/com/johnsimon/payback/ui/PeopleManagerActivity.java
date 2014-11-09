@@ -1,5 +1,7 @@
 package com.johnsimon.payback.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -9,10 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.R;
@@ -23,6 +29,7 @@ import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleFloatViewManager;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class PeopleManagerActivity extends ActionBarActivity {
@@ -30,6 +37,10 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 	private PeopleListAdapter adapter;
+    private DragSortListView listView;
+
+    private int sortAzX;
+    private int sortAzY;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -57,7 +68,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 		adapter = new PeopleListAdapter(this, Resource.people);
 
-		DragSortListView listView = (DragSortListView) findViewById(R.id.people_listview);
+		listView = (DragSortListView) findViewById(R.id.people_listview);
 
 		listView.setAdapter(adapter);
 		listView.setDropListener(onDrop);
@@ -94,6 +105,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 			}
 		});
 
+        setupTreeObserver();
     }
 
     @Override
@@ -105,7 +117,8 @@ public class PeopleManagerActivity extends ActionBarActivity {
         return true;
     }
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
@@ -113,8 +126,47 @@ public class PeopleManagerActivity extends ActionBarActivity {
 				break;
 
 			case R.id.action_sort_az:
-				Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
-				adapter.notifyDataSetChanged();
+
+                ArrayList<Person> before = (ArrayList<Person>) Resource.people.clone();
+
+                Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
+
+                if (Resource.areIdenticalLists(before, Resource.people)) {
+                    break;
+                }
+
+                if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+
+                int initialRadius = listView.getWidth();
+
+                Animator anim =
+                        ViewAnimationUtils.createCircularReveal(listView, sortAzX, sortAzY, initialRadius, 0);
+
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                        adapter.notifyDataSetChanged();
+
+                        int finalRadius = Math.max(listView.getWidth(), listView.getHeight());
+
+                        Animator anim =
+                                ViewAnimationUtils.createCircularReveal(listView, sortAzX, sortAzY, 0, finalRadius);
+
+                        listView.setVisibility(View.VISIBLE);
+                        anim.setDuration(300);
+                        anim.start();
+
+                    }
+                });
+
+                anim.setDuration(300);
+                anim.start();
+
 				break;
 
 		}
@@ -136,6 +188,30 @@ public class PeopleManagerActivity extends ActionBarActivity {
 	public void onBackPressed() {
 		returnToFeed();
 	}
+
+    private void setupTreeObserver() {
+        final ViewTreeObserver viewTreeObserver = getWindow().getDecorView().getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                View menuButton = findViewById(R.id.action_sort_az);
+                // This could be called when the button is not there yet, so we must test for null
+                if (menuButton != null) {
+                    // Found it! Do what you need with the button
+                    int[] location = new int[2];
+                    menuButton.getLocationInWindow(location);
+
+                    sortAzX = location[0];
+                    sortAzY = location[1];
+
+                    // Now you can get rid of this listener
+                    if (viewTreeObserver.isAlive()) {
+                        viewTreeObserver.removeGlobalOnLayoutListener(this);
+                    }
+                }
+            }
+        });
+    }
 
 	public void returnToFeed() {
 		Intent intent = new Intent(this, FeedActivity.class);
