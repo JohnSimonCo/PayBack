@@ -19,6 +19,7 @@
         android:id="@+id/custom_currency_dialog_edittext"
         android:textColorHint="@color/gray_text_very_light"
         android:textColor="@color/gray_text_light"
+        android:inputType="textCapWords"
         android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
