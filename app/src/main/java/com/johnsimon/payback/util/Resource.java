@@ -259,6 +259,25 @@ public class Resource {
 		return names;
 	}
 
+    public static boolean areIdenticalLists(ArrayList<Person> before, ArrayList<Person> after) {
+
+        if (before.size() != after.size()) {
+            return false;
+        }
+
+        int size = before.size();
+
+
+        for (int i = 0; i < size; i++) {
+            if (before.get(i).id != after.get(i).id) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
     public static class AmountComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt debt1, Debt debt2) {
