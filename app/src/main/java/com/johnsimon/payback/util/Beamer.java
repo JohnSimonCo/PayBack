@@ -9,8 +9,10 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 
 import com.google.gson.Gson;
+import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.ui.FeedActivity;
+import com.williammora.snackbar.Snackbar;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -29,9 +31,12 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 		return FeedActivity.isAll() ? null : createMessage(FeedActivity.feed);
 	}
 
-	public void processNdefMessage(NdefMessage message) {
+	public void processNdefMessage(NdefMessage message, Activity activity) {
 		Debt[] debts = readMessage(message);
-		Resource.toast(context, "Received " + debts.length + " debts via NFC");
+
+        Snackbar.with(activity.getApplicationContext())
+                .text(activity.getString(R.string.beamer_1) + " " + debts.length + " " + activity.getString(R.string.beamer_2))
+                .show(activity);
 	}
 
 

@@ -27,7 +27,7 @@
     <string name="paid_back_exclamation">Paid back!</string>
     <string name="paid_back">Paid back</string>
     <string name="checkbox">Checkbox!</string>
-    <string name="create_fab_error">You need to enter a name and a amount</string>
+    <string name="create_fab_error">You need to enter a name and an amount</string>
     <string name="pay_back">Pay Back</string>
     <string name="send">Send</string>
     <string name="about_title">About</string>
@@ -65,6 +65,8 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="you">You</string>
+    <string name="beamer_1">Received</string>
+    <string name="beamer_2">debts via NFC</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -81,6 +83,8 @@
     <string name="author_dslv">Carl Bauer</string>
     <string name="lib_qr">QuickReturn</string>
     <string name="author_qr">Etienne Lawlor</string>
+    <string name="lib_snb">Snackbar</string>
+    <string name="author_snb">William Mora</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>

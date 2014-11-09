@@ -132,7 +132,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	public void processIntent(Intent intent) {
-		beamer.processNdefMessage((NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0]);
+		beamer.processNdefMessage((NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0], this);
 	}
 
 	@Override

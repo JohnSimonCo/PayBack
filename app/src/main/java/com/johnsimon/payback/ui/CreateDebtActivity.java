@@ -37,6 +37,7 @@ import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
+import com.williammora.snackbar.Snackbar;
 
 public class CreateDebtActivity extends ActionBarActivity {
 
@@ -257,7 +258,9 @@ public class CreateDebtActivity extends ActionBarActivity {
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
                 }
             } else {
-                Resource.toast(getApplicationContext(), getString(R.string.create_fab_error));
+                Snackbar.with(getApplicationContext())
+                        .text(getString(R.string.create_fab_error))
+                        .show(CreateDebtActivity.this);
             }
         }
     };

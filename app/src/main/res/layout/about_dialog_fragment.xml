@@ -141,6 +141,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <TextView
+            style="@style/library_title"
+            android:text="@string/lib_snb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.johnsimon.payback.util.RobotoMediumTextView
+            android:text="@string/author_snb"
+            style="@style/library_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>
