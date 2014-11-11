@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"  >
+
+    <com.johnsimon.payback.util.RobotoMediumTextView
+        android:text="@string/rate_title"
+        android:id="@+id/request_rate_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#474747"
+        android:textSize="22sp"
+        android:padding="8dp"   />
+
+    <com.johnsimon.payback.util.RobotoMediumTextView
+        android:id="@+id/select_person_actv"
+        android:text="@string/rate_text"
+        android:textColor="@color/gray_text_light"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:paddingTop="8dp"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_gravity="right"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="right|center_vertical"
+            android:textAllCaps="true"
+            android:text="@string/rate_now"
+            android:id="@+id/request_rate_dialog_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/green_strong"
+            android:textSize="14sp"/>
+
+        <Button
+            android:layout_gravity="right"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@color/green_strong"
+            android:gravity="right|center_vertical"
+            android:textAllCaps="true"
+            android:text="@string/rate_later"
+            android:id="@+id/request_rate_dialog_later"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="14sp"/>
+
+        <Button
+            android:layout_gravity="right"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@color/green_strong"
+            android:gravity="right|center_vertical"
+            android:textAllCaps="true"
+            android:text="@string/rate_never"
+            android:id="@+id/request_rate_dialog_never"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="14sp"/>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

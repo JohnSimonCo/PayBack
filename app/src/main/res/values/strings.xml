@@ -67,6 +67,12 @@
     <string name="you">You</string>
     <string name="beamer_1">Received</string>
     <string name="beamer_2">debts via NFC</string>
+    <string name="rate_title">Rate Pay Back!</string>
+    <string name="rate_text">Lorem ipsum</string>
+    <string name="ok">OK</string>
+    <string name="rate_now">Rate now</string>
+    <string name="rate_later">Maybe later</string>
+    <string name="rate_never">No thanks</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

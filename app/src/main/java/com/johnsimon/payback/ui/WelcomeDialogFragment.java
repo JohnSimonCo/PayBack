@@ -72,11 +72,15 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
 		welcome_continue.setOnClickListener(clickListener);
 
-		if (!hasNfc || currencyOnly) {
+		if (!hasNfc) {
 			welcome_continue.setText(R.string.welcome_got_it);
 		} else {
 			welcome_continue.setText(R.string.welcome_continue);
 		}
+
+        if (currencyOnly) {
+            welcome_continue.setText(R.string.done);
+        }
 
 		final WelcomeDialogFragment self = this;
 		currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -45,11 +45,11 @@
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackground"
             android:textSize="14sp"
-            android:textColor="#212121"/>
+            android:textColor="@color/green_strong"/>
 
         <Button
             android:textAllCaps="true"
-            android:text="@string/done"
+            android:text="@string/ok"
             android:id="@+id/dialog_select_person_confirm"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
