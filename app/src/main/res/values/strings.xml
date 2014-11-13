@@ -73,6 +73,8 @@
     <string name="rate_now">Rate now</string>
     <string name="rate_later">Maybe later</string>
     <string name="rate_never">No thanks</string>
+    <string name="undo">Undo</string>
+    <string name="sort_list">Sorted people</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

@@ -19,6 +19,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.R;
@@ -28,6 +29,7 @@ import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleFloatViewManager;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,8 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
     private int sortAzX;
     private int sortAzY;
+
+    private ArrayList<Person> personListBeforeSort;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -127,11 +131,11 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 			case R.id.action_sort_az:
 
-                ArrayList<Person> before = (ArrayList<Person>) Resource.people.clone();
+                personListBeforeSort = (ArrayList<Person>) Resource.people.clone();
 
                 Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
 
-                if (Resource.areIdenticalLists(before, Resource.people)) {
+                if (Resource.areIdenticalLists(personListBeforeSort, Resource.people)) {
                     break;
                 }
 
@@ -141,6 +145,8 @@ public class PeopleManagerActivity extends ActionBarActivity {
                 }
 
                 int initialRadius = listView.getWidth();
+
+                final PeopleManagerActivity self = this;
 
                 Animator anim =
                         ViewAnimationUtils.createCircularReveal(listView, sortAzX, sortAzY, initialRadius, 0);
@@ -159,6 +165,40 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
                         listView.setVisibility(View.VISIBLE);
                         anim.setDuration(300);
+
+                        anim.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                //Show snackbar for listView resort possibility
+                                Snackbar.with(getApplicationContext())
+                                        .text(getString(R.string.sort_list))
+                                        .actionLabel(getString(R.string.undo))
+                                        .actionListener(new Snackbar.ActionClickListener() {
+                                            @Override
+                                            public void onActionClicked() {
+                                                Resource.people = personListBeforeSort;
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        })
+                                        .show(self);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+
                         anim.start();
 
                     }
@@ -195,16 +235,13 @@ public class PeopleManagerActivity extends ActionBarActivity {
             @Override
             public void onGlobalLayout() {
                 View menuButton = findViewById(R.id.action_sort_az);
-                // This could be called when the button is not there yet, so we must test for null
                 if (menuButton != null) {
-                    // Found it! Do what you need with the button
                     int[] location = new int[2];
                     menuButton.getLocationInWindow(location);
 
                     sortAzX = location[0];
                     sortAzY = location[1];
 
-                    // Now you can get rid of this listener
                     if (viewTreeObserver.isAlive()) {
                         viewTreeObserver.removeGlobalOnLayoutListener(this);
                     }

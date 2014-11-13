@@ -15,6 +15,7 @@ import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
+import com.williammora.snackbar.Snackbar;
 
 public class PeopleDetailDialogFragment extends DialogFragment {
 	public static Person person;
@@ -98,6 +99,23 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 					confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
 						@Override
 						public void onConfirm() {
+
+                            final Person restorePerson = person;
+                            final int restorePersonIndex = Resource.data.people.indexOf(person);
+
+                            Snackbar.with(getActivity())
+                                    .text(getString(R.string.sort_list))
+                                    .actionLabel(getString(R.string.undo))
+                                    .actionListener(new Snackbar.ActionClickListener() {
+                                        @Override
+                                        public void onActionClicked() {
+                                            //TODO make sure this works
+                                            Resource.data.people.add(restorePersonIndex, restorePerson);
+                                            editPersonCallback.onEdit();
+                                        }
+                                    })
+                                    .show(getActivity());
+
 							Resource.data.delete(person);
 							cancel();
 						}
@@ -111,7 +129,24 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback renameCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
+
+            final String oldName = person.name;
+
 			Resource.data.rename(person, name);
+
+            Snackbar.with(getActivity())
+                    .text(getString(R.string.sort_list))
+                    .actionLabel(getString(R.string.undo))
+                    .actionListener(new Snackbar.ActionClickListener() {
+                        @Override
+                        public void onActionClicked() {
+                            //TODO make sure this works
+                            Resource.data.rename(person, oldName);
+                            editPersonCallback.onEdit();
+                        }
+                    })
+                    .show(getActivity());
+
 			cancel();
 		}
 	};
@@ -134,6 +169,31 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 			confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
 				@Override
 				public void onConfirm() {
+
+                    final Person oldPerson = person;
+                    final int oldPersonIndex = Resource.people.indexOf(person);
+
+                    final Person targetBeforeMerge = other.copy();
+                    final int targetPersonIndex = Resource.people.indexOf(other);
+
+                    Snackbar.with(getActivity())
+                            .text(getString(R.string.sort_list))
+                            .actionLabel(getString(R.string.undo))
+                            .actionListener(new Snackbar.ActionClickListener() {
+                                @Override
+                                public void onActionClicked() {
+                                    //TODO make sure this works
+                                    Resource.people.add(oldPersonIndex, oldPerson);
+                                    Resource.people.remove(targetPersonIndex);
+                                    Resource.people.add(targetPersonIndex, targetBeforeMerge);
+
+                                    editPersonCallback.onEdit();
+                                }
+                            })
+                            .show(getActivity());
+
+
+                    //from, to
 					Resource.data.merge(person, other);
 					cancel();
 				}

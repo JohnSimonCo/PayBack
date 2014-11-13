@@ -49,110 +49,116 @@
         android:layout_width="match_parent"
         android:layout_height="1dp" />
 
-    <LinearLayout
+    <ScrollView
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_devdesign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_johnsimon"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_devdesign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_riv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_johnsimon"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_riv"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_riv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_riv"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_fab"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_gson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_fab"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_gson"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_gson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_uil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_gson"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_uil"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_uil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_dslv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_uil"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_dslv"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_dslv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_qr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_dslv"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_qr"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_qr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/library_title"
-            android:text="@string/lib_snb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_qr"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:text="@string/author_snb"
-            style="@style/library_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_snb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:text="@string/author_snb"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
