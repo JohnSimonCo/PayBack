@@ -116,7 +116,9 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 	}
 
 	public static FeedFragment newInstance(NavigationDrawerItem item) {
-		return new FeedFragment();
+		FeedFragment fragment = new FeedFragment();
+
+		return fragment;
 	}
 
 	@Override
@@ -159,19 +161,17 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 	@Override
 	public void onDelete(Debt debt) {
 		Resource.debts.remove(debt);
+		Resource.commit();
 		adapter.notifyDataSetChanged();
 		displayTotalDebt(getActivity());
-		Resource.commit();
-		Resource.actionComplete(getFragmentManager());
 	}
 
 	@Override
 	public void onMove(Debt debt, Person person) {
-		//TODO complete this
 		Resource.data.move(debt, person);
-		adapter.notifyDataSetChanged();
 		Resource.commit();
-		Resource.actionComplete(getFragmentManager());
+		//TODO complete this
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override

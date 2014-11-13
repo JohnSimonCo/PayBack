@@ -248,8 +248,7 @@ public class CreateDebtActivity extends ActionBarActivity {
                 );
 
                 finishAffinity();
-                final Intent intent = new Intent(getApplicationContext(), FeedActivity.class)
-						.putExtra(FeedActivity.ARG_FROM_CREATE, true);
+                final Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
 
                 FeedActivity.person = person;
 

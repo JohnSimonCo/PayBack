@@ -35,7 +35,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
-	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
+	public static String ARG_GOTO_PERSON_ID = Resource.arg(ARG_PREFIX, "GOTO_PERSON");
+
+	public static String SAVE_PERSON_ID = "SAVE_PERSON_ID";
 
 	public static boolean animateListItems = true;
 	public static Toolbar toolbar;
@@ -109,16 +111,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
             feed_activity_status_bar_pusher.setBackgroundColor(getResources().getColor(R.color.primary_color_darker));
         }
 	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		if(getIntent().getBooleanExtra(ARG_FROM_CREATE, false)) {
-			Resource.actionComplete(getFragmentManager());
-		}
-	}
-
 	public static boolean isAll() {
 		return person == null;
 	}
@@ -126,6 +118,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	public void onResume() {
 		super.onResume();
+
 		// Check to see that the Activity started due to an Android Beam
 		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 			processIntent(getIntent());

@@ -104,7 +104,6 @@ public class PeopleManagerActivity extends ActionBarActivity {
 					public void onEdit() {
 						adapter.notifyDataSetChanged();
 						Resource.commit();
-						Resource.actionComplete(getFragmentManager());
 					}
 				};
 			}
