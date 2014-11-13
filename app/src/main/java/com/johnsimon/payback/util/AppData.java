@@ -3,6 +3,7 @@ package com.johnsimon.payback.util;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.send.DebtSendable;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -106,6 +107,11 @@ public class AppData {
 		people.add(index, restore);
 	}
 	public void delete(Person person) {
+		deleteDebts(person);
+		people.remove(person);
+	}
+
+	private void deleteDebts(Person person) {
 		//#perfmatters
 		int push = -1;
 		Debt[] remove = new Debt[debts.size()];
@@ -118,11 +124,6 @@ public class AppData {
 		for(int i = 0; i < push; i++) {
 			debts.remove(remove[i]);
 		}
-
-		//Tell GC to clean #memorymanagement
-		remove = null;
-
-		people.remove(person);
 	}
 
 	public void move(Debt debt, Person person) {
@@ -131,6 +132,13 @@ public class AppData {
 
 	public void rename(Person person, String name) {
 		person.name = name;
+	}
+
+	public void sync(Person person, DebtSendable[] debts) {
+		deleteDebts(person);
+		for(DebtSendable debt : debts) {
+			this.debts.add(debt.extract(person));
+		}
 	}
 
 }
