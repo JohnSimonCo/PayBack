@@ -18,7 +18,7 @@ import com.makeramen.RoundedImageView;
 
 import java.util.ArrayList;
 
-public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
+public class FeedListAdapterRecycler extends RecyclerView.Adapter<FeedListAdapterRecycler.ViewHolder> {
 	private final ArrayList<Debt> list;
 	private final Activity context;
 	private DebtDetailDialogFragment.Callback callback;
@@ -44,14 +44,14 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		}
 	}
 
-	public FeedListAdapter(ArrayList<Debt> debts, Activity ctx, DebtDetailDialogFragment.Callback _callback) {
+	public FeedListAdapterRecycler(ArrayList<Debt> debts, Activity ctx, DebtDetailDialogFragment.Callback _callback) {
 		list = debts;
 		context = ctx;
 		callback = _callback;
 	}
 
 	@Override
-	public FeedListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public FeedListAdapterRecycler.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_list_item, parent, false));
 	}
 

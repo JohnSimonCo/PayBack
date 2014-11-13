@@ -169,7 +169,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 				final int index = Resource.debts.indexOf(debt);
 
 				Snackbar.with(getActivity())
-						.text(getString(R.string.sort_list))
+						.text(getString(R.string.deleted_debt))
 						.actionLabel(getString(R.string.undo))
 						.actionColor(Color.WHITE)
 						.actionListener(new Snackbar.ActionClickListener() {
