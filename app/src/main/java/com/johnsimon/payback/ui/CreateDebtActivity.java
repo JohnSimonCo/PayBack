@@ -275,12 +275,12 @@ public class CreateDebtActivity extends ActionBarActivity {
 
 		Person person;
 		if(editingDebt == null) {
-			person = Resource.getOrCreatePerson(name);
+			person = Resource.getOrCreatePerson(name, this);
 			Resource.debts.add(0, new Debt(person, amount, note));
 		} else {
 			person = editingDebt.owner.name.equals(name)
 				? editingDebt.owner
-				: Resource.getOrCreatePerson(name);
+				: Resource.getOrCreatePerson(name, this);
 
 			editingDebt.edit(person, amount, note);
 		}

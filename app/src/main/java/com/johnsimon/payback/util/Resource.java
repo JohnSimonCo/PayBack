@@ -1,6 +1,7 @@
 package com.johnsimon.payback.util;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -20,6 +21,7 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.ui.RequestRateDialogFragment;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -29,9 +31,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Resource {
+	private final static int MAX_ACTIONS = 15;
+
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
     private final static String SAVE_KEY_APP_DATA = "APP_DATA";
-    private final static String SAVE_KEY_CURRENCY = "CURRENCY_SAVE_KEY";
+	private final static String SAVE_KEY_CURRENCY = "CURRENCY_SAVE_KEY";
+	private final static String SAVE_KEY_ACTIONS = "SAVE_KEY_ACTIONS";
+	private final static String SAVE_KEY_NEVER_RATE = "SAVE_KEY_NEVER_RATE";
 
     private final static String PACKAGE_NAME = "se.jrp.deptapp";
     private final static String ARG_PREFIX = PACKAGE_NAME + ".ARG_";
@@ -43,13 +49,14 @@ public class Resource {
 
 	public static String userName;
 
-    private static Activity context;
     private static SharedPreferences preferences;
+
+	private static int actions;
+	private static boolean neverRate;
 
     public static void init(Activity context) {
         if (data != null) return;
 
-        Resource.context = context;
         Resource.preferences = context.getPreferences(Context.MODE_PRIVATE);
 
 		contacts = getContacts(context);
@@ -81,6 +88,11 @@ public class Resource {
         }
 
 		userName = getUserName(context);
+
+		neverRate = preferences.getBoolean(SAVE_KEY_NEVER_RATE, false);
+		if(!neverRate) {
+			actions = preferences.getInt(SAVE_KEY_ACTIONS, 0);
+		}
 
 		//Default configuration
 		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
@@ -208,7 +220,7 @@ public class Resource {
 		return null;
 	}
 
-	public static Person getOrCreatePerson(String name) {
+	public static Person getOrCreatePerson(String name, Context context) {
 		//Try to find existing person
 		Person person = data.findPersonByName(name);
 		if(person != null) {
@@ -271,6 +283,24 @@ public class Resource {
 		return names;
 	}
 
+	public static void actionComplete(FragmentManager fragmentManager) {
+		//Don't do anything if user pressed "never rate"
+		if(neverRate) return;
+
+		//Increment actions and compare to MAX_ACTIONS
+		if(++actions >= MAX_ACTIONS) {
+			actions = 0;
+
+			RequestRateDialogFragment fragment = new RequestRateDialogFragment();
+
+			fragment.rateCallback = rateCallback;
+
+			fragment.show(fragmentManager, "Skriv nåt bara, så du är säker");
+		}
+
+		preferences.edit().putInt(SAVE_KEY_ACTIONS, actions).apply();
+	}
+
     public static boolean areIdenticalLists(ArrayList<Person> before, ArrayList<Person> after) {
 
         if (before.size() != after.size()) {
@@ -289,6 +319,19 @@ public class Resource {
         return true;
 
     }
+
+	private static RequestRateDialogFragment.RateCallback rateCallback = new RequestRateDialogFragment.RateCallback() {
+		@Override
+		public void onNeverAgain() {
+			neverRate = true;
+
+			preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
+		}
+
+		@Override
+		public void onLater() {
+		}
+	};
 
     public static class AmountComparator implements Comparator<Debt> {
         @Override
