@@ -111,7 +111,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	public View getAllView(View view, boolean isSelected) {
 		ViewHolder holder;
 		if (view == null) {
-			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item_all, null);
+			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
 
 			holder = new ViewHolder(
 					(TextView) view.findViewById(R.id.navigation_drawer_list_item_text),
