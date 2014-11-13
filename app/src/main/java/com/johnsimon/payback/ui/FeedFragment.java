@@ -10,6 +10,9 @@ import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +21,13 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
+import com.johnsimon.payback.adapter.FeedListAdapterRecycler;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.adapter.FeedListAdapter;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
@@ -36,7 +38,7 @@ import com.williammora.snackbar.Snackbar;
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-	public static FeedListAdapter adapter;
+	public static FeedListAdapterRecycler adapter;
     public static FrameLayout headerView;
 
 	public static TextView totalDebtTextView;
@@ -50,7 +52,13 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
-        final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
+        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
+		recyclerView.setHasFixedSize(true);
+
+		final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		recyclerView.setLayoutManager(layoutManager);
+
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         headerView = (FrameLayout) rootView.findViewById(R.id.feed_list_header_master);
         feed_header_balance = (TextView) headerView.findViewById(R.id.feed_header_balance);
@@ -59,8 +67,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 		displayTotalDebt(getActivity());
 
-		adapter = new FeedListAdapter(getActivity(), FeedActivity.feed);
-        listView.setAdapter(adapter);
+		adapter = new FeedListAdapterRecycler(FeedActivity.feed, getActivity(), this);
+		recyclerView.setAdapter(adapter);
 
         //We're done animating.
         Handler handler = new Handler();
@@ -92,27 +100,12 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
         View header = new View(getActivity());
         header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
-        listView.addHeaderView(header, null, false);
-
-        listView.setEmptyView(inflater.inflate(R.layout.list_empty_view, null));
-
-		final FeedFragment self = this;
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get(position - listView.getHeaderViewsCount()));
-                dialog.show(getFragmentManager().beginTransaction(), "dialog");
-				dialog.callback = self;
-            }
-        });
 
         int headerHeight = headerView.getLayoutParams().height;
         QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
                 headerView, -headerHeight, null, 0);
-        // Setting to true will slide the header and/or footer into view or slide out of view based
-        // on what is visible in the idle scroll state
         scrollListener.setCanSlideInIdleScrollState(false);
-        listView.setOnScrollListener(scrollListener);
+        recyclerView.setOnScrollListener(scrollListener);
 
 		return rootView;
 	}
@@ -125,7 +118,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 	public void onPaidBack(Debt debt) {
 		debt.isPaidBack = !debt.isPaidBack;
 		Resource.commit();
-		adapter.animationDebt = debt;
 		adapter.notifyDataSetChanged();
 		displayTotalDebt(getActivity());
 	}

@@ -60,7 +60,6 @@
             android:contentDescription="Arrow"
             android:src="@drawable/ic_action_arrow_up"
             android:background="@null"
-            android:layout_marginBottom="8dp"
             android:layout_width="48dp"
             android:layout_height="48dp"/>
     

@@ -2,12 +2,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"  >
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:divider="@null"
         android:scrollbars="none"
+        android:paddingTop="@dimen/list_header_height_full"
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@android:id/list"   />
+        android:id="@+id/feed_list"   />
 
     <FrameLayout
         android:id="@+id/feed_list_header_master"
