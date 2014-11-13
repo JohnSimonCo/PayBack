@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.serialize.AppDataSerializable;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
@@ -47,7 +48,7 @@ public class Resource {
     public static ArrayList<Debt> debts;
 	public static ArrayList<Contact> contacts;
 
-	public static String userName;
+	public static User user;
 
     private static SharedPreferences preferences;
 
@@ -87,7 +88,7 @@ public class Resource {
             commit();
         }
 
-		userName = getUserName(context);
+		user = getUser(context);
 
 		neverRate = preferences.getBoolean(SAVE_KEY_NEVER_RATE, false);
 		if(!neverRate) {
@@ -210,14 +211,16 @@ public class Resource {
 		return contacts;
 	}
 
-	private static String getUserName(Context context) {
+	private static User getUser(Context context) {
+		String name = null;
+
 		Cursor cursor = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
 		if(cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			return cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+			name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
 		}
 
-		return null;
+		return new User(name);
 	}
 
 	public static Person getOrCreatePerson(String name, Context context) {

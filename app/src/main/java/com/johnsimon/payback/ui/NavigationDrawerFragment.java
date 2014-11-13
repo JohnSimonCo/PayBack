@@ -316,7 +316,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void updateName() {
-        headerName.setText(!TextUtils.isEmpty(Resource.userName) ? Resource.userName : getString(R.string.you));
+        headerName.setText(Resource.user.getName(getResources()));
 	}
 
     public boolean isDrawerOpen() {

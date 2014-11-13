@@ -22,16 +22,20 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.User;
+import com.johnsimon.payback.send.DebtSendable;
+import com.johnsimon.payback.send.NfcData;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FeedActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class FeedActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener {
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
@@ -113,9 +117,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		if(getIntent().getBooleanExtra(ARG_FROM_CREATE, false)) {
+		Intent intent = getIntent();
+		if(intent.getBooleanExtra(ARG_FROM_CREATE, false)) {
 			Resource.actionComplete(getFragmentManager());
+			intent.removeExtra(ARG_FROM_CREATE);
 		}
 	}
 
@@ -127,8 +132,9 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public void onResume() {
 		super.onResume();
 		// Check to see that the Activity started due to an Android Beam
-		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-			processIntent(getIntent());
+		Intent intent = getIntent();
+		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+			beamer.processIntent(intent);
 		}
 	}
 
@@ -136,10 +142,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public void onNewIntent(Intent intent) {
 		// onResume gets called after this to handle the intent
 		setIntent(intent);
-	}
-
-	public void processIntent(Intent intent) {
-		beamer.processNdefMessage((NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0], this);
 	}
 
 	@Override
@@ -264,4 +266,23 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		FeedFragment.adapter.notifyDataSetChanged();
 	}
 
+	@Override
+	public void onRecievedBeam(DebtSendable[] debts, User sender) {
+		person = test(sender);
+
+		Resource.data.sync(person, debts);
+
+		Snackbar.with(getApplicationContext())
+				.text("Recieved " + debts.length + " debts from " + sender.name)
+				.show(this);
+	}
+
+	private Person test(User sender) {
+		if(isAll()) {
+			Person foundPerson = Resource.data.findPersonByName(sender.name);
+			return foundPerson == null ? Resource.people.get(0) : foundPerson;
+		} else {
+			return person;
+		}
+	}
 }
