@@ -230,6 +230,18 @@ public class Resource {
 		return person;
 	}
 
+	//Returns all unique people names
+	public static ArrayList<String> getPeopleNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (Person person : people) {
+			if(!names.contains(person.name)) {
+				names.add(person.name);
+			}
+		}
+
+		return names;
+	}
+
 	//Returns all unique names (from people and contacts)
 	public static ArrayList<String> getAllNames() {
 		ArrayList<String> names = new ArrayList<String>();

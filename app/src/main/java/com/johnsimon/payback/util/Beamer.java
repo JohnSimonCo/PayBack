@@ -55,21 +55,12 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 				new NdefRecord[]{
 						createMime("application/vnd.com.johnsimon.payback", JSON.getBytes()),
 						NdefRecord.createApplicationRecord("com.johnsimon.payback")
-						/**
-						 * The Android Application Record (AAR) is commented out. When a device
-						 * receives a push with an AAR in it, the application specified in the AAR
-						 * is guaranteed to run. The AAR overrides the tag dispatch system.
-						 * You can add it back in to guarantee that this
-						 * activity starts when receiving a beamed message. For now, this code
-						 * uses the tag dispatch system.
-						 */
-
 				});
 	}
 
 	private Debt[] readMessage(NdefMessage message) {
 		NdefRecord[] records = message.getRecords();
-		String JSON = getContents(records[0]);
+		String JSON = new String(records[0].getPayload());
 
 		// record 0 contains the MIME type, record 1 is the AAR, if present
 		//textView.setText(new String(msg.getRecords()[0].getPayload()));
