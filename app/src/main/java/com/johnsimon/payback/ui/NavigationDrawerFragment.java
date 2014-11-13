@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
 import com.johnsimon.payback.core.NavigationDrawerItem;
@@ -141,26 +142,21 @@ public class NavigationDrawerFragment extends Fragment {
 		headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
 		headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
 
+        RelativeLayout headerBackground = (RelativeLayout) headerView.findViewById(R.id.navigation_drawer_header_background);
+
 		updateBalance();
 		updateName();
 
-		headerTextContainer.setTranslationY(Resource.getPx(58, getActivity().getResources()));
-        headerPlus.setAlpha(0f);
-        headerMinus.setAlpha(0f);
-
-		headerArrow.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-                handleArrowRotation();
-			}
-		});
-
-        headerTextContainer.setOnClickListener(new View.OnClickListener() {
+        headerBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleArrowRotation();
             }
         });
+
+		headerTextContainer.setTranslationY(Resource.getPx(58, getActivity().getResources()));
+        headerPlus.setAlpha(0f);
+        headerMinus.setAlpha(0f);
 
 		mDrawerListView.addHeaderView(headerView);
 
