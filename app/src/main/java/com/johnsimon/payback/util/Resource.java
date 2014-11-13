@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Resource {
-	private final static int MAX_ACTIONS = 15;
+	private final static int MAX_ACTIONS = 1;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
     private final static String SAVE_KEY_APP_DATA = "APP_DATA";

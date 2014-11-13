@@ -119,6 +119,9 @@ public class AppData {
 			debts.remove(remove[i]);
 		}
 
+		//Tell GC to clean #memorymanagement
+		remove = null;
+
 		people.remove(person);
 	}
 
