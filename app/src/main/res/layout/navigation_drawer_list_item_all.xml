@@ -35,7 +35,6 @@
     </RelativeLayout>
 
     <com.johnsimon.payback.util.RobotoMediumTextView
-        android:id="@+id/navigation_drawer_list_item_all_text"
         android:text="@string/all"
         android:layout_gravity="center_vertical"
         android:textColor="@color/gray_text_light"
