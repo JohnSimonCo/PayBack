@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,8 +136,9 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 			Resource.data.rename(person, name);
 
             Snackbar.with(getActivity())
-                    .text(getString(R.string.sort_list))
+                    .text(getString(R.string.renamed_person))
                     .actionLabel(getString(R.string.undo))
+                    .actionColor(Color.WHITE)
                     .actionListener(new Snackbar.ActionClickListener() {
                         @Override
                         public void onActionClicked() {
@@ -177,8 +179,9 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                     final int targetPersonIndex = Resource.people.indexOf(other);
 
                     Snackbar.with(getActivity())
-                            .text(getString(R.string.sort_list))
+                            .text(getString(R.string.merged_people))
                             .actionLabel(getString(R.string.undo))
+                            .actionColor(Color.WHITE)
                             .actionListener(new Snackbar.ActionClickListener() {
                                 @Override
                                 public void onActionClicked() {
