@@ -18,6 +18,7 @@
     <dimen name="list_header_height_full">180dp</dimen>
     <dimen name="list_header_image_height">140dp</dimen>
 
+
     <dimen name="feed_header_balance_text_size">20sp</dimen>
     <dimen name="feed_header_title_text_size">26sp</dimen>
 

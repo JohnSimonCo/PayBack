@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:descendantFocusability="blocksDescendants"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -109,18 +110,6 @@
             android:textSize="@dimen/feed_name_size" />
 
     </LinearLayout>
-
-    <com.johnsimon.payback.util.RobotoMediumTextView
-        android:visibility="gone"
-        android:id="@+id/list_item_paid_back"
-        android:paddingBottom="12dp"
-        android:textSize="20sp"
-        android:layout_gravity="center_horizontal"
-        android:textStyle="italic"
-        android:text="@string/paid_back"
-        android:textColor="@color/gray_oncolor_light"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"    />
 
     <View
         android:layout_marginLeft="@dimen/feed_left_margin"

@@ -140,6 +140,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 								Bundle args = new Bundle();
 								args.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+								args.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
 								personPickerDialogFragment.setArguments(args);
 
 								personPickerDialogFragment.show(getFragmentManager(), "person_dialog");
@@ -172,7 +173,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 		@Override
 		public void onSelected(String name) {
 			if(callback != null) {
-				callback.onMove(debt, Resource.getOrCreatePerson(name, getActivity()));
+				callback.onMove(debt, Resource.data.findPersonByName(name));
 			}
 		}
 	};
