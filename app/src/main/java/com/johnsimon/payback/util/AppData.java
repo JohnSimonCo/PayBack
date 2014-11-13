@@ -99,11 +99,9 @@ public class AppData {
 		people.remove(from);
 	}
 
-	public void unmerge(Person restore, Person from, int index) {
+	public void unmerge(Person restore, ArrayList<Debt> debts, int index) {
 		for(Debt debt : debts) {
-			if(debt.owner == from) {
-				debt.owner = restore;
-			}
+			debt.owner = restore;
 		}
 		people.add(index, restore);
 	}

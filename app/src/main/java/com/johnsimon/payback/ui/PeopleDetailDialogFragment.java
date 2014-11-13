@@ -11,12 +11,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
 import com.williammora.snackbar.Snackbar;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 public class PeopleDetailDialogFragment extends DialogFragment {
 	public static Person person;
@@ -173,7 +177,13 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 				@Override
 				public void onConfirm() {
 
-                    final int personIndex = Resource.people.indexOf(person);
+                    final int index = Resource.people.indexOf(person);
+					final ArrayList<Debt> debts = new ArrayList<Debt>();
+					for(Debt debt : Resource.debts) {
+						if(debt.owner == person) {
+							debts.add(debt);
+						}
+					}
 
                    // final int otherIndex = Resource.people.indexOf(other);
 
@@ -185,7 +195,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                                 @Override
                                 public void onActionClicked() {
                                     //TODO make sure this works
-                                    Resource.data.unmerge(person, other, personIndex);
+                                    Resource.data.unmerge(person, debts, index);
 
                                     editPersonCallback.onEdit();
                                 }
