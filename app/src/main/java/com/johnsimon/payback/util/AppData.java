@@ -98,6 +98,15 @@ public class AppData {
 		}
 		people.remove(from);
 	}
+
+	public void unmerge(Person restore, Person from, int index) {
+		for(Debt debt : debts) {
+			if(debt.owner == from) {
+				debt.owner = restore;
+			}
+		}
+		people.add(index, restore);
+	}
 	public void delete(Person person) {
 		//#perfmatters
 		int push = -1;

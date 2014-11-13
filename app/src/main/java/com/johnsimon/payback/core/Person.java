@@ -40,8 +40,4 @@ public class Person {
 	public String getAvatarLetter() {
 		return name.substring(0, 1).toUpperCase();
 	}
-
-    public Person copy() {
-        return new Person(name, id, link, color);
-    }
 }

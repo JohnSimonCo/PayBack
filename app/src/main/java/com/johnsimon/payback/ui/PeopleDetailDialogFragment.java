@@ -173,11 +173,9 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 				@Override
 				public void onConfirm() {
 
-                    final Person oldPerson = person;
-                    final int oldPersonIndex = Resource.people.indexOf(person);
+                    final int personIndex = Resource.people.indexOf(person);
 
-                    final Person targetBeforeMerge = other.copy();
-                    final int targetPersonIndex = Resource.people.indexOf(other);
+                   // final int otherIndex = Resource.people.indexOf(other);
 
                     Snackbar.with(getActivity())
                             .text(getString(R.string.merged_people))
@@ -187,9 +185,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                                 @Override
                                 public void onActionClicked() {
                                     //TODO make sure this works
-                                    Resource.people.add(oldPersonIndex, oldPerson);
-                                    Resource.people.remove(targetPersonIndex);
-                                    Resource.people.add(targetPersonIndex, targetBeforeMerge);
+                                    Resource.data.unmerge(person, other, personIndex);
 
                                     editPersonCallback.onEdit();
                                 }
