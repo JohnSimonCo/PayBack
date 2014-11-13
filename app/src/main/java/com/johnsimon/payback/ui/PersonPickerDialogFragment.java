@@ -103,7 +103,10 @@ public class PersonPickerDialogFragment extends DialogFragment {
 			}
 			@Override
 			public void afterTextChanged(Editable s) {
-				if (TextUtils.isEmpty(s.toString())) {
+
+				String name = s.toString();
+
+				if (TextUtils.isEmpty(name) || (useOnlyPeopleInApp && Resource.data.findPersonByName(name) == null)) {
 					disableButton(confirmButton);
 				} else {
 					enableButton(confirmButton);

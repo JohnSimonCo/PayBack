@@ -42,6 +42,9 @@ public class RequestRateDialogFragment extends DialogFragment {
                 } catch (android.content.ActivityNotFoundException anfe) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
                 }
+
+				rateCallback.onNeverAgain();
+				alertDialog.cancel();
             }
         });
 

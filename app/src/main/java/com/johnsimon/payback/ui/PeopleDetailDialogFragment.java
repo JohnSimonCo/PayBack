@@ -82,6 +82,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 
 					Bundle argsMerge = new Bundle();
 					argsMerge.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+					argsMerge.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
 					personPickerDialogFragmentMerge.setArguments(argsMerge);
 
 					personPickerDialogFragmentMerge.show(getFragmentManager(), "people_detail_dialog_merge");

@@ -142,12 +142,12 @@ public class NavigationDrawerFragment extends Fragment {
 		headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
 		headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
 
-        RelativeLayout headerBackground = (RelativeLayout) headerView.findViewById(R.id.navigation_drawer_header_background);
-
 		updateBalance();
 		updateName();
 
-        headerBackground.setOnClickListener(new View.OnClickListener() {
+		Button navigation_drawer_header_button = (Button) headerView.findViewById(R.id.navigation_drawer_header_button);
+
+		navigation_drawer_header_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleArrowRotation();
