@@ -14,6 +14,7 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.send.NfcData;
+import com.johnsimon.payback.ui.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.williammora.snackbar.Snackbar;
 
@@ -22,28 +23,34 @@ import java.util.ArrayList;
 import static android.nfc.NdefRecord.createMime;
 
 public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
-	private FeedActivity activity;
+	private BeamListener callback;
 
-	public Beamer(FeedActivity activity) {
-		this.activity = activity;
+	public Beamer(BeamListener callback) {
+		this.callback = callback;
 	}
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
-		return FeedActivity.isAll() ? null : createMessage(FeedActivity.feed);
+		if(DebtDetailDialogFragment.debt != null) {
+			return createMessage(new Debt[] {DebtDetailDialogFragment.debt}, false);
+		} else if(!FeedActivity.isAll()) {
+			return createMessage(FeedActivity.feed.toArray(new Debt[FeedActivity.feed.size()]), true);
+		} else {
+			return null;
+		}
 	}
 
 	public void processIntent(Intent intent) {
 		if(intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)) {
 			NfcData data = readMessage((NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0]);
-			activity.onRecievedBeam(data.debts, data.sender);
+			callback.onRecievedBeam(data.debts, data.sender, data.fullSync);
 
 			intent.removeExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
 		}
 	}
 
-	private NdefMessage createMessage(ArrayList<Debt> debts) {
-		String JSON = new Gson().toJson(new NfcData(debts), NfcData.class);
+	private NdefMessage createMessage(Debt[] debts, boolean fullSync) {
+		String JSON = new Gson().toJson(new NfcData(debts, fullSync), NfcData.class);
 		return new NdefMessage(
 				new NdefRecord[]{
 						createMime("application/vnd.com.johnsimon.payback", JSON.getBytes()),
@@ -70,6 +77,6 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	*/
 
 	public interface BeamListener {
-		void onRecievedBeam(DebtSendable[] debts, User sender);
+		void onRecievedBeam(DebtSendable[] debts, User sender, boolean fullSync);
 	}
 }

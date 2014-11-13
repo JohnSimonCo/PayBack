@@ -110,10 +110,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 		return rootView;
 	}
 
-	public static FeedFragment newInstance(NavigationDrawerItem item) {
-		return new FeedFragment();
-	}
-
 	@Override
 	public void onPaidBack(Debt debt) {
 		debt.isPaidBack = !debt.isPaidBack;

@@ -155,7 +155,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		}
 
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, FeedFragment.newInstance(item), "feed_fragment_tag")
+				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 				.commit();
 	}
 
@@ -267,15 +267,25 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	@Override
-	public void onRecievedBeam(DebtSendable[] debts, User sender) {
+	public void onRecievedBeam(DebtSendable[] debts, User sender, boolean fullSync) {
 		person = test(sender);
 
-		Resource.data.sync(person, debts);
+		if(fullSync) {
+			Resource.data.sync(person, debts);
+		} else {
+			Resource.debts.add(debts[0].extract(person));
+		}
 
-		Snackbar.with(getApplicationContext())
-				.text("Recieved " + debts.length + " debts from " + sender.name)
-				.show(this);
+		feed = Resource.data.personalizedFeed(person);
+
+		navigationDrawerFragment.setSelectedPerson(person);
+
+		getFragmentManager().beginTransaction()
+			.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
+			.commit();
 	}
+
+	private
 
 	private Person test(User sender) {
 		if(isAll()) {

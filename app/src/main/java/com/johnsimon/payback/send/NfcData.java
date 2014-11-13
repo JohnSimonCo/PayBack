@@ -12,12 +12,14 @@ import java.util.ArrayList;
 public class NfcData {
 	public DebtSendable[] debts;
 	public User sender;
+	public boolean fullSync;
 
-	public NfcData(ArrayList<Debt> debts) {
-		this.debts = new DebtSendable[debts.size()];
+	public NfcData(Debt[] debts, boolean fullSync) {
+		this.debts = new DebtSendable[debts.length];
 		for(int i = 0; i < this.debts.length; i++) {
-			this.debts[i] = new DebtSendable(debts.get(i));
+			this.debts[i] = new DebtSendable(debts[i]);
 		}
 		this.sender = Resource.user;
+		this.fullSync = fullSync;
 	}
 }
