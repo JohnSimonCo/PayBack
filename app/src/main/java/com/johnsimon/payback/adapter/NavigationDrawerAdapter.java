@@ -114,9 +114,8 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item_all, null);
 
 			holder = new ViewHolder(
-					(TextView) view.findViewById(R.id.navigation_drawer_list_item_text),
-					(RoundedImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
-					null
+					(TextView) view.findViewById(R.id.navigation_drawer_list_item_all_text),
+					null, null
 			);
 			view.setTag(holder);
 		} else {
