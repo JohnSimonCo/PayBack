@@ -276,6 +276,8 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 			Resource.debts.add(debts[0].extract(person));
 		}
 
+		Resource.commit();
+
 		feed = Resource.data.personalizedFeed(person);
 
 		navigationDrawerFragment.setSelectedPerson(person);
@@ -284,8 +286,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 			.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 			.commit();
 	}
-
-	private
 
 	private Person test(User sender) {
 		if(isAll()) {

@@ -112,17 +112,15 @@ public class AppData {
 	}
 
 	private void deleteDebts(Person person) {
-		//#perfmatters
-		int push = -1;
-		Debt[] remove = new Debt[debts.size()];
+		ArrayList<Debt> remove = new ArrayList<Debt>();
 		for(Debt debt : debts) {
 			if(debt.owner == person) {
-				remove[++push] = debt;
+				remove.add(debt);
 			}
 		}
 
-		for(int i = 0; i < push; i++) {
-			debts.remove(remove[i]);
+		for(Debt debt : remove) {
+			debts.remove(debt);
 		}
 	}
 
