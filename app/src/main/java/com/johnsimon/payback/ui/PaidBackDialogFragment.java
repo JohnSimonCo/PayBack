@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Debt;
 
 public class PaidBackDialogFragment extends DialogFragment {
 
@@ -16,9 +17,11 @@ public class PaidBackDialogFragment extends DialogFragment {
 	public final static int UNDO_PAY_BACK = 1;
 
 	private static boolean payBack = false;
+	private static Debt debt;
 
-	public static PaidBackDialogFragment newInstance(int flag) {
+	public static PaidBackDialogFragment newInstance(int flag, Debt _debt) {
 		payBack = flag == PAY_BACK;
+		debt = _debt;
 		return new PaidBackDialogFragment();
 	}
 
@@ -57,7 +60,7 @@ public class PaidBackDialogFragment extends DialogFragment {
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				completeCallback.onComplete();
+				completeCallback.onComplete(debt);
 				alertDialog.cancel();
 			}
 		}, 1000);
@@ -67,7 +70,7 @@ public class PaidBackDialogFragment extends DialogFragment {
 	}
 
 	public interface CompleteCallback {
-		public void onComplete();
+		public void onComplete(Debt debt);
 	}
 
 }

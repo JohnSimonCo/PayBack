@@ -154,6 +154,9 @@ public class Resource {
     public static boolean isLOrAbove() {
         return Build.VERSION.SDK_INT >= 21;
     }
+	public static boolean isKkOrAbove() {
+		return Build.VERSION.SDK_INT >= 19;
+	}
 
     public static CharSequence getRelativeTimeString(Context ctx, long timestamp) {
         long now = System.currentTimeMillis();

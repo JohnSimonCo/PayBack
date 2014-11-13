@@ -105,13 +105,19 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 		View feed_activity_status_bar_pusher = findViewById(R.id.feed_activity_status_bar_pusher);
 
-		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			feed_activity_status_bar_pusher.getLayoutParams().height = getResources().getDimensionPixelSize(resourceId);
+		if (Resource.isKkOrAbove()) {
+			int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+			if (resourceId > 0) {
+				feed_activity_status_bar_pusher.getLayoutParams().height = getResources().getDimensionPixelSize(resourceId);
+			}
+			if (!Resource.isLOrAbove()) {
+				feed_activity_status_bar_pusher.setBackgroundColor(getResources().getColor(R.color.primary_color_darker));
+			}
+		} else {
+			feed_activity_status_bar_pusher.setVisibility(View.GONE);
 		}
-        if (!Resource.isLOrAbove()) {
-            feed_activity_status_bar_pusher.setBackgroundColor(getResources().getColor(R.color.primary_color_darker));
-        }
+
+
 	}
 
 	@Override

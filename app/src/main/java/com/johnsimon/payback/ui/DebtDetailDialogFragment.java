@@ -76,9 +76,9 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 				PaidBackDialogFragment paidBackDialogFragment;
 
 				if (debt.isPaidBack) {
-					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK);
+					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK, debt);
 				} else {
-					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK);
+					paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, debt);
 				}
 				paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
 				paidBackDialogFragment.completeCallback = self;
@@ -170,8 +170,8 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
     }
 
 	@Override
-	public void onDetach() {
-		super.onDetach();
+	public void onDestroy() {
+		super.onDestroy();
 		debt = null;
 	}
 
@@ -185,9 +185,9 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	};
 
 	@Override
-	public void onComplete() {
+	public void onComplete(Debt _debt) {
 		if(callback != null) {
-			callback.onPaidBack(debt);
+			callback.onPaidBack(_debt);
 		}
 	}
 

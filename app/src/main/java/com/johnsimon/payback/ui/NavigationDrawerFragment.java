@@ -119,9 +119,6 @@ public class NavigationDrawerFragment extends Fragment {
 		setSelectedPerson(FeedActivity.person);
 		selectItem(mCurrentSelectedPosition);
 
-        mDrawerListView.setAdapter(adapter);
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
         Button footerPeople = (Button) footerView.findViewById(R.id.navigation_drawer_footer_people);
@@ -159,6 +156,9 @@ public class NavigationDrawerFragment extends Fragment {
         headerMinus.setAlpha(0f);
 
 		mDrawerListView.addHeaderView(headerView);
+
+		mDrawerListView.setAdapter(adapter);
+		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mDrawerListView;
     }
