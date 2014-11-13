@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
+import com.williammora.snackbar.Snackbar;
 
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
@@ -157,12 +159,44 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 	};
 
 	@Override
-	public void onDelete(Debt debt) {
-		Resource.debts.remove(debt);
-		adapter.notifyDataSetChanged();
-		displayTotalDebt(getActivity());
-		Resource.commit();
-		Resource.actionComplete(getFragmentManager());
+	public void onDelete(final Debt debt) {
+
+		ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+
+		Bundle argsDelete = new Bundle();
+		argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_person_text));
+		argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
+		confirmDialogFragment.setArguments(argsDelete);
+
+		confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
+
+		confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
+			@Override
+			public void onConfirm() {
+
+				final int index = Resource.debts.indexOf(debt);
+
+				Snackbar.with(getActivity())
+						.text(getString(R.string.sort_list))
+						.actionLabel(getString(R.string.undo))
+						.actionColor(Color.WHITE)
+						.actionListener(new Snackbar.ActionClickListener() {
+							@Override
+							public void onActionClicked() {
+								Resource.debts.add(index, debt);
+								adapter.notifyDataSetChanged();
+								displayTotalDebt(getActivity());
+								Resource.commit();
+							}
+						})
+						.show(getActivity());
+
+				Resource.debts.remove(debt);
+				adapter.notifyDataSetChanged();
+				displayTotalDebt(getActivity());
+				Resource.commit();
+			}
+		};
 	}
 
 	@Override
