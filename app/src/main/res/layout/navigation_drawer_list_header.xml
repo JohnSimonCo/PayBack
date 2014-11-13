@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_marginBottom="80dp"
-    android:layout_width="match_parent"
-    android:layout_height="136dp">
-
-    <ImageView
-        android:contentDescription="Header image"
-        android:scaleType="centerCrop"
-        android:src="@drawable/navigation_drawer_image"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent" >
+    
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="128dp"/>
-
-    <LinearLayout
-        android:layout_marginRight="48dp"
-        android:layout_marginTop="26dp"
-        android:id="@+id/navigation_drawer_header_text_container"
-        android:orientation="vertical"
-        android:paddingLeft="72dp"
+        android:layout_height="128dp">
+    
+        <ImageView
+            android:contentDescription="Header image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/navigation_drawer_image"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"/>
+    
+        <LinearLayout
+            android:layout_marginRight="48dp"
+            android:layout_marginTop="26dp"
+            android:id="@+id/navigation_drawer_header_text_container"
+            android:orientation="vertical"
+            android:paddingLeft="72dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:id="@+id/navigation_drawer_header_name"
+                android:paddingTop="6dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:paddingBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:id="@+id/navigation_drawer_header_plus"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"   />
+    
+            <com.johnsimon.payback.util.RobotoMediumTextView
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:id="@+id/navigation_drawer_header_minus"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"   />
+    
+        </LinearLayout>
+    
+        <ImageButton
+            android:id="@+id/navigation_drawer_header_arrow"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="Arrow"
+            android:src="@drawable/ic_action_arrow_up"
+            android:background="@null"
+            android:layout_marginBottom="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"/>
+    
+        <Button
+            android:id="@+id/navigation_drawer_header_button"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"/>
+    
+    </RelativeLayout>
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:id="@+id/navigation_drawer_header_name"
-            android:paddingTop="6dp"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:paddingBottom="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:textSize="16sp"
-            android:textColor="@android:color/white"
-            android:id="@+id/navigation_drawer_header_plus"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"   />
-
-        <com.johnsimon.payback.util.RobotoMediumTextView
-            android:textSize="16sp"
-            android:textColor="@android:color/white"
-            android:id="@+id/navigation_drawer_header_minus"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"   />
-
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/navigation_drawer_header_arrow"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:contentDescription="Arrow"
-        android:src="@drawable/ic_action_arrow_up"
-        android:background="@null"
-        android:layout_marginBottom="8dp"
-        android:layout_width="48dp"
-        android:layout_height="48dp"/>
-
-    <Button
-        android:id="@+id/navigation_drawer_header_button"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"/>
-
-</RelativeLayout>
+        android:layout_height="12dp"    />
+</LinearLayout>
