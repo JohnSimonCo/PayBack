@@ -101,17 +101,17 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 						@Override
 						public void onConfirm() {
 
-                            final Person restorePerson = person;
                             final int restorePersonIndex = Resource.data.people.indexOf(person);
 
                             Snackbar.with(getActivity())
                                     .text(getString(R.string.sort_list))
                                     .actionLabel(getString(R.string.undo))
+									.actionColor(Color.WHITE)
                                     .actionListener(new Snackbar.ActionClickListener() {
                                         @Override
                                         public void onActionClicked() {
                                             //TODO make sure this works
-                                            Resource.data.people.add(restorePersonIndex, restorePerson);
+                                            Resource.data.people.add(restorePersonIndex, person);
                                             editPersonCallback.onEdit();
                                         }
                                     })

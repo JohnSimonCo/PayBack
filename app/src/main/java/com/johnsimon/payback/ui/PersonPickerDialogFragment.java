@@ -12,16 +12,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.support.v7.internal.widget.TintEditText;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.RobotoMediumTextView;
-import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.FontCache;
 
 import java.util.ArrayList;
@@ -31,9 +25,11 @@ public class PersonPickerDialogFragment extends DialogFragment {
 	public PersonSelectedCallback completeCallback = null;
 	private AlertDialog alertDialog;
 	private String title;
+	private boolean useOnlyPeopleInApp = false;
 
 	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
 	public final static String TITLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_TITLE_KEY";
+	public final static String PEOPLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_PERSON_KEY";
 
 	private AutoCompleteTextView autoCompleteTextView;
 
@@ -49,6 +45,7 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			title = args.getString(TITLE_KEY, USE_DEFAULT_TITLE);
+			useOnlyPeopleInApp = args.getBoolean(PEOPLE_KEY, false);
 		}
 
 		boolean useOnlyContacts = false;
@@ -80,9 +77,13 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 		if (useOnlyContacts) {
 			people = Resource.getContactNames();
+		} else if (useOnlyPeopleInApp) {
+			people = Resource.getPeopleNames();
 		} else {
 			people = Resource.getAllNames();
 		}
+
+
 		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
 				getActivity(),
 				R.layout.autocomplete_list_item,

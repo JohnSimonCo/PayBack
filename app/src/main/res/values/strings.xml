@@ -78,6 +78,7 @@
     <string name="deleted_person">Deleted person</string>
     <string name="renamed_person">Renamed person</string>
     <string name="merged_people">Merged people</string>
+    <string name="already_sorted">Already sorted</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

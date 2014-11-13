@@ -136,6 +136,9 @@ public class PeopleManagerActivity extends ActionBarActivity {
                 Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
 
                 if (Resource.areIdenticalLists(personListBeforeSort, Resource.people)) {
+					Snackbar.with(getApplicationContext())
+							.text(getString(R.string.already_sorted))
+							.show(this);
                     break;
                 }
 
@@ -169,7 +172,6 @@ public class PeopleManagerActivity extends ActionBarActivity {
                         anim.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
-
                             }
 
                             @Override
@@ -178,6 +180,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
                                 Snackbar.with(getApplicationContext())
                                         .text(getString(R.string.sort_list))
                                         .actionLabel(getString(R.string.undo))
+										.actionColor(Color.WHITE)
                                         .actionListener(new Snackbar.ActionClickListener() {
                                             @Override
                                             public void onActionClicked() {
@@ -190,12 +193,10 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
-
                             }
 
                             @Override
                             public void onAnimationRepeat(Animator animation) {
-
                             }
                         });
 
