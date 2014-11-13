@@ -172,7 +172,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 		@Override
 		public void onSelected(String name) {
 			if(callback != null) {
-				callback.onMove(debt, Resource.getOrCreatePerson(name));
+				callback.onMove(debt, Resource.getOrCreatePerson(name, getActivity()));
 			}
 		}
 	};

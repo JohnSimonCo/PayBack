@@ -150,7 +150,7 @@ public class NavigationDrawerFragment extends Fragment {
 		navigation_drawer_header_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleArrowRotation();
+                toggleHeaderVisibility();
             }
         });
 
@@ -163,7 +163,7 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerListView;
     }
 
-    public void handleArrowRotation() {
+    public void toggleHeaderVisibility() {
         if (inHeaderDetailScreen) {
             //Spin to down arrow
 
