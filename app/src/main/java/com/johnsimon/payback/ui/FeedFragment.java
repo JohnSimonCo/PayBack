@@ -167,6 +167,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 			public void onConfirm() {
 
 				final int index = Resource.debts.indexOf(debt);
+				final int indexFeed = FeedActivity.feed.indexOf(debt);
 
 				Snackbar.with(getActivity())
 						.text(getString(R.string.deleted_debt))
@@ -176,28 +177,40 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 							@Override
 							public void onActionClicked() {
 								Resource.debts.add(index, debt);
+								Resource.commit();
+								if(!FeedActivity.isAll()) {
+									FeedActivity.feed.add(indexFeed, debt);
+								}
+
 								adapter.notifyDataSetChanged();
 								displayTotalDebt(getActivity());
-								Resource.commit();
 							}
 						})
 						.show(getActivity());
 
 				Resource.debts.remove(debt);
-				adapter.notifyDataSetChanged();
-				displayTotalDebt(getActivity());
 				Resource.commit();
+				if(!FeedActivity.isAll()) {
+					FeedActivity.feed.remove(debt);
+				}
+
+				displayTotalDebt(getActivity());
+				adapter.notifyDataSetChanged();
 			}
 		};
 	}
 
 	@Override
 	public void onMove(Debt debt, Person person) {
-		//TODO complete this
 		Resource.data.move(debt, person);
-		adapter.notifyDataSetChanged();
 		Resource.commit();
+
+		if (!FeedActivity.isAll()) {
+			FeedActivity.feed.remove(debt);
+		}
+
 		Resource.actionComplete(getFragmentManager());
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override

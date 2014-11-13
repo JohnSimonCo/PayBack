@@ -69,9 +69,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup viewGroup) {
 		ViewHolder holder;
-		boolean isSelected = position == NavigationDrawerFragment.mCurrentSelectedPosition;
+		boolean isSelected = (position == NavigationDrawerFragment.mCurrentSelectedPosition);
 
-		if(position == 0) {
+		if (position == 0) {
 			return getAllView(convertView, isSelected);
 		}
 

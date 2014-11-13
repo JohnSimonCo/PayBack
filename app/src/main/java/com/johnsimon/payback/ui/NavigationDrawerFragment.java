@@ -402,6 +402,9 @@ public class NavigationDrawerFragment extends Fragment {
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(adapter.getItem(position));
         }
+
+		adapter.notifyDataSetChanged();
+
     }
 
     @Override
