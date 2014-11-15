@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -22,11 +24,14 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.ui.ConfirmDialogFragment;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.RequestRateDialogFragment;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -54,6 +59,36 @@ public class Resource {
 
 	private static int actions;
 	private static boolean neverRate;
+
+
+
+
+
+/*
+	ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+
+	Bundle argsDelete = new Bundle();
+	argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.overwrite_nfc_title));
+	argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.overwrite_nfc_text) + person.name + "?");
+	confirmDialogFragment.setArguments(argsDelete);
+
+	confirmDialogFragment.show(getFragmentManager(), "overwrite_confirmation");
+
+	confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
+		@Override
+		public void onConfirm() {
+
+		}
+	};
+
+	Snackbar.with(getActivity())
+			.text(getString(R.string.nfc_error_all))
+			.show(getActivity());
+
+
+*/
+
+
 
     public static void init(Activity context) {
         if (data != null) return;

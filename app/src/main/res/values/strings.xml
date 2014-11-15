@@ -81,6 +81,10 @@
     <string name="already_sorted">Already sorted</string>
     <string name="deleted_debt">Deleted entry</string>
     <string name="delete_entry">Delete entry</string>
+    <string name="overwrite_nfc_title">Overwrite all entries</string>
+    <string name="overwrite_nfc_text">Are you sure you want to overwrite all entries from </string>
+    <string name="from_who_title">From who?</string>
+    <string name="nfc_error_all">Can't send entries from \"All\"</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
