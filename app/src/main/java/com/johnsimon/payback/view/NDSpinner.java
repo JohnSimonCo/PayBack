@@ -1,6 +1,7 @@
 package com.johnsimon.payback.view;
 
 import android.content.Context;
+import android.support.v7.internal.widget.TintSpinner;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Spinner;
@@ -9,7 +10,7 @@ import java.lang.reflect.Field;
 /** Spinner extension that calls onItemSelected even when the selection is the same as       its previous value.
  *   ie This is extended "Customized class of Spinner" to  get the "onItemSelected"      event even if the item in the
  *  Spinner is already  selected by the user*/
-public class NDSpinner extends Spinner {
+public class NDSpinner extends TintSpinner {
 
 	public NDSpinner(Context context)
 	{ super(context); }

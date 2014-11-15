@@ -67,6 +67,12 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+        
+        <View
+            android:layout_marginTop="@dimen/list_header_image_height"
+            style="@style/Elevation2DP"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
 
         <include
             android:layout_gravity="bottom|right"

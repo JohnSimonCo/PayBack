@@ -13,7 +13,7 @@
     <ImageView
         android:contentDescription="@string/checkbox"
         android:layout_gravity="center_horizontal"
-        android:src="@anim/checkbox_animation"
+        android:id="@+id/paid_back_dialog_image"
         android:layout_width="62dp"
         android:layout_height="62dp"    />
 

@@ -7,9 +7,6 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 
-/**
- * Created by John on 2014-11-04.
- */
 public class Animator {
 	public static void expand(final View v) {
 		expand(v, true, 4);

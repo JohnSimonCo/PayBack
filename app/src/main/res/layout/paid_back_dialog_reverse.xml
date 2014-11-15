@@ -11,9 +11,9 @@
       android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/paid_back_dialog_image_reverse"
         android:contentDescription="@string/checkbox"
         android:layout_gravity="center_horizontal"
-        android:src="@anim/checkbox_animation_reverse"
         android:layout_width="62dp"
         android:layout_height="62dp"    />
 

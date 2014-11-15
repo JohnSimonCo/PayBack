@@ -24,7 +24,9 @@ import com.makeramen.RoundedImageView;
 
 public class DebtDetailDialogFragment extends DialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
-	public static Debt debt = null;
+	public static Debt debtAccessible = null;
+	private static Debt debt = null;
+
 	public Callback callback = null;
 	public AlertDialog alertDialog;
 
@@ -32,6 +34,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 	public static DebtDetailDialogFragment newInstance(Debt debt) {
 		DebtDetailDialogFragment.debt = debt;
+		DebtDetailDialogFragment.debtAccessible = debt;
         return new DebtDetailDialogFragment();
     }
 
@@ -172,7 +175,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		debt = null;
+		debtAccessible = null;
 	}
 
 	public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {

@@ -66,10 +66,11 @@
                             <ImageButton
                                 android:id="@+id/create_clear"
                                 android:contentDescription="@string/clear"
-                                android:background="@drawable/flat_white_selector"
+                                style="@style/RippleBackground"
                                 android:src="@drawable/ic_clear"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
+                                android:layout_marginTop="8dp"
                                 android:layout_alignParentTop="true"
                                 android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true"/>

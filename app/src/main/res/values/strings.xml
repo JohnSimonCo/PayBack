@@ -68,7 +68,7 @@
     <string name="beamer_1">Received</string>
     <string name="beamer_2">debts via NFC</string>
     <string name="rate_title">Rate Pay Back!</string>
-    <string name="rate_text">Lorem ipsum</string>
+    <string name="rate_text">If you like the app, please take a moment to rate it on Google Play!</string>
     <string name="ok">OK</string>
     <string name="rate_now">Rate now</string>
     <string name="rate_later">Maybe later</string>
@@ -80,6 +80,7 @@
     <string name="merged_people">Merged people</string>
     <string name="already_sorted">Already sorted</string>
     <string name="deleted_debt">Deleted entry</string>
+    <string name="delete_entry">Delete entry</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -103,19 +104,6 @@
     <string name="pref_settings">Settings</string>
     <string name="pref_general">General</string>
     <string name="currency">Currency</string>
-
-    <string-array name="currencyDisplay">
-        <item>Kronor (Kr)</item>
-        <item>Dollar ($)</item>
-        <item>Euro (£)</item>
-        <item>Vodka (L)</item>
-    </string-array>
-    <string-array name="currencyReturn">
-        <item>Kr</item>
-        <item>$</item>
-        <item>£</item>
-        <item>L</item>
-    </string-array>
 
     <string-array name="currencies">
         <item>$</item>

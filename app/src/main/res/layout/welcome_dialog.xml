@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"    />
 
             <com.johnsimon.payback.util.RobotoMediumTextView
-                android:paddingTop="16dp"
+                android:paddingTop="8dp"
                 android:layout_gravity="center_horizontal"
                 android:paddingLeft="16dp"
                 android:textSize="18sp"

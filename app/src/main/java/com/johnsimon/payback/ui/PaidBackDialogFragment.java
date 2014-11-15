@@ -3,10 +3,12 @@ package com.johnsimon.payback.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
@@ -48,8 +50,28 @@ public class PaidBackDialogFragment extends DialogFragment {
 		View rootView;
 		if (payBack) {
 			rootView = inflater.inflate(R.layout.paid_back_dialog, null);
+
+			final ImageView image = (ImageView) rootView.findViewById(R.id.paid_back_dialog_image);
+			image.setBackgroundResource(R.anim.checkbox_animation);
+			image.post(new Runnable() {
+				@Override
+				public void run() {
+					AnimationDrawable frameAnimation = (AnimationDrawable) image.getBackground();
+					frameAnimation.start();
+				}
+			});
 		} else {
 			rootView = inflater.inflate(R.layout.paid_back_dialog_reverse, null);
+
+			final ImageView image = (ImageView) rootView.findViewById(R.id.paid_back_dialog_image_reverse);
+			image.setBackgroundResource(R.anim.checkbox_animation_reverse);
+			image.post(new Runnable() {
+				@Override
+				public void run() {
+					AnimationDrawable frameAnimation = (AnimationDrawable) image.getBackground();
+					frameAnimation.start();
+				}
+			});
 		}
 
 		builder.setView(rootView);

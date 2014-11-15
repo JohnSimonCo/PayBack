@@ -67,6 +67,9 @@ public class RequestRateDialogFragment extends DialogFragment {
         builder.setView(rootView);
 
         alertDialog = builder.create();
+
+		setCancelable(false);
+
         return alertDialog;
     }
 

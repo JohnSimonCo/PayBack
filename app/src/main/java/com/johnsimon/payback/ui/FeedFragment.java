@@ -10,7 +10,6 @@ import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,12 +26,12 @@ import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScro
 import com.johnsimon.payback.adapter.FeedListAdapterRecycler;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
+
 
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
@@ -46,8 +44,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
     private final Person person = FeedActivity.person;
 
-	private final FeedFragment self = this;
-
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,8 +53,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 		final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);
-
-		recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         headerView = (FrameLayout) rootView.findViewById(R.id.feed_list_header_master);
         feed_header_balance = (TextView) headerView.findViewById(R.id.feed_header_balance);
@@ -152,7 +146,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 		ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
 
 		Bundle argsDelete = new Bundle();
-		argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_person_text));
+		argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_entry));
 		argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
 		confirmDialogFragment.setArguments(argsDelete);
 

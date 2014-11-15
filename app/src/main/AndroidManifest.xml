@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.johnsimon.payback" >
-
-    <!--
-        Used Libraries:
-
-        RoundedAvatarDrawable by Evelio Tarazona Cáceres (http://evel.io/2013/07/21/rounded-avatars-in-android/)
-        FloatingActionButton by Faiz Malkani (https://github.com/FaizMalkani/FloatingActionButton)
-        SystemBarTint by Jeff Gilfelt (https://github.com/jgilfelt/SystemBarTint)
-        L-Dialogs by Lewis Deane (https://github.com/lewisjdeane/L-Dialogs)
-        AndroidFloatLabel by weddingparty (https://github.com/weddingparty/AndroidFloatLabel)
-    -->
+          package="com.johnsimon.payback">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
