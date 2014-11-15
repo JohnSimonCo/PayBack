@@ -313,6 +313,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 		feed = Resource.data.personalizedFeed(person);
 
+		NavigationDrawerFragment.adapter.clearItems();
 		NavigationDrawerFragment.adapter.setItems(Resource.people);
 		navigationDrawerFragment.setSelectedPerson(person);
 
