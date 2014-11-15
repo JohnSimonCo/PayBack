@@ -72,7 +72,7 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="SpinnerNormal" parent="Widget.AppCompat.Spinner"   />
+    <style name="SpinnerNormal" parent="@android:style/Widget.Holo.Light.Spinner"   />
 
     <style name="Elevation4DP"></style>
 
