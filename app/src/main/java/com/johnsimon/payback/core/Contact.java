@@ -13,7 +13,11 @@ public class Contact {
 		this.id = id;
 	}
 
+	private boolean hasNumber() {
+		return number != null;
+	}
+
 	public boolean matchTo(User user) {
-		return this.name.equals(user.name) || this.number.equals(user.number);
+		return this.name.equals(user.name) || (hasNumber() && this.number.equals(user.number));
 	}
 }
