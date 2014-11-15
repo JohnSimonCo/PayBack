@@ -269,7 +269,12 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	@Override
 	public void onReceivedBeam(DebtSendable[] debts, User sender, boolean fullSync) {
-		person = test(sender);
+		String name = Resource.guessName(sender);
+		if(name != null) {
+			person = Resource.getOrCreatePerson(name, this);
+		} else {
+			person = Resource.people.get(0);
+		}
 
 		if(fullSync) {
 			Resource.data.sync(person, debts);
@@ -286,14 +291,5 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		getFragmentManager().beginTransaction()
 			.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 			.commit();
-	}
-
-	private Person test(User sender) {
-		if(isAll()) {
-			Person foundPerson = Resource.data.findPersonByName(sender.name);
-			return foundPerson == null ? Resource.people.get(0) : foundPerson;
-		} else {
-			return person;
-		}
 	}
 }

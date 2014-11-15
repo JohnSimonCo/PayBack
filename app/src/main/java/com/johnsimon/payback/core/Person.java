@@ -8,7 +8,7 @@ public class Person {
 	public String name;
 	public UUID id;
 	public Contact link;
-	public Integer color;
+	public int color;
 
 	//Used for deserialization
 	public Person(String name, UUID id, Contact link, Integer color) {
@@ -39,5 +39,12 @@ public class Person {
 	}
 	public String getAvatarLetter() {
 		return name.substring(0, 1).toUpperCase();
+	}
+
+	public boolean matchName(User user) {
+		return this.name.equals(user.name);
+	}
+	public boolean matchLinkName(User user) {
+		return isLinked() && link.matchName(user);
 	}
 }

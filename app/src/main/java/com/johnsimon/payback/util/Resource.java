@@ -2,13 +2,17 @@ package com.johnsimon.payback.util;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.provider.UserDictionary;
+import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.RequestRateDialogFragment;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -189,13 +194,12 @@ public class Resource {
 
 	private static ArrayList<Contact> getContacts(Context context) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
-		Cursor cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		ContentResolver contentResolver = context.getContentResolver();
+		Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		if (cursor.getCount() > 0) {
 			while (cursor.moveToNext()) {
-				//Get contact info
+				//Get contact name
 				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-				long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
 				//Exlude email adresses
 				if(name == null || name.matches(".*@.*\\..*")) continue;
@@ -209,22 +213,70 @@ public class Resource {
 				//Exlude non-unique contacts
 				if(!unique) continue;
 
-				contacts.add(new Contact(name, photoURI, id));
+				//Get rest of contact info
+				long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+				String number = getPhoneNumber(contentResolver, id);
+				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+
+				contacts.add(new Contact(name, number, photoURI, id));
 			}
 		}
+		cursor.close();
+
 		return contacts;
 	}
 
 	private static User getUser(Context context) {
-		String name = null;
+		String name = null, number = null;
 
-		Cursor cursor = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-		if(cursor.getCount() > 0) {
-			cursor.moveToFirst();
+		ContentResolver contentResolver = context.getContentResolver();
+
+		Cursor cursor = contentResolver.query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+		if(cursor.moveToFirst()) {
 			name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+			number = getUserPhoneNumber(contentResolver);
+		}
+		cursor.close();
+
+		return new User(name, number);
+	}
+
+	private static String getUserPhoneNumber(ContentResolver contentResolver) {
+		Cursor cursor = contentResolver.query(
+				Uri.withAppendedPath(
+						ContactsContract.Profile.CONTENT_URI,
+						ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+				new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER},
+				null, null, null);
+
+		String number = null;
+		if(cursor.moveToFirst()) {
+			number = cursor.getString(0);
 		}
 
-		return new User(name);
+		cursor.close();
+
+		return normalizePhoneNumber(number);
+	}
+
+	private static String getPhoneNumber(ContentResolver contentResolver, long id) {
+		Cursor cursor = contentResolver.query(
+				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
+
+		String number = null;
+		if(cursor.moveToFirst()) {
+			number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+		}
+
+		cursor.close();
+
+		return normalizePhoneNumber(number);
+	}
+
+	//Removes all formatting, so that numbers can be compared
+	private static String normalizePhoneNumber(String number) {
+		return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
 	}
 
 	public static Person getOrCreatePerson(String name, Context context) {
@@ -290,6 +342,30 @@ public class Resource {
 		return names;
 	}
 
+	public static String guessName(User sender) {
+		//First match name and number in people and their links
+		for(Person person : people) {
+			if(person.matchName(sender) || person.matchLinkName(sender)) {
+				return person.name;
+			}
+		}
+
+		//Secondly, match name and number in contacts
+		for(Contact contact : contacts) {
+			if(contact.matchName(sender)) {
+				return contact.name;
+			}
+		}
+
+		//Otherwise, if not in all view, use currently viewed person
+		if(!FeedActivity.isAll()) {
+			return FeedActivity.person.name;
+		}
+
+		//If no match found, return null
+		return null;
+	}
+
 	public static void actionComplete(FragmentManager fragmentManager) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
@@ -298,6 +374,7 @@ public class Resource {
 		if(++actions >= MAX_ACTIONS) {
 			actions = 0;
 
+			//Open the request rate dialog
 			RequestRateDialogFragment fragment = new RequestRateDialogFragment();
 
 			fragment.rateCallback = rateCallback;
@@ -305,33 +382,16 @@ public class Resource {
 			fragment.show(fragmentManager, "request_rate");
 		}
 
+		//Save the new action count
 		preferences.edit().putInt(SAVE_KEY_ACTIONS, actions).apply();
 	}
-
-    public static boolean areIdenticalLists(ArrayList<Person> before, ArrayList<Person> after) {
-
-        if (before.size() != after.size()) {
-            return false;
-        }
-
-        int size = before.size();
-
-
-        for (int i = 0; i < size; i++) {
-            if (before.get(i).id != after.get(i).id) {
-                return false;
-            }
-        }
-
-        return true;
-
-    }
 
 	private static RequestRateDialogFragment.RateCallback rateCallback = new RequestRateDialogFragment.RateCallback() {
 		@Override
 		public void onNeverAgain() {
 			neverRate = true;
 
+			//Save the new value
 			preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
 		}
 
@@ -339,6 +399,25 @@ public class Resource {
 		public void onLater() {
 		}
 	};
+
+	public static boolean areIdenticalLists(ArrayList<Person> before, ArrayList<Person> after) {
+
+		if (before.size() != after.size()) {
+			return false;
+		}
+
+		int size = before.size();
+
+
+		for (int i = 0; i < size; i++) {
+			if (before.get(i).id != after.get(i).id) {
+				return false;
+			}
+		}
+
+		return true;
+
+	}
 
     public static class AmountComparator implements Comparator<Debt> {
         @Override
