@@ -80,6 +80,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 				};
 
 				Message msg = handler.obtainMessage();
+				msg.obj = actv;
 				handler.sendMessageDelayed(msg, 200);
 
 				actv.setSelection(actv.getText().length());
