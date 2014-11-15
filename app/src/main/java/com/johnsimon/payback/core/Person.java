@@ -41,10 +41,7 @@ public class Person {
 		return name.substring(0, 1).toUpperCase();
 	}
 
-	public boolean matchName(User user) {
+	public boolean matchTo(User user) {
 		return this.name.equals(user.name);
-	}
-	public boolean matchLinkName(User user) {
-		return isLinked() && link.matchName(user);
 	}
 }

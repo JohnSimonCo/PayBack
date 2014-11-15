@@ -11,8 +11,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
-import android.provider.UserDictionary;
-import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -215,7 +213,7 @@ public class Resource {
 
 				//Get rest of contact info
 				long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-				String number = getPhoneNumber(contentResolver, id);
+				String number = getContactPhoneNumber(contentResolver, id);
 				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
 
 				contacts.add(new Contact(name, number, photoURI, id));
@@ -259,7 +257,7 @@ public class Resource {
 		return normalizePhoneNumber(number);
 	}
 
-	private static String getPhoneNumber(ContentResolver contentResolver, long id) {
+	private static String getContactPhoneNumber(ContentResolver contentResolver, long id) {
 		Cursor cursor = contentResolver.query(
 				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
 				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
@@ -345,14 +343,14 @@ public class Resource {
 	public static String guessName(User sender) {
 		//First match name and number in people and their links
 		for(Person person : people) {
-			if(person.matchName(sender) || person.matchLinkName(sender)) {
+			if(person.matchTo(sender) || (person.isLinked() && person.link.matchTo(sender))) {
 				return person.name;
 			}
 		}
 
 		//Secondly, match name and number in contacts
 		for(Contact contact : contacts) {
-			if(contact.matchName(sender)) {
+			if(contact.matchTo(sender)) {
 				return contact.name;
 			}
 		}
