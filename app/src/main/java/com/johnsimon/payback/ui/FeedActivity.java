@@ -2,6 +2,7 @@ package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.nfc.NdefMessage;
@@ -268,20 +269,46 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	@Override
-	public void onReceivedBeam(DebtSendable[] debts, User sender, boolean fullSync) {
-		String name = Resource.guessName(sender);
-		if(name != null) {
-			person = Resource.getOrCreatePerson(name, this);
-		} else {
-			person = Resource.people.get(0);
-		}
+	public void onReceivedBeam(final DebtSendable[] debts, final User sender, final boolean fullSync) {
+		FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
-		if(fullSync) {
-			Resource.data.sync(person, debts);
-		} else {
-			Resource.debts.add(debts[0].extract(person));
-		}
+		Bundle arguments = new Bundle();
+		arguments.putString(FromWhoDialogFragment.KEY_NAME, Resource.guessName(sender));
+		fragment.setArguments(arguments);
 
+		fragment.show(getFragmentManager(), "from_who");
+
+		final FeedActivity self = this;
+		fragment.completeCallback = new FromWhoDialogFragment.FromWhoSelected() {
+			@Override
+			public void onSelected(String name) {
+				person = Resource.getOrCreatePerson(name, self);
+
+				if(fullSync) {
+					ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+
+					Bundle arguments = new Bundle();
+					arguments.putString(ConfirmDialogFragment.CONFIRM_TEXT, self.getString(R.string.overwrite_nfc_title));
+					arguments.putString(ConfirmDialogFragment.INFO_TEXT, self.getString(R.string.overwrite_nfc_text) + person.name + "?");
+					confirmDialogFragment.setArguments(arguments);
+
+					confirmDialogFragment.show(getFragmentManager(), "overwrite_confirmation");
+
+					confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
+						@Override
+						public void onConfirm() {
+							Resource.data.sync(person, debts);
+							commitBeam();
+						}
+					};
+				} else {
+					Resource.debts.add(debts[0].extract(person));
+					commitBeam();
+				}
+			}
+		};
+	}
+	private void commitBeam() {
 		Resource.commit();
 
 		feed = Resource.data.personalizedFeed(person);
@@ -289,7 +316,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 		navigationDrawerFragment.setSelectedPerson(person);
 
 		getFragmentManager().beginTransaction()
-			.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
-			.commit();
+				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
+				.commit();
 	}
 }
