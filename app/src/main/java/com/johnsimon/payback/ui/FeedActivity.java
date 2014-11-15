@@ -37,7 +37,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
-	public static boolean animateListItems = true;
 	public static Toolbar toolbar;
 
 	public static Person person = null;
@@ -217,7 +216,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 			case R.id.navigation_drawer_footer_about:
-				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+				//AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+				//aboutDialogFragment.show(getFragmentManager(), "about_dialog");
+
+				FromWhoDialogFragment aboutDialogFragment = new FromWhoDialogFragment();
 				aboutDialogFragment.show(getFragmentManager(), "about_dialog");
 				break;
 
@@ -230,19 +232,11 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	public void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		navigationDrawerFragment.mDrawerToggle.syncState();
-
-		if (animateListItems) {
-			Animation toolbarEnter = AnimationUtils.loadAnimation(this, R.anim.feed_toolbar_enter);
-			Animation headerEnter = AnimationUtils.loadAnimation(this, R.anim.feed_header_enter);
-			toolbar.startAnimation(toolbarEnter);
-			FeedFragment.headerView.startAnimation(headerEnter);
-		}
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putBoolean("ANIMATE_FEED_LIST_ITEMS", animateListItems);
         if (filterAmount != null) {
             outState.putBoolean("AMOUNT_USED_SORT", filterAmount.isChecked());
         }
@@ -251,7 +245,6 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		animateListItems = savedInstanceState.getBoolean("ANIMATE_FEED_LIST_ITEMS", true);
 
 		if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
 			sortAmount();

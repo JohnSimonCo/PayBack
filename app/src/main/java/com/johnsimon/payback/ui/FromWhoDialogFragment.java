@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.FontCache;
@@ -25,6 +27,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 
 	public FromWhoSelected completeCallback = null;
 	private AlertDialog alertDialog;
+	private ImageButton from_who_clear;
 
 	public final static String KEY_NAME = "FROM_WHO_LEY_NAME";
 
@@ -51,8 +54,25 @@ public class FromWhoDialogFragment extends DialogFragment {
 			}
 		});
 
+		from_who_clear = (ImageButton) rootView.findViewById(R.id.from_who_clear);
+		from_who_clear.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				actv.setText("");
+				disableButton(confirmButton);
+			}
+		});
+
 		actv = (AutoCompleteTextView) rootView.findViewById(R.id.from_who_actv);
 		actv.setTextColor(getResources().getColor(R.color.gray_text_dark));
+
+		Resources res = getResources();
+		actv.setPadding(
+				Resource.getPx(8, res),
+				Resource.getPx(8, res),
+				Resource.getPx(42, res),
+				Resource.getPx(8, res)
+		);
 
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				getActivity(),
@@ -125,6 +145,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 		btn.setOnClickListener(null);
 		btn.setClickable(false);
 		btn.setEnabled(false);
+		from_who_clear.setVisibility(View.GONE);
 	}
 
 	private void enableButton(Button btn) {
@@ -132,6 +153,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 		btn.setOnClickListener(clickListener);
 		btn.setClickable(true);
 		btn.setEnabled(true);
+		from_who_clear.setVisibility(View.VISIBLE);
 	}
 
 	private View.OnClickListener clickListener = new View.OnClickListener() {

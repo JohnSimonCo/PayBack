@@ -64,15 +64,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 		adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, rootView.findViewById(R.id.feed_list_empty_view));
 		recyclerView.setAdapter(adapter);
 
-        //We're done animating.
-        Handler handler = new Handler();
-        Runnable r = new Runnable() {
-            public void run() {
-                FeedActivity.animateListItems = false;
-            }
-        };
-        handler.postDelayed(r, 400);
-
         //FAB is different on L
         if (Resource.isLOrAbove()) {
             final ImageButton fab = (ImageButton) headerView.findViewById(R.id.feed_fab_l);
