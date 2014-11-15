@@ -29,7 +29,6 @@ public class NDSpinner extends Spinner {
 			reqField.setInt(this, -1);
 		} catch (Exception e) {
 			Log.d("Exception Private", "ex", e);
-			// TODO: handle exception
 		}
 	}
 

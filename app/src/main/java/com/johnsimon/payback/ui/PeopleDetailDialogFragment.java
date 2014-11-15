@@ -146,7 +146,6 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                     .actionListener(new Snackbar.ActionClickListener() {
                         @Override
                         public void onActionClicked() {
-                            //TODO make sure this works
                             Resource.data.rename(person, oldName);
                             editPersonCallback.onEdit();
                         }
