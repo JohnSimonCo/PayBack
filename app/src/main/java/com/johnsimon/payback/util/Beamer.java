@@ -1,7 +1,5 @@
 package com.johnsimon.payback.util;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -10,15 +8,11 @@ import android.nfc.NfcEvent;
 
 import com.google.gson.Gson;
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.send.NfcData;
 import com.johnsimon.payback.ui.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.FeedActivity;
-import com.williammora.snackbar.Snackbar;
-
-import java.util.ArrayList;
 
 import static android.nfc.NdefRecord.createMime;
 
@@ -43,7 +37,7 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	public void processIntent(Intent intent) {
 		if(intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)) {
 			NfcData data = readMessage((NdefMessage) intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)[0]);
-			callback.onRecievedBeam(data.debts, data.sender, data.fullSync);
+			callback.onReceivedBeam(data.debts, data.sender, data.fullSync);
 
 			intent.removeExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
 		}
@@ -77,6 +71,6 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	*/
 
 	public interface BeamListener {
-		void onRecievedBeam(DebtSendable[] debts, User sender, boolean fullSync);
+		void onReceivedBeam(DebtSendable[] debts, User sender, boolean fullSync);
 	}
 }

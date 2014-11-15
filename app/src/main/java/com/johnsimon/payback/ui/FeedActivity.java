@@ -24,13 +24,8 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
-import com.johnsimon.payback.send.NfcData;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -273,7 +268,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	}
 
 	@Override
-	public void onRecievedBeam(DebtSendable[] debts, User sender, boolean fullSync) {
+	public void onReceivedBeam(DebtSendable[] debts, User sender, boolean fullSync) {
 		person = test(sender);
 
 		if(fullSync) {
