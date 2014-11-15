@@ -216,10 +216,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 			case R.id.navigation_drawer_footer_about:
-				//AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-				//aboutDialogFragment.show(getFragmentManager(), "about_dialog");
-
-				FromWhoDialogFragment aboutDialogFragment = new FromWhoDialogFragment();
+				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
 				aboutDialogFragment.show(getFragmentManager(), "about_dialog");
 				break;
 
