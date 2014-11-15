@@ -10,9 +10,11 @@ import com.johnsimon.payback.R;
  */
 public class User {
 	public String name;
+	public String number;
 
-	public User(String name) {
+	public User(String name, String number) {
 		this.name = name;
+		this.number = number;
 	}
 
 	public String getName(Resources resources) {

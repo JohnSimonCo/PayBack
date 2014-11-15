@@ -30,9 +30,7 @@ public class ColorPalette {
 		}
 
 		for (Person person : Resource.people) {
-			if(person.color != null) {
-				usedColors.put(person.color, usedColors.get(person.color) + 1);
-			}
+			usedColors.put(person.color, usedColors.get(person.color) + 1);
 		}
 
 		int color = 0, smallest = -1;
