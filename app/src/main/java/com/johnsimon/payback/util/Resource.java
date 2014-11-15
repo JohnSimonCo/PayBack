@@ -341,6 +341,12 @@ public class Resource {
 	}
 
 	public static String guessName(User sender) {
+		//If user has no name, use currently viewed person
+		if(user.name == null) {
+			return FeedActivity.isAll() ? null : FeedActivity.person.name;
+		}
+
+		//If user has a name:
 		//First match name and number in people and their links
 		for(Person person : people) {
 			if(person.matchTo(sender) || (person.isLinked() && person.link.matchTo(sender))) {
@@ -355,13 +361,8 @@ public class Resource {
 			}
 		}
 
-		//Otherwise, if not in all view, use currently viewed person
-		if(!FeedActivity.isAll()) {
-			return FeedActivity.person.name;
-		}
-
-		//If no match found, return null
-		return null;
+		//Otherwise, use the senders name
+		return sender.name;
 	}
 
 	public static void actionComplete(FragmentManager fragmentManager) {
