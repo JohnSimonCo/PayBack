@@ -70,7 +70,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		adapter = new PeopleListAdapter(this, Resource.people);
+		adapter = new PeopleListAdapter(this, Resource.people, findViewById(R.id.people_manager_empty));
 
 		listView = (DragSortListView) findViewById(R.id.people_listview);
 
@@ -109,6 +109,8 @@ public class PeopleManagerActivity extends ActionBarActivity {
 				};
 			}
 		});
+
+		adapter.notifyDataSetChanged();
 
         setupTreeObserver();
     }

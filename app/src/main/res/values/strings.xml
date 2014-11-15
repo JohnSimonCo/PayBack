@@ -15,7 +15,7 @@
     <string name="title_activity_setup">Pay Back</string>
     <string name="welcome">Welcome to Pay Back!</string>
     <string name="title_activity_create_debt">Create new debt</string>
-    <string name="list_empty_text">No debts yet :)</string>
+    <string name="list_empty_text">No entries, try adding one</string>
     <string name="even">We\'re even!</string>
     <string name="person_hint">Who?</string>
     <string name="they_owe">They owe</string>
@@ -53,7 +53,7 @@
     <string name="done">Done</string>
     <string name="welcome_currency">Select the currency you would like to use</string>
     <string name="sort_az">Sort </string>
-    <string name="people_empty_text">No people added yet</string>
+    <string name="people_empty_text">No people added</string>
     <string name="select_person">Select a person</string>
     <string name="change_person">Change person</string>
     <string name="rename">Rename</string>

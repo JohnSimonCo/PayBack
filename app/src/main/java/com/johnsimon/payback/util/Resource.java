@@ -67,6 +67,7 @@ public class Resource {
         people = data.people;
         debts = data.debts;
 
+		//TODO remove sample data
         if (people.size() == 0) {
             ColorPalette palette = ColorPalette.getInstance(context);
             Person john = new Person("John Rapp", palette);

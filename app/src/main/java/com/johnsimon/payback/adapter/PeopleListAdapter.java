@@ -18,11 +18,13 @@ import java.util.ArrayList;
 public class PeopleListAdapter extends ArrayAdapter<Person> {
 	public final ArrayList<Person> people;
 	private final Activity context;
+	private View emptyView;
 
-	public PeopleListAdapter(Activity context, ArrayList<Person> people) {
+	public PeopleListAdapter(Activity context, ArrayList<Person> people, View emptyView) {
 		super(context, R.layout.people_list_item, people);
 		this.context = context;
 		this.people = people;
+		this.emptyView = emptyView;
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -60,6 +62,17 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 			this.name = name;
 			this.avatar = avatar;
             this.avatarLetter = avatarLetter;
+		}
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		super.notifyDataSetChanged();
+
+		if (people.size() == 0) {
+			emptyView.setVisibility(View.VISIBLE);
+		} else {
+			emptyView.setVisibility(View.GONE);
 		}
 	}
 }

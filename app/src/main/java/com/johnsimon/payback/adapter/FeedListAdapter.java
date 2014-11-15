@@ -18,9 +18,10 @@ import com.makeramen.RoundedImageView;
 
 import java.util.ArrayList;
 
-public class FeedListAdapterRecycler extends RecyclerView.Adapter<FeedListAdapterRecycler.ViewHolder> {
+public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 	private final ArrayList<Debt> list;
 	private final Activity context;
+	private final View emptyView;
 	private DebtDetailDialogFragment.Callback callback;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -44,14 +45,15 @@ public class FeedListAdapterRecycler extends RecyclerView.Adapter<FeedListAdapte
 		}
 	}
 
-	public FeedListAdapterRecycler(ArrayList<Debt> debts, Activity ctx, DebtDetailDialogFragment.Callback _callback) {
+	public FeedListAdapter(ArrayList<Debt> debts, Activity ctx, DebtDetailDialogFragment.Callback _callback, View _emptyView) {
 		list = debts;
 		context = ctx;
 		callback = _callback;
+		emptyView = _emptyView;
 	}
 
 	@Override
-	public FeedListAdapterRecycler.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public FeedListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_list_item, parent, false));
 	}
 
@@ -90,7 +92,14 @@ public class FeedListAdapterRecycler extends RecyclerView.Adapter<FeedListAdapte
 				dialog.callback = callback;
 			}
 		});
+	}
 
+	public void checkAdapterIsEmpty () {
+		if (getItemCount() == 0) {
+			emptyView.setVisibility(View.VISIBLE);
+		} else {
+			emptyView.setVisibility(View.GONE);
+		}
 	}
 
 	// Return the size of your dataset (invoked by the layout manager)

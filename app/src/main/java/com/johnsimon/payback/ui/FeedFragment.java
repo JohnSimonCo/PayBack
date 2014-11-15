@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
-import com.johnsimon.payback.adapter.FeedListAdapterRecycler;
+import com.johnsimon.payback.adapter.FeedListAdapter;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
@@ -36,7 +36,7 @@ import com.williammora.snackbar.Snackbar;
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-	public static FeedListAdapterRecycler adapter;
+	public static FeedListAdapter adapter;
     public static FrameLayout headerView;
 
 	public static TextView totalDebtTextView;
@@ -61,7 +61,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 		displayTotalDebt(getActivity());
 
-		adapter = new FeedListAdapterRecycler(FeedActivity.feed, getActivity(), this);
+		adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, rootView.findViewById(R.id.feed_list_empty_view));
 		recyclerView.setAdapter(adapter);
 
         //We're done animating.
@@ -100,6 +100,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
                 headerView, -headerHeight, null, 0);
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
+
+		adapter.checkAdapterIsEmpty();
 
 		return rootView;
 	}
@@ -172,8 +174,9 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 									FeedActivity.feed.add(indexFeed, debt);
 								}
 
-								adapter.notifyDataSetChanged();
 								displayTotalDebt(getActivity());
+								adapter.notifyDataSetChanged();
+								adapter.checkAdapterIsEmpty();
 							}
 						})
 						.show(getActivity());
@@ -186,6 +189,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 				displayTotalDebt(getActivity());
 				adapter.notifyDataSetChanged();
+				adapter.checkAdapterIsEmpty();
 			}
 		};
 	}
