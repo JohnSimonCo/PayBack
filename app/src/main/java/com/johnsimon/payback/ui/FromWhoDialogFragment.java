@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -17,15 +19,16 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.FontCache;
 import com.johnsimon.payback.util.Resource;
 
+import java.util.ArrayList;
+
 public class FromWhoDialogFragment extends DialogFragment {
 
 	public FromWhoSelected completeCallback = null;
 	private AlertDialog alertDialog;
-	private boolean useOnlyPeopleInApp = false;
 
 	public final static String KEY_NAME = "FROM_WHO_LEY_NAME";
 
-	private AutoCompleteTextView autoCompleteTextView;
+	private AutoCompleteTextView actv;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,40 +51,55 @@ public class FromWhoDialogFragment extends DialogFragment {
 			}
 		});
 
-		autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.from_who_actv);
-		autoCompleteTextView.setTextColor(getResources().getColor(R.color.gray_text_dark));
+		actv = (AutoCompleteTextView) rootView.findViewById(R.id.from_who_actv);
+		actv.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
-		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				Resource.getAllNames()));
+				Resource.getAllNames());
+
+		actv.setAdapter(adapter);
 
 		Bundle args = getArguments();
 		if (args != null) {
 			String sentName = args.getString(KEY_NAME, "");
 			if (!TextUtils.isEmpty(sentName)) {
-				autoCompleteTextView.setFocusable(false);
-				autoCompleteTextView.setFocusableInTouchMode(false);
-				autoCompleteTextView.setText(sentName);
-				autoCompleteTextView.setFocusable(true);
-				autoCompleteTextView.setFocusableInTouchMode(true);
-				autoCompleteTextView.setSelection(autoCompleteTextView.getText().length());
+
+				actv.setText(sentName);
+
+				actv.setSelection(0, actv.getText().length());
+				actv.setAdapter(null);
+				actv.requestFocus();
+
+				Handler handler = new Handler() {
+					public void handleMessage(Message msg) {
+						((AutoCompleteTextView) msg.obj).setAdapter(adapter);
+					}
+				};
+
+				Message msg = handler.obtainMessage();
+				handler.sendMessageDelayed(msg, 200);
+
+				actv.setSelection(actv.getText().length());
 				enableButton(confirmButton);
 			}
 		}
 
-		if (autoCompleteTextView.getText().toString().equals("")) {
+		if (actv.getText().toString().equals("")) {
 			disableButton(confirmButton);
 		}
 
-		autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+			actv.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
+
 			@Override
 			public void afterTextChanged(Editable s) {
 
@@ -118,7 +136,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 	private View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			completeCallback.onSelected(autoCompleteTextView.getText().toString());
+			completeCallback.onSelected(actv.getText().toString());
 			alertDialog.cancel();
 		}
 	};
