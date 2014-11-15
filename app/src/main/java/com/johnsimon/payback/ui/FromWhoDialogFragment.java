@@ -59,7 +59,16 @@ public class FromWhoDialogFragment extends DialogFragment {
 
 		Bundle args = getArguments();
 		if (args != null) {
-			autoCompleteTextView.setText(args.getString(KEY_NAME, ""));
+			String sentName = args.getString(KEY_NAME, "");
+			if (!TextUtils.isEmpty(sentName)) {
+				autoCompleteTextView.setFocusable(false);
+				autoCompleteTextView.setFocusableInTouchMode(false);
+				autoCompleteTextView.setText(sentName);
+				autoCompleteTextView.setFocusable(true);
+				autoCompleteTextView.setFocusableInTouchMode(true);
+				autoCompleteTextView.setSelection(autoCompleteTextView.getText().length());
+				enableButton(confirmButton);
+			}
 		}
 
 		if (autoCompleteTextView.getText().toString().equals("")) {
@@ -78,7 +87,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 
 				String name = s.toString();
 
-				if (TextUtils.isEmpty(name) || (useOnlyPeopleInApp && Resource.data.findPersonByName(name) == null)) {
+				if (TextUtils.isEmpty(name)) {
 					disableButton(confirmButton);
 				} else {
 					enableButton(confirmButton);
