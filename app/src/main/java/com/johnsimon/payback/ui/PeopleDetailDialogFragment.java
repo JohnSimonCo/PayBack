@@ -109,7 +109,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                             final int restorePersonIndex = Resource.data.people.indexOf(person);
 
                             Snackbar.with(getActivity())
-                                    .text(getString(R.string.sort_list))
+                                    .text(getString(R.string.deleted_person))
                                     .actionLabel(getString(R.string.undo))
 									.actionColor(Color.WHITE)
                                     .actionListener(new Snackbar.ActionClickListener() {
@@ -183,8 +183,6 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 						}
 					}
 
-                   // final int otherIndex = Resource.people.indexOf(other);
-
                     Snackbar.with(getActivity())
                             .text(getString(R.string.merged_people))
                             .actionLabel(getString(R.string.undo))
@@ -192,7 +190,6 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                             .actionListener(new Snackbar.ActionClickListener() {
                                 @Override
                                 public void onActionClicked() {
-                                    //TODO make sure this works
                                     Resource.data.unmerge(person, debts, index);
 
                                     editPersonCallback.onEdit();
