@@ -58,36 +58,6 @@ public class Resource {
 	private static int actions;
 	private static boolean neverRate;
 
-
-
-
-
-/*
-	ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
-
-	Bundle argsDelete = new Bundle();
-	argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.overwrite_nfc_title));
-	argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.overwrite_nfc_text) + person.name + "?");
-	confirmDialogFragment.setArguments(argsDelete);
-
-	confirmDialogFragment.show(getFragmentManager(), "overwrite_confirmation");
-
-	confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
-		@Override
-		public void onConfirm() {
-
-		}
-	};
-
-	Snackbar.with(getActivity())
-			.text(getString(R.string.nfc_error_all))
-			.show(getActivity());
-
-
-*/
-
-
-
     public static void init(Activity context) {
         if (data != null) return;
 

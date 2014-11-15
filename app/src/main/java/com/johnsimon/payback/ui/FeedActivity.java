@@ -289,7 +289,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 					Bundle arguments = new Bundle();
 					arguments.putString(ConfirmDialogFragment.CONFIRM_TEXT, self.getString(R.string.overwrite_nfc_title));
-					arguments.putString(ConfirmDialogFragment.INFO_TEXT, self.getString(R.string.overwrite_nfc_text) + person.name + "?");
+					arguments.putString(ConfirmDialogFragment.INFO_TEXT, String.format(self.getString(R.string.overwrite_nfc_text), person.name));
 					confirmDialogFragment.setArguments(arguments);
 
 					confirmDialogFragment.show(getFragmentManager(), "overwrite_confirmation");
@@ -313,6 +313,7 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 		feed = Resource.data.personalizedFeed(person);
 
+		NavigationDrawerFragment.adapter.setItems(Resource.people);
 		navigationDrawerFragment.setSelectedPerson(person);
 
 		getFragmentManager().beginTransaction()

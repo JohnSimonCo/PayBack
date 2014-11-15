@@ -28,7 +28,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		setItems(people);
 	}
 
-	private void setItems(ArrayList<Person> people) {
+	public void setItems(ArrayList<Person> people) {
 		for(Person person : people) {
 			items.add(new NavigationDrawerItem(person.toString(), person.id, null, person));
 		}
