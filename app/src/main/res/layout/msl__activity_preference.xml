@@ -8,6 +8,7 @@
               tools:context="com.antonioleiva.materialeverywhere.SettingsActivity" >
 
     <android.support.v7.widget.Toolbar
+        style="@style/AppTheme"
         android:id="@+id/msl__toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

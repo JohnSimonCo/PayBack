@@ -34,11 +34,11 @@
 
         <ImageView
             style="@style/Elevation2DP"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="35dp"
             android:layout_gravity="bottom"
             android:src="@drawable/feed_image_bottom_shadow"
             android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             style="@style/Elevation2DP"
@@ -67,12 +67,6 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-        
-        <View
-            android:layout_marginTop="@dimen/list_header_image_height"
-            style="@style/Elevation2DP"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
 
         <include
             android:layout_gravity="bottom|right"

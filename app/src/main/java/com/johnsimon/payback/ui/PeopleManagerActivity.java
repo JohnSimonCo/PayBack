@@ -137,6 +137,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
                 personListBeforeSort = (ArrayList<Person>) Resource.people.clone();
 
                 Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
+                Resource.commit();
 
                 if (Resource.areIdenticalLists(personListBeforeSort, Resource.people)) {
 					Snackbar.with(getApplicationContext())
@@ -188,6 +189,10 @@ public class PeopleManagerActivity extends ActionBarActivity {
                                             @Override
                                             public void onActionClicked() {
                                                 Resource.people = personListBeforeSort;
+                                                Resource.commit();
+
+                                                adapter.clear();
+                                                adapter.addAll(Resource.people);
                                                 adapter.notifyDataSetChanged();
                                             }
                                         })

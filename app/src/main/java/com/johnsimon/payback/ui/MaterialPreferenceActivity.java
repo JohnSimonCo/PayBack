@@ -1,6 +1,8 @@
 package com.johnsimon.payback.ui;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +10,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.Resource;
 
 public abstract class MaterialPreferenceActivity extends PreferenceActivity
 {
@@ -51,10 +54,15 @@ public abstract class MaterialPreferenceActivity extends PreferenceActivity
 		});
 	}
 
-	protected void setEnabledActionBarShadow(final boolean enable)
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    protected void setEnabledActionBarShadow(final boolean enable)
 	{
-		if(_shadowView==null)
-			_shadowView=findViewById(R.id.msl__shadowView);
-		_shadowView.setVisibility(enable ? View.VISIBLE : View.GONE);
+        if (Resource.isLOrAbove()) {
+            _toolbar.setElevation(4);
+        } else {
+            if(_shadowView==null)
+                _shadowView=findViewById(R.id.msl__shadowView);
+            _shadowView.setVisibility(enable ? View.VISIBLE : View.GONE);
+        }
 	}
 }

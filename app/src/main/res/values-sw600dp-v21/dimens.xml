@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="feed_fab_bottom_margin">14dp</dimen>
+    <dimen name="feed_fab_bottom_margin">13dp</dimen>
     <dimen name="create_fab_top_margin">196dp</dimen>
 
 </resources>
