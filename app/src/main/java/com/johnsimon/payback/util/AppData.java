@@ -32,8 +32,8 @@ public class AppData {
 		return result;
 	}
 
-	public static int totalDebt(ArrayList<Debt> debts) {
-		int total = 0;
+	public static float totalDebt(ArrayList<Debt> debts) {
+		float total = 0;
 		for(Debt debt : debts) {
 			if(!debt.isPaidBack) {
 				total += debt.amount;
@@ -42,8 +42,8 @@ public class AppData {
 		return total;
 	}
 
-	public int calculateTotalPlus() {
-		int sum = 0;
+	public float calculateTotalPlus() {
+		float sum = 0;
 		for (int i = 0; i < debts.size(); i++) {
 			if (debts.get(i).amount > 0) {
 				sum += debts.get(i).amount;
@@ -52,8 +52,8 @@ public class AppData {
 		return sum;
 	}
 
-	public int calculateTotalMinus() {
-		int sum = 0;
+	public float calculateTotalMinus() {
+		float sum = 0;
 		for (int i = 0; i < debts.size(); i++) {
 			if (debts.get(i).amount < 0) {
 				sum += debts.get(i).amount;

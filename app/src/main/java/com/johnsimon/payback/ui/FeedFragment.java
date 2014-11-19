@@ -105,7 +105,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 		displayTotalDebt(getActivity());
 	}
 	public static void displayTotalDebt(Context ctx) {
-		int debt = AppData.totalDebt(FeedActivity.feed);
+		float debt = AppData.totalDebt(FeedActivity.feed);
 
         if (debt == 0) {
             feed_header_balance.setVisibility(View.GONE);
