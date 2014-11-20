@@ -184,7 +184,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
                                 Snackbar.with(getApplicationContext())
                                         .text(getString(R.string.sort_list))
                                         .actionLabel(getString(R.string.undo))
-										.actionColor(Color.WHITE)
+										.actionColor(getResources().getColor(R.color.green))
                                         .actionListener(new Snackbar.ActionClickListener() {
                                             @Override
                                             public void onActionClicked() {

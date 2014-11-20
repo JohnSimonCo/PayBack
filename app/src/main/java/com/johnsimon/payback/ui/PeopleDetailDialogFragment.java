@@ -111,7 +111,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                             Snackbar.with(getActivity())
                                     .text(getString(R.string.deleted_person))
                                     .actionLabel(getString(R.string.undo))
-									.actionColor(Color.WHITE)
+									.actionColor(getResources().getColor(R.color.green))
                                     .actionListener(new Snackbar.ActionClickListener() {
                                         @Override
                                         public void onActionClicked() {
@@ -142,7 +142,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
             Snackbar.with(getActivity())
                     .text(getString(R.string.renamed_person))
                     .actionLabel(getString(R.string.undo))
-                    .actionColor(Color.WHITE)
+                    .actionColor(getResources().getColor(R.color.green))
                     .actionListener(new Snackbar.ActionClickListener() {
                         @Override
                         public void onActionClicked() {
@@ -186,7 +186,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                     Snackbar.with(getActivity())
                             .text(getString(R.string.merged_people))
                             .actionLabel(getString(R.string.undo))
-                            .actionColor(Color.WHITE)
+                            .actionColor(getResources().getColor(R.color.green))
                             .actionListener(new Snackbar.ActionClickListener() {
                                 @Override
                                 public void onActionClicked() {

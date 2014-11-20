@@ -155,7 +155,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 				Snackbar.with(getActivity())
 						.text(getString(R.string.deleted_debt))
 						.actionLabel(getString(R.string.undo))
-						.actionColor(Color.WHITE)
+						.actionColor(getResources().getColor(R.color.green))
 						.actionListener(new Snackbar.ActionClickListener() {
 							@Override
 							public void onActionClicked() {

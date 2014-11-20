@@ -5,7 +5,7 @@
 
     <dimen name="fab_create_right_margin">8dp</dimen>
 
-    <dimen name="navigation_drawer_width">296dp</dimen>
+    <dimen name="navigation_drawer_width">270dp</dimen>
 
     <dimen name="feed_left_margin">72dp</dimen>
     <dimen name="feed_header_bottom_margin">64dp</dimen>

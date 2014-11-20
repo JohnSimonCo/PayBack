@@ -112,9 +112,11 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 			welcome_information_text.setText(R.string.welcome_currency);
 		}
 
-		if (!currencyOnly) {
-			setCancelable(false);
-		}
+		if (currencyOnly) {
+			setCancelable(true);
+		} else {
+            setCancelable(false);
+        }
 
 		builder.setView(rootView);
 
