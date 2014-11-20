@@ -5,7 +5,7 @@
 
     <item
         android:drawable="@drawable/check"
-        android:duration="160"/>
+        android:duration="240"/>
 
     <item
         android:drawable="@drawable/check1"

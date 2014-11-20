@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
+import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
@@ -311,8 +312,8 @@ public class NavigationDrawerFragment extends Fragment {
 	public static void updateBalance() {
 		String currency = Resource.getCurrency();
 
-		headerPlus.setText("+ " + Resource.data.calculateTotalPlus() + " " + currency);
-		headerMinus.setText(" " + Resource.data.calculateTotalMinus() + " " + currency);
+		headerPlus.setText("+ " + Debt.amountString(Resource.data.calculateTotalPlus()) + " " + currency);
+		headerMinus.setText(" " + Debt.amountString(Resource.data.calculateTotalMinus()) + " " + currency);
 	}
 
 	private void updateName() {
