@@ -6,9 +6,12 @@
 
     <com.johnsimon.payback.RobotoMediumTextView
         android:id="@+id/sb__action"
-        style="@style/Snackbar.Text.Action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textColor="@color/sb__action_text_color"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 
