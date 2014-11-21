@@ -13,6 +13,7 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -417,6 +418,15 @@ public class Resource {
 		return true;
 
 	}
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
 
     public static class AmountComparator implements Comparator<Debt> {
         @Override

@@ -1,6 +1,7 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -262,6 +263,8 @@ public class CreateDebtActivity extends ActionBarActivity {
                 Snackbar.with(getApplicationContext())
                         .text(getString(R.string.create_fab_error))
                         .show(CreateDebtActivity.this);
+
+                Resource.hideKeyboard(CreateDebtActivity.this);
             }
         }
     };
