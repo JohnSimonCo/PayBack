@@ -140,12 +140,8 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
 						mHeaderDiffTotal = Math.min(Math.max(mHeaderDiffTotal + dy, mMinHeaderTranslation), 0);
 					}
 
-                    Log.d("PAY BACK", mHeaderMaxHeight - (mHeaderDiffTotal) + "");
-
 					mHeader.setTranslationY(mHeaderDiffTotal);
-                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mHeaderImage.getLayoutParams();
-                    params.height =  mHeaderMaxHeight - (mHeaderDiffTotal);
-                    mHeaderImage.setLayoutParams(params);
+
 					break;
 				case FOOTER:
 					if(dy < 0){ // scrolling down

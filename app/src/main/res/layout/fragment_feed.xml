@@ -33,13 +33,6 @@
             android:src="@drawable/feed_image_gradient"
             android:layout_width="match_parent"
             android:layout_height="@dimen/list_header_image_height" />
-        
-        <View
-            style="@style/Elevation2DP"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:background="#eee"   />
 
         <ImageView
             style="@style/Elevation2DP"
