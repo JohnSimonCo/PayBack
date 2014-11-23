@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -233,7 +234,7 @@ public class Snackbar extends RelativeLayout {
 
         snackbarText.setMaxLines(mType.getMaxLines());
 
-        RobotoMediumTextView snackbarAction = (RobotoMediumTextView) layout.findViewById(R.id.sb__action);
+        Button snackbarAction = (Button) layout.findViewById(R.id.sb__action);
         if (!TextUtils.isEmpty(mActionLabel)) {
             requestLayout();
             snackbarAction.setText(mActionLabel);

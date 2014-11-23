@@ -2,9 +2,13 @@ package com.etiennelawlor.quickreturn.library.listeners;
 
 import android.animation.ObjectAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
+import com.johnsimon.payback.util.Resource;
 
 public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollListener {
 
@@ -13,19 +17,23 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
     private int mMinHeaderTranslation;
     private int mHeaderDiffTotal = 0;
     private int mFooterDiffTotal = 0;
+    private int mHeaderMaxHeight = 0;
     private View mHeader;
+    private View mHeaderImage;
     private View mFooter;
     private QuickReturnType mQuickReturnType;
     private boolean mCanSlideInIdleScrollState = false;
     // endregion
 
     // region Constructors
-    public QuickReturnListViewOnScrollListener(QuickReturnType quickReturnType, View headerView, int headerTranslation, View footerView, int footerTranslation){
+    public QuickReturnListViewOnScrollListener(QuickReturnType quickReturnType, View headerView, int headerTranslation, View footerView, int footerTranslation, View image){
         mQuickReturnType = quickReturnType;
         mHeader =  headerView;
         mMinHeaderTranslation = headerTranslation;
         mFooter =  footerView;
         mMinFooterTranslation = footerTranslation;
+        mHeaderImage = image;
+        mHeaderMaxHeight = image.getLayoutParams().height;
     }
     // endregion
 
@@ -132,7 +140,12 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
 						mHeaderDiffTotal = Math.min(Math.max(mHeaderDiffTotal + dy, mMinHeaderTranslation), 0);
 					}
 
+                    Log.d("PAY BACK", mHeaderMaxHeight - (mHeaderDiffTotal) + "");
+
 					mHeader.setTranslationY(mHeaderDiffTotal);
+                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mHeaderImage.getLayoutParams();
+                    params.height =  mHeaderMaxHeight - (mHeaderDiffTotal);
+                    mHeaderImage.setLayoutParams(params);
 					break;
 				case FOOTER:
 					if(dy < 0){ // scrolling down

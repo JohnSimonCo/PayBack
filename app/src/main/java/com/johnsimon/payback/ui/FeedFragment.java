@@ -88,7 +88,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
         int headerHeight = headerView.getLayoutParams().height;
         QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
-                headerView, -headerHeight, null, 0);
+                headerView, -headerHeight, null, 0, headerView.findViewById(R.id.feed_list_image));
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
 

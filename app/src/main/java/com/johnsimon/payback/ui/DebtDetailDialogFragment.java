@@ -1,16 +1,22 @@
 package com.johnsimon.payback.ui;
 
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -30,8 +36,6 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 	public Callback callback = null;
 	public AlertDialog alertDialog;
 
-	private DebtDetailDialogFragment self = this;
-
 	public static DebtDetailDialogFragment newInstance(Debt debt) {
 		DebtDetailDialogFragment.debt = debt;
 		DebtDetailDialogFragment.debtAccessible = debt;
@@ -45,7 +49,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View rootView = inflater.inflate(R.layout.detail_dialog, null);
+        final View rootView = inflater.inflate(R.layout.detail_dialog, null);
 
         Button dialog_custom_confirm = (Button) rootView.findViewById(R.id.dialog_custom_confirm);
         Button dialog_custom_cancel = (Button) rootView.findViewById(R.id.dialog_custom_cancel);
@@ -169,10 +173,41 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
         builder.setView(rootView);
 
 		alertDialog = builder.create();
+
+        try {
+            if (Resource.isLOrAbove()) {
+
+                rootView.setVisibility(View.INVISIBLE);
+
+                rootView.postDelayed(new Runnable() {
+
+                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void run() {
+                        int cx = (rootView.getLeft() + rootView.getRight()) / 2;
+                        int cy = (rootView.getTop() + rootView.getBottom()) / 2;
+
+                        int finalRadius = Math.max(rootView.getWidth(), rootView.getHeight());
+
+                        Animator anim = ViewAnimationUtils.createCircularReveal(rootView, cx, cy, 0, finalRadius);
+
+                        rootView.setVisibility(View.VISIBLE);
+
+                        anim.setDuration(400);
+                        anim.start();
+                    }
+                }, 100);
+            }
+        } catch (Exception e) {
+
+        }
+
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
         return alertDialog;
     }
 
-	@Override
+    @Override
 	public void onDestroy() {
 		super.onDestroy();
 		debtAccessible = null;
