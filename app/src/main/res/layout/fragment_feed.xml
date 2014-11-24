@@ -81,14 +81,30 @@
 
     </FrameLayout>
 
-    <com.johnsimon.payback.util.RobotoMediumTextView
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="vertical"
         android:visibility="gone"
         android:id="@+id/feed_list_empty_view"
-        android:text="@string/list_empty_text"
-        android:layout_gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="24sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginTop="60dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Empty screen"
+            android:src="@drawable/empty_view"
+            android:layout_width="240dp"
+            android:layout_height="130dp" />
+
+        <com.johnsimon.payback.util.RobotoMediumTextView
+            android:text="@string/list_empty_text"
+            android:gravity="center_horizontal"
+            android:paddingTop="24dp"
+            android:textSize="17sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </FrameLayout>
