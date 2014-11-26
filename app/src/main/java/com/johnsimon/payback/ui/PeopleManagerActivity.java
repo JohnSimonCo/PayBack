@@ -148,6 +148,24 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
                 if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
                     adapter.notifyDataSetChanged();
+
+                    Snackbar.with(getApplicationContext())
+                            .text(getString(R.string.sort_list))
+                            .actionLabel(getString(R.string.undo))
+                            .actionColor(getResources().getColor(R.color.green))
+                            .actionListener(new Snackbar.ActionClickListener() {
+                                @Override
+                                public void onActionClicked() {
+                                    Resource.people = personListBeforeSort;
+                                    Resource.commit();
+
+                                    adapter.clear();
+                                    adapter.addAll(Resource.people);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            })
+                            .show(this);
+
                     break;
                 }
 
