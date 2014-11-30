@@ -60,7 +60,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 		setEnabledActionBarShadow(true);
 
         if (Resource.isLOrAbove()) {
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.action_settings), BitmapFactory.decodeResource(getResources(),
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
                     R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
 
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -93,6 +93,9 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 				return false;
 			}
 		});
+
+        ListPreference background = (ListPreference) findPreference("pref_background");
+        bindPreferenceSummaryToValue(background);
 
 		bindPreferenceSummaryToValue(pref_currency);
     }

@@ -310,10 +310,8 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 	public static void updateBalance() {
-		String currency = Resource.getCurrency();
-
-		headerPlus.setText("+ " + Debt.amountString(Resource.data.calculateTotalPlus()) + " " + currency);
-		headerMinus.setText(" " + Debt.amountString(Resource.data.calculateTotalMinus()) + " " + currency);
+		headerPlus.setText("+ " + Debt.amountString(Resource.data.calculateTotalPlus()));
+		headerMinus.setText(" " + Debt.amountString(Resource.data.calculateTotalMinus()));
 	}
 
 	private void updateName() {

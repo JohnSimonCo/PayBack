@@ -52,7 +52,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         if (Resource.isLOrAbove()) {
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.title_activity_people_manager), BitmapFactory.decodeResource(getResources(),
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
                     R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
 
             SystemBarTintManager tintManager = new SystemBarTintManager(this);

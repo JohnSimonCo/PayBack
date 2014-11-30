@@ -54,7 +54,7 @@ public class Resource {
 
 	public static User user;
 
-    private static SharedPreferences preferences;
+    public static SharedPreferences preferences;
 
 	private static int actions;
 	private static boolean neverRate;

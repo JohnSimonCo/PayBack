@@ -19,6 +19,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
@@ -86,9 +87,16 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
         View header = new View(getActivity());
         header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
 
+
+        ImageView headerImage = (ImageView) rootView.findViewById(R.id.feed_list_image);
+        if (!Resource.preferences.getString("pref_background", "mountains").equals("mountains")) {
+            Resource.toast(getActivity(), "test");
+            headerImage.setImageDrawable(getResources().getDrawable(R.drawable.art_old));
+        }
+
         int headerHeight = headerView.getLayoutParams().height;
         QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
-                headerView, -headerHeight, null, 0, headerView.findViewById(R.id.feed_list_image));
+                headerView, -headerHeight, null, 0, headerImage);
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
 
