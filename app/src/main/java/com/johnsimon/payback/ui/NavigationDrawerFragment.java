@@ -311,7 +311,7 @@ public class NavigationDrawerFragment extends Fragment {
 
 	public static void updateBalance() {
 		headerPlus.setText("+ " + Debt.amountString(Resource.data.calculateTotalPlus()));
-		headerMinus.setText(" " + Debt.amountString(Resource.data.calculateTotalMinus()));
+		headerMinus.setText("- " + Debt.amountString(Resource.data.calculateTotalMinus()));
 	}
 
 	private void updateName() {
