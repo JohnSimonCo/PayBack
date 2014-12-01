@@ -90,6 +90,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/feed_list_empty_view_image"
             android:layout_marginTop="60dp"
             android:layout_gravity="center_horizontal"
             android:contentDescription="Empty screen"

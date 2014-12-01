@@ -10,6 +10,7 @@ import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -84,13 +85,15 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
             fab.setOnClickListener(fabClickListener);
         }
 
+        if (!getResources().getBoolean(R.bool.showEmptyViewImage)) {
+            rootView.findViewById(R.id.feed_list_empty_view_image).setVisibility(View.GONE);
+        }
+
         View header = new View(getActivity());
         header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
 
-
         ImageView headerImage = (ImageView) rootView.findViewById(R.id.feed_list_image);
-        if (!Resource.preferences.getString("pref_background", "mountains").equals("mountains")) {
-            Resource.toast(getActivity(), "test");
+        if (!PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).getString("pref_background", "mountains").equals("mountains")) {
             headerImage.setImageDrawable(getResources().getDrawable(R.drawable.art_old));
         }
 
