@@ -132,6 +132,10 @@ public class PeopleManagerActivity extends ActionBarActivity {
 				returnToFeed();
 				break;
 
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+
 			case R.id.action_sort_az:
 
                 personListBeforeSort = (ArrayList<Person>) Resource.people.clone();
