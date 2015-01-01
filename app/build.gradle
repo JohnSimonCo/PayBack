@@ -8,8 +8,8 @@ android {
         applicationId "com.johnsimon.payback"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -29,4 +33,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.makeramen:roundedimageview:1.4.0'
     compile 'com.williammora:snackbar:1.4.0'
+    compile 'com.anjlab.android.iab.v3:library:1.0.+@aar'
 }
