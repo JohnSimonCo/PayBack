@@ -27,6 +27,7 @@ import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.serialize.AppDataSerializable;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.RequestRateDialogFragment;
+import com.johnsimon.payback.ui.UpgradeDialogFragment;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -36,7 +37,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Resource {
-	private final static int MAX_ACTIONS = 15;
+    private final static int MAX_ACTIONS = 25;
+    private final static int MAX_FREE_DEBTS = 6;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
     private final static String SAVE_KEY_APP_DATA = "APP_DATA";
@@ -44,7 +46,7 @@ public class Resource {
 	private final static String SAVE_KEY_ACTIONS = "SAVE_KEY_ACTIONS";
 	private final static String SAVE_KEY_NEVER_RATE = "SAVE_KEY_NEVER_RATE";
 
-    private final static String PACKAGE_NAME = "se.jrp.deptapp";
+    private final static String PACKAGE_NAME = "com.johnsimon.payback";
     private final static String ARG_PREFIX = PACKAGE_NAME + ".ARG_";
 
     public static AppData data = null;
@@ -59,6 +61,8 @@ public class Resource {
 	private static int actions;
 	private static boolean neverRate;
 
+    public static boolean isFull = false;
+
     public static void init(Activity context) {
         if (data != null) return;
 
@@ -71,7 +75,10 @@ public class Resource {
         people = data.people;
         debts = data.debts;
 
-		//TODO remove sample data
+        checkFull(context);
+
+        //TODO REMOVE SAMPLE DATA
+        /*
         if (people.size() == 0) {
             ColorPalette palette = ColorPalette.getInstance(context);
             Person john = new Person("John Rapp", palette);
@@ -81,7 +88,6 @@ public class Resource {
             Person agge = new Person("Agge Eklöf", palette);
             people.add(agge);
 
-            //#perfmatters
             long timestamp = System.currentTimeMillis();
             debts.add(new Debt(john, 100, "Dyr kebab", timestamp));
             debts.add(new Debt(simon, -200, "Pokemonkort", ++timestamp));
@@ -91,7 +97,7 @@ public class Resource {
             debts.add(new Debt(agge, 2.5f, "Äpple delat på 2", ++timestamp));
 
             commit();
-        }
+        }*/
 
 		user = getUser(context);
 
@@ -448,4 +454,22 @@ public class Resource {
             return person1.name.compareToIgnoreCase(person2.name);
         }
     }
+
+    private static void checkFull(Activity context) {
+        isFull = false;
+    }
+
+    public static boolean verifyFull(Activity activity) {
+        if (!isFull) {
+            UpgradeDialogFragment fragment = new UpgradeDialogFragment();
+            fragment.show(activity.getFragmentManager(), "upgradeTag");
+        }
+
+        return isFull;
+    }
+
+    public static boolean canHold(Activity activity, int addition) {
+        return verifyFull(activity) || debts.size() + addition <= MAX_FREE_DEBTS;
+    }
+
 }

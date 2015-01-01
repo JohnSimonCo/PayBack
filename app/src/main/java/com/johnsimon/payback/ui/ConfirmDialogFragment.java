@@ -30,8 +30,6 @@ public class ConfirmDialogFragment extends DialogFragment {
 
 		View rootView = inflater.inflate(R.layout.confirm_delete_dialog, null);
 
-
-
 		Button confirm_delete_cancel = (Button) rootView.findViewById(R.id.confirm_delete_cancel);
 		Button confirm_delete_confirm = (Button) rootView.findViewById(R.id.confirm_delete_confirm);
 

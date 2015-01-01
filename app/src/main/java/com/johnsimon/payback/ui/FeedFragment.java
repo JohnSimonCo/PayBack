@@ -130,17 +130,21 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
-					.putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
-			if(!FeedActivity.isAll()) {
-				intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
-			}
-			if (Resource.isLOrAbove()) {
-				startActivity(intent);
-			} else {
-				startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
-			}
+            if (Resource.canHold(getActivity(), 1)) {
+                Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
+                        .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
+
+                if(!FeedActivity.isAll()) {
+                    intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
+                }
+                if (Resource.isLOrAbove()) {
+                    startActivity(intent);
+                } else {
+                    startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
+                }
+            }
+
 		}
 	};
 

@@ -33,7 +33,7 @@ public class ThumbnailLoader implements ImageLoadingListener {
 
 	public void load(String uri, final SimpleImageLoadingListener callback) {
 		//TODO MEGA DIRTY
-		uri = uri.replaceAll("/photo$", "");
+		uri = uri.replaceAll("/photo$", ""); //Det funkade
 
 		if(cache.containsKey(uri)) {
 			Bitmap cached = cache.get(uri);
@@ -48,7 +48,7 @@ public class ThumbnailLoader implements ImageLoadingListener {
 		if(callbackMap.containsKey(uri)) {
 			callbacks = callbackMap.get(uri);
 		} else {
-			callbacks = new ArrayList<SimpleImageLoadingListener>();
+			callbacks = new ArrayList<>();
 			callbackMap.put(uri, callbacks);
 			cache.put(uri, null);
 

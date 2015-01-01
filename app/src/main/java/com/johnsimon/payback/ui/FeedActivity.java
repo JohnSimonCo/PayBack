@@ -260,7 +260,10 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	@Override
 	public void onReceivedBeam(final DebtSendable[] debts, final User sender, final boolean fullSync) {
-		FromWhoDialogFragment fragment = new FromWhoDialogFragment();
+
+        if(!Resource.canHold(this, debts.length)) return;
+
+        FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
 		Bundle arguments = new Bundle();
 		arguments.putString(FromWhoDialogFragment.KEY_NAME, Resource.guessName(sender));

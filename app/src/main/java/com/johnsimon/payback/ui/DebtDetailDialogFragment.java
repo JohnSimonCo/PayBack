@@ -174,34 +174,6 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 
 		alertDialog = builder.create();
 
-        try {
-            if (Resource.isLOrAbove()) {
-
-                rootView.setVisibility(View.INVISIBLE);
-
-                rootView.postDelayed(new Runnable() {
-
-                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void run() {
-                        int cx = (rootView.getLeft() + rootView.getRight()) / 2;
-                        int cy = (rootView.getTop() + rootView.getBottom()) / 2;
-
-                        int finalRadius = Math.max(rootView.getWidth(), rootView.getHeight());
-
-                        Animator anim = ViewAnimationUtils.createCircularReveal(rootView, cx, cy, 0, finalRadius);
-
-                        rootView.setVisibility(View.VISIBLE);
-
-                        anim.setDuration(400);
-                        anim.start();
-                    }
-                }, 100);
-            }
-        } catch (Exception e) {
-
-        }
-
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         return alertDialog;
