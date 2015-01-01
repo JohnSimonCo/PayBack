@@ -16,11 +16,8 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.nispok.snackbar.Snackbar;
 
-/**
- * Created by johnrs on 2015-01-01.
- */
 public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final int REQUEST_CODE_RESOLUTION = -14765;
+    private static final int REQUEST_CODE_RESOLUTION = -14795;
 
     private GoogleApiClient client;
     private Activity context;
