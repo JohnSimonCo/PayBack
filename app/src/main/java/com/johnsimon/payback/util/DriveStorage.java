@@ -17,7 +17,7 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.nispok.snackbar.Snackbar;
 
 public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final int REQUEST_CODE_RESOLUTION = -14795;
+    private static final int REQUEST_CODE_RESOLUTION = 14795;
 
     private GoogleApiClient client;
     private Activity context;
@@ -103,6 +103,7 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                 connectionResult.startResolutionForResult(context, REQUEST_CODE_RESOLUTION);
             } catch (IntentSender.SendIntentException e) {
                 // Unable to resolve, message user appropriately
+                show("Shit fuckd up");
             }
         } else {
             GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), context, 0).show();

@@ -342,9 +342,8 @@ public class FeedActivity extends ActionBarActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean handled = false;
-        handled |= bp.handleActivityResult(requestCode, resultCode, data);
-        handled |= storage.handleActivityResult(requestCode, resultCode, data);
+        boolean handled = bp.handleActivityResult(requestCode, resultCode, data) ||
+                          storage.handleActivityResult(requestCode, resultCode, data);
 
         if (!handled) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -353,8 +352,9 @@ public class FeedActivity extends ActionBarActivity implements
 
     @Override
     public void onDestroy() {
-        if (bp != null)
+        if (bp != null) {
             bp.release();
+        }
 
         super.onDestroy();
     }

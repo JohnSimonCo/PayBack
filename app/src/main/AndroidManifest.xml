@@ -12,6 +12,9 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppThemeParent" >
+
+        <meta-data android:name="com.google.android.apps.drive.APP_ID" android:value="id=305687333197-ac3lr46h84qtbj6hbm1g5f0hr62aepoo.apps.googleusercontent.com" />
+
         <activity
             android:exported="true"
             android:name=".ui.FeedActivity"
