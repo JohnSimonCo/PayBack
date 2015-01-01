@@ -9,13 +9,18 @@ import android.os.Bundle;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.nispok.snackbar.Snackbar;
 
 /**
  * Created by johnrs on 2015-01-01.
  */
 public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final int REQUEST_CODE_RESOLUTION = 1;
+    private static final int REQUEST_CODE_RESOLUTION = -14765;
 
     private GoogleApiClient client;
     private Activity context;
@@ -39,7 +44,7 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
         client.disconnect();
     }
 
-    public boolean onResult(final int requestCode, final int resultCode, final Intent data) {
+    public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_RESOLUTION:
                 if (resultCode == Activity.RESULT_OK) {
@@ -52,7 +57,41 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onConnected(Bundle bundle) {
+        Drive.DriveApi.newDriveContents(client)
+                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                    @Override
+                    public void onResult(DriveApi.DriveContentsResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            show("Error while trying to create new file contents");
+                            return;
+                        }
 
+                        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                            .setTitle("data.json")
+                            .setMimeType("text/json")
+                            .build();
+                        Drive.DriveApi.getAppFolder(client)
+                                .createFile(client, changeSet, result.getDriveContents())
+                                .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+                                    @Override
+                                    public void onResult(DriveFolder.DriveFileResult result) {
+                                        if (!result.getStatus().isSuccess()) {
+                                            show("Error while trying to create the file");
+                                            return;
+                                        }
+                                        show("Created a file in App Folder: "
+                                                + result.getDriveFile().getDriveId());
+                                    }
+                                });
+                    }
+                });
+
+    }
+
+    private void show(String text) {
+        Snackbar.with(context)
+                .text(text)
+                .show(context);
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.util.Beamer;
+import com.johnsimon.payback.util.DriveStorage;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
@@ -55,7 +56,8 @@ public class FeedActivity extends ActionBarActivity implements
 
 	private NfcAdapter nfcAdapter;
 
-	Beamer beamer;
+	private Beamer beamer;
+    private DriveStorage storage;
 
 	private CharSequence title;
 
@@ -63,6 +65,8 @@ public class FeedActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        storage = new DriveStorage(this);
 
         bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
 
@@ -131,9 +135,18 @@ public class FeedActivity extends ActionBarActivity implements
 			Resource.actionComplete(getFragmentManager());
 			intent.removeExtra(ARG_FROM_CREATE);
 		}
+
+        storage.connect();
 	}
 
-	public static boolean isAll() {
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        storage.disconnect();
+    }
+
+    public static boolean isAll() {
 		return person == null;
 	}
 
@@ -329,8 +342,13 @@ public class FeedActivity extends ActionBarActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data))
+        boolean handled = false;
+        handled |= bp.handleActivityResult(requestCode, resultCode, data);
+        handled |= storage.handleActivityResult(requestCode, resultCode, data);
+
+        if (!handled) {
             super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
