@@ -131,7 +131,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 		@Override
 		public void onClick(View v) {
 
-            if (Resource.canHold(getActivity(), 1)) {
+            if (Resource.canHold(1)) {
                 Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
                         .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
@@ -143,6 +143,9 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
                 } else {
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
                 }
+            } else {
+                UpgradeDialogFragment fragment = UpgradeDialogFragment.create(FeedActivity.bp);
+                fragment.show(getActivity().getFragmentManager(), "upgradeTag");
             }
 
 		}

@@ -8,11 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
 import com.johnsimon.payback.R;
 
 public class UpgradeDialogFragment extends DialogFragment {
 
     private AlertDialog alertDialog;
+    public static BillingProcessor bp;
+
+    public static UpgradeDialogFragment create(BillingProcessor bp) {
+        UpgradeDialogFragment.bp = bp;
+        return new UpgradeDialogFragment();
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -34,7 +41,8 @@ public class UpgradeDialogFragment extends DialogFragment {
         upgradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO IAP here
+                bp.purchase(getActivity(), "full_version");
+                alertDialog.cancel();
             }
         });
 

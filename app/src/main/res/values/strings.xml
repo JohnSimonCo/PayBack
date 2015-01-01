@@ -77,7 +77,8 @@
     <string name="from_who_title">From who?</string>
     <string name="nfc_error_all">Can\'t send entries from \"All\"</string>
     <string name="title_activity_people_manager">People</string>
-    <string name="upgrade_text">You are using the free version of Pay Back where you are limited to </string>
+    <string name="upgrade_title">Purchase full</string>
+    <string name="upgrade_text">Purchase the full version of Pay Back to add more than 6 debts.</string>
     <string name="upgrade_confirm_text">Upgrade</string>
 
     <!-- About -->

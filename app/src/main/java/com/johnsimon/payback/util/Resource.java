@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
 import com.google.gson.Gson;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Contact;
@@ -74,8 +75,6 @@ public class Resource {
         data = JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract(contacts);
         people = data.people;
         debts = data.debts;
-
-        checkFull(context);
 
         //TODO REMOVE SAMPLE DATA
         /*
@@ -455,21 +454,12 @@ public class Resource {
         }
     }
 
-    private static void checkFull(Activity context) {
-        isFull = false;
+    public static void checkFull(BillingProcessor bp) {
+        isFull =  bp.isPurchased("full_version");
     }
 
-    public static boolean verifyFull(Activity activity) {
-        if (!isFull) {
-            UpgradeDialogFragment fragment = new UpgradeDialogFragment();
-            fragment.show(activity.getFragmentManager(), "upgradeTag");
-        }
-
-        return isFull;
-    }
-
-    public static boolean canHold(Activity activity, int addition) {
-        return verifyFull(activity) || debts.size() + addition <= MAX_FREE_DEBTS;
+    public static boolean canHold(int addition) {
+        return isFull || debts.size() + addition <= MAX_FREE_DEBTS;
     }
 
 }

@@ -8,8 +8,14 @@
     android:padding="16dp"  >
 
     <com.johnsimon.payback.util.RobotoMediumTextView
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:text="@string/upgrade_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#474747"
+        android:textSize="22sp"
+        android:paddingBottom="8dp"/>
+
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:textColor="@color/gray_text_light"
         android:layout_width="wrap_content"
         android:text="@string/upgrade_text"

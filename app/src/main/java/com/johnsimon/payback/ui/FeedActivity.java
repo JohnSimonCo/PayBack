@@ -18,7 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
@@ -31,7 +34,11 @@ import com.johnsimon.payback.util.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FeedActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener {
+public class FeedActivity extends ActionBarActivity implements
+        NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
+        BillingProcessor.IBillingHandler {
+
+    public static BillingProcessor bp;
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 
@@ -50,15 +57,16 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 
 	Beamer beamer;
 
-	/**
-	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-	 */
 	private CharSequence title;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
+
+        Resource.checkFull(bp);
 
         if (Resource.isLOrAbove()) {
             setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
@@ -261,7 +269,11 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	public void onReceivedBeam(final DebtSendable[] debts, final User sender, final boolean fullSync) {
 
-        if(!Resource.canHold(this, debts.length)) return;
+        if(!Resource.canHold(debts.length)) {
+            UpgradeDialogFragment fragment = UpgradeDialogFragment.create(FeedActivity.bp);
+            fragment.show(this.getFragmentManager(), "upgradeTag");
+            return;
+        }
 
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
@@ -314,4 +326,38 @@ public class FeedActivity extends ActionBarActivity implements NavigationDrawerF
 				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 				.commit();
 	}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null)
+            bp.release();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onProductPurchased(String s, TransactionDetails transactionDetails) {
+        Resource.checkFull(bp);
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
 }
