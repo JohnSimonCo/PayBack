@@ -15,7 +15,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 
-    <com.johnsimon.payback.RobotoMediumTextView
+    <com.johnsimon.payback.util.RobotoMediumTextView
         android:id="@+id/sb__text"
         style="@style/Snackbar.Text"
         android:layout_width="wrap_content"
