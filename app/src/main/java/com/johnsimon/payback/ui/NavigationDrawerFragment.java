@@ -31,7 +31,6 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.util.FontCache;
 import com.johnsimon.payback.util.Resource;
 
 /**
@@ -125,10 +124,6 @@ public class NavigationDrawerFragment extends Fragment {
         Button footerPeople = (Button) footerView.findViewById(R.id.navigation_drawer_footer_people);
         Button footerSettings = (Button) footerView.findViewById(R.id.navigation_drawer_footer_settings);
         Button footerAbout = (Button) footerView.findViewById(R.id.navigation_drawer_footer_about);
-
-        footerPeople.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
-        footerSettings.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
-        footerAbout.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		mDrawerListView.addFooterView(footerView);
 

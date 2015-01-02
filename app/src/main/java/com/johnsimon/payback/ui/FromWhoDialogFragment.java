@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.util.FontCache;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
@@ -43,9 +42,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 		View rootView = inflater.inflate(R.layout.from_who_dialog, null);
 
 		final Button confirmButton = (Button) rootView.findViewById(R.id.from_who_dialog_confirm);
-		confirmButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 		Button cancelButton = (Button) rootView.findViewById(R.id.from_who_dialog_cancel);
-		cancelButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			@Override

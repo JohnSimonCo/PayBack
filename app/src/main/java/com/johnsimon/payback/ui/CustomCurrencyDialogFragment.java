@@ -13,7 +13,6 @@ import android.support.v7.internal.widget.TintEditText;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.ValidatorListener;
-import com.johnsimon.payback.util.FontCache;
 
 public class CustomCurrencyDialogFragment extends DialogFragment {
 
@@ -33,7 +32,6 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 		final Button dialogCustomCurrencyConfirm = (Button) rootView.findViewById(R.id.dialog_custom_currency_confirm);
 		Button dialogCustomCurrencyCancel = (Button) rootView.findViewById(R.id.dialog_custom_currency_cancel);
-		dialogCustomCurrencyCancel.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		dialogCustomCurrencyCancel.setOnClickListener(new View.OnClickListener() {
 			@Override

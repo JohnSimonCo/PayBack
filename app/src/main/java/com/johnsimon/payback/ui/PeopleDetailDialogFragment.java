@@ -14,11 +14,9 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
 import com.williammora.snackbar.Snackbar;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class PeopleDetailDialogFragment extends DialogFragment {
@@ -50,10 +48,6 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 		Button personRename = (Button) rootView.findViewById(R.id.person_detail_dialog_rename);
 		Button personMerge = (Button) rootView.findViewById(R.id.person_detail_dialog_merge);
 		Button personDelete = (Button) rootView.findViewById(R.id.person_detail_dialog_delete);
-
-		personRename.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
-		personMerge.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
-		personDelete.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		personRename.setOnClickListener(clickListener);
 		personMerge.setOnClickListener(clickListener);

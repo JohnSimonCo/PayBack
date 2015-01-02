@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.FontCache;
 
 import java.util.ArrayList;
 
@@ -59,9 +58,7 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		}
 
 		final Button confirmButton = (Button) rootView.findViewById(R.id.dialog_select_person_confirm);
-		confirmButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 		Button cancelButton = (Button) rootView.findViewById(R.id.dialog_select_person_cancel);
-		cancelButton.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			@Override
