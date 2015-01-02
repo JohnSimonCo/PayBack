@@ -49,7 +49,6 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 		welcomeCurrencyPreview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
 
         final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
-        welcome_continue.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "robotomedium.ttf"));
 
         Handler handler = new Handler();
         Runnable r = new Runnable() {
