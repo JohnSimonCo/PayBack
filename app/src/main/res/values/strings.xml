@@ -9,7 +9,7 @@
     <string name="balance">Balance:</string>
     <string name="title_activity_setup">Pay Back</string>
     <string name="welcome">Welcome to Pay Back!</string>
-    <string name="list_empty_text">Once you add an entry,\nYou\'ll see it listed here</string>
+    <string name="list_empty_text">Once you add an entry,\nyou\'ll see it listed here</string>
     <string name="even">We\'re even!</string>
     <string name="person_hint">Who?</string>
     <string name="they_owe">They owe</string>
