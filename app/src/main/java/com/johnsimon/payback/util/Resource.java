@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -57,7 +58,7 @@ public class Resource {
 
         isInitialized = true;
 
-        Resource.preferences = context.getPreferences(Context.MODE_PRIVATE);
+        Resource.preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         //TODO REMOVE SAMPLE DATA
         /*
@@ -115,7 +116,8 @@ public class Resource {
     }
 
     public static String getCurrency() {
-        return preferences.getString(SAVE_KEY_CURRENCY, "$");
+        //return preferences.getString(SAVE_KEY_CURRENCY, "$");
+        return "$";
     }
 
     public static void toast(Context context, String text) {

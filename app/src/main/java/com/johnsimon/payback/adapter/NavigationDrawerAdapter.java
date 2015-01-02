@@ -37,18 +37,17 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		}
 	}
 
-	public void selectPerson(Person person) {
+	public int selectPerson(Person person) {
 		if(person == null) {
-			NavigationDrawerFragment.mCurrentSelectedPosition = 0;
-			return;
+			return 0;
 		}
 		for(int i = 0, l = items.size(); i < l; i++) {
 			NavigationDrawerItem item = items.get(i);
 			if(item.personId == person.id) {
-				NavigationDrawerFragment.mCurrentSelectedPosition = i + 1;
-				break;
+				return i + 1;
 			}
 		}
+        return 0;
 	}
 
 	@Override
