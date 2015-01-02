@@ -9,9 +9,6 @@ import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
 
-/**
- * Created by johnrs on 2015-01-02.
- */
 public abstract class DataDialogFragment extends DialogFragment {
     protected Storage storage;
     public AppData data;
@@ -27,6 +24,8 @@ public abstract class DataDialogFragment extends DialogFragment {
 
         this.contactLoader = activity.contactLoader;
         contactLoader.callbacks.add(contactCallback);
+
+        Callbacks.all(bothCallback, storage.callbacks, contactLoader.callbacks);
 
         return super.onCreateDialog(savedInstanceState);
     }
@@ -48,11 +47,22 @@ public abstract class DataDialogFragment extends DialogFragment {
         }
     };
 
+    private Callback bothCallback = new Callback() {
+        @Override
+        public void onFired(Object data) {
+            onFullyLoaded();
+        }
+    };
+
     protected void onDataReceived() {
 
     }
 
     protected void onContactsLoaded() {
+
+    }
+
+    protected void onFullyLoaded() {
 
     }
 }

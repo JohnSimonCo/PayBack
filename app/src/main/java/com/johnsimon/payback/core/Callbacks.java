@@ -30,4 +30,39 @@ public class Callbacks<D> {
         }
         callbacks.clear();
     }
+
+    public static void all(final Callback callback, Callbacks... callbacks) {
+        final FiredCounter counter = new FiredCounter(callbacks.length);
+
+        Callback check = new Callback() {
+            @Override
+            public void onFired(Object data) {
+                if(counter.fire().isDone()) {
+                    callback.onFired(null);
+                }
+            }
+        };
+
+        for(Callbacks cb : callbacks) {
+            cb.add(check);
+        }
+    }
+
+    private static class FiredCounter {
+        private int fired = 0;
+        private int shouldFire;
+
+        public FiredCounter(int shouldFire) {
+            this.shouldFire = shouldFire;
+        }
+
+        public FiredCounter fire() {
+            ++fired;
+            return this;
+        }
+
+        public boolean isDone() {
+            return fired >= shouldFire;
+        }
+    }
 }

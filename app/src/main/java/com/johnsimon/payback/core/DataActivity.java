@@ -31,6 +31,8 @@ public abstract class DataActivity extends ActionBarActivity {
         contactLoader = new ContactLoader();
         contactLoader.callbacks.add(contactCallback);
         contactLoader.execute(this);
+
+        Callbacks.all(bothCallback, storage.callbacks, contactLoader.callbacks);
     }
 
     @Override
@@ -73,11 +75,22 @@ public abstract class DataActivity extends ActionBarActivity {
         }
     };
 
+    private Callback bothCallback = new Callback() {
+        @Override
+        public void onFired(Object data) {
+            onFullyLoaded();
+        }
+    };
+
     protected void onDataReceived() {
 
     }
 
     protected void onContactsLoaded() {
+
+    }
+
+    protected void onFullyLoaded() {
 
     }
 }

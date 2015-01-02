@@ -33,6 +33,8 @@ public abstract class DataFragment extends Fragment {
         this.contactLoader = activity.contactLoader;
         contactLoader.callbacks.add(contactCallback);
 
+        Callbacks.all(bothCallback, storage.callbacks, contactLoader.callbacks);
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -53,11 +55,22 @@ public abstract class DataFragment extends Fragment {
         }
     };
 
+    private Callback bothCallback = new Callback() {
+        @Override
+        public void onFired(Object data) {
+            onFullyLoaded();
+        }
+    };
+
     protected void onDataReceived() {
 
     }
 
     protected void onContactsLoaded() {
+
+    }
+
+    protected void onFullyLoaded() {
 
     }
 }

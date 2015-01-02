@@ -224,14 +224,16 @@ public class CreateDebtActivity extends DataActivity {
             create_fab.setOnClickListener(fabClickListener);
         }
 
+    }
+
+    @Override
+    protected void onFullyLoaded() {
         floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(
-				this,
-				R.layout.autocomplete_list_item,
-				R.id.autocomplete_list_item_title,
-				data.getAllNames(contacts)
-		));
-
-
+                this,
+                R.layout.autocomplete_list_item,
+                R.id.autocomplete_list_item_title,
+                data.getAllNames(contacts)
+        ));
     }
 
     private View.OnClickListener fabClickListener = new View.OnClickListener() {
