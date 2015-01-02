@@ -50,4 +50,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
 
+    <com.devspark.robototextview.widget.RobotoButton
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:id="@+id/navigation_drawer_footer_upgrade"
+        style="@style/navigation_drawer_footer"
+        android:onClick="navigationDrawerFooterClick"
+        android:drawableLeft="@drawable/ic_key"
+        android:drawableStart="@drawable/ic_key"
+        android:text="@string/upgrade_navigation_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    />
+
 </LinearLayout>

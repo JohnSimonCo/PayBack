@@ -25,7 +25,7 @@
     <string name="send">Send</string>
     <string name="about_title">About</string>
     <string name="filter">Filter</string>
-    <string name="welcome_text">In this free version you are limited to 6 debts at a time. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currency you wish to use. This can be changed later in settings.</string>
+    <string name="welcome_text">In this free version you are limited to 6 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currency you wish to use. This can be changed later in settings.</string>
     <string name="welcome_continue">Continue</string>
     <string name="welcome_currency_hint">Currency (ex. $)</string>
     <string name="welcome_using_nfc">Using NFC</string>
@@ -79,8 +79,15 @@
     <string name="nfc_error_all">Can\'t send entries from \"All\"</string>
     <string name="title_activity_people_manager">People</string>
     <string name="upgrade_title">Purchase full</string>
-    <string name="upgrade_text">Purchase the full version of Pay Back to add more than 6 debts.</string>
+    <string name="upgrade_text">Purchase the full version of Pay Back to add more than 6 debts and sync them across devices.</string>
     <string name="upgrade_confirm_text">Upgrade</string>
+    <string name="cloud_sync">Cloud sync</string>
+    <string name="cloud_sync_description_first">Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>
+    <string name="cloud_sync_description">Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>
+    <string name="activate">Activate</string>
+    <string name="not_now">Not now</string>
+    <string name="cloud_sync_not_full">Requires full version</string>
+    <string name="upgrade_navigation_drawer">Unlock full version</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -105,6 +112,7 @@
     <string name="pref_general">General</string>
     <string name="currency">Currency</string>
     <string name="background">Background</string>
+    <string name="pref_cloud_sync">Sync data across devices</string>
 
     <string-array name="currencies">
         <item>$</item>

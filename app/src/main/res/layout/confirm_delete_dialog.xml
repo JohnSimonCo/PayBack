@@ -10,6 +10,17 @@
     <com.devspark.robototextview.widget.RobotoTextView
         app:fontFamily="roboto"
         app:textWeight="medium"
+        android:paddingBottom="8dp"
+        android:id="@+id/confirm_delete_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#474747"
+        android:textSize="22sp"
+        android:padding="8dp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:textColor="@color/gray_text_light"

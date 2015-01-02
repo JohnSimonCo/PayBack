@@ -222,6 +222,10 @@ public class FeedActivity extends DataActivity implements
 				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
 				aboutDialogFragment.show(getFragmentManager(), "about_dialog");
 				break;
+            case R.id.navigation_drawer_footer_upgrade:
+                UpgradeDialogFragment fragment = UpgradeDialogFragment.create(bp);
+                fragment.show(getFragmentManager(), "upgrade_dialog");
+                break;
 
 			default:
 				break;
@@ -343,6 +347,21 @@ public class FeedActivity extends DataActivity implements
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
         Resource.checkFull(bp);
+
+        ConfirmDialogFragment fragment = new ConfirmDialogFragment();
+        Bundle args = new Bundle();
+
+        args.putString(ConfirmDialogFragment.CONFIRM_TEXT, getString(R.string.activate));
+        args.putString(ConfirmDialogFragment.INFO_TEXT, getString(R.string.cloud_sync_description_first));
+        args.putString(ConfirmDialogFragment.DECLINE_TEXT, getString(R.string.not_now));
+        args.putString(ConfirmDialogFragment.TITLE_TEXT, getString(R.string.cloud_sync));
+
+        fragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
+            @Override
+            public void onConfirm() {
+                Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+            }
+        };
     }
 
     @Override

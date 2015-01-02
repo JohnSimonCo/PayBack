@@ -41,13 +41,13 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 		View rootView = inflater.inflate(R.layout.person_picker_dialog, null);
 
-		Bundle args = getArguments();
-		if (args != null) {
-			title = args.getString(TITLE_KEY, USE_DEFAULT_TITLE);
-			useOnlyPeopleInApp = args.getBoolean(PEOPLE_KEY, false);
-		}
+        Bundle args = getArguments();
+        if (args != null) {
+            title = args.getString(TITLE_KEY, USE_DEFAULT_TITLE);
+            useOnlyPeopleInApp = args.getBoolean(PEOPLE_KEY, false);
+        }
 
-		boolean useOnlyContacts = false;
+        boolean useOnlyContacts = false;
 
         TextView person_picker_dialog_title = (TextView) rootView.findViewById(R.id.person_picker_dialog_title);
 		if (!title.equals(USE_DEFAULT_TITLE)) {
