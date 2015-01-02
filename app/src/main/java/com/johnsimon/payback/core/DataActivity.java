@@ -14,7 +14,6 @@ import com.johnsimon.payback.util.AppData;
 public abstract class DataActivity extends ActionBarActivity implements Callback<AppData> {
 
     public Storage storage;
-
     public AppData data;
 
     @Override
