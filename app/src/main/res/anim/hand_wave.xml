@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item
+        android:drawable="@drawable/wave"
+        android:duration="2000"/>
+
+    <item
+        android:drawable="@drawable/wave1"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave2"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave3"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave4"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave5"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave6"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave7"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave8"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave9"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave10"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave11"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave12"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave13"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave14"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave15"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave16"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave17"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave18"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave19"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave20"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave21"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave22"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave23"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave24"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave25"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave26"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave27"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave26"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave25"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave24"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave23"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave22"
+        android:duration="32"/>
+
+
+
+    <item
+        android:drawable="@drawable/wave21"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave22"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave23"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave24"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave25"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave26"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave27"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave26"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave25"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave24"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave23"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave22"
+        android:duration="32"/>
+
+
+
+
+    <item
+        android:drawable="@drawable/wave21"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave22"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave23"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave24"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave25"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave26"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave27"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave26"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave25"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave24"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave23"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave22"
+        android:duration="32"/>
+
+    <item
+        android:drawable="@drawable/wave21"
+        android:duration="32"/>
+
+
+
+    <item
+        android:drawable="@drawable/wave20"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave19"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave18"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave17"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave16"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave15"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave14"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave13"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave12"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave11"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave10"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave9"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave8"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave7"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave6"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave5"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave4"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave3"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave2"
+        android:duration="16"/>
+
+    <item
+        android:drawable="@drawable/wave1"
+        android:duration="16"/>
+
+
+</animation-list>

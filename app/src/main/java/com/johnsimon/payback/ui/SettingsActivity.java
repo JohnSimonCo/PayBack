@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -93,6 +94,25 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 				return false;
 			}
 		});
+
+        final CheckBoxPreference pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
+
+        if (!Resource.isFull) {
+            pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
+            pref_cloud_sync.setEnabled(false);
+        }
+
+        pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (pref_cloud_sync.isChecked()) {
+                    Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, false).apply();
+                } else {
+                    Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+                }
+                return true;
+            }
+        });
 
         ListPreference background = (ListPreference) findPreference("pref_background");
         bindPreferenceSummaryToValue(background);

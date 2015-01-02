@@ -17,7 +17,9 @@ public class ConfirmDialogFragment extends DialogFragment {
 
 	public ConfirmCallback confirm = null;
 	public final static String INFO_TEXT = "INFO_TEXT_KEY";
-	public final static String CONFIRM_TEXT = "CONFIRM_TEXT_KEY";
+    public final static String CONFIRM_TEXT = "CONFIRM_TEXT_KEY";
+    public final static String DECLINE_TEXT = "DECLINE_TEXT_KEY";
+    public final static String TITLE_TEXT = "CONFIRM_TEXT_KEY";
 
 	private AlertDialog alertDialog;
 
@@ -30,6 +32,9 @@ public class ConfirmDialogFragment extends DialogFragment {
 
 		Button confirm_delete_cancel = (Button) rootView.findViewById(R.id.confirm_delete_cancel);
 		Button confirm_delete_confirm = (Button) rootView.findViewById(R.id.confirm_delete_confirm);
+        TextView confirm_delete_dialog_text = (TextView) rootView.findViewById(R.id.confirm_delete_dialog_text);
+        TextView confirm_delete_dialog_title = (TextView) rootView.findViewById(R.id.confirm_delete_dialog_title);
+
 
 		confirm_delete_cancel.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -46,21 +51,34 @@ public class ConfirmDialogFragment extends DialogFragment {
 			}
 		});
 
-        TextView confirm_delete_dialog_text = (TextView) rootView.findViewById(R.id.confirm_delete_dialog_text);
+        String titleText = getArguments().getString(TITLE_TEXT);
+        String text = getArguments().getString(INFO_TEXT);
+        String confirmText = getArguments().getString(CONFIRM_TEXT);
+        String declineText = getArguments().getString(DECLINE_TEXT);
 
-		String text = getArguments().getString(INFO_TEXT);
-		if (TextUtils.isEmpty(text)) {
-			confirm_delete_dialog_text.setVisibility(View.GONE);
-		} else {
-			confirm_delete_dialog_text.setText(text);
-		}
+        if (TextUtils.isEmpty(text)) {
+            confirm_delete_dialog_text.setVisibility(View.GONE);
+        } else {
+            confirm_delete_dialog_text.setText(text);
+        }
 
-		String confirmText = getArguments().getString(CONFIRM_TEXT);
-		if (TextUtils.isEmpty(confirmText)) {
-			confirm_delete_confirm.setText(R.string.confirm);
-		} else {
-			confirm_delete_confirm.setText(confirmText);
-		}
+        if (TextUtils.isEmpty(confirmText)) {
+            confirm_delete_confirm.setText(R.string.confirm);
+        } else {
+            confirm_delete_confirm.setText(confirmText);
+        }
+
+        if (TextUtils.isEmpty(declineText)) {
+            confirm_delete_cancel.setText(R.string.cancel);
+        } else {
+            confirm_delete_cancel.setText(declineText);
+        }
+
+        if (TextUtils.isEmpty(titleText)) {
+            confirm_delete_dialog_title.setVisibility(View.GONE);
+        } else {
+            confirm_delete_dialog_title.setText(titleText);
+        }
 
 		builder.setView(rootView);
 
