@@ -13,7 +13,9 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppThemeParent" >
 
-        <meta-data android:name="com.google.android.apps.drive.APP_ID" android:value="id=305687333197-4gt9hs4l2drn487m650tq209pbsc6d1l.apps.googleusercontent.com" />
+        <meta-data
+            android:name="com.google.android.apps.drive.APP_ID"
+            android:value="id=305687333197-4gt9hs4l2drn487m650tq209pbsc6d1l.apps.googleusercontent.com" />
 
         <activity
             android:exported="true"
@@ -51,6 +53,22 @@
             android:parentActivityName=".ui.FeedActivity"
             android:theme="@style/AppThemeParent"
             android:label="@string/title_activity_people_manager"   />
+
+        <!--Widget-->
+        <receiver
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:name="ListWidgetService">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
+        <service
+            android:name="ListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

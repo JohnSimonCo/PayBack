@@ -165,7 +165,7 @@ public class Resource {
 		} else {
 			avatar.setImageDrawable(new AvatarPlaceholderDrawable(person.color));
 			avatarLetter.setVisibility(View.VISIBLE);
-			avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
+			avatarLetter.setText(person.getAvatarLetter());
 		}
 	}
 
