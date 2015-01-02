@@ -84,6 +84,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         }
 
         final ImageView emptyViewImage = (ImageView) rootView.findViewById(R.id.feed_list_empty_view_image);
+        emptyView = rootView.findViewById(R.id.feed_list_empty_view);
 
         ViewTreeObserver vto = emptyViewImage.getViewTreeObserver();
 

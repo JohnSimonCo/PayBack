@@ -61,7 +61,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	public NavigationDrawerItem getItem(int i) {
 		return i == 0
 			? allItem
-			: items.get(--i);
+			: items.get(i - 1);
 	}
 
 	@Override

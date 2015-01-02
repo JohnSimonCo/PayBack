@@ -72,7 +72,7 @@ public class NavigationDrawerFragment extends DataFragment {
     private static TextView headerPlus;
     private static TextView headerMinus;
 
-    public static int mCurrentSelectedPosition = 0;
+    public static int mCurrentSelectedPosition = 1;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 	private boolean inHeaderDetailScreen = false;
@@ -150,7 +150,7 @@ public class NavigationDrawerFragment extends DataFragment {
 
 		mDrawerListView.addHeaderView(headerView);
 
-        View superView = super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         return mDrawerListView;
     }
@@ -395,7 +395,7 @@ public class NavigationDrawerFragment extends DataFragment {
 	}
 
     private void selectItem(int position) {
-		position -= mDrawerListView.getHeaderViewsCount();
+//		position -= mDrawerListView.getHeaderViewsCount();
         mCurrentSelectedPosition = position;
 
         if (mDrawerListView != null) {

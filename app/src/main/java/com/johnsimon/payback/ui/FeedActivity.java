@@ -112,6 +112,7 @@ public class FeedActivity extends DataActivity implements
 
     @Override
     public void onDataReceived(AppData data) {
+        super.onDataReceived(data);
         if(isAll()) {
             feed = data.debts;
         } else {
@@ -153,13 +154,13 @@ public class FeedActivity extends DataActivity implements
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		if(item.type == NavigationDrawerItem.Type.All) {
 			person = null;
-			feed = data.debts;
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
 			person = item.owner;
-			feed = data.feed(person);
 		}
 
-		getFragmentManager().beginTransaction()
+        feed = data.feed(person);
+
+        getFragmentManager().beginTransaction()
 				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 				.commit();
 	}
