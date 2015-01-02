@@ -8,14 +8,12 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
 
-import java.util.ArrayList;
-
-public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory, Callback<AppData> {
 
     private Context ctx = null;
     private AppData data;
@@ -23,7 +21,8 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     public WidgetViewsFactory(Context ctx, Intent intent) {
         this.ctx = ctx;
-
+        storage = new LocalStorage(ctx);
+        storage.callbacks.add(this);
     }
 
     @Override
@@ -43,16 +42,14 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews row = new RemoteViews(ctx.getPackageName(), R.layout.widget_list_item);
-
-
+        RemoteViews row = new RemoteViews(ctx.getPackageName(), R.layout.feed_list_item);
 
         Intent intent = new Intent();
         Bundle extras = new Bundle();
 
-        extras.putString(ListWidgetService.EXTRA_SEND, "EXTRA DATA WALLAH");
+        extras.putString(ListWidgetService.EXTRA_SEND, "bajs");
         intent.putExtras(extras);
-        row.setOnClickFillInIntent(android.R.id.text1, intent);
+        row.setOnClickFillInIntent(R.id.feed_list_item_master, intent);
 
         return(row);
     }
@@ -80,5 +77,10 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged() {
 
+    }
+
+    @Override
+    public void onDataReceived(AppData data) {
+        this.data = data;
     }
 }
