@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -49,7 +50,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
+		final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
 		recyclerView.setHasFixedSize(true);
 
@@ -63,7 +64,9 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 		displayTotalDebt(getActivity());
 
-		adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, rootView.findViewById(R.id.feed_list_empty_view));
+        final View emptyView = rootView.findViewById(R.id.feed_list_empty_view);
+
+		adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, emptyView);
 		recyclerView.setAdapter(adapter);
 
         //FAB is different on L
@@ -85,9 +88,28 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
             fab.setOnClickListener(fabClickListener);
         }
 
-        if (!getResources().getBoolean(R.bool.showEmptyViewImage)) {
-            rootView.findViewById(R.id.feed_list_empty_view_image).setVisibility(View.GONE);
-        }
+        final ImageView emptyViewImage = (ImageView) rootView.findViewById(R.id.feed_list_empty_view_image);
+
+        ViewTreeObserver vto = emptyViewImage.getViewTreeObserver();
+
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                ViewTreeObserver obs = emptyViewImage.getViewTreeObserver();
+
+                if (rootView.getHeight() - headerView.getHeight() < emptyView.getHeight() + 40) {
+                    emptyViewImage.setVisibility(View.GONE);
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeOnGlobalLayoutListener(this);
+                } else {
+                    obs.removeGlobalOnLayoutListener(this);
+                }
+            }
+
+        });
 
         View header = new View(getActivity());
         header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
