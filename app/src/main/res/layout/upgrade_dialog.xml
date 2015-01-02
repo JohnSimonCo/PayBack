@@ -17,13 +17,18 @@
         android:textSize="22sp"
         android:paddingBottom="8dp"/>
 
+    <ImageView
+        android:id="@+id/upgrade_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <com.devspark.robototextview.widget.RobotoTextView
         app:fontFamily="roboto"
         app:textWeight="medium"
         android:textColor="@color/gray_text_light"
         android:layout_width="wrap_content"
         android:text="@string/upgrade_text"
-        android:textSize="17sp"
+        android:textSize="16sp"
         android:layout_height="wrap_content"/>
 
     <LinearLayout

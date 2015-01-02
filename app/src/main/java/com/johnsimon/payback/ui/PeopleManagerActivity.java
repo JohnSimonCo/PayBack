@@ -71,7 +71,6 @@ public class PeopleManagerActivity extends DataActivity {
 
 		adapter = new PeopleListAdapter(this, data.people, findViewById(R.id.people_manager_empty));
 
-
         listView = (DragSortListView) findViewById(R.id.people_listview);
 
         listView.setAdapter(adapter);

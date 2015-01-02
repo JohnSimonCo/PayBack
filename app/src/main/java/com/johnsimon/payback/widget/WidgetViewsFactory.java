@@ -21,7 +21,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     public WidgetViewsFactory(Context ctx, Intent intent) {
         this.ctx = ctx;
-        storage = new LocalStorage(ctx);
+        //storage = new LocalStorage(ctx);
         storage.callbacks.add(this);
     }
 
@@ -37,7 +37,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public int getCount() {
-        return items.length;
+        return data.debts.size();
     }
 
     @Override

@@ -218,27 +218,27 @@
 
     <item
         android:drawable="@drawable/wave26"
-        android:duration="32"/>
+        android:duration="16"/>
 
     <item
         android:drawable="@drawable/wave25"
-        android:duration="32"/>
+        android:duration="16"/>
 
     <item
         android:drawable="@drawable/wave24"
-        android:duration="32"/>
+        android:duration="16"/>
 
     <item
         android:drawable="@drawable/wave23"
-        android:duration="32"/>
+        android:duration="16"/>
 
     <item
         android:drawable="@drawable/wave22"
-        android:duration="32"/>
+        android:duration="16"/>
 
     <item
         android:drawable="@drawable/wave21"
-        android:duration="32"/>
+        android:duration="16"/>
 
 
 
