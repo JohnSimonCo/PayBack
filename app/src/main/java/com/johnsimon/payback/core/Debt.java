@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 
+import java.util.UUID;
+
 public class Debt {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
@@ -14,45 +16,28 @@ public class Debt {
 	private final static int NEGATIVE_COLOR_DISABLED = R.color.red_disabled;
 
 	public Person owner;
+    public UUID id;
 	public float amount;
 	public String amountAsString;
 	public String note;
-	//Also works as an id (since two different debts can't be created at the exact same time)
 	public long timestamp;
 	public int color;
 	public boolean isPaidBack;
 
+    public Debt(Person owner, float amount, String note, long timestamp, boolean isPaidBack) {
+        this.owner = owner;
+        this.id = UUID.randomUUID();
+        this.amount = amount;
+        this.amountAsString = amountString(amount);
+        this.note = note;
+        this.timestamp = timestamp;
+        this.color = getColor(amount);
+        this.isPaidBack = isPaidBack;
+    }
+
 	//Used when creating new
 	public Debt(Person owner, float amount, String note) {
-		this.owner = owner;
-		this.amount = amount;
-		this.amountAsString = amountString(amount);
-		this.note = note;
-		this.color = getColor(amount);
-
-		this.timestamp = System.currentTimeMillis();
-		this.isPaidBack = false;
-	}
-
-	//Used for creating multiple
-	public Debt(Person owner, float amount, String note, long timestamp) {
-		this.owner = owner;
-		this.amount = amount;
-		this.amountAsString = amountString(amount);
-		this.note = note;
-		this.color = getColor(amount);
-
-		this.timestamp = timestamp;
-		this.isPaidBack = false;
-	}
-
-
-	//Used when extracting from serializable form
-	public Debt(Person owner, float amount, String note, long timestamp, boolean isPaidBack) {
-		this(owner, amount, note);
-
-		this.timestamp = timestamp;
-		this.isPaidBack = isPaidBack;
+        this(owner, amount, note, System.currentTimeMillis(), false);
 	}
 
 	public static String amountString(float amount) {

@@ -171,7 +171,9 @@ public class AppData {
             }
         }
         //Create person and add to people
-        person = new Person(name, link, ColorPalette.getInstance(context));
+        person = new Person(name, ColorPalette.getInstance(context));
+        person.link = link;
+
         people.add(person);
         return person;
     }

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class DebtSerializable {
 	public UUID ownerId;
+    public UUID id;
 	public float amount;
 	public String note;
 	public long timestamp;
@@ -15,6 +16,7 @@ public class DebtSerializable {
 
 	public DebtSerializable(Debt debt) {
 		this.ownerId = debt.owner.id;
+        this.id = debt.id;
 		this.amount = debt.amount;
 		this.note = debt.note;
 		this.timestamp = debt.timestamp;
