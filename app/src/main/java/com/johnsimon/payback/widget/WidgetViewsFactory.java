@@ -28,7 +28,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     public WidgetViewsFactory(Context ctx, Intent intent) {
         this.ctx = ctx;
-        //storage = new LocalStorage(ctx);
+        storage = new LocalStorage(ctx);
         storage.callbacks.add(this);
     }
 
@@ -52,6 +52,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         final RemoteViews row = new RemoteViews(ctx.getPackageName(), R.layout.feed_list_item);
 
         Debt debt = data.debts.get(position);
+
         if (debt.owner.hasImage()) {
             ThumbnailLoader.getInstance().load(debt.owner.link.photoURI, new SimpleImageLoadingListener() {
                 @Override
@@ -70,18 +71,16 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
         row.setTextViewText(R.id.list_item_amount, debt.amountAsString);
         row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(Debt.getColor(debt.amount)));
-/*
+
         if (debt.isPaidBack) {
             row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_very_light));
-            holder.note.setTextColor(context.getResources().getColor(R.color.gray_oncolor_light));
-            holder.amount.setTextColor(context.getResources().getColor(Debt.getDisabledColor(debt.amount)));
-            holder.avatar.setAlpha(0.5f);
+            row.setTextColor(R.id.list_item_note, ctx.getResources().getColor(R.color.gray_oncolor_light));
+            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(Debt.getDisabledColor(debt.amount)));
         } else {
-            holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_normal));
-            holder.note.setTextColor(context.getResources().getColor(R.color.gray_text_light));
-            holder.amount.setTextColor(context.getResources().getColor(Debt.getColor(debt.amount)));
-            holder.avatar.setAlpha(1f);
-        }*/
+            row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_normal));
+            row.setTextColor(R.id.list_item_note, ctx.getResources().getColor(R.color.gray_text_light));
+            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(Debt.getColor(debt.amount)));
+        }
 
         Intent intent = new Intent();
         Bundle extras = new Bundle();
