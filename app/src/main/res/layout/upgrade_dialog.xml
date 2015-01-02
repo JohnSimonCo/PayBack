@@ -18,6 +18,7 @@
         android:paddingBottom="8dp"/>
 
     <ImageView
+        android:layout_marginBottom="8dp"
         android:id="@+id/upgrade_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
