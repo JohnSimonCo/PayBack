@@ -7,6 +7,7 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -19,6 +20,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.johnsimon.payback.adapter.PeopleListAdapter;
@@ -72,27 +74,27 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 		adapter = new PeopleListAdapter(this, Resource.people, findViewById(R.id.people_manager_empty));
 
-		listView = (DragSortListView) findViewById(R.id.people_listview);
 
-		listView.setAdapter(adapter);
-		listView.setDropListener(onDrop);
-        listView.setEmptyView(getLayoutInflater().inflate(R.layout.people_manager_empty_view, null));
+        listView = (DragSortListView) findViewById(R.id.people_listview);
 
-		DragSortController controller = new DragSortController(listView);
-		controller.setDragHandleId(R.id.people_list_item_handle);
-		controller.setRemoveEnabled(false);
-		controller.setSortEnabled(true);
-		controller.setDragInitMode(DragSortController.ON_DRAG);
+        listView.setAdapter(adapter);
+        listView.setDropListener(onDrop);
 
-		listView.setFloatViewManager(controller);
-		listView.setOnTouchListener(controller);
-		listView.setDragEnabled(true);
+        DragSortController controller = new DragSortController(listView);
+        controller.setDragHandleId(R.id.people_list_item_handle);
+        controller.setRemoveEnabled(false);
+        controller.setSortEnabled(true);
+        controller.setDragInitMode(DragSortController.ON_DRAG);
+
+        listView.setFloatViewManager(controller);
+        listView.setOnTouchListener(controller);
+        listView.setDragEnabled(true);
 
         SimpleFloatViewManager simpleFloatViewManager = new SimpleFloatViewManager(listView);
         simpleFloatViewManager.setBackgroundColor(Color.TRANSPARENT);
         listView.setFloatViewManager(simpleFloatViewManager);
 
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Person person = adapter.getItem(position);
@@ -111,6 +113,16 @@ public class PeopleManagerActivity extends ActionBarActivity {
 		});
 
 		adapter.notifyDataSetChanged();
+
+        final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
+        people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
+        people_manager_empty_image.post(new Runnable() {
+            @Override
+            public void run() {
+                AnimationDrawable frameAnimation = (AnimationDrawable) people_manager_empty_image.getBackground();
+                frameAnimation.start();
+            }
+        });
 
         setupTreeObserver();
     }
