@@ -2,8 +2,6 @@ package com.johnsimon.payback.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.graphics.Typeface;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,12 +13,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.johnsimon.payback.view.NDSpinner;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.view.NDSpinner;
 
-public class WelcomeDialogFragment extends DialogFragment implements CustomCurrencyDialogFragment.CustomCurrencySelectedCallback {
+public class WelcomeDialogFragment extends DataDialogFragment implements CustomCurrencyDialogFragment.CustomCurrencySelectedCallback {
 
 	private AlertDialog alertDialog;
 	private boolean hasNfc = false;
@@ -162,7 +161,7 @@ public class WelcomeDialogFragment extends DialogFragment implements CustomCurre
 
             FeedFragment.adapter.notifyDataSetChanged();
             FeedFragment.displayTotalDebt(getActivity());
-			NavigationDrawerFragment.updateBalance();
+			NavigationDrawerFragment.updateBalance(data);
 			if (SettingsActivity.pref_currency != null) {
 				SettingsActivity.pref_currency.setSummary(currency);
 			}

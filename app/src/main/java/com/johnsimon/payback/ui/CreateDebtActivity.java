@@ -1,7 +1,6 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -11,7 +10,7 @@ import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.widget.TintEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -28,19 +27,18 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
-import android.support.v7.internal.widget.TintEditText;
-
+import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.RequiredValidator;
-import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.ValidatorListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
-public class CreateDebtActivity extends ActionBarActivity {
+public class CreateDebtActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
@@ -97,7 +95,7 @@ public class CreateDebtActivity extends ActionBarActivity {
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
 		if (intent.hasExtra(ARG_TIMESTAMP)) {
-			editingDebt = Resource.data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
+			editingDebt = data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.owner.name);
 
@@ -230,7 +228,7 @@ public class CreateDebtActivity extends ActionBarActivity {
 				this,
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				Resource.getAllNames()
+				data.getAllNames()
 		));
 
 
@@ -279,17 +277,17 @@ public class CreateDebtActivity extends ActionBarActivity {
 
 		Person person;
 		if(editingDebt == null) {
-			person = Resource.getOrCreatePerson(name, this);
-			Resource.debts.add(0, new Debt(person, amount, note));
+			person = data.getOrCreatePerson(name, this);
+			data.debts.add(0, new Debt(person, amount, note));
 		} else {
 			person = editingDebt.owner.name.equals(name)
 				? editingDebt.owner
-				: Resource.getOrCreatePerson(name, this);
+				: data.getOrCreatePerson(name, this);
 
 			editingDebt.edit(person, amount, note);
 		}
 
-		Resource.commit();
+		storage.commit();
 		return person;
 	}
 

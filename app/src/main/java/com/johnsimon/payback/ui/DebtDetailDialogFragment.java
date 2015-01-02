@@ -20,13 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
-public class DebtDetailDialogFragment extends DialogFragment implements PaidBackDialogFragment.CompleteCallback {
+public class DebtDetailDialogFragment extends DataDialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
 	public static Debt debtAccessible = null;
 	private static Debt debt = null;
@@ -185,7 +186,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 		@Override
 		public void onSelected(String name) {
 			if(callback != null) {
-				callback.onMove(debt, Resource.data.findPersonByName(name));
+				callback.onMove(debt, data.findPersonByName(name));
 			}
 		}
 	};

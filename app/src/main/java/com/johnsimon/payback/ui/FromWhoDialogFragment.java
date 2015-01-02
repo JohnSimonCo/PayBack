@@ -18,11 +18,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 
-public class FromWhoDialogFragment extends DialogFragment {
+public class FromWhoDialogFragment extends DataDialogFragment {
 
 	public FromWhoSelected completeCallback = null;
 	private AlertDialog alertDialog;
@@ -75,7 +76,7 @@ public class FromWhoDialogFragment extends DialogFragment {
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				Resource.getAllNames());
+				data.getAllNames());
 
 		actv.setAdapter(adapter);
 

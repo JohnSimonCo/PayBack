@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
@@ -19,7 +20,7 @@ import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class PeopleDetailDialogFragment extends DialogFragment {
+public class PeopleDetailDialogFragment extends DataDialogFragment {
 	public static Person person;
 
 	public EditPersonCallback editPersonCallback = null;
@@ -99,7 +100,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 						@Override
 						public void onConfirm() {
 
-                            final int restorePersonIndex = Resource.data.people.indexOf(person);
+                            final int restorePersonIndex = data.people.indexOf(person);
 
                             Snackbar.with(getActivity())
                                     .text(getString(R.string.deleted_person))
@@ -108,13 +109,13 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                                     .actionListener(new Snackbar.ActionClickListener() {
                                         @Override
                                         public void onActionClicked() {
-                                            Resource.data.people.add(restorePersonIndex, person);
+                                            data.people.add(restorePersonIndex, person);
                                             editPersonCallback.onEdit();
                                         }
                                     })
                                     .show(getActivity());
 
-							Resource.data.delete(person);
+							data.delete(person);
 							cancel();
 						}
 					};
@@ -130,7 +131,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 
             final String oldName = person.name;
 
-			Resource.data.rename(person, name);
+			data.rename(person, name);
 
             Snackbar.with(getActivity())
                     .text(getString(R.string.renamed_person))
@@ -139,7 +140,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                     .actionListener(new Snackbar.ActionClickListener() {
                         @Override
                         public void onActionClicked() {
-                            Resource.data.rename(person, oldName);
+                            data.rename(person, oldName);
                             editPersonCallback.onEdit();
                         }
                     })
@@ -152,7 +153,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback mergeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			final Person other = Resource.data.findPersonByName(name);
+			final Person other = data.findPersonByName(name);
 
 			ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
 
@@ -168,9 +169,9 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 				@Override
 				public void onConfirm() {
 
-                    final int index = Resource.people.indexOf(person);
+                    final int index = data.people.indexOf(person);
 					final ArrayList<Debt> debts = new ArrayList<Debt>();
-					for(Debt debt : Resource.debts) {
+					for(Debt debt : data.debts) {
 						if(debt.owner == person) {
 							debts.add(debt);
 						}
@@ -183,7 +184,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
                             .actionListener(new Snackbar.ActionClickListener() {
                                 @Override
                                 public void onActionClicked() {
-                                    Resource.data.unmerge(person, debts, index);
+                                    data.unmerge(person, debts, index);
 
                                     editPersonCallback.onEdit();
                                 }
@@ -192,7 +193,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 
 
                     //from, to
-					Resource.data.merge(person, other);
+					data.merge(person, other);
 					cancel();
 				}
 			};

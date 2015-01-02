@@ -9,20 +9,17 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.adapter.PeopleListAdapter;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
 import com.mobeta.android.dslv.DragSortController;
@@ -34,7 +31,7 @@ import com.williammora.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PeopleManagerActivity extends ActionBarActivity {
+public class PeopleManagerActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
@@ -70,7 +67,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		adapter = new PeopleListAdapter(this, Resource.people, findViewById(R.id.people_manager_empty));
+		adapter = new PeopleListAdapter(this, data.people, findViewById(R.id.people_manager_empty));
 
 		listView = (DragSortListView) findViewById(R.id.people_listview);
 
@@ -103,7 +100,7 @@ public class PeopleManagerActivity extends ActionBarActivity {
 					@Override
 					public void onEdit() {
 						adapter.notifyDataSetChanged();
-						Resource.commit();
+                        storage.commit();
 						Resource.actionComplete(getFragmentManager());
 					}
 				};
@@ -138,12 +135,12 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 			case R.id.action_sort_az:
 
-                personListBeforeSort = (ArrayList<Person>) Resource.people.clone();
+                personListBeforeSort = (ArrayList<Person>) data.people.clone();
 
-                Collections.sort(Resource.people, new Resource.AlphabeticalComparator());
-                Resource.commit();
+                Collections.sort(data.people, new Resource.AlphabeticalComparator());
+                storage.commit();
 
-                if (Resource.areIdenticalLists(personListBeforeSort, Resource.people)) {
+                if (Resource.areIdenticalLists(personListBeforeSort, data.people)) {
 					Snackbar.with(getApplicationContext())
 							.text(getString(R.string.already_sorted))
 							.show(this);
@@ -160,11 +157,11 @@ public class PeopleManagerActivity extends ActionBarActivity {
                             .actionListener(new Snackbar.ActionClickListener() {
                                 @Override
                                 public void onActionClicked() {
-                                    Resource.people = personListBeforeSort;
-                                    Resource.commit();
+                                    data.people = personListBeforeSort;
+                                    storage.commit();
 
                                     adapter.clear();
-                                    adapter.addAll(Resource.people);
+                                    adapter.addAll(data.people);
                                     adapter.notifyDataSetChanged();
                                 }
                             })
@@ -210,11 +207,11 @@ public class PeopleManagerActivity extends ActionBarActivity {
                                         .actionListener(new Snackbar.ActionClickListener() {
                                             @Override
                                             public void onActionClicked() {
-                                                Resource.people = personListBeforeSort;
-                                                Resource.commit();
+                                                data.people = personListBeforeSort;
+                                                storage.commit();
 
                                                 adapter.clear();
-                                                adapter.addAll(Resource.people);
+                                                adapter.addAll(data.people);
                                                 adapter.notifyDataSetChanged();
                                             }
                                         })
@@ -283,11 +280,11 @@ public class PeopleManagerActivity extends ActionBarActivity {
 
 	public void returnToFeed() {
 		Intent intent = new Intent(this, FeedActivity.class);
-		if(!Resource.people.contains(FeedActivity.person)) {
+		if(!data.people.contains(FeedActivity.person)) {
 			FeedActivity.person = null;
 		}
 
-		Resource.commit();
+        storage.commit();
 
 		finishAffinity();
 		startActivity(intent);

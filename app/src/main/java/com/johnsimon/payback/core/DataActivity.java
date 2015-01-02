@@ -4,42 +4,44 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import com.johnsimon.payback.storage.LocalStorage;
+import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.DriveStorage;
 
 /**
  * Created by johnrs on 2015-01-02.
  */
-public abstract class DataActivity extends ActionBarActivity implements DriveStorage.OnDataRecievedCallback {
+public abstract class DataActivity extends ActionBarActivity implements Callback<AppData> {
 
-    private DriveStorage driveStorage;
+    public Storage storage;
 
-    protected AppData data;
+    public AppData data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        driveStorage = new DriveStorage(this, this);
+        storage = new LocalStorage(this);
+        storage.callbacks.add(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        driveStorage.disconnect();
+        storage.disconnect();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        driveStorage.connect();
+        storage.connect();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean handled = driveStorage.handleActivityResult(requestCode, resultCode, data);
+        boolean handled = storage.handleActivityResult(requestCode, resultCode, data);
 
         if(!handled) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -47,11 +49,7 @@ public abstract class DataActivity extends ActionBarActivity implements DriveSto
     }
 
     @Override
-    public void onDataRevieced(AppData data) {
+    public void onDataReceived(AppData data) {
         this.data = data;
-    }
-
-    private void commit() {
-        driveStorage.commit(data);
     }
 }

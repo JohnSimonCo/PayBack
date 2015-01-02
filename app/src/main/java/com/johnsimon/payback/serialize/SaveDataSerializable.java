@@ -3,15 +3,15 @@ package com.johnsimon.payback.serialize;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.util.SaveData;
 
 import java.util.ArrayList;
 
-public class AppDataSerializable {
+public class SaveDataSerializable {
 	public ArrayList<PersonSerializable> people;
 	public ArrayList<DebtSerializable> debts;
 
-	public AppDataSerializable(AppData data) {
+	public SaveDataSerializable(SaveData data) {
 		this.people = new ArrayList<PersonSerializable>();
 		for(Person person : data.people) {
 			people.add(new PersonSerializable(person));
@@ -22,7 +22,7 @@ public class AppDataSerializable {
 		}
 	}
 
-	public AppData extract(ArrayList<Contact> contacts) {
+	public SaveData extract(ArrayList<Contact> contacts) {
 		ArrayList<Person> people = new ArrayList<Person>();
 		for(PersonSerializable person : this.people) {
 			people.add(person.extract(contacts));
@@ -32,6 +32,6 @@ public class AppDataSerializable {
 		for(DebtSerializable debt : this.debts) {
 			debts.add(debt.extract(people));
 		}
-		return new AppData(people, debts);
+		return new SaveData(people, debts);
 	}
 }

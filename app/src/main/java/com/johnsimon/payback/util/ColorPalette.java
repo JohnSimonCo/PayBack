@@ -1,18 +1,23 @@
 package com.johnsimon.payback.util;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.util.SparseIntArray;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Person;
 
 public class ColorPalette {
 	private static ColorPalette instance = null;
 
+    private DataActivity context;
+
 	private int[] palette;
-	public ColorPalette(Resources resources) {
-		palette = new int[] {
+	public ColorPalette(DataActivity context) {
+        this.context = context;
+
+        Resources resources = context.getResources();
+        palette = new int[] {
 			resources.getColor(R.color.color1),
 			resources.getColor(R.color.color2),
 			resources.getColor(R.color.color3),
@@ -29,7 +34,7 @@ public class ColorPalette {
 			usedColors.put(color, 0);
 		}
 
-		for (Person person : Resource.people) {
+		for (Person person : context.data.people) {
 			usedColors.put(person.color, usedColors.get(person.color) + 1);
 		}
 
@@ -46,9 +51,9 @@ public class ColorPalette {
 		return color;
 	}
 
-	public static ColorPalette getInstance(Context context) {
+	public static ColorPalette getInstance(DataActivity context) {
 		if(instance == null) {
-			instance = new ColorPalette(context.getResources());
+			instance = new ColorPalette(context);
 		}
 		return instance;
 	}

@@ -15,11 +15,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 
-public class PersonPickerDialogFragment extends DialogFragment {
+public class PersonPickerDialogFragment extends DataDialogFragment {
 
 	public PersonSelectedCallback completeCallback = null;
 	private AlertDialog alertDialog;
@@ -73,11 +74,11 @@ public class PersonPickerDialogFragment extends DialogFragment {
 		ArrayList<String> people;
 
 		if (useOnlyContacts) {
-			people = Resource.getContactNames();
+			people = data.getContactNames();
 		} else if (useOnlyPeopleInApp) {
-			people = Resource.getPeopleNames();
+			people = data.getPeopleNames();
 		} else {
-			people = Resource.getAllNames();
+			people = data.getAllNames();
 		}
 
 
@@ -103,7 +104,7 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 				String name = s.toString();
 
-				if (TextUtils.isEmpty(name) || (useOnlyPeopleInApp && Resource.data.findPersonByName(name) == null)) {
+				if (TextUtils.isEmpty(name) || (useOnlyPeopleInApp && data.findPersonByName(name) == null)) {
 					disableButton(confirmButton);
 				} else {
 					enableButton(confirmButton);

@@ -2,15 +2,11 @@ package com.johnsimon.payback.util;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,17 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
-import com.google.gson.Gson;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
-import com.johnsimon.payback.serialize.AppDataSerializable;
-import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.RequestRateDialogFragment;
-import com.johnsimon.payback.ui.UpgradeDialogFragment;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -42,20 +32,12 @@ public class Resource {
     private final static int MAX_FREE_DEBTS = 6;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
-    private final static String SAVE_KEY_APP_DATA = "APP_DATA";
 	private final static String SAVE_KEY_CURRENCY = "CURRENCY_SAVE_KEY";
 	private final static String SAVE_KEY_ACTIONS = "SAVE_KEY_ACTIONS";
 	private final static String SAVE_KEY_NEVER_RATE = "SAVE_KEY_NEVER_RATE";
 
     private final static String PACKAGE_NAME = "com.johnsimon.payback";
     private final static String ARG_PREFIX = PACKAGE_NAME + ".ARG_";
-
-    public static AppData data = null;
-    public static ArrayList<Person> people;
-    public static ArrayList<Debt> debts;
-	public static ArrayList<Contact> contacts;
-
-	public static User user;
 
     public static SharedPreferences preferences;
 
@@ -64,17 +46,14 @@ public class Resource {
 
     public static boolean isFull = false;
 
+    private static boolean isInitialized = false;
+
     public static void init(Activity context) {
-        if (data != null) return;
+        if (isInitialized) return;
+
+        isInitialized = true;
 
         Resource.preferences = context.getPreferences(Context.MODE_PRIVATE);
-
-		contacts = getContacts(context);
-
-        String JSON = preferences.getString(SAVE_KEY_APP_DATA, null);
-        data = JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract(contacts);
-        people = data.people;
-        debts = data.debts;
 
         //TODO REMOVE SAMPLE DATA
         /*
@@ -98,8 +77,6 @@ public class Resource {
             commit();
         }*/
 
-		user = getUser(context);
-
 		neverRate = preferences.getBoolean(SAVE_KEY_NEVER_RATE, false);
 		if(!neverRate) {
 			actions = preferences.getInt(SAVE_KEY_ACTIONS, 0);
@@ -107,11 +84,6 @@ public class Resource {
 
 		//Default configuration
 		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
-    }
-
-    public static void commit() {
-        String JSON = new Gson().toJson(new AppDataSerializable(data), AppDataSerializable.class);
-        preferences.edit().putString(SAVE_KEY_APP_DATA, JSON).apply();
     }
 
     /*  Method to detect if it's the first time the user uses the app.
@@ -194,181 +166,6 @@ public class Resource {
 			avatarLetter.setVisibility(View.VISIBLE);
 			avatarLetter.setText(person.name.substring(0, 1).toUpperCase());
 		}
-	}
-
-	private static ArrayList<Contact> getContacts(Context context) {
-		ArrayList<Contact> contacts = new ArrayList<Contact>();
-		ContentResolver contentResolver = context.getContentResolver();
-		Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		if (cursor.getCount() > 0) {
-			while (cursor.moveToNext()) {
-				//Get contact name
-				String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-				//Exlude email adresses
-				if(name == null || name.matches(".*@.*\\..*")) continue;
-
-				//Test if the name is unique
-				boolean unique = true;
-				for (Contact contact : contacts) {
-					if (contact.name.equals(name)) unique = false;
-				}
-
-				//Exlude non-unique contacts
-				if(!unique) continue;
-
-				//Get rest of contact info
-				long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-				String number = getContactPhoneNumber(contentResolver, id);
-				String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-
-				contacts.add(new Contact(name, number, photoURI, id));
-			}
-		}
-		cursor.close();
-
-		return contacts;
-	}
-
-	private static User getUser(Context context) {
-		String name = null, number = null;
-
-		ContentResolver contentResolver = context.getContentResolver();
-
-		Cursor cursor = contentResolver.query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-		if(cursor.moveToFirst()) {
-			name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
-			number = getUserPhoneNumber(contentResolver);
-		}
-		cursor.close();
-
-		return new User(name, number);
-	}
-
-	private static String getUserPhoneNumber(ContentResolver contentResolver) {
-		Cursor cursor = contentResolver.query(
-				Uri.withAppendedPath(
-						ContactsContract.Profile.CONTENT_URI,
-						ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-				new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER},
-				null, null, null);
-
-		String number = null;
-		if(cursor.moveToFirst()) {
-			number = cursor.getString(0);
-		}
-
-		cursor.close();
-
-		return normalizePhoneNumber(number);
-	}
-
-	private static String getContactPhoneNumber(ContentResolver contentResolver, long id) {
-		Cursor cursor = contentResolver.query(
-				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
-
-		String number = null;
-		if(cursor.moveToFirst()) {
-			number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-		}
-
-		cursor.close();
-
-		return normalizePhoneNumber(number);
-	}
-
-	//Removes all formatting, so that numbers can be compared
-	private static String normalizePhoneNumber(String number) {
-		return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
-	}
-
-	public static Person getOrCreatePerson(String name, Context context) {
-		//Try to find existing person
-		Person person = data.findPersonByName(name);
-		if(person != null) {
-			return person;
-		}
-
-		//Create new person
-		//Attempt to find link
-		Contact link = null;
-		for (Contact contact : contacts) {
-			if (contact.name.equals(name)) {
-				link = contact;
-				break;
-			}
-		}
-		//Create person and add to people
-		person = new Person(name, link, ColorPalette.getInstance(context));
-		people.add(person);
-		return person;
-	}
-
-	//Returns all unique people names
-	public static ArrayList<String> getPeopleNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for (Person person : people) {
-			if(!names.contains(person.name)) {
-				names.add(person.name);
-			}
-		}
-
-		return names;
-	}
-
-	//Returns all unique names (from people and contacts)
-	public static ArrayList<String> getAllNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for (Person person : people) {
-			if(!names.contains(person.name)) {
-				names.add(person.name);
-			}
-		}
-		for (Contact contact : contacts) {
-			if(!names.contains(contact.name)) {
-				names.add(contact.name);
-			}
-		}
-
-		return names;
-	}
-
-	//Returns all unique contact names
-	public static ArrayList<String> getContactNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for (Contact contact : contacts) {
-			if(!names.contains(contact.name)) {
-				names.add(contact.name);
-			}
-		}
-
-		return names;
-	}
-
-	public static String guessName(User sender) {
-		//If user has no name, use currently viewed person
-		if(user.name == null) {
-			return FeedActivity.isAll() ? null : FeedActivity.person.name;
-		}
-
-		//If user has a name:
-		//First match name and number in people and their links
-		for(Person person : people) {
-			if(person.matchTo(sender) || (person.isLinked() && person.link.matchTo(sender))) {
-				return person.name;
-			}
-		}
-
-		//Secondly, match name and number in contacts
-		for(Contact contact : contacts) {
-			if(contact.matchTo(sender)) {
-				return contact.name;
-			}
-		}
-
-		//Otherwise, use the senders name
-		return sender.name;
 	}
 
 	public static void actionComplete(FragmentManager fragmentManager) {
@@ -458,8 +255,8 @@ public class Resource {
         isFull =  bp.isPurchased("full_version");
     }
 
-    public static boolean canHold(int addition) {
-        return isFull || debts.size() + addition <= MAX_FREE_DEBTS;
+    public static boolean canHold(int debts, int addition) {
+        return isFull || debts + addition <= MAX_FREE_DEBTS;
     }
 
 }

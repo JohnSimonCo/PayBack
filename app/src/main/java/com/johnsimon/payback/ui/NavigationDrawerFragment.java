@@ -4,14 +4,12 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,14 +21,15 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
+import com.johnsimon.payback.core.DataFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 
 /**
@@ -38,7 +37,7 @@ import com.johnsimon.payback.util.Resource;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends DataFragment {
 
     /**
      * Remember the position of the selected item.
@@ -114,10 +113,6 @@ public class NavigationDrawerFragment extends Fragment {
 		        selectItem(position);
 	        }
         });
-	    adapter = new NavigationDrawerAdapter(getActivity(), Resource.people);
-
-		setSelectedPerson(FeedActivity.person);
-		selectItem(mCurrentSelectedPosition);
 
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
@@ -135,9 +130,6 @@ public class NavigationDrawerFragment extends Fragment {
 		headerMinus = (TextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
 		headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
 
-		updateBalance();
-		updateName();
-
 		Button navigation_drawer_header_button = (Button) headerView.findViewById(R.id.navigation_drawer_header_button);
 
 		navigation_drawer_header_button.setOnClickListener(new View.OnClickListener() {
@@ -153,10 +145,24 @@ public class NavigationDrawerFragment extends Fragment {
 
 		mDrawerListView.addHeaderView(headerView);
 
-		mDrawerListView.setAdapter(adapter);
-		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        View superView = super.onCreateView(inflater, container, savedInstanceState);
 
         return mDrawerListView;
+    }
+
+    @Override
+    public void onDataReceived(AppData data) {
+        super.onDataReceived(data);
+
+        adapter = new NavigationDrawerAdapter(getActivity(), data.people);
+        mDrawerListView.setAdapter(adapter);
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        setSelectedPerson(FeedActivity.person);
+        selectItem(mCurrentSelectedPosition);
+
+        updateBalance(data);
+        updateName();
     }
 
     public void toggleHeaderVisibility() {
@@ -304,13 +310,13 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-	public static void updateBalance() {
-		headerPlus.setText("+ " + Debt.amountString(Resource.data.calculateTotalPlus()));
-		headerMinus.setText("- " + Debt.amountString(Resource.data.calculateTotalMinus()));
+	public static void updateBalance(AppData data) {
+		headerPlus.setText("+ " + Debt.amountString(data.totalPlus()));
+		headerMinus.setText("- " + Debt.amountString(data.totalMinus()));
 	}
 
 	private void updateName() {
-        headerName.setText(Resource.user.getName(getResources()));
+        headerName.setText(data.user.getName(getResources()));
 	}
 
     public boolean isDrawerOpen() {

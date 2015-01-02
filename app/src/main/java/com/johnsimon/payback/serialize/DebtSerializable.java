@@ -2,7 +2,6 @@ package com.johnsimon.payback.serialize;
 
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.AppData;
 
 import java.util.ArrayList;
 import java.util.UUID;

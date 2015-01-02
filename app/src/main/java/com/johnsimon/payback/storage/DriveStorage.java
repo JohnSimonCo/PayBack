@@ -1,4 +1,4 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.storage;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,26 +23,22 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
-import com.google.gson.Gson;
-import com.nispok.snackbar.Snackbar;
+import com.johnsimon.payback.util.AppData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DriveStorage extends Storage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private final static int REQUEST_CODE_RESOLUTION = 14795;
     private final static String FILE_NAME = "data.json";
 
     private GoogleApiClient client;
-    private Activity context;
-    private OnDataRecievedCallback callback;
 
     private DriveFile file = null;
 
-    public DriveStorage(Activity context, OnDataRecievedCallback callback) {
-        this.context = context;
-        this.callback = callback;
+    public DriveStorage(Activity context) {
+        super(context);
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
@@ -52,32 +48,28 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
            .build();
     }
 
+
+    @Override
+    public void commit() {
+        write(data.save(), file, new ResultCallback<FileResult>() {
+            @Override
+            public void onResult(FileResult result) {
+                if(!result.getStatus().isSuccess()) {
+                    show("Error when commiting");
+                    return;
+                }
+            }
+        });
+    }
+
+    @Override
     public void connect() {
         client.connect();
     }
 
+    @Override
     public void disconnect() {
         client.disconnect();
-    }
-
-    public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE_RESOLUTION:
-                if (resultCode == Activity.RESULT_OK) {
-                    client.connect();
-                }
-                return true;
-        }
-        return false;
-    }
-
-    public void commit(AppData data) {
-        write(new Gson().toJson(data), file, new ResultCallback<FileResult>() {
-            @Override
-            public void onResult(FileResult fileResult) {
-
-            }
-        });
     }
 
     @Override
@@ -97,22 +89,18 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                         }
 
                         MetadataBuffer buffer = result.getMetadataBuffer();
-                        if(buffer.getCount() > 0) {
-                            for(int i = 0, c = buffer.getCount(); i < c; i++) {
-                                Metadata data = buffer.get(i);
-                                DriveId id = data.getDriveId();
-                                show("File exists " + c);
+                        int count = buffer.getCount();
+                        if(count > 0) {
+                            Metadata data = buffer.get(0);
+                            show("File exists " + count);
 
-                                readFile(id, fileFoundCallback);
-                            }
+                            read(data.getDriveId(), fileFoundCallback);
                         } else {
                             show("File doesn't exists");
 
-                            AppData data = new AppData();
+                            emit(new AppData(context, null));
 
-                            callback.onDataRevieced(data);
-
-                            createFile(new Gson().toJson(data), fileCreatedCallback);
+                            createFile(data.save(), fileCreatedCallback);
                         }
                     }
                 });
@@ -133,7 +121,7 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
 
             show("File says " + JSON);
 
-            callback.onDataRevieced(new Gson().fromJson(JSON, AppData.class));
+            emit(new AppData(context, JSON));
         }
     };
 
@@ -178,14 +166,13 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                                 }
 
                                 write(text, result.getDriveFile(), callback);
-
                             }
                         });
                 }
             });
     }
 
-    private void readFile(final DriveId id, ResultCallback<FileResult> callback) {
+    private void read(final DriveId id, ResultCallback<FileResult> callback) {
         read(Drive.DriveApi.getFile(client, id), callback);
     }
 
@@ -219,7 +206,7 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
         file.open(client, DriveFile.MODE_READ_ONLY, null).setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
             @Override
             public void onResult(DriveApi.DriveContentsResult result) {
-                if(!result.getStatus().isSuccess()) {
+                if (!result.getStatus().isSuccess()) {
                     callback.onResult(new FileResult(result.getStatus()));
                     return;
                 }
@@ -240,15 +227,8 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
         });
     }
 
-    private void show(String text) {
-        Snackbar.with(context)
-                .text(text)
-                .show(context);
-    }
-
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
@@ -265,8 +245,16 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
         }
     }
 
-    public interface OnDataRecievedCallback {
-        void onDataRevieced(AppData data);
+    @Override
+    public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_RESOLUTION:
+                if (resultCode == Activity.RESULT_OK) {
+                    client.connect();
+                }
+                return true;
+        }
+        return super.handleActivityResult(requestCode, resultCode, data);
     }
 
     private static class FileResult implements Result {

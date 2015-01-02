@@ -1,15 +1,12 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityOptions;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,17 +23,18 @@ import android.widget.TextView;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
+import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.FeedListAdapter;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.core.DataFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
 
-public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
+public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public static FeedListAdapter adapter;
@@ -47,11 +45,14 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
     private final Person person = FeedActivity.person;
 
+    private RecyclerView recyclerView;
+    private View emptyView;
+
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
-        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
 		recyclerView.setHasFixedSize(true);
 
 		final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -63,11 +64,6 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
 
 		displayTotalDebt(getActivity());
-
-        final View emptyView = rootView.findViewById(R.id.feed_list_empty_view);
-
-		adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, emptyView);
-		recyclerView.setAdapter(adapter);
 
         //FAB is different on L
         if (Resource.isLOrAbove()) {
@@ -125,20 +121,30 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
 
-		adapter.checkAdapterIsEmpty();
+        View superView = super.onCreateView(inflater, container, savedInstanceState);
 
 		return rootView;
 	}
 
-	@Override
+    @Override
+    public void onDataReceived(AppData data) {
+        super.onDataReceived(data);
+
+        adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, emptyView);
+        recyclerView.setAdapter(adapter);
+
+        adapter.checkAdapterIsEmpty();
+    }
+
+    @Override
 	public void onPaidBack(Debt debt) {
 		debt.isPaidBack = !debt.isPaidBack;
-		Resource.commit();
+        storage.commit();
 		adapter.notifyDataSetChanged();
 		displayTotalDebt(getActivity());
 	}
-	public static void displayTotalDebt(Context ctx) {
-		float debt = AppData.totalDebt(FeedActivity.feed);
+	public static void displayTotalDebt(Activity ctx) {
+		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
             feed_header_balance.setVisibility(View.GONE);
@@ -146,14 +152,14 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
+		totalDebtTextView.setText(Debt.totalString(debt, ctx.getString(R.string.even)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 
-            if (Resource.canHold(1)) {
+            if (Resource.canHold(data.debts.size(), 1)) {
                 Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
                         .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
@@ -189,7 +195,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 			@Override
 			public void onConfirm() {
 
-				final int index = Resource.debts.indexOf(debt);
+				final int index = data.debts.indexOf(debt);
 				final int indexFeed = FeedActivity.feed.indexOf(debt);
 
 				Snackbar.with(getActivity())
@@ -199,8 +205,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 						.actionListener(new Snackbar.ActionClickListener() {
 							@Override
 							public void onActionClicked() {
-								Resource.debts.add(index, debt);
-								Resource.commit();
+								data.debts.add(index, debt);
+								storage.commit();
 								if(!FeedActivity.isAll()) {
 									FeedActivity.feed.add(indexFeed, debt);
 								}
@@ -212,8 +218,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 						})
 						.show(getActivity());
 
-				Resource.debts.remove(debt);
-				Resource.commit();
+				data.debts.remove(debt);
+				storage.commit();
 				if(!FeedActivity.isAll()) {
 					FeedActivity.feed.remove(debt);
 				}
@@ -227,8 +233,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 	@Override
 	public void onMove(Debt debt, Person person) {
-		Resource.data.move(debt, person);
-		Resource.commit();
+		data.move(debt, person);
+		storage.commit();
 
 		if (!FeedActivity.isAll()) {
 			FeedActivity.feed.remove(debt);

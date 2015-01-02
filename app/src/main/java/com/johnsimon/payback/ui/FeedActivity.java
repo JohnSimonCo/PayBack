@@ -8,7 +8,6 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +22,7 @@ import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 
@@ -75,12 +75,6 @@ public class FeedActivity extends DataActivity implements
 			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
 		}
 
-		if(isAll()) {
-			feed = Resource.debts;
-		} else {
-			feed = Resource.data.personalizedFeed(person);
-		}
-
 		setContentView(R.layout.activity_feed);
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,7 +90,7 @@ public class FeedActivity extends DataActivity implements
 		);
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-		beamer = new Beamer(this);
+		beamer = new Beamer(this, this);
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(beamer, this);
 		}
@@ -114,11 +108,18 @@ public class FeedActivity extends DataActivity implements
 		} else {
 			feed_activity_status_bar_pusher.setVisibility(View.GONE);
 		}
-
-
 	}
 
-	@Override
+    @Override
+    public void onDataReceived(AppData data) {
+        if(isAll()) {
+            feed = data.debts;
+        } else {
+            feed = data.feed(person);
+        }
+    }
+
+    @Override
 	protected void onStart() {
 		super.onStart();
 		Intent intent = getIntent();
@@ -152,10 +153,10 @@ public class FeedActivity extends DataActivity implements
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		if(item.type == NavigationDrawerItem.Type.All) {
 			person = null;
-			feed = Resource.debts;
+			feed = data.debts;
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
 			person = item.owner;
-			feed = Resource.data.personalizedFeed(person);
+			feed = data.feed(person);
 		}
 
 		getFragmentManager().beginTransaction()
@@ -264,7 +265,7 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onReceivedBeam(final DebtSendable[] debts, final User sender, final boolean fullSync) {
 
-        if(!Resource.canHold(debts.length)) {
+        if(!Resource.canHold(data.debts.size(), debts.length)) {
             UpgradeDialogFragment fragment = UpgradeDialogFragment.create(FeedActivity.bp);
             fragment.show(this.getFragmentManager(), "upgradeTag");
             return;
@@ -273,7 +274,7 @@ public class FeedActivity extends DataActivity implements
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
 		Bundle arguments = new Bundle();
-		arguments.putString(FromWhoDialogFragment.KEY_NAME, Resource.guessName(sender));
+		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(sender));
 		fragment.setArguments(arguments);
 
 		fragment.show(getFragmentManager(), "from_who");
@@ -282,7 +283,7 @@ public class FeedActivity extends DataActivity implements
 		fragment.completeCallback = new FromWhoDialogFragment.FromWhoSelected() {
 			@Override
 			public void onSelected(String name) {
-				person = Resource.getOrCreatePerson(name, self);
+				person = data.getOrCreatePerson(name, self);
 
 				if(fullSync) {
 					ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
@@ -297,24 +298,24 @@ public class FeedActivity extends DataActivity implements
 					confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
 						@Override
 						public void onConfirm() {
-							Resource.data.sync(person, debts);
+							data.sync(person, debts);
 							commitBeam();
 						}
 					};
 				} else {
-					Resource.debts.add(debts[0].extract(person));
+					data.debts.add(debts[0].extract(person));
 					commitBeam();
 				}
 			}
 		};
 	}
 	private void commitBeam() {
-		Resource.commit();
+        storage.commit();
 
-		feed = Resource.data.personalizedFeed(person);
+		feed = data.feed(person);
 
 		NavigationDrawerFragment.adapter.clearItems();
-		NavigationDrawerFragment.adapter.setItems(Resource.people);
+		NavigationDrawerFragment.adapter.setItems(data.people);
 		navigationDrawerFragment.setSelectedPerson(person);
 
 		getFragmentManager().beginTransaction()
