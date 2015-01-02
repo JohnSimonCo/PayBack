@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="1dp" />
 
-    <Button
+    <com.devspark.robototextview.widget.RobotoButton
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:id="@+id/navigation_drawer_footer_people"
         style="@style/navigation_drawer_footer"
         android:onClick="navigationDrawerFooterClick"
@@ -24,7 +26,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
 
-    <Button
+    <com.devspark.robototextview.widget.RobotoButton
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:id="@+id/navigation_drawer_footer_settings"
         style="@style/navigation_drawer_footer"
         android:onClick="navigationDrawerFooterClick"
@@ -34,7 +38,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
 
-    <Button
+    <com.devspark.robototextview.widget.RobotoButton
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:id="@+id/navigation_drawer_footer_about"
         style="@style/navigation_drawer_footer"
         android:onClick="navigationDrawerFooterClick"

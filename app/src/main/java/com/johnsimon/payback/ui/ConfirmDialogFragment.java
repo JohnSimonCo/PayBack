@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.FontCache;
-import com.johnsimon.payback.util.RobotoMediumTextView;
 
 public class ConfirmDialogFragment extends DialogFragment {
 
@@ -51,7 +50,7 @@ public class ConfirmDialogFragment extends DialogFragment {
 			}
 		});
 
-		RobotoMediumTextView confirm_delete_dialog_text = (RobotoMediumTextView) rootView.findViewById(R.id.confirm_delete_dialog_text);
+        TextView confirm_delete_dialog_text = (TextView) rootView.findViewById(R.id.confirm_delete_dialog_text);
 		confirm_delete_dialog_text.setTypeface(FontCache.get(getActivity(), FontCache.RobotoMedium));
 
 		String text = getArguments().getString(INFO_TEXT);

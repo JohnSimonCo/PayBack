@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"  >
+    android:padding="16dp">
 
-    <com.johnsimon.payback.util.RobotoMediumTextView
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:textColor="@color/gray_text_light"
@@ -23,7 +25,9 @@
         android:paddingTop="8dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
             android:textAllCaps="true"
             android:text="@string/cancel"
             android:id="@+id/confirm_delete_cancel"
@@ -33,7 +37,9 @@
             android:textSize="14sp"
             android:textColor="@color/green_strong"/>
 
-        <Button
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
             android:textAllCaps="true"
             android:text="@string/confirm"
             android:id="@+id/confirm_delete_confirm"

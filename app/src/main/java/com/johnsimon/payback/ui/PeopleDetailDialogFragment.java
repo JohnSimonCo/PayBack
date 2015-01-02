@@ -14,7 +14,6 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
 import com.williammora.snackbar.Snackbar;
@@ -40,7 +39,7 @@ public class PeopleDetailDialogFragment extends DialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View rootView = inflater.inflate(R.layout.person_detail_dialog, null);
 
-		RobotoMediumTextView personDetailTitle = (RobotoMediumTextView) rootView.findViewById(R.id.person_detail_title);
+        TextView personDetailTitle = (TextView) rootView.findViewById(R.id.person_detail_title);
 		personDetailTitle.setText(person.name);
 
 		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.person_detail_dialog_avatar);

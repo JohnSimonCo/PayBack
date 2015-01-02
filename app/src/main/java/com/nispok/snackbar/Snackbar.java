@@ -12,9 +12,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.nispok.snackbar.enums.SnackbarType;
 import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
@@ -225,7 +225,7 @@ public class Snackbar extends RelativeLayout {
 
         layout.setLayoutParams(params);
 
-        RobotoMediumTextView snackbarText = (RobotoMediumTextView) layout.findViewById(R.id.sb__text);
+        TextView snackbarText = (TextView) layout.findViewById(R.id.sb__text);
         snackbarText.setText(mText);
 
         if (mTextColor != -1) {

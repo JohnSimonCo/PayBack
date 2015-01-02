@@ -57,7 +57,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
 
-            <com.johnsimon.payback.util.RobotoMediumTextView
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
                 android:textColor="@color/gray_text_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +74,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <com.johnsimon.payback.util.RobotoMediumTextView
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
                     android:layout_weight="1"
                     android:textSize="@dimen/feed_info_size"
                     android:textColor="@color/gray_text_light"
@@ -83,7 +87,9 @@
                     android:ellipsize="end"
                     android:id="@+id/list_item_note"    />
 
-                <com.johnsimon.payback.util.RobotoMediumTextView
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
                     android:textSize="@dimen/feed_info_size"
                     android:textColor="@color/gray_text_very_light"
                     android:layout_width="wrap_content"

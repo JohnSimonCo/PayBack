@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
 import com.johnsimon.payback.core.Debt;
@@ -31,7 +32,6 @@ import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.FontCache;
-import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.Resource;
 
 /**
@@ -70,9 +70,9 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ImageButton headerArrow;
     private LinearLayout headerTextContainer;
-    private RobotoMediumTextView headerName;
-    private static RobotoMediumTextView headerPlus;
-    private static RobotoMediumTextView headerMinus;
+    private TextView headerName;
+    private static TextView headerPlus;
+    private static TextView headerMinus;
 
     public static int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -135,9 +135,9 @@ public class NavigationDrawerFragment extends Fragment {
 		View headerView = inflater.inflate(R.layout.navigation_drawer_list_header, null);
 
 		headerTextContainer = (LinearLayout) headerView.findViewById(R.id.navigation_drawer_header_text_container);
-		headerName = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_name);
-		headerPlus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_plus);
-		headerMinus = (RobotoMediumTextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
+		headerName = (TextView) headerView.findViewById(R.id.navigation_drawer_header_name);
+		headerPlus = (TextView) headerView.findViewById(R.id.navigation_drawer_header_plus);
+		headerMinus = (TextView) headerView.findViewById(R.id.navigation_drawer_header_minus);
 		headerArrow = (ImageButton) headerView.findViewById(R.id.navigation_drawer_header_arrow);
 
 		updateBalance();

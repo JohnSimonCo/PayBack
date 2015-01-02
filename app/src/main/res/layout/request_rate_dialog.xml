@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"  >
+    android:padding="16dp">
 
-    <com.johnsimon.payback.util.RobotoMediumTextView
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:text="@string/rate_title"
         android:id="@+id/request_rate_dialog_title"
         android:layout_width="wrap_content"
@@ -16,7 +18,9 @@
         android:textSize="22sp"
         android:padding="8dp"   />
 
-    <com.johnsimon.payback.util.RobotoMediumTextView
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:id="@+id/select_person_actv"
         android:text="@string/rate_text"
         android:textColor="@color/gray_text_light"
@@ -33,7 +37,9 @@
         android:paddingTop="8dp"
         android:orientation="vertical">
 
-        <Button
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
             android:layout_gravity="right"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -47,7 +53,9 @@
             android:textColor="@color/green_strong"
             android:textSize="16sp"/>
 
-        <Button
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
             android:layout_gravity="right"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -61,7 +69,9 @@
             android:background="?android:attr/selectableItemBackground"
             android:textSize="14sp"/>
 
-        <Button
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
             android:layout_gravity="right"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"

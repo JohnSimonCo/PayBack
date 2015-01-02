@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:orientation="vertical"
-      android:paddingTop="20dp"
-      android:paddingBottom="20dp"
-      android:paddingLeft="32dp"
-      android:paddingRight="32dp"
-      android:background="@color/red"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:background="@color/red"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/paid_back_dialog_image_reverse"
@@ -17,7 +18,9 @@
         android:layout_width="62dp"
         android:layout_height="62dp"    />
 
-    <com.johnsimon.payback.util.RobotoMediumTextView
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:layout_gravity="center_horizontal"
         android:textSize="23sp"
         android:textColor="@android:color/white"

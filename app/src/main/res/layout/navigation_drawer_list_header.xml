@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent" >
+    android:layout_width="match_parent">
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,7 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
     
-            <com.johnsimon.payback.util.RobotoMediumTextView
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
                 android:id="@+id/navigation_drawer_header_name"
                 android:paddingTop="6dp"
                 android:singleLine="true"
@@ -37,14 +40,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
     
-            <com.johnsimon.payback.util.RobotoMediumTextView
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_plus"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"   />
     
-            <com.johnsimon.payback.util.RobotoMediumTextView
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:id="@+id/navigation_drawer_header_minus"
@@ -63,7 +70,9 @@
             android:layout_width="48dp"
             android:layout_height="48dp"/>
     
-        <Button
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
             android:id="@+id/navigation_drawer_header_button"
             android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"

@@ -24,7 +24,6 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
 import com.makeramen.RoundedImageView;
 
@@ -94,7 +93,7 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 			}
 		});
 
-		RobotoMediumTextView dialog_custom_amount = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_amount);
+		TextView dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
 		if (debt.amount < 0) {
 			//negative
 			dialog_custom_amount.setText(debt.amountAsString);
@@ -105,8 +104,8 @@ public class DebtDetailDialogFragment extends DialogFragment implements PaidBack
 		}
 
 
-        RobotoMediumTextView dialog_custom_title = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_title);
-        RobotoMediumTextView dialog_custom_content = (RobotoMediumTextView) rootView.findViewById(R.id.dialog_custom_content);
+        TextView dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
+        TextView dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
 
         dialog_custom_title.setText(debt.owner.name);
 

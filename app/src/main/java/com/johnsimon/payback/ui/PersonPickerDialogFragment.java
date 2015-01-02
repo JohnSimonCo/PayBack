@@ -12,10 +12,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.RobotoMediumTextView;
 import com.johnsimon.payback.util.FontCache;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class PersonPickerDialogFragment extends DialogFragment {
 
 		boolean useOnlyContacts = false;
 
-		RobotoMediumTextView person_picker_dialog_title = (RobotoMediumTextView) rootView.findViewById(R.id.person_picker_dialog_title);
+        TextView person_picker_dialog_title = (TextView) rootView.findViewById(R.id.person_picker_dialog_title);
 		if (!title.equals(USE_DEFAULT_TITLE)) {
 			person_picker_dialog_title.setText(title);
 			if (title.equals(getResources().getString(R.string.rename))) {
