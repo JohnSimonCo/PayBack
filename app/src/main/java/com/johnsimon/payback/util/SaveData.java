@@ -1,7 +1,6 @@
 package com.johnsimon.payback.util;
 
 import com.google.gson.Gson;
-import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.serialize.SaveDataSerializable;
@@ -22,8 +21,8 @@ public class SaveData {
         this.debts = debts;
     }
 
-    public static SaveData fromJson(String JSON, ArrayList<Contact> contacts) {
-        return JSON == null ? new SaveData() : new Gson().fromJson(JSON, SaveDataSerializable.class).extract(contacts);
+    public static SaveData fromJson(String JSON) {
+        return JSON == null ? new SaveData() : new Gson().fromJson(JSON, SaveDataSerializable.class).extract();
     }
 
     public static String toJson(SaveData data) {

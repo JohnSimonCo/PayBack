@@ -1,6 +1,5 @@
 package com.johnsimon.payback.serialize;
 
-import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.SaveData;
@@ -22,10 +21,10 @@ public class SaveDataSerializable {
 		}
 	}
 
-	public SaveData extract(ArrayList<Contact> contacts) {
+	public SaveData extract() {
 		ArrayList<Person> people = new ArrayList<Person>();
 		for(PersonSerializable person : this.people) {
-			people.add(person.extract(contacts));
+			people.add(person.extract());
 		}
 
 		ArrayList<Debt> debts = new ArrayList<Debt>();

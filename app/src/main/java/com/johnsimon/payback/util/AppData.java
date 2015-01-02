@@ -26,7 +26,7 @@ public class AppData {
         this.contacts = Contacts.getContacts(context);
         this.user = Contacts.getUser(context);
 
-        this.data = SaveData.fromJson(JSON, contacts);
+        this.data = SaveData.fromJson(JSON);
         this.debts = data.debts;
         this.people = data.people;
     }
@@ -84,7 +84,7 @@ public class AppData {
         return findPerson(people, UUID.fromString(id));
     }
 
-    public /*static*/ Person findPerson(ArrayList<Person> people, UUID id) {
+    public Person findPerson(ArrayList<Person> people, UUID id) {
         for(Person p : people) {
             if(p.id.equals(id)) return p;
         }
