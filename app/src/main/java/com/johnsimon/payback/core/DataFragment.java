@@ -9,13 +9,18 @@ import android.view.ViewGroup;
 
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.util.ContactLoader;
+import com.johnsimon.payback.util.Contacts;
 
 /**
  * Created by johnrs on 2015-01-02.
  */
-public abstract class DataFragment extends Fragment implements Callback<AppData> {
+public abstract class DataFragment extends Fragment {
+    protected Storage storage;
     public AppData data;
-    public Storage storage;
+
+    protected ContactLoader contactLoader;
+    public Contacts contacts;
 
     @Nullable
     @Override
@@ -23,13 +28,36 @@ public abstract class DataFragment extends Fragment implements Callback<AppData>
 
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
-        storage.callbacks.add(this);
+        storage.callbacks.add(dataCallback);
+
+        this.contactLoader = activity.contactLoader;
+        contactLoader.callbacks.add(contactCallback);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void onDataReceived(AppData data) {
-        this.data = data;
+    private DataFragment self = this;
+    private Callback<AppData> dataCallback = new Callback<AppData>() {
+        @Override
+        public void onFired(AppData data) {
+            self.data = data;
+            onDataReceived();
+        }
+    };
+
+    private Callback<Contacts> contactCallback = new Callback<Contacts>() {
+        @Override
+        public void onFired(Contacts contacts) {
+            self.contacts = contacts;
+            onContactsLoaded();
+        }
+    };
+
+    protected void onDataReceived() {
+
+    }
+
+    protected void onContactsLoaded() {
+
     }
 }

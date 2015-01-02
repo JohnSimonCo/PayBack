@@ -2,7 +2,6 @@ package com.johnsimon.payback.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 
@@ -74,11 +72,11 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		ArrayList<String> people;
 
 		if (useOnlyContacts) {
-			people = data.getContactNames();
+			people = data.getContactNames(contacts);
 		} else if (useOnlyPeopleInApp) {
 			people = data.getPeopleNames();
 		} else {
-			people = data.getAllNames();
+			people = data.getAllNames(contacts);
 		}
 
 

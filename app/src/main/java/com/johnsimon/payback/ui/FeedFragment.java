@@ -127,9 +127,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	}
 
     @Override
-    public void onDataReceived(AppData data) {
-        super.onDataReceived(data);
-
+    protected void onDataReceived() {
         adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, emptyView);
         recyclerView.setAdapter(adapter);
 

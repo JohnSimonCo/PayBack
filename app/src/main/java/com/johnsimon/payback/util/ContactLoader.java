@@ -1,20 +1,23 @@
 package com.johnsimon.payback.util;
 
-import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
+import com.johnsimon.payback.core.Callbacks;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.User;
 
-public class ContactLoader extends AsyncTask<Activity, Void, Contacts> {
+public class ContactLoader extends AsyncTask<Context, Void, Contacts> {
+
+    public Callbacks<Contacts> callbacks = new Callbacks<>();
 
     @Override
-    protected Contacts doInBackground(Activity... params) {
-        Activity context = params[0];
+    protected Contacts doInBackground(Context... params) {
+        Context context = params[0];
 
         Contacts contacts = getContacts(context);
 
@@ -23,7 +26,7 @@ public class ContactLoader extends AsyncTask<Activity, Void, Contacts> {
         return contacts;
     }
 
-    public static User getUser(Activity context) {
+    public static User getUser(Context context) {
         String name = null, number = null;
 
         ContentResolver contentResolver = context.getContentResolver();
@@ -38,7 +41,7 @@ public class ContactLoader extends AsyncTask<Activity, Void, Contacts> {
         return new User(name, number);
     }
 
-    public static Contacts getContacts(Activity context) {
+    public static Contacts getContacts(Context context) {
         Contacts contacts = new Contacts();
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -108,5 +111,10 @@ public class ContactLoader extends AsyncTask<Activity, Void, Contacts> {
     //Removes all formatting, so that numbers can be compared
     private static String normalizePhoneNumber(String number) {
         return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
+    }
+
+    @Override
+    protected void onPostExecute(Contacts contacts) {
+        callbacks.fire(contacts);
     }
 }

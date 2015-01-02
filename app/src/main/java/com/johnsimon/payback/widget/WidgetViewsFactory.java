@@ -119,7 +119,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     }
 
     @Override
-    public void onDataReceived(AppData data) {
+    public void onFired(AppData data) {
         this.data = data;
     }
 }

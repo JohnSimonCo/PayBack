@@ -228,7 +228,7 @@ public class CreateDebtActivity extends DataActivity {
 				this,
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				data.getAllNames()
+				data.getAllNames(contacts)
 		));
 
 
@@ -277,12 +277,12 @@ public class CreateDebtActivity extends DataActivity {
 
 		Person person;
 		if(editingDebt == null) {
-			person = data.getOrCreatePerson(name, this);
+			person = data.getOrCreatePerson(name, contacts, this);
 			data.debts.add(0, new Debt(person, amount, note));
 		} else {
 			person = editingDebt.owner.name.equals(name)
 				? editingDebt.owner
-				: data.getOrCreatePerson(name, this);
+				: data.getOrCreatePerson(name, contacts, this);
 
 			editingDebt.edit(person, amount, note);
 		}

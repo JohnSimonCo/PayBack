@@ -12,8 +12,8 @@ public class SaveData {
 	public ArrayList<Debt> debts;
 
 	public SaveData() {
-		this.people = new ArrayList<Person>();
-		this.debts = new ArrayList<Debt>();
+		this.people = new ArrayList<>();
+		this.debts = new ArrayList<>();
 	}
 
     public SaveData(ArrayList<Person> people, ArrayList<Debt> debts) {

@@ -1,22 +1,21 @@
 package com.johnsimon.payback.storage;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.johnsimon.payback.core.Callbacks;
 import com.johnsimon.payback.util.AppData;
-import com.nispok.snackbar.Snackbar;
 
 /**
  * Created by johnrs on 2015-01-02.
  */
 public abstract class Storage {
-    protected Activity context;
+    protected Context context;
     public Callbacks<AppData> callbacks = new Callbacks<>();
 
     protected AppData data;
 
-    public Storage(Activity context) {
+    public Storage(Context context) {
         this.context = context;
     }
 
@@ -39,8 +38,9 @@ public abstract class Storage {
     }
 
     protected void show(String text) {
+        /*
         Snackbar.with(context)
                 .text(text)
-                .show(context);
+                .show(context);*/
     }
 }

@@ -1,8 +1,8 @@
 package com.johnsimon.payback.storage;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.johnsimon.payback.util.AppData;
 
@@ -15,15 +15,15 @@ public class LocalStorage extends Storage {
 
     public static SharedPreferences preferences;
 
-    public LocalStorage(Activity context) {
+    public LocalStorage(Context context) {
         super(context);
 
         long time = System.currentTimeMillis();
 
-        preferences = context.getPreferences(Context.MODE_PRIVATE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String JSON = preferences.getString(SAVE_KEY_DATA, null);
-        emit(new AppData(context, JSON));
+        emit(new AppData(JSON));
 
         show(Long.toString(System.currentTimeMillis() - time));
     }

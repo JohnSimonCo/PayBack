@@ -22,7 +22,6 @@ import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
-import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 
@@ -111,8 +110,7 @@ public class FeedActivity extends DataActivity implements
 	}
 
     @Override
-    public void onDataReceived(AppData data) {
-        super.onDataReceived(data);
+    protected void onDataReceived() {
         if(isAll()) {
             feed = data.debts;
         } else {
@@ -279,7 +277,7 @@ public class FeedActivity extends DataActivity implements
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
 		Bundle arguments = new Bundle();
-		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(sender));
+		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(sender, contacts));
 		fragment.setArguments(arguments);
 
 		fragment.show(getFragmentManager(), "from_who");
@@ -288,7 +286,7 @@ public class FeedActivity extends DataActivity implements
 		fragment.completeCallback = new FromWhoDialogFragment.FromWhoSelected() {
 			@Override
 			public void onSelected(String name) {
-				person = data.getOrCreatePerson(name, self);
+				person = data.getOrCreatePerson(name, contacts, self);
 
 				if(fullSync) {
 					ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();

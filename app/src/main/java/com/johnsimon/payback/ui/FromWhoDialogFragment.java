@@ -2,7 +2,6 @@ package com.johnsimon.payback.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,8 +19,6 @@ import android.widget.ImageButton;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.util.Resource;
-
-import java.util.ArrayList;
 
 public class FromWhoDialogFragment extends DataDialogFragment {
 
@@ -76,7 +73,7 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				data.getAllNames());
+				data.getAllNames(contacts));
 
 		actv.setAdapter(adapter);
 

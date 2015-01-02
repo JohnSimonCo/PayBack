@@ -1,8 +1,5 @@
 package com.johnsimon.payback.util;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
@@ -15,20 +12,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class AppData {
-    public ArrayList<Contact> contacts;
-    public User user;
-
     private SaveData data;
     public ArrayList<Debt> debts;
     public ArrayList<Person> people;
 
-    public AppData(Activity context, String JSON) {
-        this.contacts = Contacts.getContacts(context);
-        this.user = Contacts.getUser(context);
-
+    public AppData(String JSON) {
         this.data = SaveData.fromJson(JSON);
         this.debts = data.debts;
         this.people = data.people;
+    }
+
+    public AppData() {
+        this(null);
     }
 
     public String save() {
@@ -154,7 +149,7 @@ public class AppData {
         }
     }
 
-    public Person getOrCreatePerson(String name, DataActivity context) {
+    public Person getOrCreatePerson(String name, Contacts contacts, DataActivity context) {
         //Try to find existing person
         Person person = findPersonByName(name);
         if(person != null) {
@@ -191,7 +186,7 @@ public class AppData {
     }
 
     //Returns all unique names (from people and contacts)
-    public ArrayList<String> getAllNames() {
+    public ArrayList<String> getAllNames(Contacts contacts) {
         ArrayList<String> names = new ArrayList<String>();
         for (Person person : people) {
             if(!names.contains(person.name)) {
@@ -208,7 +203,7 @@ public class AppData {
     }
 
     //Returns all unique contact names
-    public ArrayList<String> getContactNames() {
+    public ArrayList<String> getContactNames(Contacts contacts) {
         ArrayList<String> names = new ArrayList<String>();
         for (Contact contact : contacts) {
             if(!names.contains(contact.name)) {
@@ -219,9 +214,9 @@ public class AppData {
         return names;
     }
 
-    public String guessName(User sender) {
+    public String guessName(User sender, Contacts contacts) {
         //If user has no name, use currently viewed person
-        if(user.name == null) {
+        if(contacts.user.name == null) {
             return FeedActivity.isAll() ? null : FeedActivity.person.name;
         }
 

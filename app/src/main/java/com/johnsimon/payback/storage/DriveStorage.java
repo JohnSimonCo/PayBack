@@ -33,12 +33,16 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     private final static int REQUEST_CODE_RESOLUTION = 14795;
     private final static String FILE_NAME = "data.json";
 
+    private Activity activity;
+
     private GoogleApiClient client;
 
     private DriveFile file = null;
 
     public DriveStorage(Activity context) {
         super(context);
+
+        activity = context;
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
@@ -98,7 +102,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                         } else {
                             show("File doesn't exists");
 
-                            emit(new AppData(context, null));
+                            emit(new AppData());
 
                             createFile(data.save(), fileCreatedCallback);
                         }
@@ -121,7 +125,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
             show("File says " + JSON);
 
-            emit(new AppData(context, JSON));
+            emit(new AppData(JSON));
         }
     };
 
@@ -235,13 +239,13 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (connectionResult.hasResolution()) {
             try {
-                connectionResult.startResolutionForResult(context, REQUEST_CODE_RESOLUTION);
+                connectionResult.startResolutionForResult(activity, REQUEST_CODE_RESOLUTION);
             } catch (IntentSender.SendIntentException e) {
                 // Unable to resolve, message user appropriately
                 show("Shit fuckd up");
             }
         } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), context, 0).show();
+            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
         }
     }
 

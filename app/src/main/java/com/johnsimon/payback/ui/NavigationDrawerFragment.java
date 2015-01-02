@@ -156,9 +156,7 @@ public class NavigationDrawerFragment extends DataFragment {
     }
 
     @Override
-    public void onDataReceived(AppData data) {
-        super.onDataReceived(data);
-
+    protected void onDataReceived() {
         adapter = new NavigationDrawerAdapter(getActivity(), data.people);
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -321,7 +319,7 @@ public class NavigationDrawerFragment extends DataFragment {
 	}
 
 	private void updateName() {
-        headerName.setText(data.user.getName(getResources()));
+        headerName.setText(contacts.user.getName(getResources()));
 	}
 
     public boolean isDrawerOpen() {

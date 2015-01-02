@@ -13,7 +13,7 @@ public class Callbacks<D> {
 
     public void add(Callback<D> callback) {
         if(hasFired) {
-            callback.onDataReceived(data);
+            callback.onFired(data);
         } else {
             callbacks.add(callback);
         }
@@ -26,7 +26,7 @@ public class Callbacks<D> {
         this.data = data;
 
         for(Callback<D> callback : callbacks) {
-            callback.onDataReceived(data);
+            callback.onFired(data);
         }
         callbacks.clear();
     }
