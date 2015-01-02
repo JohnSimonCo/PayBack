@@ -397,7 +397,7 @@ public class NavigationDrawerFragment extends DataFragment {
 	}
 
     private void selectItem(int position) {
-//		position -= mDrawerListView.getHeaderViewsCount();
+		position -= mDrawerListView.getHeaderViewsCount();
         mCurrentSelectedPosition = position;
 
         if (mDrawerListView != null) {
