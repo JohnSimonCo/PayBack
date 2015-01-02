@@ -15,18 +15,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#474747"
-        android:textSize="22sp"
-        android:padding="8dp"/>
+        android:textSize="22sp" />
 
     <com.devspark.robototextview.widget.RobotoTextView
         app:fontFamily="roboto"
         app:textWeight="medium"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:textColor="@color/gray_text_light"
         android:id="@+id/confirm_delete_dialog_text"
         android:layout_width="wrap_content"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:layout_height="wrap_content"/>
 
     <LinearLayout

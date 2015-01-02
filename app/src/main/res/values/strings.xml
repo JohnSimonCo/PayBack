@@ -78,16 +78,17 @@
     <string name="from_who_title">From who?</string>
     <string name="nfc_error_all">Can\'t send entries from \"All\"</string>
     <string name="title_activity_people_manager">People</string>
-    <string name="upgrade_title">Purchase full</string>
+    <string name="upgrade_title">Unlock full version</string>
     <string name="upgrade_text">Purchase the full version of Pay Back to add more than 6 debts and sync them across devices.</string>
     <string name="upgrade_confirm_text">Upgrade</string>
     <string name="cloud_sync">Cloud sync</string>
     <string name="cloud_sync_description_first">Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>
-    <string name="cloud_sync_description">Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>
+    <string name="cloud_sync_description">Activate cloud sync to sync debt data across devices using Google Drive.</string>
     <string name="activate">Activate</string>
     <string name="not_now">Not now</string>
     <string name="cloud_sync_not_full">Requires full version</string>
     <string name="upgrade_navigation_drawer">Unlock full version</string>
+    <string name="debt_free">Debt free!</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

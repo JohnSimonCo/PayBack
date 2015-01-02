@@ -70,9 +70,9 @@ public class Debt {
 		return amount > 0 ? POSITIVE_COLOR_DISABLED : NEGATIVE_COLOR_DISABLED;
 	}
 
-	public static String totalString(float amount, String even) {
+	public static String totalString(float amount, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
-			return even;
+            return isAll ? allEvenString : even;
 		} else {
 			return (amount > 0 ? "+ " : "- ") + amountString(amount);
 		}

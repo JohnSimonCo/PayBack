@@ -35,7 +35,6 @@ import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
-
 public class FeedFragment extends Fragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
@@ -146,7 +145,7 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even)));
+		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even), FeedActivity.isAll(), ctx.getResources().getString(R.string.debt_free)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -180,7 +179,8 @@ public class FeedFragment extends Fragment implements DebtDetailDialogFragment.C
 
 		Bundle argsDelete = new Bundle();
 		argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_entry));
-		argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
+        argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
+        argsDelete.putString(ConfirmDialogFragment.DECLINE_TEXT, getResources().getString(R.string.cancel));
 		confirmDialogFragment.setArguments(argsDelete);
 
 		confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
