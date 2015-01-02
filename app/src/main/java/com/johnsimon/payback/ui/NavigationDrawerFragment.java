@@ -165,6 +165,10 @@ public class NavigationDrawerFragment extends DataFragment {
         selectItem(mCurrentSelectedPosition);
 
         updateBalance(data);
+    }
+
+    @Override
+    protected void onContactsLoaded() {
         updateName();
     }
 

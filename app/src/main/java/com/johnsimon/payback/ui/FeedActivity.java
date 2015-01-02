@@ -119,6 +119,11 @@ public class FeedActivity extends DataActivity implements
     }
 
     @Override
+    protected void onContactsLoaded() {
+        int i = 0;
+    }
+
+    @Override
 	protected void onStart() {
 		super.onStart();
 		Intent intent = getIntent();
