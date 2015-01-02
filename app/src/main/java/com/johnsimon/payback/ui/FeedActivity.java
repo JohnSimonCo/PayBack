@@ -2,12 +2,9 @@ package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcEvent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -16,26 +13,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.util.Beamer;
-import com.johnsimon.payback.util.DriveStorage;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FeedActivity extends ActionBarActivity implements
+public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
         BillingProcessor.IBillingHandler {
 
@@ -57,7 +51,6 @@ public class FeedActivity extends ActionBarActivity implements
 	private NfcAdapter nfcAdapter;
 
 	private Beamer beamer;
-    private DriveStorage storage;
 
 	private CharSequence title;
 
@@ -65,8 +58,6 @@ public class FeedActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-        storage = new DriveStorage(this);
 
         bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
 
@@ -135,22 +126,13 @@ public class FeedActivity extends ActionBarActivity implements
 			Resource.actionComplete(getFragmentManager());
 			intent.removeExtra(ARG_FROM_CREATE);
 		}
-
-        storage.connect();
 	}
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        storage.disconnect();
-    }
 
     public static boolean isAll() {
 		return person == null;
 	}
 
-	@Override
+    @Override
 	public void onResume() {
 		super.onResume();
 		// Check to see that the Activity started due to an Android Beam
@@ -158,7 +140,7 @@ public class FeedActivity extends ActionBarActivity implements
 		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 			beamer.processIntent(intent);
 		}
-	}
+    }
 
 	@Override
 	public void onNewIntent(Intent intent) {
@@ -342,8 +324,7 @@ public class FeedActivity extends ActionBarActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean handled = bp.handleActivityResult(requestCode, resultCode, data) ||
-                          storage.handleActivityResult(requestCode, resultCode, data);
+        boolean handled = bp.handleActivityResult(requestCode, resultCode, data);
 
         if (!handled) {
             super.onActivityResult(requestCode, resultCode, data);

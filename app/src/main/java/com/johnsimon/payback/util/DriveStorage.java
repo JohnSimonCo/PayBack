@@ -1,12 +1,9 @@
 package com.johnsimon.payback.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.database.CursorJoiner;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -14,7 +11,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
@@ -27,15 +23,12 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
+import com.google.gson.Gson;
 import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private final static int REQUEST_CODE_RESOLUTION = 14795;
@@ -43,9 +36,13 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
 
     private GoogleApiClient client;
     private Activity context;
+    private OnDataRecievedCallback callback;
 
-    public DriveStorage(Activity context) {
+    private DriveFile file = null;
+
+    public DriveStorage(Activity context, OnDataRecievedCallback callback) {
         this.context = context;
+        this.callback = callback;
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
@@ -74,6 +71,15 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
         return false;
     }
 
+    public void commit(AppData data) {
+        write(new Gson().toJson(data), file, new ResultCallback<FileResult>() {
+            @Override
+            public void onResult(FileResult fileResult) {
+
+            }
+        });
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         Query query = new Query.Builder()
@@ -96,51 +102,56 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                                 Metadata data = buffer.get(i);
                                 DriveId id = data.getDriveId();
                                 show("File exists " + c);
-                                readFile(id, new ResultCallback<StringResult>() {
-                                    @Override
-                                    public void onResult(StringResult result) {
-                                        if(!result.getStatus().isSuccess()) {
-                                            show("Error when reading file");
-                                            return;
-                                        }
 
-                                        show("File says " + result.getString());
-                                    }
-                                });
+                                readFile(id, fileFoundCallback);
                             }
                         } else {
                             show("File doesn't exists");
-                            createFile("Hej hopp", new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(Status status) {
-                                    if (!status.isSuccess()) {
-                                        show("Error while trying to write file");
-                                        return;
-                                    }
 
-                                    show("Created a file in App Folder");
+                            AppData data = new AppData();
 
-                                    /*
-                                    read(file, new ResultCallback<StringResult>() {
-                                        @Override
-                                        public void onResult(StringResult result) {
-                                            if (!result.getStatus().isSuccess()) {
-                                                show("Error while trying to read file");
-                                                return;
-                                            }
+                            callback.onDataRevieced(data);
 
-                                            show("Read a file in App Folder: " + result.getString());
-                                        }
-                                    });
-                                    */
-                                }
-                            });
+                            createFile(new Gson().toJson(data), fileCreatedCallback);
                         }
                     }
                 });
     }
 
-    private void createFile(final String text, final ResultCallback<Status> callback) {
+    private DriveStorage self = this;
+    private ResultCallback<FileResult> fileFoundCallback = new ResultCallback<FileResult>() {
+        @Override
+        public void onResult(FileResult result) {
+            if(!result.getStatus().isSuccess()) {
+                show("Error when reading file");
+                return;
+            }
+
+            self.file = result.getFile();
+
+            String JSON = result.getText();
+
+            show("File says " + JSON);
+
+            callback.onDataRevieced(new Gson().fromJson(JSON, AppData.class));
+        }
+    };
+
+    private ResultCallback<FileResult> fileCreatedCallback = new ResultCallback<FileResult>() {
+        @Override
+        public void onResult(FileResult result) {
+            if (!result.getStatus().isSuccess()) {
+                show("Error while trying to write file");
+                return;
+            }
+
+            self.file = result.getFile();
+
+            show("Created a file in App Folder");
+        }
+    };
+
+    private void createFile(final String text, final ResultCallback<FileResult> callback) {
         Drive.DriveApi.newDriveContents(client)
             .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                 @Override
@@ -174,16 +185,16 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
             });
     }
 
-    private void readFile(final DriveId id, ResultCallback<StringResult> callback) {
+    private void readFile(final DriveId id, ResultCallback<FileResult> callback) {
         read(Drive.DriveApi.getFile(client, id), callback);
     }
 
-    private void write(final String text, DriveFile file, final ResultCallback<Status> callback) {
+    private void write(final String text, final DriveFile file, final ResultCallback<FileResult> callback) {
         file.open(client, DriveFile.MODE_WRITE_ONLY, null).setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
             @Override
             public void onResult(DriveApi.DriveContentsResult result) {
                 if (!result.getStatus().isSuccess()) {
-                    callback.onResult(result.getStatus());
+                    callback.onResult(new FileResult(result.getStatus()));
                     return;
                 }
 
@@ -193,18 +204,23 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                contents.commit(client, null).setResultCallback(callback);
+                contents.commit(client, null).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        callback.onResult(new FileResult(file, text, status));
+                    }
+                });
             }
         });
 
     }
 
-    private void read(DriveFile file, final ResultCallback<StringResult> callback) {
+    private void read(final DriveFile file, final ResultCallback<FileResult> callback) {
         file.open(client, DriveFile.MODE_READ_ONLY, null).setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
             @Override
             public void onResult(DriveApi.DriveContentsResult result) {
                 if(!result.getStatus().isSuccess()) {
-                    callback.onResult(new StringResult(null, result.getStatus()));
+                    callback.onResult(new FileResult(result.getStatus()));
                     return;
                 }
 
@@ -219,7 +235,7 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                callback.onResult(new StringResult(builder.toString(), result.getStatus()));
+                callback.onResult(new FileResult(file, builder.toString(), result.getStatus()));
             }
         });
     }
@@ -249,17 +265,31 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
         }
     }
 
-    private static class StringResult implements Result {
-        private String string;
+    public interface OnDataRecievedCallback {
+        void onDataRevieced(AppData data);
+    }
+
+    private static class FileResult implements Result {
+        private DriveFile file;
+        private String text;
         private Status status;
 
-        public StringResult(String string, Status status) {
-            this.string = string;
+        public FileResult(DriveFile file, String text, Status status) {
+            this.file = file;
+            this.text = text;
             this.status = status;
         }
 
-        public String getString() {
-            return string;
+        public FileResult(Status status) {
+            this(null, null, status);
+        }
+
+        public DriveFile getFile() {
+            return file;
+        }
+
+        public String getText() {
+            return text;
         }
 
         @Override
