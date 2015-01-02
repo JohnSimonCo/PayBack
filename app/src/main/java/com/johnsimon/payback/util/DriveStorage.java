@@ -166,11 +166,7 @@ public class DriveStorage implements GoogleApiClient.ConnectionCallbacks, Google
                                     return;
                                 }
 
-                                final DriveFile file = result.getDriveFile();
-
-                                show("Created a file in App Folder: " + file.getDriveId());
-
-                                write(text, file, callback);
+                                write(text, result.getDriveFile(), callback);
 
                             }
                         });
