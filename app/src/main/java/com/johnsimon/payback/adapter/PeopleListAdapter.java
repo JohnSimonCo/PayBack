@@ -21,12 +21,14 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 	private final Activity context;
 	private View emptyView;
     private AppData data;
+    private TextView managerTitle;
 
-	public PeopleListAdapter(Activity context, View emptyView, AppData data) {
+	public PeopleListAdapter(Activity context, View emptyView, AppData data, TextView managerTitle) {
 		super(context, R.layout.people_list_item, data.people);
 		this.context = context;
 		this.emptyView = emptyView;
         this.data = data;
+        this.managerTitle = managerTitle;
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -77,6 +79,12 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 	@Override
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
+
+        if (data.people.size() == 1) {
+            managerTitle.setText("1 " + context.getString(R.string.person));
+        } else {
+            managerTitle.setText(data.people.size() + " " + context.getString(R.string.people));
+        }
 
 		if (data.people.size() == 0) {
 			emptyView.setVisibility(View.VISIBLE);

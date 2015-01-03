@@ -92,6 +92,8 @@
     <string name="add_person">Add person</string>
     <string name="debt_single">debt</string>
     <string name="debt_plural">debts</string>
+    <string name="people">people</string>
+    <string name="person">person</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

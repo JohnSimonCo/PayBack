@@ -11,6 +11,27 @@
     <include
         layout="@layout/toolbar"    />
 
+    <LinearLayout
+        android:background="@color/primary_color"
+        style="@style/Elevation4DP"
+        android:paddingLeft="@dimen/side_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:fontFamily="roboto"
+            app:textWeight="medium"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp"
+            android:paddingRight="16dp"
+            android:id="@+id/people_manager_title"
+            android:textColor="#ffffff"
+            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,7 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerHeight="0dp"
+            android:paddingTop="16dp"
             android:paddingLeft="@dimen/feed_list_item_extra_margin"
+            android:clipToPadding="false"
             android:paddingRight="@dimen/feed_list_item_extra_margin"
             dslv:float_background_color="@android:color/transparent"
             dslv:collapsed_height="0dp"

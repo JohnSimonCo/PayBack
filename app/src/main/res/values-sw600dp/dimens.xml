@@ -38,5 +38,7 @@
 
     <dimen name="feed_fab_bottom_margin">4dp</dimen>
 
+    <dimen name="side_margin">80dp</dimen>
+
 
 </resources>
