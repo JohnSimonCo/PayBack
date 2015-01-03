@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
 
 /**

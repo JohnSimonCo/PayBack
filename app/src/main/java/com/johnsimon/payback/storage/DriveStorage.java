@@ -24,7 +24,6 @@ import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 import com.johnsimon.payback.util.AppData;
-import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,7 +55,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     public void commit() {
-        show("Started commmit");
         write(data.save(), file, new ResultCallback<FileResult>() {
             @Override
             public void onResult(FileResult result) {
@@ -64,7 +62,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                     show("Error when commiting");
                     return;
                 }
-                show("Commited successfully");
             }
         });
     }
@@ -109,7 +106,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
                             createFile(data.save(), fileCreatedCallback);
                         }
-                        buffer.release();
                     }
                 });
     }
@@ -292,12 +288,5 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         public Status getStatus() {
             return status;
         }
-    }
-
-    @Override
-    protected void show(String text) {
-        Snackbar.with(activity)
-                .text(text)
-                .show(activity);
     }
 }
