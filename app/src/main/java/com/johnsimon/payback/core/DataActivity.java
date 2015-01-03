@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
+import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
@@ -29,7 +29,7 @@ public abstract class DataActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        storage = new LocalStorage(this);
+        storage = StorageManager.getStorage(this);
         storage.promise.then(dataLoadedCallback);
 
         contactLoader = new ContactLoader();
