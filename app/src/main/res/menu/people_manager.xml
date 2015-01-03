@@ -4,6 +4,12 @@
     tools:context="com.johnsimon.payback.ui.PeopleManagerActivity">
 
     <item
+        android:id="@+id/action_people_plus"
+        android:title="@string/add_person"
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="ifRoom"   />
+
+    <item
         android:id="@+id/action_sort_az"
         android:title="@string/sort_az"
         app:showAsAction="ifRoom"

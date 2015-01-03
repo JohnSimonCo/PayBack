@@ -116,9 +116,6 @@ public class NavigationDrawerFragment extends DataFragment {
 
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
-        Button footerPeople = (Button) footerView.findViewById(R.id.navigation_drawer_footer_people);
-        Button footerSettings = (Button) footerView.findViewById(R.id.navigation_drawer_footer_settings);
-        Button footerAbout = (Button) footerView.findViewById(R.id.navigation_drawer_footer_about);
         Button footerUpgrade = (Button) footerView.findViewById(R.id.navigation_drawer_footer_upgrade);
 
         if (Resource.isFull) {

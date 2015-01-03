@@ -144,6 +144,22 @@ public class PeopleManagerActivity extends DataActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
 
+            case R.id.action_people_plus:
+                PersonPickerDialogFragment fragment = new PersonPickerDialogFragment();
+                Bundle args = new Bundle();
+                args.putString(PersonPickerDialogFragment.TITLE_KEY, getString(R.string.add_person));
+                fragment.setArguments(args);
+                fragment.completeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
+                    @Override
+                    public void onSelected(String name) {
+                        //TODO add person
+                    //    Person person = new Person();
+                    //    data.people.add()
+                    }
+                };
+
+                break;
+
 			case R.id.action_sort_az:
 
                 personListBeforeSort = (ArrayList<Person>) data.people.clone();

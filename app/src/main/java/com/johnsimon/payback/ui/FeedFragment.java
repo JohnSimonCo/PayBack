@@ -121,7 +121,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
 
-        View superView = super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
 		return rootView;
 	}

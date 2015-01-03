@@ -89,6 +89,7 @@
     <string name="cloud_sync_not_full">Requires full version</string>
     <string name="upgrade_navigation_drawer">Unlock full version</string>
     <string name="debt_free">Debt free!</string>
+    <string name="add_person">Add person</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
