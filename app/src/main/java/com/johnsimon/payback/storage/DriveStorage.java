@@ -106,6 +106,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
                             createFile(data.save(), fileCreatedCallback);
                         }
+                        buffer.release();
                     }
                 });
     }
@@ -233,6 +234,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     public void onConnectionSuspended(int i) {
+        int j = 0;
     }
 
     @Override
@@ -243,6 +245,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
             } catch (IntentSender.SendIntentException e) {
                 // Unable to resolve, message user appropriately
                 show("Shit fuckd up");
+                //client.connect();
             }
         } else {
             GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
