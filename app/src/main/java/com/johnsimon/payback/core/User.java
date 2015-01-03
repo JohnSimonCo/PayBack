@@ -12,10 +12,13 @@ public class User {
 	public String name;
 	public String number;
 
-	public User(String name, String number) {
+	public User(String name) {
 		this.name = name;
-		this.number = number;
 	}
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
 	public String getName(Resources resources) {
 		return TextUtils.isEmpty(name) ? resources.getString(R.string.you) : name;

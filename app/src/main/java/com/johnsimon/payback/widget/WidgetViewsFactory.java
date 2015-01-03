@@ -1,6 +1,5 @@
 package com.johnsimon.payback.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,7 +28,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     public WidgetViewsFactory(Context ctx, Intent intent) {
         this.ctx = ctx;
         storage = new LocalStorage(ctx);
-        storage.callbacks.add(this);
+        storage.promise.then(this);
     }
 
     @Override

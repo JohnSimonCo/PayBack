@@ -3,7 +3,7 @@ package com.johnsimon.payback.storage;
 import android.content.Context;
 import android.content.Intent;
 
-import com.johnsimon.payback.core.Callbacks;
+import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.util.AppData;
 
 /**
@@ -11,7 +11,7 @@ import com.johnsimon.payback.util.AppData;
  */
 public abstract class Storage {
     protected Context context;
-    public Callbacks<AppData> callbacks = new Callbacks<>();
+    public Promise<AppData> promise = new Promise<>();
 
     protected AppData data;
 
@@ -21,7 +21,7 @@ public abstract class Storage {
 
     protected void emit(AppData data) {
         this.data = data;
-        callbacks.fire(data);
+        promise.fire(data);
     }
 
     public abstract void commit();

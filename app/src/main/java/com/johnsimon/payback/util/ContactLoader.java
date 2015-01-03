@@ -3,47 +3,44 @@ package com.johnsimon.payback.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
-import com.johnsimon.payback.core.Callbacks;
+import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.User;
 
 public class ContactLoader extends AsyncTask<Context, Void, Contacts> {
 
-    public Callbacks<Contacts> callbacks = new Callbacks<>();
+    public Promise<Contacts> promise = new Promise<>();
 
     @Override
     protected Contacts doInBackground(Context... params) {
         Context context = params[0];
 
-        Contacts contacts = getContacts(context);
+        ContentResolver contentResolver = context.getContentResolver();
 
-        contacts.user = getUser(context);
+        Contacts contacts = getContacts(contentResolver);
+
+        contacts.user = getUser(contentResolver);
 
         return contacts;
     }
 
-    public static User getUser(Context context) {
-        String name = null, number = null;
-
-        ContentResolver contentResolver = context.getContentResolver();
+    public static User getUser(ContentResolver contentResolver) {
+        String name = null;
 
         Cursor cursor = contentResolver.query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
         if(cursor.moveToFirst()) {
             name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
-            number = getUserPhoneNumber(contentResolver);
         }
         cursor.close();
 
-        return new User(name, number);
+        return new User(name);
     }
 
-    public static Contacts getContacts(Context context) {
+    public static Contacts getContacts(ContentResolver contentResolver) {
         Contacts contacts = new Contacts();
-        ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -64,10 +61,9 @@ public class ContactLoader extends AsyncTask<Context, Void, Contacts> {
 
                 //Get rest of contact info
                 long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String number = getContactPhoneNumber(contentResolver, id);
                 String photoURI = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
 
-                contacts.add(new Contact(name, number, photoURI, id));
+                contacts.add(new Contact(name, photoURI, id));
             }
         }
         cursor.close();
@@ -75,46 +71,10 @@ public class ContactLoader extends AsyncTask<Context, Void, Contacts> {
         return contacts;
     }
 
-    private static String getUserPhoneNumber(ContentResolver contentResolver) {
-        Cursor cursor = contentResolver.query(
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER},
-                null, null, null);
 
-        String number = null;
-        if(cursor.moveToFirst()) {
-            number = cursor.getString(0);
-        }
-
-        cursor.close();
-
-        return normalizePhoneNumber(number);
-    }
-
-    private static String getContactPhoneNumber(ContentResolver contentResolver, long id) {
-        Cursor cursor = contentResolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
-
-        String number = null;
-        if(cursor.moveToFirst()) {
-            number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        }
-
-        cursor.close();
-
-        return normalizePhoneNumber(number);
-    }
-
-    //Removes all formatting, so that numbers can be compared
-    private static String normalizePhoneNumber(String number) {
-        return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
-    }
 
     @Override
     protected void onPostExecute(Contacts contacts) {
-        callbacks.fire(contacts);
+        promise.fire(contacts);
     }
 }

@@ -2,16 +2,13 @@ package com.johnsimon.payback.core;
 
 import java.util.ArrayList;
 
-/**
- * Created by johnrs on 2015-01-02.
- */
-public class Callbacks<D> {
+public class Promise<D> {
     private ArrayList<Callback<D>> callbacks = new ArrayList<>();
     private D data;
 
     private boolean hasFired = false;
 
-    public void add(Callback<D> callback) {
+    public void then(Callback<D> callback) {
         if(hasFired) {
             callback.onFired(data);
         } else {
@@ -31,38 +28,42 @@ public class Callbacks<D> {
         callbacks.clear();
     }
 
-    public static void all(final Callback callback, Callbacks... callbacks) {
-        final FiredCounter counter = new FiredCounter(callbacks.length);
+    public static Promise all(Promise... promises) {
+        final Promise promise = new Promise();
+
+        final Counter counter = new Counter(promises.length);
 
         Callback check = new Callback() {
             @Override
             public void onFired(Object data) {
-                if(counter.fire().isDone()) {
-                    callback.onFired(null);
+                if(counter.increment().isDone()) {
+                    promise.fire(null);
                 }
             }
         };
 
-        for(Callbacks cb : callbacks) {
-            cb.add(check);
+        for(Promise p : promises) {
+            p.then(check);
         }
+
+        return promise;
     }
 
-    private static class FiredCounter {
-        private int fired = 0;
-        private int shouldFire;
+    private static class Counter {
+        private int i = 0;
+        private int max;
 
-        public FiredCounter(int shouldFire) {
-            this.shouldFire = shouldFire;
+        public Counter(int max) {
+            this.max = max;
         }
 
-        public FiredCounter fire() {
-            ++fired;
+        public Counter increment() {
+            ++i;
             return this;
         }
 
         public boolean isDone() {
-            return fired >= shouldFire;
+            return i >= max;
         }
     }
 }

@@ -9,6 +9,7 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
+import com.johnsimon.payback.util.PhoneNumberLoader;
 
 /**
  * Created by johnrs on 2015-01-02.
@@ -19,20 +20,27 @@ public abstract class DataActivity extends ActionBarActivity {
     public AppData data;
 
     protected ContactLoader contactLoader;
+    protected PhoneNumberLoader phoneNumberLoader;
     public Contacts contacts;
+
+    protected Promise fullyLoadedPromise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         storage = new LocalStorage(this);
-        storage.callbacks.add(dataCallback);
+        storage.promise.then(dataLoadedCallback);
 
         contactLoader = new ContactLoader();
-        contactLoader.callbacks.add(contactCallback);
+        contactLoader.promise.then(contactsLoadedCallback);
         contactLoader.execute(this);
 
-        Callbacks.all(bothCallback, storage.callbacks, contactLoader.callbacks);
+        phoneNumberLoader = new PhoneNumberLoader();
+        phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
+
+        fullyLoadedPromise = Promise.all(storage.promise, contactLoader.promise);
+        fullyLoadedPromise.then(fullyLoadedCallback);
     }
 
     @Override
@@ -59,7 +67,7 @@ public abstract class DataActivity extends ActionBarActivity {
     }
 
     private DataActivity self = this;
-    private Callback<AppData> dataCallback = new Callback<AppData>() {
+    private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
         public void onFired(AppData data) {
             self.data = data;
@@ -67,15 +75,24 @@ public abstract class DataActivity extends ActionBarActivity {
         }
     };
 
-    private Callback<Contacts> contactCallback = new Callback<Contacts>() {
+    private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onFired(Contacts contacts) {
+            phoneNumberLoader.execute(new PhoneNumberLoader.Argument(self, contacts));
+
             self.contacts = contacts;
             onContactsLoaded();
         }
     };
 
-    private Callback bothCallback = new Callback() {
+    private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
+        @Override
+        public void onFired(Contacts contacts) {
+            onPhoneNumbersLoaded();
+        }
+    };
+
+    private Callback fullyLoadedCallback = new Callback() {
         @Override
         public void onFired(Object data) {
             onFullyLoaded();
@@ -87,6 +104,10 @@ public abstract class DataActivity extends ActionBarActivity {
     }
 
     protected void onContactsLoaded() {
+
+    }
+
+    protected void onPhoneNumbersLoaded() {
 
     }
 

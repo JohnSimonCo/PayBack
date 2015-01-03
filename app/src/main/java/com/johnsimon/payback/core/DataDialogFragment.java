@@ -6,32 +6,31 @@ import android.os.Bundle;
 
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
 
 public abstract class DataDialogFragment extends DialogFragment {
     protected Storage storage;
     public AppData data;
 
-    protected ContactLoader contactLoader;
     public Contacts contacts;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
-        storage.callbacks.add(dataCallback);
+        storage.promise.then(dataLoadedCallback);
 
-        this.contactLoader = activity.contactLoader;
-        contactLoader.callbacks.add(contactCallback);
+        activity.contactLoader.promise.then(contactsLoadedCallback);
+        activity.phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
 
-        Callbacks.all(bothCallback, storage.callbacks, contactLoader.callbacks);
+        activity.fullyLoadedPromise.then(fullyLoadedCallback);
 
         return super.onCreateDialog(savedInstanceState);
     }
 
+
     private DataDialogFragment self = this;
-    private Callback<AppData> dataCallback = new Callback<AppData>() {
+    private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
         public void onFired(AppData data) {
             self.data = data;
@@ -39,7 +38,7 @@ public abstract class DataDialogFragment extends DialogFragment {
         }
     };
 
-    private Callback<Contacts> contactCallback = new Callback<Contacts>() {
+    private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onFired(Contacts contacts) {
             self.contacts = contacts;
@@ -47,7 +46,14 @@ public abstract class DataDialogFragment extends DialogFragment {
         }
     };
 
-    private Callback bothCallback = new Callback() {
+    private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
+        @Override
+        public void onFired(Contacts contacts) {
+            onPhoneNumbersLoaded();
+        }
+    };
+
+    private Callback fullyLoadedCallback = new Callback() {
         @Override
         public void onFired(Object data) {
             onFullyLoaded();
@@ -59,6 +65,10 @@ public abstract class DataDialogFragment extends DialogFragment {
     }
 
     protected void onContactsLoaded() {
+
+    }
+
+    protected void onPhoneNumbersLoaded() {
 
     }
 

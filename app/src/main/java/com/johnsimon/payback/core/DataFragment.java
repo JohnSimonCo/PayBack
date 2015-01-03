@@ -19,7 +19,6 @@ public abstract class DataFragment extends Fragment {
     protected Storage storage;
     public AppData data;
 
-    protected ContactLoader contactLoader;
     public Contacts contacts;
 
     @Nullable
@@ -28,18 +27,18 @@ public abstract class DataFragment extends Fragment {
 
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
-        storage.callbacks.add(dataCallback);
+        storage.promise.then(dataLoadedCallback);
 
-        this.contactLoader = activity.contactLoader;
-        contactLoader.callbacks.add(contactCallback);
+        activity.contactLoader.promise.then(contactsLoadedCallback);
+        activity.phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
 
-        Callbacks.all(bothCallback, storage.callbacks, contactLoader.callbacks);
+        activity.fullyLoadedPromise.then(fullyLoadedCallback);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private DataFragment self = this;
-    private Callback<AppData> dataCallback = new Callback<AppData>() {
+    private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
         public void onFired(AppData data) {
             self.data = data;
@@ -47,7 +46,7 @@ public abstract class DataFragment extends Fragment {
         }
     };
 
-    private Callback<Contacts> contactCallback = new Callback<Contacts>() {
+    private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onFired(Contacts contacts) {
             self.contacts = contacts;
@@ -55,7 +54,14 @@ public abstract class DataFragment extends Fragment {
         }
     };
 
-    private Callback bothCallback = new Callback() {
+    private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
+        @Override
+        public void onFired(Contacts contacts) {
+            onPhoneNumbersLoaded();
+        }
+    };
+
+    private Callback fullyLoadedCallback = new Callback() {
         @Override
         public void onFired(Object data) {
             onFullyLoaded();
@@ -67,6 +73,10 @@ public abstract class DataFragment extends Fragment {
     }
 
     protected void onContactsLoaded() {
+
+    }
+
+    protected void onPhoneNumbersLoaded() {
 
     }
 
