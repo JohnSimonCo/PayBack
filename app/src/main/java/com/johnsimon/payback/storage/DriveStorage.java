@@ -24,6 +24,7 @@ import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 import com.johnsimon.payback.util.AppData;
+import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     private final static int REQUEST_CODE_RESOLUTION = 14795;
     private final static String FILE_NAME = "data.json";
 
-    private Activity activity;
+    public Activity activity;
 
     private GoogleApiClient client;
 
@@ -46,7 +47,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
-           .addScope(Drive.SCOPE_APPFOLDER)
+           .addScope(Drive.SCOPE_FILE)
            .addConnectionCallbacks(this)
            .addOnConnectionFailedListener(this)
            .build();
@@ -82,8 +83,9 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
             .addFilter(Filters.eq(SearchableField.TITLE, FILE_NAME))
             .build();
 
-        Drive.DriveApi.getAppFolder(client)
-                .queryChildren(client, query)
+        Drive.DriveApi.getRootFolder(client)
+                .listChildren(client)
+                //.queryChildren(client, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
                     public void onResult(DriveApi.MetadataBufferResult result) {
@@ -94,7 +96,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
                         MetadataBuffer buffer = result.getMetadataBuffer();
                         int count = buffer.getCount();
-                        if(count > 0) {
+                        if (count > 0) {
                             Metadata data = buffer.get(0);
                             show("File exists " + count);
 
@@ -160,7 +162,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                         .build();
 
 
-                    Drive.DriveApi.getAppFolder(client)
+                    Drive.DriveApi.getRootFolder(client)
                         .createFile(client, changeSet, result.getDriveContents())
                         .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
                             @Override
@@ -262,6 +264,13 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                 return true;
         }
         return super.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void show(String text) {
+        Snackbar.with(context)
+                .text(text)
+                .show(activity);
     }
 
     private static class FileResult implements Result {
