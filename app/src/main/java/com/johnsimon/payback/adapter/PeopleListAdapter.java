@@ -1,6 +1,7 @@
 package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +11,22 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
 import java.util.ArrayList;
 
 public class PeopleListAdapter extends ArrayAdapter<Person> {
-	public final ArrayList<Person> people;
 	private final Activity context;
 	private View emptyView;
+    private AppData data;
 
-	public PeopleListAdapter(Activity context, ArrayList<Person> people, View emptyView) {
-		super(context, R.layout.people_list_item, people);
+	public PeopleListAdapter(Activity context, View emptyView, AppData data) {
+		super(context, R.layout.people_list_item, data.people);
 		this.context = context;
-		this.people = people;
 		this.emptyView = emptyView;
+        this.data = data;
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -37,31 +39,38 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 			holder = new ViewHolder(
 					(TextView) convertView.findViewById(R.id.people_list_item_name),
 					(RoundedImageView) convertView.findViewById(R.id.people_list_item_avatar),
-                    (TextView) convertView.findViewById(R.id.people_list_item_avatar_letter)
+                    (TextView) convertView.findViewById(R.id.people_list_item_avatar_letter),
+                    (TextView) convertView.findViewById(R.id.people_list_item_debts)
 			);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Person person = people.get(position);
-
+		Person person = data.people.get(position);
 		holder.name.setText(person.name);
-
+        int debts = data.feed(person).size();
+        if (debts == 1) {
+            holder.debtsCount.setText(debts +  " " + context.getString(R.string.debt_single));
+        } else {
+            holder.debtsCount.setText(debts +  " " + context.getString(R.string.debt_plural));
+        }
 		Resource.createProfileImage(person, holder.avatar, holder.avatarLetter);
 
 		return convertView;
 	}
 
-	static class ViewHolder {
+	private static class ViewHolder {
 		public TextView name;
 		public RoundedImageView avatar;
         public TextView avatarLetter;
+        public TextView debtsCount;
 
-		ViewHolder(TextView name, RoundedImageView avatar, TextView avatarLetter) {
+		ViewHolder(TextView name, RoundedImageView avatar, TextView avatarLetter, TextView debtsCount) {
 			this.name = name;
 			this.avatar = avatar;
             this.avatarLetter = avatarLetter;
+            this.debtsCount = debtsCount;
 		}
 	}
 
@@ -69,7 +78,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
 
-		if (people.size() == 0) {
+		if (data.people.size() == 0) {
 			emptyView.setVisibility(View.VISIBLE);
 		} else {
 			emptyView.setVisibility(View.GONE);

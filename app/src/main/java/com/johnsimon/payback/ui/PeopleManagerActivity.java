@@ -70,7 +70,7 @@ public class PeopleManagerActivity extends DataActivity {
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		adapter = new PeopleListAdapter(this, data.people, findViewById(R.id.people_manager_empty));
+		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data);
 
         listView = (DragSortListView) findViewById(R.id.people_listview);
 
