@@ -89,6 +89,7 @@
 
 
     <ImageView
+        android:scaleType="center"
         android:focusable="false"
         android:background="@android:color/transparent"
         android:layout_alignParentRight="true"

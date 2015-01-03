@@ -80,7 +80,6 @@ public class PeopleManagerActivity extends DataActivity {
         listView.setDropListener(onDrop);
 
         DragSortController controller = new DragSortController(listView);
-        controller.setDragHandleId(R.id.people_list_item_handle);
         controller.setRemoveEnabled(false);
         controller.setSortEnabled(true);
         controller.setDragInitMode(DragSortController.ON_DRAG);

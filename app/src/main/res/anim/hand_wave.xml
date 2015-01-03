@@ -9,35 +9,35 @@
 
     <item
         android:drawable="@drawable/wave1"
-        android:duration="16"/>
+        android:duration="24"/>
 
     <item
         android:drawable="@drawable/wave2"
-        android:duration="16"/>
+        android:duration="23"/>
 
     <item
         android:drawable="@drawable/wave3"
-        android:duration="16"/>
+        android:duration="22"/>
 
     <item
         android:drawable="@drawable/wave4"
-        android:duration="16"/>
+        android:duration="21"/>
 
     <item
         android:drawable="@drawable/wave5"
-        android:duration="16"/>
+        android:duration="20"/>
 
     <item
         android:drawable="@drawable/wave6"
-        android:duration="16"/>
+        android:duration="19"/>
 
     <item
         android:drawable="@drawable/wave7"
-        android:duration="16"/>
+        android:duration="18"/>
 
     <item
         android:drawable="@drawable/wave8"
-        android:duration="16"/>
+        android:duration="17"/>
 
     <item
         android:drawable="@drawable/wave9"
@@ -292,35 +292,35 @@
 
     <item
         android:drawable="@drawable/wave8"
-        android:duration="16"/>
+        android:duration="17"/>
 
     <item
         android:drawable="@drawable/wave7"
-        android:duration="16"/>
+        android:duration="18"/>
 
     <item
         android:drawable="@drawable/wave6"
-        android:duration="16"/>
+        android:duration="19"/>
 
     <item
         android:drawable="@drawable/wave5"
-        android:duration="16"/>
+        android:duration="20"/>
 
     <item
         android:drawable="@drawable/wave4"
-        android:duration="16"/>
+        android:duration="21"/>
 
     <item
         android:drawable="@drawable/wave3"
-        android:duration="16"/>
+        android:duration="22"/>
 
     <item
         android:drawable="@drawable/wave2"
-        android:duration="16"/>
+        android:duration="23"/>
 
     <item
         android:drawable="@drawable/wave1"
-        android:duration="16"/>
+        android:duration="24"/>
 
 
 </animation-list>

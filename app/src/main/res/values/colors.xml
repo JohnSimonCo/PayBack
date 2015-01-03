@@ -19,7 +19,6 @@
     <color name="primary_color_darker">#BB3A30</color>
 
     <color name="accent_color">#ff9800</color>
-    <color name="accent_color_darker">#cc7a00</color>
 
     <color name="white_on_red_selector">#66ffffff</color>
     <color name="white_on_red_darker_selector">#44ffffff</color>
