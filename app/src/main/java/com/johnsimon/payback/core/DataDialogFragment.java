@@ -15,7 +15,8 @@ public abstract class DataDialogFragment extends DialogFragment {
     public Contacts contacts;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
         storage.promise.then(dataLoadedCallback);
@@ -25,9 +26,8 @@ public abstract class DataDialogFragment extends DialogFragment {
 
         activity.fullyLoadedPromise.then(fullyLoadedCallback);
 
-        return super.onCreateDialog(savedInstanceState);
+        super.onCreate(savedInstanceState);
     }
-
 
     private DataDialogFragment self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {

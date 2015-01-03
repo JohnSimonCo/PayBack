@@ -37,6 +37,11 @@ public abstract class DataFragment extends Fragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     private DataFragment self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override

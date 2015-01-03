@@ -79,8 +79,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 			people = data.getAllNames(contacts);
 		}
 
-
-		autoCompleteTextView.setAdapter(new ArrayAdapter<String>(
+		autoCompleteTextView.setAdapter(new ArrayAdapter<>(
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,

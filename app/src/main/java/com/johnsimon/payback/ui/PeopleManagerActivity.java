@@ -23,6 +23,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
@@ -135,7 +136,10 @@ public class PeopleManagerActivity extends DataActivity {
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+
+        final PeopleManagerActivity self = this;
+
+        switch (item.getItemId()) {
 			case android.R.id.home:
 				returnToFeed();
 				break;
@@ -149,14 +153,18 @@ public class PeopleManagerActivity extends DataActivity {
                 Bundle args = new Bundle();
                 args.putString(PersonPickerDialogFragment.TITLE_KEY, getString(R.string.add_person));
                 fragment.setArguments(args);
+
                 fragment.completeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
                     @Override
                     public void onSelected(String name) {
-                        //TODO add person
-                    //    Person person = new Person();
-                    //    data.people.add()
+                        Person person = new Person(name, ColorPalette.getInstance(self));
+                        data.people.add(person);
+                        storage.commit();
+                        adapter.notifyDataSetChanged();
                     }
                 };
+
+                fragment.show(getFragmentManager(), "person_picker");
 
                 break;
 
@@ -198,8 +206,6 @@ public class PeopleManagerActivity extends DataActivity {
                 }
 
                 int initialRadius = listView.getWidth();
-
-                final PeopleManagerActivity self = this;
 
                 Animator anim =
                         ViewAnimationUtils.createCircularReveal(listView, sortAzX, sortAzY, initialRadius, 0);
@@ -316,5 +322,4 @@ public class PeopleManagerActivity extends DataActivity {
 		finishAffinity();
 		startActivity(intent);
 	}
-
 }
