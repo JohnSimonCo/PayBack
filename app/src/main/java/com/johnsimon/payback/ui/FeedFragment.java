@@ -228,7 +228,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                                         }
 
                                         displayTotalDebt(getActivity());
-                                        adapter.notifyDataSetChanged();
+                                        adapter.notifyItemInserted(indexFeed);
                                         adapter.checkAdapterIsEmpty();
                                     }
                                 })
