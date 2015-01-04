@@ -8,7 +8,7 @@ import com.johnsimon.payback.util.Resource;
 
 import java.util.UUID;
 
-public class Debt implements Identifiable {
+public class Debt implements Syncable<Debt> {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
@@ -24,9 +24,9 @@ public class Debt implements Identifiable {
 	public int color;
 	public boolean isPaidBack;
 
-    public Debt(Person owner, float amount, String note, long timestamp, boolean isPaidBack) {
+    public Debt(Person owner, float amount, String note, UUID id, long timestamp, boolean isPaidBack) {
         this.owner = owner;
-        this.id = UUID.randomUUID();
+        this.id = id;
         this.amount = amount;
         this.amountAsString = amountString(amount);
         this.note = note;
@@ -37,7 +37,7 @@ public class Debt implements Identifiable {
 
 	//Used when creating new
 	public Debt(Person owner, float amount, String note) {
-        this(owner, amount, note, System.currentTimeMillis(), false);
+        this(owner, amount, note, UUID.randomUUID(), System.currentTimeMillis(), false);
 	}
 
 	public static String amountString(float amount) {
@@ -92,4 +92,13 @@ public class Debt implements Identifiable {
     public UUID getId() {
         return id;
     }
-}
+
+
+    @Override
+    public Debt syncWith(Debt other) {
+        return Debt.sync(this, other);
+    }
+
+    public static Debt sync(Debt a, Debt b) {
+        return a;
+    }}

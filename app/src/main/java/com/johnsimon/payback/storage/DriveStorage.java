@@ -25,6 +25,7 @@ import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.util.DataSyncer;
 import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedReader;
@@ -70,17 +71,15 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     public void sync(AppData driveData) {
         show("synced data from drive");
 
-        AppData data = AppData.sync(driveData, localStorage.data);
+        AppData data = DataSyncer.sync(driveData, localStorage.data);
 
         commit(data);
-        localStorage.commit(data);
-
         emit(data);
     }
 
     @Override
     public void commit() {
-        show("commited data to localStoragec");
+        show("commited data to localStorage");
         localStorage.commit(data);
 
         if(file == null) return;

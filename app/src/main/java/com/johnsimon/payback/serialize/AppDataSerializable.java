@@ -5,13 +5,14 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.AppData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class AppDataSerializable {
 	public ArrayList<PersonSerializable> people;
 	public ArrayList<DebtSerializable> debts;
 
-    public ArrayList<UUID> deleted;
+    public HashSet<UUID> deleted;
 
 	public AppDataSerializable(AppData data) {
 		this.people = new ArrayList<>();

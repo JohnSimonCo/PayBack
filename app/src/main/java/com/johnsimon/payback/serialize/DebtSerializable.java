@@ -24,7 +24,7 @@ public class DebtSerializable {
 	}
 
 	public Debt extract(ArrayList<Person> people) {
-		return new Debt(owner(people), amount, note, timestamp, isPaidBack);
+		return new Debt(owner(people), amount, note, id, timestamp, isPaidBack);
 	}
 
 	private Person owner(ArrayList<Person> people) {

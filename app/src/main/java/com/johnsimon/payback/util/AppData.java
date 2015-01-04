@@ -1,35 +1,33 @@
 package com.johnsimon.payback.util;
 
-import com.google.android.gms.internal.ot;
 import com.google.gson.Gson;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.Syncable;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.serialize.AppDataSerializable;
 import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
-public class AppData implements Syncable<AppData> {
+public class AppData {
     public ArrayList<Person> people;
     public ArrayList<Debt> debts;
 
-    public ArrayList<UUID> deleted;
+    public HashSet<UUID> deleted;
 
-    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, ArrayList<UUID> deleted) {
+    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted) {
         this.people = people;
         this.debts = debts;
         this.deleted = deleted;
     }
 
     public AppData() {
-        this(new ArrayList<Person>(), new ArrayList<Debt>(), new ArrayList<UUID>());
+        this(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>());
     }
 
     public String save() {
@@ -251,38 +249,5 @@ public class AppData implements Syncable<AppData> {
 
     public static String toJson(AppData data) {
         return new Gson().toJson(new AppDataSerializable(data), AppDataSerializable.class);
-    }
-    public static <T extends Identifiable> T find(ArrayList<T> array, UUID id) {
-        for(T item : array) {
-            if(item.getId().equals(id)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public static AppData sync(AppData a, AppData b) {
-        ArrayList<Person> people = new ArrayList<>();
-        ArrayList<Debt> debts = new ArrayList<>();
-        ArrayList<UUID> deleted = new ArrayList<>();
-
-        people.addAll(a.people);
-        debts.addAll(a.debts);
-/*
-        for(Person person : b.people) {
-            Person otherPerson = find(people, person.id);
-            if(otherPerson != null) {
-                people.remove(otherPerson);
-                people.add();
-            } else {
-                people.add(person);
-            }
-        }
-
-        for(Debt debt : b.)
-
-        deleted.addAll(a.deleted);
-*/
-        return a;
     }
 }

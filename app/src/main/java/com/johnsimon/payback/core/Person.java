@@ -4,7 +4,7 @@ import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.UUID;
 
-public class Person implements Identifiable {
+public class Person implements Syncable<Person> {
 	public String name;
 	public UUID id;
 	public int color;
@@ -43,5 +43,14 @@ public class Person implements Identifiable {
     @Override
     public UUID getId() {
         return id;
+    }
+
+    @Override
+    public Person syncWith(Person other) {
+        return Person.sync(this, other);
+    }
+
+    public static Person sync(Person a, Person b) {
+        return a;
     }
 }
