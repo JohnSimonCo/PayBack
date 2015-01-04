@@ -10,7 +10,7 @@ public class Promise<D> {
 
     public void then(Callback<D> callback) {
         if(hasFired) {
-            callback.onFired(data);
+            callback.onCalled(data);
         } else {
             callbacks.add(callback);
         }
@@ -23,7 +23,7 @@ public class Promise<D> {
         this.data = data;
 
         for(Callback<D> callback : callbacks) {
-            callback.onFired(data);
+            callback.onCalled(data);
         }
         callbacks.clear();
     }
@@ -35,7 +35,7 @@ public class Promise<D> {
 
         Callback check = new Callback() {
             @Override
-            public void onFired(Object data) {
+            public void onCalled(Object data) {
                 if(counter.increment().isDone()) {
                     promise.fire(null);
                 }

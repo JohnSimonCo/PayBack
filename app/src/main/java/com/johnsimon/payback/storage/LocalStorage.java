@@ -18,14 +18,10 @@ public class LocalStorage extends Storage {
     public LocalStorage(Context context) {
         super(context);
 
-        long time = System.currentTimeMillis();
-
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String JSON = preferences.getString(SAVE_KEY_DATA, null);
-        emit(new AppData(JSON));
-
-        show(Long.toString(System.currentTimeMillis() - time));
+        emit(AppData.fromJson(JSON));
     }
 
     @Override

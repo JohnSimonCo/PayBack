@@ -23,6 +23,7 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
+import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.util.AppData;
 import com.nispok.snackbar.Snackbar;
 
@@ -38,12 +39,17 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     private GoogleApiClient client;
 
+    private LocalStorage localStorage;
+
     private DriveFile file = null;
 
     public DriveStorage(Activity context) {
         super(context);
 
         activity = context;
+
+        localStorage = new LocalStorage(context);
+        localStorage.subscription.listen(localStorageDataRecieved);
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
@@ -53,9 +59,31 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
            .build();
     }
 
+    private Callback<AppData> localStorageDataRecieved = new Callback<AppData>() {
+        @Override
+        public void onCalled(AppData data) {
+            show("emit localStorage data");
+            emit(data);
+        }
+    };
+
+    public void sync(AppData driveData) {
+        show("synced data from drive");
+
+        AppData data = AppData.sync(driveData, localStorage.data);
+
+        commit(data);
+        localStorage.commit(data);
+
+        emit(data);
+    }
 
     @Override
     public void commit() {
+        show("commited data to localStoragec");
+        localStorage.commit(data);
+
+        if(file == null) return;
         write(data.save(), file, new ResultCallback<FileResult>() {
             @Override
             public void onResult(FileResult result) {
@@ -63,55 +91,56 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                     show("Error when commiting");
                     return;
                 }
+                show("commited data to drive");
             }
         });
     }
 
     @Override
-    public void connect() {
-        client.connect();
-    }
-
-    @Override
-    public void disconnect() {
-        client.disconnect();
-    }
-
-    @Override
     public void onConnected(Bundle bundle) {
-        Query query = new Query.Builder()
-            .addFilter(Filters.eq(SearchableField.TITLE, FILE_NAME))
-            .build();
-
-        Drive.DriveApi.getRootFolder(client)
-                .listChildren(client)
-                //.queryChildren(client, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            show("Error listing children");
-                            return;
-                        }
-
-                        MetadataBuffer buffer = result.getMetadataBuffer();
-                        int count = buffer.getCount();
-                        if (count > 0) {
-                            Metadata data = buffer.get(0);
-                            show("File exists " + count);
-
-                            read(data.getDriveId(), fileFoundCallback);
-                        } else {
-                            show("File doesn't exists");
-
-                            emit(new AppData());
-
-                            createFile(data.save(), fileCreatedCallback);
-                        }
-                        buffer.release();
-                    }
-                });
+        Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
     }
+
+    private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
+        @Override
+        public void onResult(Status status) {
+            if(!status.isSuccess()) {
+                show("Sync error");
+                return;
+            }
+
+            Query query = new Query.Builder()
+                    .addFilter(Filters.eq(SearchableField.TITLE, FILE_NAME))
+                    .build();
+
+            Drive.DriveApi.getRootFolder(client)
+                    .listChildren(client)
+                            //.queryChildren(client, query)
+                    .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+                        @Override
+                        public void onResult(DriveApi.MetadataBufferResult result) {
+                            if (!result.getStatus().isSuccess()) {
+                                show("Error listing children");
+                                return;
+                            }
+
+                            MetadataBuffer buffer = result.getMetadataBuffer();
+                            int count = buffer.getCount();
+                            if (count > 0) {
+                                Metadata data = buffer.get(0);
+                                show("File exists " + count);
+
+                                read(data.getDriveId(), fileFoundCallback);
+                            } else {
+                                show("File doesn't exists");
+
+                                createFile(data.save(), fileCreatedCallback);
+                            }
+                            buffer.release();
+                        }
+                    });
+        }
+    };
 
     private DriveStorage self = this;
     private ResultCallback<FileResult> fileFoundCallback = new ResultCallback<FileResult>() {
@@ -128,7 +157,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
             show("File says " + JSON);
 
-            emit(new AppData(JSON));
+            sync(AppData.fromJson(JSON));
         }
     };
 
@@ -142,7 +171,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
             self.file = result.getFile();
 
-            show("Created a file in App Folder");
+            show("Created a file");
         }
     };
 
@@ -235,6 +264,16 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     }
 
     @Override
+    public void connect() {
+        client.connect();
+    }
+
+    @Override
+    public void disconnect() {
+        client.disconnect();
+    }
+
+    @Override
     public void onConnectionSuspended(int i) {
         int j = 0;
     }
@@ -268,7 +307,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     protected void show(String text) {
-        Snackbar.with(context)
+        Snackbar.with(activity)
                 .text(text)
                 .show(activity);
     }

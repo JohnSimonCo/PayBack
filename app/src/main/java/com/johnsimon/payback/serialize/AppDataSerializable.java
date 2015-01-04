@@ -2,35 +2,40 @@ package com.johnsimon.payback.serialize;
 
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.SaveData;
+import com.johnsimon.payback.util.AppData;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class SaveDataSerializable {
+public class AppDataSerializable {
 	public ArrayList<PersonSerializable> people;
 	public ArrayList<DebtSerializable> debts;
 
-	public SaveDataSerializable(SaveData data) {
-		this.people = new ArrayList<PersonSerializable>();
+    public ArrayList<UUID> deleted;
+
+	public AppDataSerializable(AppData data) {
+		this.people = new ArrayList<>();
 		for(Person person : data.people) {
 			people.add(new PersonSerializable(person));
 		}
-		this.debts = new ArrayList<DebtSerializable>();
+		this.debts = new ArrayList<>();
 		for(Debt debt : data.debts) {
 			debts.add(new DebtSerializable(debt));
 		}
+
+        this.deleted = data.deleted;
 	}
 
-	public SaveData extract() {
-		ArrayList<Person> people = new ArrayList<Person>();
+	public AppData extract() {
+		ArrayList<Person> people = new ArrayList<>();
 		for(PersonSerializable person : this.people) {
 			people.add(person.extract());
 		}
 
-		ArrayList<Debt> debts = new ArrayList<Debt>();
+		ArrayList<Debt> debts = new ArrayList<>();
 		for(DebtSerializable debt : this.debts) {
 			debts.add(debt.extract(people));
 		}
-		return new SaveData(people, debts);
+		return new AppData(people, debts, this.deleted);
 	}
 }

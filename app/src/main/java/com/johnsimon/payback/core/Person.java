@@ -4,7 +4,7 @@ import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.UUID;
 
-public class Person {
+public class Person implements Identifiable {
 	public String name;
 	public UUID id;
 	public int color;
@@ -39,4 +39,9 @@ public class Person {
 	public boolean matchTo(User user) {
 		return this.name.equals(user.name);
 	}
+
+    @Override
+    public UUID getId() {
+        return id;
+    }
 }

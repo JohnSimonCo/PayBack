@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.storage.Storage;
+import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
@@ -29,8 +29,8 @@ public abstract class DataActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        storage = new DriveStorage(this);
-        storage.promise.then(dataLoadedCallback);
+        storage = StorageManager.getStorage(this);
+        storage.subscription.listen(dataLoadedCallback);
 
         contactLoader = new ContactLoader();
         contactLoader.promise.then(contactsLoadedCallback);
@@ -69,7 +69,7 @@ public abstract class DataActivity extends ActionBarActivity {
     private DataActivity self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
-        public void onFired(AppData data) {
+        public void onCalled(AppData data) {
             self.data = data;
             onDataReceived();
         }
@@ -77,7 +77,7 @@ public abstract class DataActivity extends ActionBarActivity {
 
     private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
-        public void onFired(Contacts contacts) {
+        public void onCalled(Contacts contacts) {
             phoneNumberLoader.execute(new PhoneNumberLoader.Argument(self, contacts));
 
             self.contacts = contacts;
@@ -87,14 +87,14 @@ public abstract class DataActivity extends ActionBarActivity {
 
     private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
         @Override
-        public void onFired(Contacts contacts) {
+        public void onCalled(Contacts contacts) {
             onPhoneNumbersLoaded();
         }
     };
 
     private Callback fullyLoadedCallback = new Callback() {
         @Override
-        public void onFired(Object data) {
+        public void onCalled(Object data) {
             onFullyLoaded();
         }
     };

@@ -217,7 +217,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 						})
 						.show(getActivity());
 
-				data.debts.remove(debt);
+				data.delete(debt);
 				storage.commit();
 				if(!FeedActivity.isAll()) {
 					FeedActivity.feed.remove(debt);

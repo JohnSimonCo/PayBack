@@ -28,7 +28,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     public WidgetViewsFactory(Context ctx, Intent intent) {
         this.ctx = ctx;
         storage = new LocalStorage(ctx);
-        storage.promise.then(this);
+        storage.subscription.listen(this);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     }
 
     @Override
-    public void onFired(AppData data) {
+    public void onCalled(AppData data) {
         this.data = data;
     }
 }

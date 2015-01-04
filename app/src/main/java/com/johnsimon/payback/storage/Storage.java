@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.johnsimon.payback.core.Promise;
+import com.johnsimon.payback.core.Subscription;
 import com.johnsimon.payback.util.AppData;
 
 /**
@@ -11,6 +12,7 @@ import com.johnsimon.payback.util.AppData;
  */
 public abstract class Storage {
     protected Context context;
+    public Subscription<AppData> subscription = new Subscription<>();
     public Promise<AppData> promise = new Promise<>();
 
     protected AppData data;
@@ -22,9 +24,15 @@ public abstract class Storage {
     protected void emit(AppData data) {
         this.data = data;
         promise.fire(data);
+        subscription.broadcast(data);
     }
 
     public abstract void commit();
+
+    public void commit(AppData data) {
+        this.data = data;
+        commit();
+    }
 
     public void connect() {
 

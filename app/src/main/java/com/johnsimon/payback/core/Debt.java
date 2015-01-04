@@ -8,7 +8,7 @@ import com.johnsimon.payback.util.Resource;
 
 import java.util.UUID;
 
-public class Debt {
+public class Debt implements Identifiable {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
@@ -88,5 +88,8 @@ public class Debt {
 		return shareText;
 	}
 
-
+    @Override
+    public UUID getId() {
+        return id;
+    }
 }

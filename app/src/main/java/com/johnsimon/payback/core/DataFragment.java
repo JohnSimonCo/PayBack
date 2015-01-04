@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
 
 /**
@@ -27,7 +26,7 @@ public abstract class DataFragment extends Fragment {
 
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
-        storage.promise.then(dataLoadedCallback);
+        storage.subscription.listen(dataLoadedCallback);
 
         activity.contactLoader.promise.then(contactsLoadedCallback);
         activity.phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
@@ -45,7 +44,7 @@ public abstract class DataFragment extends Fragment {
     private DataFragment self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
-        public void onFired(AppData data) {
+        public void onCalled(AppData data) {
             self.data = data;
             onDataReceived();
         }
@@ -53,7 +52,7 @@ public abstract class DataFragment extends Fragment {
 
     private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
-        public void onFired(Contacts contacts) {
+        public void onCalled(Contacts contacts) {
             self.contacts = contacts;
             onContactsLoaded();
         }
@@ -61,14 +60,14 @@ public abstract class DataFragment extends Fragment {
 
     private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
         @Override
-        public void onFired(Contacts contacts) {
+        public void onCalled(Contacts contacts) {
             onPhoneNumbersLoaded();
         }
     };
 
     private Callback fullyLoadedCallback = new Callback() {
         @Override
-        public void onFired(Object data) {
+        public void onCalled(Object data) {
             onFullyLoaded();
         }
     };

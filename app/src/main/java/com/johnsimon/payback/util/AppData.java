@@ -1,33 +1,39 @@
 package com.johnsimon.payback.util;
 
+import com.google.android.gms.internal.ot;
+import com.google.gson.Gson;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.core.Syncable;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
+import com.johnsimon.payback.serialize.AppDataSerializable;
 import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class AppData {
-    private SaveData data;
-    public ArrayList<Debt> debts;
+public class AppData implements Syncable<AppData> {
     public ArrayList<Person> people;
+    public ArrayList<Debt> debts;
 
-    public AppData(String JSON) {
-        this.data = SaveData.fromJson(JSON);
-        this.debts = data.debts;
-        this.people = data.people;
+    public ArrayList<UUID> deleted;
+
+    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, ArrayList<UUID> deleted) {
+        this.people = people;
+        this.debts = debts;
+        this.deleted = deleted;
     }
 
     public AppData() {
-        this(null);
+        this(new ArrayList<Person>(), new ArrayList<Debt>(), new ArrayList<UUID>());
     }
 
     public String save() {
-        return SaveData.toJson(data);
+        return AppData.toJson(this);
     }
 
     public ArrayList<Debt> feed(Person person) {
@@ -107,7 +113,7 @@ public class AppData {
                 debt.owner = to;
             }
         }
-        people.remove(from);
+        delete(from);
     }
 
     public void unmerge(Person restore, ArrayList<Debt> debts, int index) {
@@ -118,19 +124,19 @@ public class AppData {
     }
     public void delete(Person person) {
         deleteDebts(person);
+        deleted.add(person.id);
         people.remove(person);
+    }
+    public void delete(Debt debt) {
+        deleted.add(debt.id);
+        debts.remove(debt);
     }
 
     private void deleteDebts(Person person) {
-        ArrayList<Debt> remove = new ArrayList<Debt>();
-        for(Debt debt : debts) {
-            if(debt.owner == person) {
-                remove.add(debt);
-            }
-        }
+        ArrayList<Debt> debts = feed(person);
 
-        for(Debt debt : remove) {
-            debts.remove(debt);
+        for(Debt debt : debts) {
+            delete(debt);
         }
     }
 
@@ -237,5 +243,46 @@ public class AppData {
 
         //Otherwise, use the senders name
         return sender.name;
+    }
+
+    public static AppData fromJson(String JSON) {
+        return JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract();
+    }
+
+    public static String toJson(AppData data) {
+        return new Gson().toJson(new AppDataSerializable(data), AppDataSerializable.class);
+    }
+    public static <T extends Identifiable> T find(ArrayList<T> array, UUID id) {
+        for(T item : array) {
+            if(item.getId().equals(id)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static AppData sync(AppData a, AppData b) {
+        ArrayList<Person> people = new ArrayList<>();
+        ArrayList<Debt> debts = new ArrayList<>();
+        ArrayList<UUID> deleted = new ArrayList<>();
+
+        people.addAll(a.people);
+        debts.addAll(a.debts);
+/*
+        for(Person person : b.people) {
+            Person otherPerson = find(people, person.id);
+            if(otherPerson != null) {
+                people.remove(otherPerson);
+                people.add();
+            } else {
+                people.add(person);
+            }
+        }
+
+        for(Debt debt : b.)
+
+        deleted.addAll(a.deleted);
+*/
+        return a;
     }
 }
