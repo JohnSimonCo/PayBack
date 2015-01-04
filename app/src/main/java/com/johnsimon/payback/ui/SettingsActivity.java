@@ -1,8 +1,10 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
@@ -18,8 +20,11 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -48,6 +53,9 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
     public static Preference pref_currency;
 
+    private ListPreference pref_background;
+    private String backgroundPrefValue;
+
 	@Override
 	protected int getPreferencesXmlId() {
 		return R.xml.prefs;
@@ -73,27 +81,21 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
 
-    }
+        pref_currency = findPreference("pref_currency");
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+        pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                WelcomeDialogFragment aboutDialogFragment = new WelcomeDialogFragment();
 
-		pref_currency = findPreference("pref_currency");
+                Bundle args = new Bundle();
+                args.putBoolean("SETTINGS", true);
 
-		pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				WelcomeDialogFragment aboutDialogFragment = new WelcomeDialogFragment();
-
-				Bundle args = new Bundle();
-				args.putBoolean("SETTINGS", true);
-
-				aboutDialogFragment.setArguments(args);
-				aboutDialogFragment.show(getFragmentManager(), "settings_currency");
-				return false;
-			}
-		});
+                aboutDialogFragment.setArguments(args);
+                aboutDialogFragment.show(getFragmentManager(), "settings_currency");
+                return false;
+            }
+        });
 
         final CheckBoxPreference pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
 
@@ -102,22 +104,57 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             pref_cloud_sync.setEnabled(false);
         }
 
+        final Activity self = this;
+
         pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
                     Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, false).apply();
                 } else {
-                    Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+
+                    new MaterialDialog.Builder(self)
+                            .cancelable(false)
+                            .title(R.string.cloud_sync)
+                            .content(R.string.cloud_sync_description)
+                            .positiveText(R.string.activate)
+                            .negativeText(R.string.not_now)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
+                                    Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+
+                                    dialog.cancel();
+                                }
+
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                    dialog.cancel();
+                                    pref_cloud_sync.setChecked(false);
+                                }
+                            })
+                            .show();
                 }
                 return true;
             }
         });
 
-        ListPreference background = (ListPreference) findPreference("pref_background");
-        bindPreferenceSummaryToValue(background);
+        pref_background = (ListPreference) findPreference("pref_background");
+        bindPreferenceSummaryToValue(pref_background);
 
-		bindPreferenceSummaryToValue(pref_currency);
+        bindPreferenceSummaryToValue(pref_currency);
+
+
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+
     }
 
     /**
@@ -239,4 +276,41 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        backgroundPrefValue = pref_background.getValue();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (!backgroundPrefValue.equals(pref_background.getValue())) {
+            //Changed
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!backgroundPrefValue.equals(pref_background.getValue())) {
+            //Changed
+            finishAffinity();
+            startActivity(new Intent(this, FeedActivity.class));
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigateUp() {
+        if (!backgroundPrefValue.equals(pref_background.getValue())) {
+            //Changed
+            finishAffinity();
+            startActivity(new Intent(this, FeedActivity.class));
+
+            return true;
+        } else {
+            return super.onNavigateUp();
+        }
+    }
 }

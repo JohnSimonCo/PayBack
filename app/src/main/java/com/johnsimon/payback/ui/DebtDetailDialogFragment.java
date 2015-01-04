@@ -165,8 +165,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 
         alertDialog = builder.create();
 
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
         return alertDialog;
     }
 

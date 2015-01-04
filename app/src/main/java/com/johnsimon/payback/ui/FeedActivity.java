@@ -337,22 +337,28 @@ public class FeedActivity extends DataActivity implements
 				person = data.getOrCreatePerson(name, contacts, self);
 
 				if(fullSync) {
-					ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
 
-					Bundle arguments = new Bundle();
-					arguments.putString(ConfirmDialogFragment.CONFIRM_TEXT, self.getString(R.string.overwrite_nfc_title));
-					arguments.putString(ConfirmDialogFragment.INFO_TEXT, String.format(self.getString(R.string.overwrite_nfc_text), person.name));
-					confirmDialogFragment.setArguments(arguments);
+                    new MaterialDialog.Builder(self)
+                            .content(String.format(self.getString(R.string.overwrite_nfc_text), person.name))
+                            .positiveText(R.string.overwrite_nfc_title)
+                            .negativeText(R.string.cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
+                                    data.sync(person, debts);
+                                    commitBeam();
+                                    dialog.cancel();
+                                }
 
-					confirmDialogFragment.show(getFragmentManager(), "overwrite_confirmation");
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
 
-					confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
-						@Override
-						public void onConfirm() {
-							data.sync(person, debts);
-							commitBeam();
-						}
-					};
 				} else {
 					data.debts.add(debts[0].extract(person));
 					commitBeam();
@@ -396,20 +402,30 @@ public class FeedActivity extends DataActivity implements
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
         Resource.checkFull(bp);
 
-        ConfirmDialogFragment fragment = new ConfirmDialogFragment();
-        Bundle args = new Bundle();
+        if (!Resource.isFull) {
+            return;
+        }
 
-        args.putString(ConfirmDialogFragment.CONFIRM_TEXT, getString(R.string.activate));
-        args.putString(ConfirmDialogFragment.INFO_TEXT, getString(R.string.cloud_sync_description_first));
-        args.putString(ConfirmDialogFragment.DECLINE_TEXT, getString(R.string.not_now));
-        args.putString(ConfirmDialogFragment.TITLE_TEXT, getString(R.string.cloud_sync));
+        new MaterialDialog.Builder(this)
+                .title(R.string.cloud_sync)
+                .content(R.string.cloud_sync_description_first)
+                .positiveText(R.string.activate)
+                .negativeText(R.string.not_now)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+                        dialog.cancel();
+                    }
 
-        fragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
-            @Override
-            public void onConfirm() {
-                Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
-            }
-        };
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     @Override

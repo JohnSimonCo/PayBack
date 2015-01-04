@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
@@ -81,44 +82,51 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 					Bundle argsMerge = new Bundle();
 					argsMerge.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
 					argsMerge.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
+                    argsMerge.putString(PersonPickerDialogFragment.BLACKLIST_KEY, person.name);
 					personPickerDialogFragmentMerge.setArguments(argsMerge);
 
 					personPickerDialogFragmentMerge.show(getFragmentManager(), "people_detail_dialog_merge");
 					personPickerDialogFragmentMerge.completeCallback = mergeCallback;
 					break;
 				case R.id.person_detail_dialog_delete:
-					ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
 
-					Bundle argsDelete = new Bundle();
-					argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_person_text));
-					argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
-					confirmDialogFragment.setArguments(argsDelete);
+                    new MaterialDialog.Builder(getActivity())
+                            .content(R.string.delete_person_text)
+                            .positiveText(R.string.delete)
+                            .negativeText(R.string.cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
 
-					confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
+                                    final int restorePersonIndex = data.people.indexOf(person);
 
-					confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
-						@Override
-						public void onConfirm() {
+                                    Snackbar.with(getActivity())
+                                            .text(getString(R.string.deleted_person))
+                                            .actionLabel(getString(R.string.undo))
+                                            .actionColor(getResources().getColor(R.color.green))
+                                            .actionListener(new Snackbar.ActionClickListener() {
+                                                @Override
+                                                public void onActionClicked() {
+                                                    data.people.add(restorePersonIndex, person);
+                                                    editPersonCallback.onEdit();
+                                                }
+                                            })
+                                            .show(getActivity());
 
-                            final int restorePersonIndex = data.people.indexOf(person);
+                                    data.delete(person);
+                                    cancel();
 
-                            Snackbar.with(getActivity())
-                                    .text(getString(R.string.deleted_person))
-                                    .actionLabel(getString(R.string.undo))
-									.actionColor(getResources().getColor(R.color.green))
-                                    .actionListener(new Snackbar.ActionClickListener() {
-                                        @Override
-                                        public void onActionClicked() {
-                                            data.people.add(restorePersonIndex, person);
-                                            editPersonCallback.onEdit();
-                                        }
-                                    })
-                                    .show(getActivity());
+                                    dialog.cancel();
+                                }
 
-							data.delete(person);
-							cancel();
-						}
-					};
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
 
 					break;
 			}
@@ -155,48 +163,53 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		public void onSelected(String name) {
 			final Person other = data.findPersonByName(name);
 
-			ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+            new MaterialDialog.Builder(getActivity())
+                    .content(String.format(getString(R.string.merge_confirm_text_format), person.name, other.name))
+                    .positiveText(R.string.merge)
+                    .negativeText(R.string.cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
 
-			Bundle argsDelete = new Bundle();
-			String confirmFormat = getString(R.string.merge_confirm_text_format);
-			argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, String.format(confirmFormat, person.name, other.name));
-			argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.merge));
-			confirmDialogFragment.setArguments(argsDelete);
-
-			confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
-
-			confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
-				@Override
-				public void onConfirm() {
-
-                    final int index = data.people.indexOf(person);
-					final ArrayList<Debt> debts = new ArrayList<Debt>();
-					for(Debt debt : data.debts) {
-						if(debt.owner == person) {
-							debts.add(debt);
-						}
-					}
-
-                    Snackbar.with(getActivity())
-                            .text(getString(R.string.merged_people))
-                            .actionLabel(getString(R.string.undo))
-                            .actionColor(getResources().getColor(R.color.green))
-                            .actionListener(new Snackbar.ActionClickListener() {
-                                @Override
-                                public void onActionClicked() {
-                                    data.unmerge(person, debts, index);
-
-                                    editPersonCallback.onEdit();
+                            final int index = data.people.indexOf(person);
+                            final ArrayList<Debt> debts = new ArrayList<Debt>();
+                            for(Debt debt : data.debts) {
+                                if(debt.owner == person) {
+                                    debts.add(debt);
                                 }
-                            })
-                            .show(getActivity());
+                            }
+
+                            Snackbar.with(getActivity())
+                                    .text(getString(R.string.merged_people))
+                                    .actionLabel(getString(R.string.undo))
+                                    .actionColor(getResources().getColor(R.color.green))
+                                    .actionListener(new Snackbar.ActionClickListener() {
+                                        @Override
+                                        public void onActionClicked() {
+                                            data.unmerge(person, debts, index);
+
+                                            editPersonCallback.onEdit();
+                                        }
+                                    })
+                                    .show(getActivity());
 
 
-                    //from, to
-					data.merge(person, other);
-					cancel();
-				}
-			};
+                            //from, to
+                            data.merge(person, other);
+                            cancel();
+
+                            dialog.cancel();
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+
 		}
 	};
 

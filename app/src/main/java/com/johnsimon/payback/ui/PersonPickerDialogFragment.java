@@ -28,6 +28,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
 	public final static String TITLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_TITLE_KEY";
 	public final static String PEOPLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_PERSON_KEY";
+    public final static String BLACKLIST_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_BLACKLIST_KEY";
 
 	private AutoCompleteTextView autoCompleteTextView;
 
@@ -79,6 +80,15 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 			people = data.getAllNames(contacts);
 		}
 
+        final String blacklist = getArguments().getString(BLACKLIST_KEY, "");
+        if (!TextUtils.isEmpty(blacklist)) {
+            for (int i = 0; i < people.size(); i++) {
+                if (people.get(i).equals(blacklist)) {
+                    people.remove(i);
+                }
+            }
+        }
+
 		autoCompleteTextView.setAdapter(new ArrayAdapter<>(
 				getActivity(),
 				R.layout.autocomplete_list_item,
@@ -101,7 +111,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 
 				String name = s.toString();
 
-				if (TextUtils.isEmpty(name) || (useOnlyPeopleInApp && data.findPersonByName(name) == null)) {
+				if (TextUtils.isEmpty(name) || (useOnlyPeopleInApp && data.findPersonByName(name) == null) || name.equals(blacklist)) {
 					disableButton(confirmButton);
 				} else {
 					enableButton(confirmButton);

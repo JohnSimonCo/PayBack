@@ -112,6 +112,8 @@
     <string name="author_qr">Etienne Lawlor</string>
     <string name="lib_snb">Snackbar</string>
     <string name="author_snb">William Mora</string>
+    <string name="lib_md">Material Dialogs</string>
+    <string name="author_md">Aidan Follestad</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>

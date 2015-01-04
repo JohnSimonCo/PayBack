@@ -202,54 +202,58 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	@Override
 	public void onDelete(final Debt debt) {
 
-		ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.delete_entry)
+                .positiveText(R.string.delete)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
 
-		Bundle argsDelete = new Bundle();
-		argsDelete.putString(ConfirmDialogFragment.INFO_TEXT, getResources().getString(R.string.delete_entry));
-        argsDelete.putString(ConfirmDialogFragment.CONFIRM_TEXT, getResources().getString(R.string.delete));
-        argsDelete.putString(ConfirmDialogFragment.DECLINE_TEXT, getResources().getString(R.string.cancel));
-		confirmDialogFragment.setArguments(argsDelete);
+                        final int index = data.debts.indexOf(debt);
+                        final int indexFeed = FeedActivity.feed.indexOf(debt);
 
-		confirmDialogFragment.show(getFragmentManager(), "people_detail_dialog_delete");
+                        Snackbar.with(getActivity())
+                                .text(getString(R.string.deleted_debt))
+                                .actionLabel(getString(R.string.undo))
+                                .actionColor(getResources().getColor(R.color.green))
+                                .actionListener(new Snackbar.ActionClickListener() {
+                                    @Override
+                                    public void onActionClicked() {
+                                        data.debts.add(index, debt);
+                                        storage.commit();
+                                        if(!FeedActivity.isAll()) {
+                                            FeedActivity.feed.add(indexFeed, debt);
+                                        }
 
-		confirmDialogFragment.confirm = new ConfirmDialogFragment.ConfirmCallback() {
-			@Override
-			public void onConfirm() {
+                                        displayTotalDebt(getActivity());
+                                        adapter.notifyDataSetChanged();
+                                        adapter.checkAdapterIsEmpty();
+                                    }
+                                })
+                                .show(getActivity());
 
-				final int index = data.debts.indexOf(debt);
-				final int indexFeed = FeedActivity.feed.indexOf(debt);
+                        data.delete(debt);
+                        storage.commit();
+                        if(!FeedActivity.isAll()) {
+                            FeedActivity.feed.remove(debt);
+                        }
 
-				Snackbar.with(getActivity())
-						.text(getString(R.string.deleted_debt))
-						.actionLabel(getString(R.string.undo))
-						.actionColor(getResources().getColor(R.color.green))
-						.actionListener(new Snackbar.ActionClickListener() {
-							@Override
-							public void onActionClicked() {
-								data.debts.add(index, debt);
-								storage.commit();
-								if(!FeedActivity.isAll()) {
-									FeedActivity.feed.add(indexFeed, debt);
-								}
+                        displayTotalDebt(getActivity());
+                        adapter.notifyItemRemoved(index);
+                        adapter.checkAdapterIsEmpty();
 
-								displayTotalDebt(getActivity());
-								adapter.notifyDataSetChanged();
-								adapter.checkAdapterIsEmpty();
-							}
-						})
-						.show(getActivity());
+                        dialog.cancel();
+                    }
 
-				data.delete(debt);
-				storage.commit();
-				if(!FeedActivity.isAll()) {
-					FeedActivity.feed.remove(debt);
-				}
-
-				displayTotalDebt(getActivity());
-				adapter.notifyDataSetChanged();
-				adapter.checkAdapterIsEmpty();
-			}
-		};
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.cancel();
+                    }
+                })
+                .show();
 	}
 
 	@Override
