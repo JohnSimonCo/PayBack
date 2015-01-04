@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -92,6 +93,8 @@ public class PeopleManagerActivity extends DataActivity {
         simpleFloatViewManager.setBackgroundColor(Color.TRANSPARENT);
         listView.setFloatViewManager(simpleFloatViewManager);
 
+        final Activity self = this;
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -104,7 +107,7 @@ public class PeopleManagerActivity extends DataActivity {
 					public void onEdit() {
 						adapter.notifyDataSetChanged();
                         storage.commit();
-						Resource.actionComplete(getFragmentManager());
+						Resource.actionComplete(self);
 					}
 				};
 			}

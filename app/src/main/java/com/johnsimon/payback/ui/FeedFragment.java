@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
 import com.johnsimon.payback.R;
@@ -170,8 +171,29 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
                 }
             } else {
-                UpgradeDialogFragment fragment = UpgradeDialogFragment.create(FeedActivity.bp);
-                fragment.show(getActivity().getFragmentManager(), "upgradeTag");
+
+                final Activity self = getActivity();
+
+                new MaterialDialog.Builder(getActivity())
+                        .title(getString(R.string.upgrade_title))
+                        .content(getString(R.string.upgrade_text))
+                        .positiveText(R.string.upgrade_confirm_text)
+                        .negativeText(R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                FeedActivity.bp.purchase(self, "full_version");
+                                dialog.cancel();
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                super.onNegative(dialog);
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
             }
 
 		}
@@ -239,7 +261,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 			FeedActivity.feed.remove(debt);
 		}
 
-		Resource.actionComplete(getFragmentManager());
+		Resource.actionComplete(getActivity());
 		adapter.notifyDataSetChanged();
 	}
 

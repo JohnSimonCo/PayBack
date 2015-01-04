@@ -3,12 +3,14 @@ package com.johnsimon.payback.util;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
@@ -17,12 +19,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
-import com.johnsimon.payback.ui.RequestRateDialogFragment;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -174,7 +176,7 @@ public class Resource {
 		}
 	}
 
-	public static void actionComplete(FragmentManager fragmentManager) {
+	public static void actionComplete(final Activity activity) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
 
@@ -183,30 +185,50 @@ public class Resource {
 			actions = 0;
 
 			//Open the request rate dialog
-			RequestRateDialogFragment fragment = new RequestRateDialogFragment();
 
-			fragment.rateCallback = rateCallback;
+            new MaterialDialog.Builder(activity)
+                    .title(R.string.rate_title)
+                    .content(R.string.rate_text)
+                    .positiveText(R.string.rate_now)
+                    .neutralText(R.string.rate_later)
+                    .negativeText(R.string.rate_never)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            final String appPackageName = activity.getPackageName();
+                            try {
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
 
-			fragment.show(fragmentManager, "request_rate");
+                            neverRate = true;
+                            preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
+                            dialog.cancel();
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                            neverRate = true;
+                            preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
+                            dialog.cancel();
+                        }
+
+                        @Override
+                        public void onNeutral(MaterialDialog dialog) {
+                            super.onNeutral(dialog);
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+
 		}
 
 		//Save the new action count
 		preferences.edit().putInt(SAVE_KEY_ACTIONS, actions).apply();
 	}
-
-	private static RequestRateDialogFragment.RateCallback rateCallback = new RequestRateDialogFragment.RateCallback() {
-		@Override
-		public void onNeverAgain() {
-			neverRate = true;
-
-			//Save the new value
-			preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
-		}
-
-		@Override
-		public void onLater() {
-		}
-	};
 
 	public static boolean areIdenticalLists(ArrayList<Person> before, ArrayList<Person> after) {
 

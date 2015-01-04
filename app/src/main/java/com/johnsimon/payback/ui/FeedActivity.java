@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
@@ -128,7 +129,7 @@ public class FeedActivity extends DataActivity implements
 		super.onStart();
 		Intent intent = getIntent();
 		if(intent.getBooleanExtra(ARG_FROM_CREATE, false)) {
-			Resource.actionComplete(getFragmentManager());
+			Resource.actionComplete(this);
 			intent.removeExtra(ARG_FROM_CREATE);
 		}
 	}
@@ -228,8 +229,29 @@ public class FeedActivity extends DataActivity implements
 				aboutDialogFragment.show(getFragmentManager(), "about_dialog");
 				break;
             case R.id.navigation_drawer_footer_upgrade:
-                UpgradeDialogFragment fragment = UpgradeDialogFragment.create(bp);
-                fragment.show(getFragmentManager(), "upgrade_dialog");
+
+                final FeedActivity self = this;
+
+                new MaterialDialog.Builder(this)
+                        .title(getString(R.string.upgrade_title))
+                        .content(getString(R.string.upgrade_text))
+                        .positiveText(R.string.upgrade_confirm_text)
+                        .negativeText(R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                bp.purchase(self, "full_version");
+                                dialog.cancel();
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                super.onNegative(dialog);
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
                 break;
 
 			default:
@@ -274,8 +296,29 @@ public class FeedActivity extends DataActivity implements
 	public void onReceivedBeam(final DebtSendable[] debts, final User sender, final boolean fullSync) {
 
         if(!Resource.canHold(data.debts.size(), debts.length)) {
-            UpgradeDialogFragment fragment = UpgradeDialogFragment.create(FeedActivity.bp);
-            fragment.show(this.getFragmentManager(), "upgradeTag");
+
+            final FeedActivity self = this;
+
+            new MaterialDialog.Builder(this)
+                    .title(getString(R.string.upgrade_title))
+                    .content(getString(R.string.upgrade_text))
+                    .positiveText(R.string.upgrade_confirm_text)
+                    .negativeText(R.string.cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            bp.purchase(self, "full_version");
+                            dialog.cancel();
+                        }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
             return;
         }
 
