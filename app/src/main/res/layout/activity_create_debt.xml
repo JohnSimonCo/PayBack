@@ -45,6 +45,7 @@
 
                         <com.johnsimon.payback.view.FloatLabelLayout
                             app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel.DarkBackground"
+                            app:floatLabelHint="@string/person_hint"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -114,6 +115,7 @@
 
                         <com.johnsimon.payback.view.FloatLabelLayout
                             app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel.DarkBackground"
+                            app:floatLabelHint="@string/amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -144,6 +146,7 @@
                 android:layout_marginStart="@dimen/create_start_margin"
                 android:layout_marginRight="@dimen/create_right_margin"
                 android:layout_marginEnd="@dimen/create_right_margin"
+                app:floatLabelHint="@string/note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
