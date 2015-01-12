@@ -4,6 +4,11 @@
     <declare-styleable name="FloatLabelLayout">
         <attr name="floatLabelTextAppearance" format="reference" />
         <attr name="floatLabelSidePadding" format="reference|dimension" />
+        <attr name="floatLabelPaddingLeft" format="reference|dimension"    />
+        <attr name="floatLabelPaddingTop" format="reference|dimension"    />
+        <attr name="floatLabelPaddingBottom" format="reference|dimension"    />
+        <attr name="floatLabelPaddingRight" format="reference|dimension"    />
+        <attr name="floatLabelHint" format="reference|dimension"    />
     </declare-styleable>
 
 </resources>
