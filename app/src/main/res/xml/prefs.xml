@@ -21,5 +21,10 @@
             android:summary="@string/pref_cloud_sync"
             android:defaultValue="false"    />
 
+        <Preference
+            android:dependency="pref_cloud_sync"
+            android:key="pref_cloud_sync_account"
+            android:title="@string/cloud_sync_account"  />
+
     </PreferenceCategory>
 </PreferenceScreen>

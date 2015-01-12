@@ -94,6 +94,7 @@
     <string name="debt_plural">debts</string>
     <string name="people">people</string>
     <string name="person">person</string>
+    <string name="cloud_sync_account">Sync account</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

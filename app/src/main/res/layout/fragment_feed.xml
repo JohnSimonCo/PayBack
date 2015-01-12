@@ -6,13 +6,17 @@
     <android.support.v7.widget.RecyclerView
         android:divider="@null"
         android:scrollbars="none"
+        style="@style/FeedRecyclerView"
         android:paddingTop="@dimen/list_header_height_full"
+        android:layout_marginLeft="@dimen/feed_list_item_extra_margin"
+        android:layout_marginRight="@dimen/feed_list_item_extra_margin"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/feed_list"   />
 
     <FrameLayout
+        style="@style/Elevation4DP"
         android:id="@+id/feed_list_header_master"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -47,6 +51,7 @@
             style="@style/Elevation2DP"
             android:orientation="vertical"
             android:layout_gravity="bottom"
+            android:paddingLeft="@dimen/feed_list_item_extra_margin"
             android:layout_marginStart="@dimen/feed_left_margin"
             android:layout_marginLeft="@dimen/feed_left_margin"
             android:layout_marginBottom="@dimen/feed_header_bottom_margin"

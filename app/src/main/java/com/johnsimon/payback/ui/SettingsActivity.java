@@ -99,10 +99,22 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
         final CheckBoxPreference pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
 
+		final Preference pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
+		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				//TODO change account
+				return false;
+			}
+		});
+
+
         if (!Resource.isFull) {
             pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
             pref_cloud_sync.setEnabled(false);
-        }
+        } else {
+
+		}
 
         final Activity self = this;
 
@@ -140,6 +152,8 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                 return true;
             }
         });
+
+
 
         pref_background = (ListPreference) findPreference("pref_background");
         bindPreferenceSummaryToValue(pref_background);

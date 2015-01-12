@@ -10,8 +10,6 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:paddingLeft="@dimen/feed_list_item_extra_margin"
-        android:paddingRight="@dimen/feed_list_item_extra_margin"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    >
@@ -120,7 +118,7 @@
 
     <View
         android:layout_marginLeft="@dimen/feed_left_margin"
-        android:layout_marginRight="@dimen/feed_list_item_extra_margin"
+        android:layout_marginRight="0dp"
         android:background="@color/gray_oncolor_very_light"
         android:layout_width="match_parent"
         android:layout_height="1dp" />

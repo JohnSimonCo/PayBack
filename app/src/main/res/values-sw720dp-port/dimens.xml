@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="feed_list_item_extra_margin">48dp</dimen>
-    <dimen name="feed_left_margin">128dp</dimen>
-    <dimen name="fab_right_margin">32dp</dimen>
+    <dimen name="feed_list_item_extra_margin">64dp</dimen>
+    <dimen name="fab_right_margin">36dp</dimen>
 
 </resources>
