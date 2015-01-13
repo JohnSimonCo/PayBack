@@ -95,6 +95,10 @@
     <string name="people">people</string>
     <string name="person">person</string>
     <string name="cloud_sync_account">Sync account</string>
+    <string name="wipe_data">Wipe app data</string>
+    <string name="wipe_data_confirm_free">Are you sure you want to delete all app data?</string>
+    <string name="wipe_data_confirm_full">Are you sure you want to delete all app data? This includes Google Drive save data.</string>
+    <string name="wipe">Wipe</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

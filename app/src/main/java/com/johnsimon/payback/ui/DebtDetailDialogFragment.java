@@ -62,7 +62,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity()));
                 sendIntent.setType("text/plain");
-                startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.share)));
+                startActivity(Intent.createChooser(sendIntent, debt.getShareString(getActivity())));
             }
         });
 

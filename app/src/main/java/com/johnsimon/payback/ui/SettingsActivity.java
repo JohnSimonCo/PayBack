@@ -160,7 +160,35 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
         bindPreferenceSummaryToValue(pref_currency);
 
+		Preference pref_wipe_data = findPreference("pref_wipe_data");
+		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new MaterialDialog.Builder(self)
+						.cancelable(true)
+						.title(R.string.wipe_data)
+						.content(Resource.isFull ? R.string.wipe_data_confirm_full : R.string.wipe_data_confirm_free)
+						.positiveText(R.string.wipe)
+						.negativeText(R.string.cancel)
+						.callback(new MaterialDialog.ButtonCallback() {
+							@Override
+							public void onPositive(MaterialDialog dialog) {
+								super.onPositive(dialog);
+								//TODO wipe data
 
+								dialog.cancel();
+							}
+
+							@Override
+							public void onNegative(MaterialDialog dialog) {
+								super.onNegative(dialog);
+								dialog.cancel();
+							}
+						})
+						.show();
+				return false;
+			}
+		});
 
     }
 

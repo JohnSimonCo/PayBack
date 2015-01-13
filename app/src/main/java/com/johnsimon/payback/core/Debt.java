@@ -72,23 +72,25 @@ public class Debt implements Syncable<Debt> {
 
 	//Method to get a string usable for sharing.
 	public String getShareString(Context ctx) {
-		String shareText;
+		String shareText =
+				this.amount < 0 ?
+				ctx.getString(R.string.ioweyou) :
+				ctx.getString(R.string.youoweme);
 
-		if (this.amount < 0) {
-			shareText = ctx.getString(R.string.ioweyou);
-		} else {
-			shareText = ctx.getString(R.string.youoweme);
-		}
-
-		shareText = shareText + " " + this.amountAsString;
-		if (!TextUtils.isEmpty(shareText)) {
-			shareText = shareText + " " + ctx.getString(R.string.debt_for) + " " + this.note;
+		shareText += " " + this.amountAsString;
+		if (!TextUtils.isEmpty(this.note)) {
+			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
 		}
 
 		return shareText;
 	}
 
-    @Override
+	@Override
+	public String toString() {
+		return amount + " for " + note;
+	}
+
+	@Override
     public UUID getId() {
         return id;
     }
