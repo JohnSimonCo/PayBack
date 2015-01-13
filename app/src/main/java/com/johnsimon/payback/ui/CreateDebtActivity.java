@@ -96,7 +96,8 @@ public class CreateDebtActivity extends DataActivity {
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
 		if (intent.hasExtra(ARG_TIMESTAMP)) {
-			editingDebt = data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
+			//TODO fix this
+			//editingDebt = data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.owner.name);
 

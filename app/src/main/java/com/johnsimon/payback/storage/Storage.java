@@ -41,6 +41,10 @@ public abstract class Storage {
 
     }
 
+	public void requestRefresh() {
+
+	}
+
     public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
         return false;
     }

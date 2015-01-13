@@ -8,6 +8,7 @@ public class Person implements Syncable<Person> {
 	public String name;
 	public UUID id;
 	public int color;
+	//TODO delayed link
     public Contact link = null;
 
 	//Used for deserialization

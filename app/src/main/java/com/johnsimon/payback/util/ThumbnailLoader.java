@@ -32,7 +32,7 @@ public class ThumbnailLoader implements ImageLoadingListener {
 
 
 	public void load(String uri, final SimpleImageLoadingListener callback) {
-		//TODO MEGA DIRTY
+		//MEGA DIRTY
 		uri = uri.replaceAll("/photo$", ""); //Det funkade
 
 		if(cache.containsKey(uri)) {

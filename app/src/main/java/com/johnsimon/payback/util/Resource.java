@@ -63,28 +63,6 @@ public class Resource {
 
         Resource.preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        //TODO REMOVE SAMPLE DATA
-        /*
-        if (people.size() == 0) {
-            ColorPalette palette = ColorPalette.getInstance(context);
-            Person john = new Person("John Rapp", palette);
-            people.add(john);
-            Person simon = new Person("Simon Halvdansson", palette);
-            people.add(simon);
-            Person agge = new Person("Agge Eklöf", palette);
-            people.add(agge);
-
-            long timestamp = System.currentTimeMillis();
-            debts.add(new Debt(john, 100, "Dyr kebab", timestamp));
-            debts.add(new Debt(simon, -200, "Pokemonkort", ++timestamp));
-            debts.add(new Debt(simon, -1000, "Glömde kortet på ICA", ++timestamp));
-            debts.add(new Debt(agge, 40, null, ++timestamp));
-            debts.add(new Debt(john, 200, "Lampor till dator", ++timestamp));
-            debts.add(new Debt(agge, 2.5f, "Äpple delat på 2", ++timestamp));
-
-            commit();
-        }*/
-
 		neverRate = preferences.getBoolean(SAVE_KEY_NEVER_RATE, false);
 		if(!neverRate) {
 			actions = preferences.getInt(SAVE_KEY_ACTIONS, 0);

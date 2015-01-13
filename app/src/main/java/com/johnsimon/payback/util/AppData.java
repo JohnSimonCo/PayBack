@@ -99,9 +99,9 @@ public class AppData {
         return null;
     }
 
-    public Debt findDebt(long timestamp) {
+    public Debt findDebt(UUID id) {
         for (Debt debt : debts) {
-            if(debt.timestamp == timestamp) return debt;
+            if(debt.id.equals(id)) return debt;
         }
 
         return null;

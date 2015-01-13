@@ -165,6 +165,7 @@ public class PeopleManagerActivity extends DataActivity {
 	protected void onDataReceived() {
 		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title));
 		listView.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
