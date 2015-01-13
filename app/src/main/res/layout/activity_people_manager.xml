@@ -21,6 +21,7 @@
         <com.devspark.robototextview.widget.RobotoTextView
             app:fontFamily="roboto"
             app:textWeight="medium"
+            android:paddingLeft="@dimen/feed_list_item_extra_margin"
             android:paddingTop="8dp"
             android:paddingBottom="16dp"
             android:paddingRight="16dp"
@@ -42,9 +43,10 @@
             android:layout_height="match_parent"
             android:dividerHeight="0dp"
             android:paddingTop="16dp"
-            android:paddingLeft="@dimen/feed_list_item_extra_margin"
             android:clipToPadding="false"
-            android:paddingRight="@dimen/feed_list_item_extra_margin"
+            style="@style/FeedRecyclerView"
+            android:layout_marginLeft="@dimen/feed_list_item_extra_margin"
+            android:layout_marginRight="@dimen/feed_list_item_extra_margin"
             dslv:float_background_color="@android:color/transparent"
             dslv:collapsed_height="0dp"
             dslv:drag_enabled="true"
@@ -55,7 +57,6 @@
             dslv:remove_enabled="true"
             dslv:remove_mode="flingRemove"
             dslv:slide_shuffle_speed="0.3"
-            dslv:drag_handle_id="@+id/people_list_item_handle"
             dslv:sort_enabled="true"
             dslv:track_drag_sort="false"
             dslv:use_default_controller="true" />

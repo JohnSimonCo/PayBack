@@ -84,6 +84,7 @@ public class PeopleManagerActivity extends DataActivity {
         controller.setRemoveEnabled(false);
         controller.setSortEnabled(true);
         controller.setDragInitMode(DragSortController.ON_DRAG);
+		controller.setDragHandleId(R.id.people_list_item_handle);
 
         listView.setFloatViewManager(controller);
         listView.setOnTouchListener(controller);
