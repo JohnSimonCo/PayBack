@@ -114,7 +114,7 @@ public class Debt implements Syncable<Debt> {
 		return id.equals(other.id)
 			&& owner.id.equals(other.owner.id)
 			&& amount == other.amount
-			&& note == null ? other.note == null : note.equals(other.note)
+			&& (note == null ? other.note == null : note.equals(other.note))
 			&& isPaidBack == other.isPaidBack;
 	}
 }

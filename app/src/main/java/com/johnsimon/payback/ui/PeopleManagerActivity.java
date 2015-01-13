@@ -321,7 +321,7 @@ public class PeopleManagerActivity extends DataActivity {
 			FeedActivity.person = null;
 		}
 
-        //storage.commit();
+        storage.commit();
 
 		finishAffinity();
 		startActivity(intent);

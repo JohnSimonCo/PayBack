@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.makeramen.RoundedImageView;
@@ -230,7 +231,7 @@ public class Resource {
 		preferences.edit().putInt(SAVE_KEY_ACTIONS, actions).apply();
 	}
 
-	public static boolean areIdenticalLists(ArrayList<Person> before, ArrayList<Person> after) {
+	public static <T extends Identifiable> boolean areIdenticalLists(ArrayList<T> before, ArrayList<T> after) {
 
 		if (before.size() != after.size()) {
 			return false;
@@ -240,7 +241,7 @@ public class Resource {
 
 
 		for (int i = 0; i < size; i++) {
-			if (before.get(i).id != after.get(i).id) {
+			if (before.get(i).getId() != after.get(i).getId()) {
 				return false;
 			}
 		}

@@ -57,6 +57,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
+		//TODO använda app folder
            .addScope(Drive.SCOPE_FILE)
            .addConnectionCallbacks(this)
            .addOnConnectionFailedListener(this)
@@ -177,6 +178,13 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	private void setFile(DriveFile file) {
 		this.file = file;
+
+		file.addChangeListener(client, new ChangeListener() {
+			@Override
+			public void onChange(ChangeEvent event) {
+				show("Got a change!");
+			}
+		});
 	}
 
     private void createFile(final String text, final ResultCallback<FileResult> callback) {
@@ -267,19 +275,26 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         });
     }
 
+	private boolean preventDisconnect = false;
     @Override
     public void connect() {
-        client.connect();
+		if(!client.isConnected()) {
+			client.connect();
+		} else {
+			preventDisconnect = true;
+		}
     }
 
     @Override
     public void disconnect() {
-        client.disconnect();
+		if(!preventDisconnect) {
+			client.disconnect();
+		}
+		preventDisconnect = false;
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        int j = 0;
     }
 
     @Override
