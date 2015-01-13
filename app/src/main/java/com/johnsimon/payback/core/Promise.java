@@ -16,6 +16,10 @@ public class Promise<D> {
         }
     }
 
+	public void unregister(Callback<D> callback) {
+		callbacks.remove(callback);
+	}
+
     public void fire(D data) {
         if(hasFired) return;
 

@@ -29,7 +29,7 @@ public class DebtSerializable {
 
 	private Person owner(ArrayList<Person> people) {
 		for(Person person : people) {
-			if(person.id.equals(ownerId)) return person;
+				if(person.id.equals(ownerId)) return person;
 		}
 		return null;
 	}

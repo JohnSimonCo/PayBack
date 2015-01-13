@@ -20,28 +20,51 @@ public abstract class DataFragment extends Fragment {
 
     public Contacts contacts;
 
+	private Promise<Contacts> contactsPromise;
+	private Promise<Contacts> phoneNumbersPromise;
+	private Promise fullyLoadedPromise;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
-        storage.subscription.listen(dataLoadedCallback);
 
-        activity.contactLoader.promise.then(contactsLoadedCallback);
-        activity.phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
+		contactsPromise = activity.contactLoader.promise;
 
-        activity.fullyLoadedPromise.then(fullyLoadedCallback);
+		phoneNumbersPromise = activity.phoneNumberLoader.promise;
+
+		fullyLoadedPromise = activity.fullyLoadedPromise;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
 
-    private DataFragment self = this;
+		storage.subscription.listen(dataLoadedCallback);
+
+		contactsPromise.then(contactsLoadedCallback);
+
+		phoneNumbersPromise.then(phoneNumbersLoadedCallback);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+
+		storage.subscription.unregister(dataLoadedCallback);
+
+		contactsPromise.unregister(contactsLoadedCallback);
+
+		phoneNumbersPromise.unregister(phoneNumbersLoadedCallback);
+
+		fullyLoadedPromise.unregister(fullyLoadedCallback);
+	}
+
+	private DataFragment self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
         public void onCalled(AppData data) {
@@ -50,25 +73,43 @@ public abstract class DataFragment extends Fragment {
         }
     };
 
-    private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
+	private boolean contactsLoaded = false;
+	private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onCalled(Contacts contacts) {
-            self.contacts = contacts;
-            onContactsLoaded();
+			if(contactsLoaded) return;
+
+			contactsLoaded = true;
+
+			self.contacts = contacts;
+
+			onContactsLoaded();
+
+			fullyLoadedPromise.then(fullyLoadedCallback);
         }
     };
 
-    private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
+	private boolean phoneNumbersLoaded = false;
+	private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onCalled(Contacts contacts) {
-            onPhoneNumbersLoaded();
+			if(phoneNumbersLoaded) return;
+
+			phoneNumbersLoaded = true;
+
+			onPhoneNumbersLoaded();
         }
     };
 
-    private Callback fullyLoadedCallback = new Callback() {
+	private boolean fullyLoaded = false;
+	private Callback fullyLoadedCallback = new Callback() {
         @Override
         public void onCalled(Object data) {
-            onFullyLoaded();
+			if(fullyLoaded) return;
+
+			fullyLoaded = true;
+
+			onFullyLoaded();
         }
     };
 

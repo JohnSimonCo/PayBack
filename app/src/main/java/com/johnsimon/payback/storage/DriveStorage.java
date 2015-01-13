@@ -20,11 +20,6 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.drive.events.ChangeEvent;
-import com.google.android.gms.drive.events.ChangeListener;
-import com.google.android.gms.drive.query.Filters;
-import com.google.android.gms.drive.query.Query;
-import com.google.android.gms.drive.query.SearchableField;
 import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
@@ -106,8 +101,12 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     public void onConnected(Bundle bundle) {
-		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
+		refresh();
     }
+
+	private void refresh() {
+		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
+	}
 
     private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
         @Override
@@ -176,15 +175,9 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         }
     };
 
+
 	private void setFile(DriveFile file) {
 		this.file = file;
-
-		file.addChangeListener(client, new ChangeListener() {
-			@Override
-			public void onChange(ChangeEvent event) {
-				show("Got a change!");
-			}
-		});
 	}
 
     private void createFile(final String text, final ResultCallback<FileResult> callback) {
@@ -275,22 +268,23 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         });
     }
 
-	private boolean preventDisconnect = false;
+	private boolean keepAlive = false;
     @Override
     public void connect() {
 		if(!client.isConnected()) {
 			client.connect();
 		} else {
-			preventDisconnect = true;
+			refresh();
+			keepAlive = true;
 		}
     }
 
     @Override
     public void disconnect() {
-		if(!preventDisconnect) {
+		if(!keepAlive) {
 			client.disconnect();
 		}
-		preventDisconnect = false;
+		keepAlive = false;
     }
 
     @Override

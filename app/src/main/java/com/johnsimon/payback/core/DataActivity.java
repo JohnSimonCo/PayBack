@@ -30,29 +30,39 @@ public abstract class DataActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         storage = StorageManager.getStorage(this);
-        storage.subscription.listen(dataLoadedCallback);
 
         contactLoader = new ContactLoader();
-        contactLoader.promise.then(contactsLoadedCallback);
         contactLoader.execute(this);
 
-        phoneNumberLoader = new PhoneNumberLoader();
-        phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
+		phoneNumberLoader = new PhoneNumberLoader();
 
         fullyLoadedPromise = Promise.all(storage.promise, contactLoader.promise);
-        fullyLoadedPromise.then(fullyLoadedCallback);
     }
 
 	@Override
     protected void onStart() {
         super.onStart();
 
-        storage.connect();
+		storage.subscription.listen(dataLoadedCallback);
+
+		contactLoader.promise.then(contactsLoadedCallback);
+
+		phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
+
+		storage.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+		storage.subscription.unregister(dataLoadedCallback);
+
+		contactLoader.promise.unregister(contactsLoadedCallback);
+
+		phoneNumberLoader.promise.unregister(phoneNumbersLoadedCallback);
+
+		fullyLoadedPromise.unregister(fullyLoadedCallback);
 
         storage.disconnect();
     }
@@ -75,26 +85,44 @@ public abstract class DataActivity extends ActionBarActivity {
         }
     };
 
+	private boolean contactsLoaded = false;
     private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onCalled(Contacts contacts) {
+			if(contactsLoaded) return;
+
+			contactsLoaded = true;
+
             phoneNumberLoader.execute(new PhoneNumberLoader.Argument(self, contacts));
 
             self.contacts = contacts;
+
             onContactsLoaded();
-        }
+
+			fullyLoadedPromise.then(fullyLoadedCallback);
+		}
     };
 
+	private boolean phoneNumbersLoaded = false;
     private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
         @Override
         public void onCalled(Contacts contacts) {
+			if(phoneNumbersLoaded) return;
+
+			phoneNumbersLoaded = true;
+
             onPhoneNumbersLoaded();
         }
     };
 
+	private boolean fullyLoaded = false;
     private Callback fullyLoadedCallback = new Callback() {
         @Override
         public void onCalled(Object data) {
+			if(fullyLoaded) return;
+
+			fullyLoaded = true;
+
             onFullyLoaded();
         }
     };

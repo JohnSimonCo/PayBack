@@ -73,11 +73,8 @@ public class PeopleManagerActivity extends DataActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title));
-
         listView = (DragSortListView) findViewById(R.id.people_listview);
 
-        listView.setAdapter(adapter);
         listView.setDropListener(onDrop);
 
         DragSortController controller = new DragSortController(listView);
@@ -113,8 +110,6 @@ public class PeopleManagerActivity extends DataActivity {
 			}
 		});
 
-		adapter.notifyDataSetChanged();
-
         final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
         people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
         people_manager_empty_image.post(new Runnable() {
@@ -128,7 +123,13 @@ public class PeopleManagerActivity extends DataActivity {
         setupTreeObserver();
     }
 
-    @Override
+	@Override
+	protected void onDataReceived() {
+		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title));
+		listView.setAdapter(adapter);
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Only show items in the action bar relevant to this screen
         // if the drawer is not showing. Otherwise, let the drawer

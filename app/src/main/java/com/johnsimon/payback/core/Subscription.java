@@ -16,6 +16,10 @@ public class Subscription<D> {
         }
     }
 
+	public void unregister(Callback<D> callback) {
+		callbacks.remove(callback);
+	}
+
     public void broadcast(D data) {
         this.data = data;
 
