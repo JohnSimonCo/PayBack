@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Contacts;
+import com.johnsimon.payback.util.ContactsLoader;
 
 /**
  * Created by johnrs on 2015-01-02.
@@ -20,8 +21,8 @@ public abstract class DataFragment extends Fragment {
 
     public Contacts contacts;
 
-	private Promise<Contacts> contactsPromise;
-	private Promise<Contacts> phoneNumbersPromise;
+	private ContactsLoader contactsLoader;
+
 	private Promise fullyLoadedPromise;
 
     @Nullable
@@ -30,10 +31,6 @@ public abstract class DataFragment extends Fragment {
 
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
-
-		contactsPromise = activity.contactLoader.promise;
-
-		phoneNumbersPromise = activity.phoneNumberLoader.promise;
 
 		fullyLoadedPromise = activity.fullyLoadedPromise;
 
@@ -46,9 +43,9 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactsPromise.then(contactsLoadedCallback);
+		contactsLoader.contactsLoaded.then(contactsLoadedCallback);
 
-		phoneNumbersPromise.then(phoneNumbersLoadedCallback);
+		contactsLoader.numbersLoaded.then(phoneNumbersLoadedCallback);
 	}
 
 	@Override
@@ -57,9 +54,9 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactsPromise.unregister(contactsLoadedCallback);
+		contactsLoader.contactsLoaded.unregister(contactsLoadedCallback);
 
-		phoneNumbersPromise.unregister(phoneNumbersLoadedCallback);
+		contactsLoader.numbersLoaded.unregister(phoneNumbersLoadedCallback);
 
 		fullyLoadedPromise.unregister(fullyLoadedCallback);
 	}

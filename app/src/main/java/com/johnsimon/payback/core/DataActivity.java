@@ -7,9 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.ContactLoader;
 import com.johnsimon.payback.util.Contacts;
-import com.johnsimon.payback.util.PhoneNumberLoader;
+import com.johnsimon.payback.util.ContactsLoader;
 
 /**
  * Created by johnrs on 2015-01-02.
@@ -19,8 +18,7 @@ public abstract class DataActivity extends ActionBarActivity {
     protected Storage storage;
     public AppData data;
 
-    protected ContactLoader contactLoader;
-    protected PhoneNumberLoader phoneNumberLoader;
+    protected ContactsLoader contactsLoader;
     public Contacts contacts;
 
     protected Promise fullyLoadedPromise;
@@ -31,12 +29,9 @@ public abstract class DataActivity extends ActionBarActivity {
 
         storage = StorageManager.getStorage(this);
 
-        contactLoader = new ContactLoader();
-        contactLoader.execute(this);
+		contactsLoader = ContactsLoader.run(this);
 
-		phoneNumberLoader = new PhoneNumberLoader();
-
-        fullyLoadedPromise = Promise.all(storage.promise, contactLoader.promise);
+        fullyLoadedPromise = Promise.all(storage.promise, contactsLoader.contactsLoaded);
     }
 
 	@Override
@@ -45,9 +40,9 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactLoader.promise.then(contactsLoadedCallback);
+		contactsLoader.contactsLoaded.then(contactsLoadedCallback);
 
-		phoneNumberLoader.promise.then(phoneNumbersLoadedCallback);
+		contactsLoader.numbersLoaded.then(phoneNumbersLoadedCallback);
 
 		storage.connect();
     }
@@ -58,9 +53,9 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactLoader.promise.unregister(contactsLoadedCallback);
+		contactsLoader.contactsLoaded.unregister(contactsLoadedCallback);
 
-		phoneNumberLoader.promise.unregister(phoneNumbersLoadedCallback);
+		contactsLoader.numbersLoaded.unregister(phoneNumbersLoadedCallback);
 
 		fullyLoadedPromise.unregister(fullyLoadedCallback);
 
@@ -92,8 +87,6 @@ public abstract class DataActivity extends ActionBarActivity {
 			if(contactsLoaded) return;
 
 			contactsLoaded = true;
-
-            phoneNumberLoader.execute(new PhoneNumberLoader.Argument(self, contacts));
 
             self.contacts = contacts;
 

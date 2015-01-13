@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Contacts;
+import com.johnsimon.payback.util.ContactsLoader;
 
 public abstract class DataDialogFragment extends DialogFragment {
     protected Storage storage;
@@ -13,8 +14,7 @@ public abstract class DataDialogFragment extends DialogFragment {
 
     public Contacts contacts;
 
-	private Promise<Contacts> contactsPromise;
-	private Promise<Contacts> phoneNumbersPromise;
+	private ContactsLoader contactsLoader;
 	private Promise fullyLoadedPromise;
 
     @Override
@@ -23,9 +23,7 @@ public abstract class DataDialogFragment extends DialogFragment {
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
 
-		contactsPromise = activity.contactLoader.promise;
-
-		phoneNumbersPromise = activity.phoneNumberLoader.promise;
+		contactsLoader = activity.contactsLoader;
 
 		fullyLoadedPromise = activity.fullyLoadedPromise;
 
@@ -38,9 +36,9 @@ public abstract class DataDialogFragment extends DialogFragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactsPromise.then(contactsLoadedCallback);
+		contactsLoader.contactsLoaded.then(contactsLoadedCallback);
 
-		phoneNumbersPromise.then(phoneNumbersLoadedCallback);
+		contactsLoader.numbersLoaded.then(phoneNumbersLoadedCallback);
 
 	}
 
@@ -50,9 +48,9 @@ public abstract class DataDialogFragment extends DialogFragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactsPromise.unregister(contactsLoadedCallback);
+		contactsLoader.contactsLoaded.unregister(contactsLoadedCallback);
 
-		phoneNumbersPromise.unregister(phoneNumbersLoadedCallback);
+		contactsLoader.numbersLoaded.unregister(phoneNumbersLoadedCallback);
 
 		fullyLoadedPromise.unregister(fullyLoadedCallback);
 	}
