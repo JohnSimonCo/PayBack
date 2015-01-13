@@ -23,4 +23,9 @@
 
     </item>
 
+    <item
+        app:showAsAction="never"
+        android:id="@+id/feed_menu_pay_back"
+        android:title="@string/pay_with_swish"    />
+
 </menu>

@@ -1,6 +1,7 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -23,8 +24,10 @@ import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.SwishLauncher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,15 +39,17 @@ public class FeedActivity extends DataActivity implements
     public static BillingProcessor bp;
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
-
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
-	public static Toolbar toolbar;
+	public static boolean hasLoadedPhoneNumbers = false;
 
+	public static Toolbar toolbar;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
 	private MenuItem filterAmount;
+	private MenuItem fulllMenuPay;
+	public static MenuItem detailMenuPay;
 
 	private NavigationDrawerFragment navigationDrawerFragment;
 
@@ -191,6 +196,23 @@ public class FeedActivity extends DataActivity implements
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
 
+		fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+
+		if (isAll()) {
+			fulllMenuPay.setVisible(false);
+		} else {
+			if (hasLoadedPhoneNumbers) {
+				if (person.hasNumbers() && SwishLauncher.hasService(this)) {
+					fulllMenuPay.setEnabled(true);
+				} else {
+					fulllMenuPay.setEnabled(false);
+				}
+			} else {
+				fulllMenuPay.setEnabled(false);
+			}
+
+		}
+
 		restoreActionBar();
 		return true;
 	}
@@ -208,6 +230,23 @@ public class FeedActivity extends DataActivity implements
 			case R.id.menu_filter_amount:
 				item.setChecked(true);
 				sortAmount();
+				break;
+
+			case R.id.feed_menu_pay_back:
+
+				final Activity self = this;
+
+				new MaterialDialog.Builder(this)
+						.title(R.string.phone_number)
+						.items(new CharSequence[]{"0701111111", "0702222222", "0703333333", "0704444444"})
+						.itemsCallback(new MaterialDialog.ListCallback() {
+							@Override
+							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								data.feed(person);
+								SwishLauncher.startSwish(self, Float.toString(AppData.total(data.feed(person))).replaceAll("\\.0*$", ""), "0702222222");
+							}
+						})
+						.show();
 				break;
 
 		}
@@ -402,7 +441,22 @@ public class FeedActivity extends DataActivity implements
         super.onDestroy();
     }
 
-    @Override
+	@Override
+	protected void onPhoneNumbersLoaded() {
+		hasLoadedPhoneNumbers = true;
+
+		if (person.hasNumbers() && SwishLauncher.hasService(this)) {
+			fulllMenuPay.setEnabled(true);
+			FeedActivity.detailMenuPay.setEnabled(true);
+		} else {
+			fulllMenuPay.setEnabled(false);
+			FeedActivity.detailMenuPay.setEnabled(false);
+		}
+
+		super.onPhoneNumbersLoaded();
+	}
+
+	@Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
         Resource.checkFull(bp);
 

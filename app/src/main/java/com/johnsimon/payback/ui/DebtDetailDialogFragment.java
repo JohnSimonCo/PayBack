@@ -1,5 +1,6 @@
 package com.johnsimon.payback.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -13,11 +14,14 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
 
 public class DebtDetailDialogFragment extends DataDialogFragment implements PaidBackDialogFragment.CompleteCallback {
@@ -113,6 +117,19 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
+
+				FeedActivity.detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
+				if (FeedActivity.hasLoadedPhoneNumbers) {
+					if (debt.getOwner().hasNumbers() && SwishLauncher.hasService(getActivity())) {
+						FeedActivity.detailMenuPay.setEnabled(true);
+					} else {
+						FeedActivity.detailMenuPay.setEnabled(false);
+					}
+				} else {
+					FeedActivity.detailMenuPay.setEnabled(false);
+				}
+
+
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -146,6 +163,23 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 
                                 alertDialog.cancel();
                                 return true;
+
+							case R.id.detail_dialog_pay_back:
+								final Activity self = getActivity();
+
+								new MaterialDialog.Builder(self)
+										.title(R.string.phone_number)
+										.items(new CharSequence[]{"0701111111", "0702222222", "0703333333", "0704444444"})
+										.itemsCallback(new MaterialDialog.ListCallback() {
+											@Override
+											public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+												data.feed(debt.getOwner());
+												SwishLauncher.startSwish(self, Float.toString(AppData.total(data.feed(debt.getOwner()))).replaceAll("\\.0*$", ""), "0702222222");
+											}
+										})
+										.show();
+
+								return true;
 
                             default:
                                 return false;

@@ -25,7 +25,7 @@ import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.core.Syncable;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
-import com.nispok.snackbar.Snackbar;
+import com.williammora.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
