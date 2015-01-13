@@ -101,7 +101,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
                                     final int restorePersonIndex = data.people.indexOf(person);
 
-                                    Snackbar.with(getActivity())
+                                    Snackbar.with(getActivity().getApplicationContext())
                                             .text(getString(R.string.deleted_person))
                                             .actionLabel(getString(R.string.undo))
                                             .actionColor(getResources().getColor(R.color.green))
@@ -141,7 +141,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
 			data.rename(person, name);
 
-            Snackbar.with(getActivity())
+            Snackbar.with(getActivity().getApplicationContext())
                     .text(getString(R.string.renamed_person))
                     .actionLabel(getString(R.string.undo))
                     .actionColor(getResources().getColor(R.color.green))
@@ -180,7 +180,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                 }
                             }
 
-                            Snackbar.with(getActivity())
+                            Snackbar.with(getActivity().getApplicationContext())
                                     .text(getString(R.string.merged_people))
                                     .actionLabel(getString(R.string.undo))
                                     .actionColor(getResources().getColor(R.color.green))

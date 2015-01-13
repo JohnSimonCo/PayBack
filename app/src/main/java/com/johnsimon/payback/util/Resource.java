@@ -142,11 +142,11 @@ public class Resource {
         return (int) (dp * res.getDisplayMetrics().density + 0.5f);
     }
 
-    public static boolean isLOrAbove() {
-        return Build.VERSION.SDK_INT >= 21;
-    }
 	public static boolean isKkOrAbove() {
 		return Build.VERSION.SDK_INT >= 19;
+	}
+	public static boolean isLOrAbove() {
+		return Build.VERSION.SDK_INT >= 21;
 	}
 
     public static CharSequence getRelativeTimeString(Context ctx, long timestamp) {

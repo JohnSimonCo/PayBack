@@ -214,7 +214,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                         final int index = data.debts.indexOf(debt);
                         final int indexFeed = FeedActivity.feed.indexOf(debt);
 
-                        Snackbar.with(getActivity())
+                        Snackbar.with(getActivity().getApplicationContext())
                                 .text(getString(R.string.deleted_debt))
                                 .actionLabel(getString(R.string.undo))
                                 .actionColor(getResources().getColor(R.color.green))

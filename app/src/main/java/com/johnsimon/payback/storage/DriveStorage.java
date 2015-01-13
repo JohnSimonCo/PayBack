@@ -320,7 +320,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     protected void show(String text) {
-        Snackbar.with(activity)
+        Snackbar.with(activity.getApplicationContext())
                 .text(text)
                 .show(activity);
     }

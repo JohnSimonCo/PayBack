@@ -12,14 +12,21 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.PeopleListAdapter;
@@ -31,6 +38,7 @@ import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleFloatViewManager;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -47,6 +55,8 @@ public class PeopleManagerActivity extends DataActivity {
     private int sortAzY;
 
     private ArrayList<Person> personListBeforeSort;
+
+	int layoutCount = 0;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -68,7 +78,7 @@ public class PeopleManagerActivity extends DataActivity {
 
         setContentView(R.layout.activity_people_manager);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
@@ -81,6 +91,7 @@ public class PeopleManagerActivity extends DataActivity {
         controller.setRemoveEnabled(false);
         controller.setSortEnabled(true);
         controller.setDragInitMode(DragSortController.ON_DRAG);
+		controller.setDragHandleId(R.id.people_list_item_handle);
 
         listView.setFloatViewManager(controller);
         listView.setOnTouchListener(controller);
@@ -111,8 +122,8 @@ public class PeopleManagerActivity extends DataActivity {
 		});
 
         final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
-        people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
-        people_manager_empty_image.post(new Runnable() {
+		people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
+		people_manager_empty_image.post(new Runnable() {
             @Override
             public void run() {
                 AnimationDrawable frameAnimation = (AnimationDrawable) people_manager_empty_image.getBackground();
@@ -120,7 +131,34 @@ public class PeopleManagerActivity extends DataActivity {
             }
         });
 
-        setupTreeObserver();
+		TypedValue tv = new TypedValue();
+		if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+
+			int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+
+			if (Resource.isLOrAbove()) {
+				ImageButton fab = (ImageButton) findViewById(R.id.feed_fab_l);
+
+				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
+				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - Math.round(getResources().getDimension(R.dimen.fab_size) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
+
+				fab.setLayoutParams(params);
+
+				fab.setOnClickListener(fabClickListener);
+			} else {
+				FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.feed_fab);
+
+				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
+				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - (Resource.getPx(56, getResources()) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
+
+				fab.setLayoutParams(params);
+
+				fab.setOnClickListener(fabClickListener);
+			}
+		}
+
+		setupTreeObserver();
+
     }
 
 	@Override
@@ -129,7 +167,29 @@ public class PeopleManagerActivity extends DataActivity {
 		listView.setAdapter(adapter);
 	}
 
-	@Override
+	private View.OnClickListener fabClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			PersonPickerDialogFragment fragment = new PersonPickerDialogFragment();
+			Bundle args = new Bundle();
+			args.putString(PersonPickerDialogFragment.TITLE_KEY, getString(R.string.add_person));
+			fragment.setArguments(args);
+
+			fragment.completeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
+				@Override
+				public void onSelected(String name) {
+					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
+					data.people.add(person);
+					storage.commit();
+					adapter.notifyDataSetChanged();
+				}
+			};
+
+			fragment.show(getFragmentManager(), "person_picker");
+		}
+	};
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Only show items in the action bar relevant to this screen
         // if the drawer is not showing. Otherwise, let the drawer
@@ -151,26 +211,6 @@ public class PeopleManagerActivity extends DataActivity {
 
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
-                break;
-
-            case R.id.action_people_plus:
-                PersonPickerDialogFragment fragment = new PersonPickerDialogFragment();
-                Bundle args = new Bundle();
-                args.putString(PersonPickerDialogFragment.TITLE_KEY, getString(R.string.add_person));
-                fragment.setArguments(args);
-
-                fragment.completeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
-                    @Override
-                    public void onSelected(String name) {
-                        Person person = new Person(name, ColorPalette.getInstance(self));
-                        data.people.add(person);
-                        storage.commit();
-                        adapter.notifyDataSetChanged();
-                    }
-                };
-
-                fragment.show(getFragmentManager(), "person_picker");
-
                 break;
 
 			case R.id.action_sort_az:
@@ -298,22 +338,23 @@ public class PeopleManagerActivity extends DataActivity {
     private void setupTreeObserver() {
         final ViewTreeObserver viewTreeObserver = getWindow().getDecorView().getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                View menuButton = findViewById(R.id.action_sort_az);
-                if (menuButton != null) {
-                    int[] location = new int[2];
-                    menuButton.getLocationInWindow(location);
+			@Override
+			public void onGlobalLayout() {
+				View menuButton = findViewById(R.id.action_sort_az);
+				if (menuButton != null) {
+					int[] location = new int[2];
+					menuButton.getLocationInWindow(location);
 
-                    sortAzX = location[0];
-                    sortAzY = location[1];
+					sortAzX = location[0];
+					sortAzY = location[1];
 
-                    if (viewTreeObserver.isAlive()) {
-                        viewTreeObserver.removeGlobalOnLayoutListener(this);
-                    }
-                }
-            }
-        });
+					if (viewTreeObserver.isAlive()) {
+						viewTreeObserver.removeGlobalOnLayoutListener(this);
+					}
+
+				}
+			}
+		});
     }
 
 	public void returnToFeed() {
