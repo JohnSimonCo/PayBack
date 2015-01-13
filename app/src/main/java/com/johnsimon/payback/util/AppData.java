@@ -243,16 +243,6 @@ public class AppData {
         return sender.name;
     }
 
-	public void link(Contacts contacts) {
-		for(Person person : people) {
-			for(Contact contact : contacts) {
-				if(contact.matchTo(person)) {
-					person.linkTo(contact);
-				}
-			}
-		}
-	}
-
     public static AppData fromJson(String JSON) {
         return JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract();
     }

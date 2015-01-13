@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Contacts;
-import com.johnsimon.payback.util.ContactsLoader;
+import com.johnsimon.payback.loader.ContactsLoader;
 
 public abstract class DataDialogFragment extends DialogFragment {
     protected Storage storage;

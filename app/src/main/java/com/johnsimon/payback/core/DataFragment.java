@@ -7,10 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Contacts;
-import com.johnsimon.payback.util.ContactsLoader;
+import com.johnsimon.payback.loader.ContactsLoader;
 
 /**
  * Created by johnrs on 2015-01-02.
@@ -21,9 +22,7 @@ public abstract class DataFragment extends Fragment {
 
     public Contacts contacts;
 
-	private ContactsLoader contactsLoader;
-
-	private Promise fullyLoadedPromise;
+	private ContactLoader contactLoader;
 
     @Nullable
     @Override
@@ -32,7 +31,7 @@ public abstract class DataFragment extends Fragment {
         DataActivity activity = (DataActivity) getActivity();
         this.storage = activity.storage;
 
-		fullyLoadedPromise = activity.fullyLoadedPromise;
+		contactLoader = activity.contactLoader;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -43,9 +42,9 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactsLoader.contactsLoaded.then(contactsLoadedCallback);
+		contactLoader.contactsLoaded.then(contactsLoadedCallback);
 
-		contactsLoader.numbersLoaded.then(phoneNumbersLoadedCallback);
+		contactLoader.phoneNumbersLoaded.then(phoneNumbersLoadedCallback);
 	}
 
 	@Override
@@ -54,11 +53,9 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactsLoader.contactsLoaded.unregister(contactsLoadedCallback);
+		contactLoader.contactsLoaded.unregister(contactsLoadedCallback);
 
-		contactsLoader.numbersLoaded.unregister(phoneNumbersLoadedCallback);
-
-		fullyLoadedPromise.unregister(fullyLoadedCallback);
+		contactLoader.phoneNumbersLoaded.unregister(phoneNumbersLoadedCallback);
 	}
 
 	private DataFragment self = this;
@@ -81,8 +78,6 @@ public abstract class DataFragment extends Fragment {
 			self.contacts = contacts;
 
 			onContactsLoaded();
-
-			fullyLoadedPromise.then(fullyLoadedCallback);
         }
     };
 
@@ -110,19 +105,18 @@ public abstract class DataFragment extends Fragment {
         }
     };
 
-    protected void onDataReceived() {
+	protected void onDataReceived() {
+	}
 
-    }
+	protected void onDataLinked() {
+	}
 
-    protected void onContactsLoaded() {
+	protected void onContactsLoaded() {
+	}
 
-    }
+	protected void onUserLoaded() {
+	}
 
-    protected void onPhoneNumbersLoaded() {
-
-    }
-
-    protected void onFullyLoaded() {
-
-    }
+	protected void onPhoneNumbersLoaded() {
+	}
 }

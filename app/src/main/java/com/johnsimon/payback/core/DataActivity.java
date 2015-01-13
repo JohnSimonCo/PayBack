@@ -4,24 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Contacts;
-import com.johnsimon.payback.util.ContactsLoader;
+import com.johnsimon.payback.util.DataLinker;
 
-/**
- * Created by johnrs on 2015-01-02.
- */
 public abstract class DataActivity extends ActionBarActivity {
 
     protected Storage storage;
     public AppData data;
 
-    protected ContactsLoader contactsLoader;
+	protected Subscription<AppData> dataLinkedSubscription;
+    protected ContactLoader contactLoader;
     public Contacts contacts;
-
-    protected Promise fullyLoadedPromise;
+	public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +27,9 @@ public abstract class DataActivity extends ActionBarActivity {
 
         storage = StorageManager.getStorage(this);
 
-		contactsLoader = ContactsLoader.run(this);
+		contactLoader = ContactLoader.getLoader(this);
 
-        fullyLoadedPromise = Promise.all(storage.promise, contactsLoader.contactsLoaded);
+		dataLinkedSubscription = DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
     }
 
 	@Override
@@ -40,9 +38,13 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactsLoader.contactsLoaded.then(contactsLoadedCallback);
+		dataLinkedSubscription.listen(dataLinkedCallback);
 
-		contactsLoader.numbersLoaded.then(phoneNumbersLoadedCallback);
+		contactLoader.contactsLoaded.then(contactsLoadedCallback);
+
+		contactLoader.userLoaded.then(userLoadedCallback);
+
+		contactLoader.phoneNumbersLoaded.then(phoneNumbersLoadedCallback);
 
 		storage.connect();
     }
@@ -53,11 +55,11 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactsLoader.contactsLoaded.unregister(contactsLoadedCallback);
+		contactLoader.contactsLoaded.unregister(contactsLoadedCallback);
 
-		contactsLoader.numbersLoaded.unregister(phoneNumbersLoadedCallback);
+		contactLoader.userLoaded.unregister(userLoadedCallback);
 
-		fullyLoadedPromise.unregister(fullyLoadedCallback);
+		contactLoader.phoneNumbersLoaded.unregister(phoneNumbersLoadedCallback);
 
         storage.disconnect();
     }
@@ -80,6 +82,13 @@ public abstract class DataActivity extends ActionBarActivity {
         }
     };
 
+	private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
+		@Override
+		public void onCalled(AppData data) {
+			onDataLinked();
+		}
+	};
+
 	private boolean contactsLoaded = false;
     private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
         @Override
@@ -91,10 +100,22 @@ public abstract class DataActivity extends ActionBarActivity {
             self.contacts = contacts;
 
             onContactsLoaded();
-
-			fullyLoadedPromise.then(fullyLoadedCallback);
 		}
     };
+
+	private boolean userLoaded = false;
+	private Callback<User> userLoadedCallback = new Callback<User>() {
+		@Override
+		public void onCalled(User user) {
+			if(userLoaded) return;
+
+			userLoaded = true;
+
+			self.user = user;
+
+			onUserLoaded();
+		}
+	};
 
 	private boolean phoneNumbersLoaded = false;
     private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
@@ -108,31 +129,19 @@ public abstract class DataActivity extends ActionBarActivity {
         }
     };
 
-	private boolean fullyLoaded = false;
-    private Callback fullyLoadedCallback = new Callback() {
-        @Override
-        public void onCalled(Object data) {
-			if(fullyLoaded) return;
-
-			fullyLoaded = true;
-
-            onFullyLoaded();
-        }
-    };
-
     protected void onDataReceived() {
-
     }
+
+	protected void onDataLinked() {
+	}
 
     protected void onContactsLoaded() {
-
     }
+
+	protected void onUserLoaded() {
+	}
 
     protected void onPhoneNumbersLoaded() {
-		data.link(contacts);
     }
 
-    protected void onFullyLoaded() {
-
-    }
 }
