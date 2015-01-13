@@ -260,6 +260,8 @@ public class Resource {
 
     public static void checkFull(BillingProcessor bp) {
         isFull =  bp.isPurchased("full_version");
+
+		//TODO dont use this
 		isFull = true;
     }
 
