@@ -100,5 +100,21 @@ public class Debt implements Syncable<Debt> {
     }
 
     public static Debt sync(Debt a, Debt b) {
+		//TODO implement
         return a;
-    }}
+    }
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Debt))return false;
+		Debt other = (Debt) o;
+
+		return id.equals(other.id)
+			&& owner.id.equals(other.owner.id)
+			&& amount == other.amount
+			&& note == null ? other.note == null : note.equals(other.note)
+			&& isPaidBack == other.isPaidBack;
+	}
+}

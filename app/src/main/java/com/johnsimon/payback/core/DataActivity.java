@@ -43,18 +43,32 @@ public abstract class DataActivity extends ActionBarActivity {
         fullyLoadedPromise.then(fullyLoadedCallback);
     }
 
-    @Override
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		storage.connect();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		storage.disconnect();
+	}
+
+	@Override
     protected void onStart() {
         super.onStart();
 
-        storage.connect();
+       // storage.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        storage.disconnect();
+       // storage.disconnect();
     }
 
     @Override

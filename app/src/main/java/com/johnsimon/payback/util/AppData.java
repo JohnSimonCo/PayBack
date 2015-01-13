@@ -12,6 +12,8 @@ import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class AppData {
@@ -250,4 +252,16 @@ public class AppData {
     public static String toJson(AppData data) {
         return new Gson().toJson(new AppDataSerializable(data), AppDataSerializable.class);
     }
+
+	@Override
+	public boolean equals(Object o){
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof AppData))return false;
+		AppData other = (AppData) o;
+
+		return people.equals(other.people)
+			&& debts.equals(other.debts)
+			&& deleted.equals(other.deleted);
+	}
 }

@@ -51,6 +51,18 @@ public class Person implements Syncable<Person> {
     }
 
     public static Person sync(Person a, Person b) {
-        return a;
+		//TODO implement
+		return a;
     }
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Person))return false;
+		Person other = (Person) o;
+
+		return id.equals(other.id)
+			&& name.equals(other.name);
+	}
 }
