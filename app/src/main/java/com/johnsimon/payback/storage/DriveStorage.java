@@ -108,7 +108,14 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
 	}
 
-    private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
+	@Override
+	public void requestRefresh() {
+		if(client.isConnected()) {
+			refresh();
+		}
+	}
+
+	private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
         @Override
         public void onResult(Status status) {
             if(!status.isSuccess()) {
@@ -219,27 +226,27 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     private void write(final String text, final DriveFile file, final ResultCallback<FileResult> callback) {
         file.open(client, DriveFile.MODE_WRITE_ONLY, null).setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
-            @Override
-            public void onResult(DriveApi.DriveContentsResult result) {
-                if (!result.getStatus().isSuccess()) {
-                    callback.onResult(new FileResult(result.getStatus()));
-                    return;
-                }
+			@Override
+			public void onResult(DriveApi.DriveContentsResult result) {
+				if (!result.getStatus().isSuccess()) {
+					callback.onResult(new FileResult(result.getStatus()));
+					return;
+				}
 
-                DriveContents contents = result.getDriveContents();
-                try {
-                    contents.getOutputStream().write(text.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                contents.commit(client, null).setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        callback.onResult(new FileResult(file, text, status));
-                    }
-                });
-            }
-        });
+				DriveContents contents = result.getDriveContents();
+				try {
+					contents.getOutputStream().write(text.getBytes());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				contents.commit(client, null).setResultCallback(new ResultCallback<Status>() {
+					@Override
+					public void onResult(Status status) {
+						callback.onResult(new FileResult(file, text, status));
+					}
+				});
+			}
+		});
 
     }
 

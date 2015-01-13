@@ -167,6 +167,8 @@ public class FeedActivity extends DataActivity implements
         getFragmentManager().beginTransaction()
 				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 				.commit();
+
+		storage.requestRefresh();
 	}
 
 	@Override
