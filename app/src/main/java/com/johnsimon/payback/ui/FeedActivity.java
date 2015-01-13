@@ -124,6 +124,13 @@ public class FeedActivity extends DataActivity implements
         } else {
             feed = data.feed(person);
         }
+
+		if (filterAmount.isChecked()) {
+			sortAmount();
+		} else {
+			sortTime();
+		}
+
     }
 
     @Override
@@ -194,7 +201,7 @@ public class FeedActivity extends DataActivity implements
 		// decide what to show in the action bar.
 		getMenuInflater().inflate(R.menu.feed, menu);
 
-		filterAmount = menu.findItem(R.id.menu_filter_amount);
+		filterAmount = menu.findItem(R.id.menu_filter).getSubMenu().getItem(1);//TODO make sure works	menu.findItem(R.id.menu_filter_amount);
 
 		fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
 
@@ -447,10 +454,10 @@ public class FeedActivity extends DataActivity implements
 
 		if (person.hasNumbers() && SwishLauncher.hasService(this)) {
 			fulllMenuPay.setEnabled(true);
-			FeedActivity.detailMenuPay.setEnabled(true);
+			detailMenuPay.setEnabled(true);
 		} else {
 			fulllMenuPay.setEnabled(false);
-			FeedActivity.detailMenuPay.setEnabled(false);
+			detailMenuPay.setEnabled(false);
 		}
 
 		super.onPhoneNumbersLoaded();
