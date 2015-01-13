@@ -2,9 +2,6 @@ package com.johnsimon.payback.core;
 
 import java.util.ArrayList;
 
-/**
- * Created by johnrs on 2015-01-04.
- */
 public class Subscription<D> {
     private ArrayList<Callback<D>> callbacks = new ArrayList<>();
     private D data = null;

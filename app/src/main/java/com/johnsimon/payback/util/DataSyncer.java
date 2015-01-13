@@ -1,20 +1,14 @@
 package com.johnsimon.payback.util;
 
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.Syncable;
 import com.johnsimon.payback.core.SyncedData;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.UUID;
 
-/**
- * Created by johnrs on 2015-01-04.
- */
 public class DataSyncer {
     public static AppData sync(AppData a, AppData b) {
         HashSet<UUID> deleted = new HashSet<>();

@@ -13,9 +13,6 @@ import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Contacts;
 import com.johnsimon.payback.loader.ContactsLoader;
 
-/**
- * Created by johnrs on 2015-01-02.
- */
 public abstract class DataFragment extends Fragment {
     protected Storage storage;
     public AppData data;

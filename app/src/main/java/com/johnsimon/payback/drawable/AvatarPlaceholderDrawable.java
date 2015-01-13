@@ -1,6 +1,5 @@
 package com.johnsimon.payback.drawable;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;

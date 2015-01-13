@@ -2,9 +2,6 @@ package com.johnsimon.payback.serialize;
 
 import java.util.UUID;
 
-/**
- * Created by John on 2015-01-13.
- */
 public class SyncedDataSerializable {
 	public UUID id;
 	public long touched;

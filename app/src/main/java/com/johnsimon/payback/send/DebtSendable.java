@@ -5,9 +5,6 @@ import com.johnsimon.payback.core.Person;
 
 import java.util.UUID;
 
-/**
- * Created by John on 2014-11-13.
- */
 public class DebtSendable {
     public UUID id;
 	public float amount;

@@ -17,16 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.PeopleListAdapter;
@@ -55,8 +51,6 @@ public class PeopleManagerActivity extends DataActivity {
     private int sortAzY;
 
     private ArrayList<Person> personListBeforeSort;
-
-	int layoutCount = 0;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -220,15 +214,6 @@ public class PeopleManagerActivity extends DataActivity {
 
                 Collections.sort(data.people, new Resource.AlphabeticalComparator());
                 storage.commit();
-
-				/*
-                if (Resource.areIdenticalLists(personListBeforeSort, data.people)) {
-					Snackbar.with(getApplicationContext())
-							.text(getString(R.string.already_sorted))
-							.show(this);
-                    break;
-                }
-				*/
 
 				if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
                     adapter.notifyDataSetChanged();

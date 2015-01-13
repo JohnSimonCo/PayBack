@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.view.NDSpinner;
 

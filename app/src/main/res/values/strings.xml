@@ -99,6 +99,9 @@
     <string name="wipe_data_confirm_free">Are you sure you want to delete all app data?</string>
     <string name="wipe_data_confirm_full">Are you sure you want to delete all app data? This includes Google Drive save data.</string>
     <string name="wipe">Wipe</string>
+    <string name="phone_number">Phone number</string>
+    <string name="swish_copy_toast_end">copied to clipboard</string>
+    <string name="pay_with_swish">Pay with Swish</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
