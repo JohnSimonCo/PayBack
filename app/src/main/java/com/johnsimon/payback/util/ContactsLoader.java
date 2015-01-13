@@ -10,9 +10,6 @@ import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.core.User;
 
-/**
- * Created by John on 2015-01-13.
- */
 public class ContactsLoader implements Runnable {
 
 	private ContentResolver contentResolver;

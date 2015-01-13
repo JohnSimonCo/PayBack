@@ -7,9 +7,6 @@ import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.core.Subscription;
 import com.johnsimon.payback.util.AppData;
 
-/**
- * Created by johnrs on 2015-01-02.
- */
 public abstract class Storage {
     protected Context context;
     public Subscription<AppData> subscription = new Subscription<>();

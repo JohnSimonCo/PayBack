@@ -3,9 +3,6 @@ package com.johnsimon.payback.send;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.User;
 
-/**
- * Created by John on 2014-11-13.
- */
 public class NfcData {
 	public DebtSendable[] debts;
 	public User sender;

@@ -5,9 +5,6 @@ import android.text.TextUtils;
 
 import com.johnsimon.payback.R;
 
-/**
- * Created by John on 2014-11-13.
- */
 public class User {
 	public String name;
 	public String[] numbers;

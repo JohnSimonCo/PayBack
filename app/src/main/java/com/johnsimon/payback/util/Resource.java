@@ -1,7 +1,6 @@
 package com.johnsimon.payback.util;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,7 +22,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.makeramen.RoundedImageView;
@@ -31,7 +29,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Resource {

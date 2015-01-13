@@ -11,7 +11,6 @@ import android.content.pm.ResolveInfo;
 import android.widget.Toast;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Debt;
 
 import java.util.List;
 

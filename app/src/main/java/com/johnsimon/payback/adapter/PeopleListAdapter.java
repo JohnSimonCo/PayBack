@@ -1,12 +1,10 @@
 package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
@@ -14,8 +12,6 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
-
-import java.util.ArrayList;
 
 public class PeopleListAdapter extends ArrayAdapter<Person> {
 	private final Activity context;

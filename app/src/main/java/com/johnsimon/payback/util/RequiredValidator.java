@@ -4,8 +4,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.johnsimon.payback.util.ValidatorListener;
-
 public class RequiredValidator implements TextWatcher {
 
 	EditText[] editTexts;

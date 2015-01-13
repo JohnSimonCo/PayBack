@@ -22,7 +22,6 @@ import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.johnsimon.payback.core.Callback;
-import com.johnsimon.payback.core.Syncable;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
 import com.williammora.snackbar.Snackbar;
