@@ -175,15 +175,43 @@
                 android:layout_height="wrap_content" />
 
             <TextView
+            style="@style/library_title"
+            android:text="@string/lib_md"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
+                android:text="@string/author_md"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
                 style="@style/library_title"
-                android:text="@string/lib_md"
+                android:text="@string/lib_rbm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <com.devspark.robototextview.widget.RobotoTextView
                 app:fontFamily="roboto"
                 app:textWeight="medium"
-                android:text="@string/author_md"
+                android:text="@string/author_rbm"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/library_title"
+                android:text="@string/lib_iab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
+                android:text="@string/author_iab"
                 style="@style/library_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

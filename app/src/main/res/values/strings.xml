@@ -115,6 +115,10 @@
     <string name="author_snb">William Mora</string>
     <string name="lib_md">Material Dialogs</string>
     <string name="author_md">Aidan Follestad</string>
+    <string name="lib_rbm">Android-RobotoTextView</string>
+    <string name="author_rbm">Evgeny Shishkin</string>
+    <string name="lib_iab">Android In-App Billing</string>
+    <string name="author_iab">AnjLab</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>

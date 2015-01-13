@@ -9,8 +9,10 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_az"  />
 
-    <item android:id="@+id/action_settings"
+    <item
+        android:id="@+id/action_settings"
         android:title="@string/pref_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+
 </menu>

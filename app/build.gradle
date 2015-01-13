@@ -28,7 +28,7 @@ dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.android.support:appcompat-v7:21.0.+'
     compile 'com.android.support:recyclerview-v7:21.0.+'
-    compile 'com.shamanland:fab:0.0.5'
+    compile 'com.shamanland:fab:0.0.7'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.makeramen:roundedimageview:1.4.0'
@@ -36,5 +36,5 @@ dependencies {
     compile 'com.anjlab.android.iab.v3:library:1.0.+@aar'
     compile 'com.google.android.gms:play-services-drive:6.5.+'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
-    compile 'com.afollestad:material-dialogs:0.5.5'
+    compile 'com.afollestad:material-dialogs:0.6.0'
 }
