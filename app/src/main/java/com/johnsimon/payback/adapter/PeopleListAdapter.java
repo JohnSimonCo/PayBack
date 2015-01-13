@@ -50,7 +50,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
 		}
 
 		Person person = data.people.get(position);
-		holder.name.setText(person.name);
+		holder.name.setText(person.getName());
         int debts = data.feed(person).size();
         if (debts == 1) {
             holder.debtsCount.setText(debts +  " " + context.getString(R.string.debt_single));

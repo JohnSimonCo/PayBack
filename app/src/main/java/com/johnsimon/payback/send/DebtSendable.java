@@ -17,14 +17,14 @@ public class DebtSendable {
 
 	public DebtSendable(Debt debt) {
 		this.id = debt.id;
-        this.amount = debt.amount;
-		this.note = debt.note;
+        this.amount = debt.getAmount();
+		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
-		this.isPaidBack = debt.isPaidBack;
+		this.isPaidBack = debt.isPaidBack();
 	}
 
 	public Debt extract(Person person) {
 		//Reverse amount
-		return new Debt(person, -amount, note, id, timestamp, isPaidBack);
+		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), isPaidBack);
 	}
 }

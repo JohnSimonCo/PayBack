@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,6 +22,7 @@ import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.core.Syncable;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
 import com.nispok.snackbar.Snackbar;
@@ -71,7 +73,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     public void sync(AppData driveData) {
 		show("checking for changes from drive");
 
-		//TODO performance improvement using savedata instead
 		if(!driveData.equals(localStorage.data)) {
 			show("found changes and synced");
 
@@ -93,7 +94,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
             @Override
             public void onResult(FileResult result) {
                 if(!result.getStatus().isSuccess()) {
-                    show("Error when commiting");
+                    error("Error when commiting", result.getStatus());
                     return;
                 }
                 show("commited data to drive");
@@ -107,14 +108,21 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     }
 
 	private void refresh() {
+		lastRefresh = System.currentTimeMillis();
 		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
 	}
 
 	@Override
 	public void requestRefresh() {
-		if(client.isConnected()) {
+		if(client.isConnected() && mayRefresh()) {
 			refresh();
 		}
+	}
+
+	private final static long MAX_REFRESH_FREQ = 3000;
+	private Long lastRefresh;
+	private boolean mayRefresh() {
+		return  System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
 	}
 
 	private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
@@ -130,7 +138,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 					@Override
 					public void onResult(DriveApi.MetadataBufferResult result) {
 						if (!result.getStatus().isSuccess()) {
-							show("Error listing children");
+							error("Error listing children", result.getStatus());
 							return;
 						}
 
@@ -138,11 +146,11 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 						int count = buffer.getCount();
 						if (count > 0) {
 							Metadata data = buffer.get(0);
-							show("File exists " + count);
+							//show("File exists " + count);
 
 							read(data.getDriveId(), fileFoundCallback);
 						} else {
-							show("File doesn't exists");
+							//show("File doesn't exists");
 
 							createFile(data.save(), fileCreatedCallback);
 						}
@@ -156,7 +164,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         @Override
         public void onResult(FileResult result) {
             if(!result.getStatus().isSuccess()) {
-                show("Error when reading file");
+                error("Error when reading file", result.getStatus());
                 return;
             }
 
@@ -164,7 +172,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
             String JSON = result.getText();
 
-            show("File says " + JSON);
+            //show("File says " + JSON);
 
             sync(AppData.fromJson(JSON));
         }
@@ -174,7 +182,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         @Override
         public void onResult(FileResult result) {
             if (!result.getStatus().isSuccess()) {
-                show("Error while trying to write file");
+                error("Error while trying to write file", result.getStatus());
                 return;
             }
 
@@ -195,7 +203,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                 @Override
                 public void onResult(DriveApi.DriveContentsResult result) {
                     if (!result.getStatus().isSuccess()) {
-                        show("Error while trying to create new file contents");
+                        error("Error while trying to create new file contents", result.getStatus());
                         return;
                     }
 
@@ -211,7 +219,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                             @Override
                             public void onResult(DriveFolder.DriveFileResult result) {
                                 if (!result.getStatus().isSuccess()) {
-                                    show("Error while trying to create file");
+                                    error("Error while trying to create file", result.getStatus());
                                     return;
                                 }
 
@@ -283,7 +291,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		if(!client.isConnected()) {
 			client.connect();
 		} else {
-			refresh();
+			requestRefresh();
 			keepAlive = true;
 		}
     }
@@ -333,6 +341,13 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                 .text(text)
                 .show(activity);
     }
+
+	protected void error(String title, Status status) {
+		new MaterialDialog.Builder(activity)
+				.title(title)
+				.content(status.getStatus() + ": " + status.getStatusMessage())
+				.show();
+	}
 
     private static class FileResult implements Result {
         private DriveFile file;

@@ -221,14 +221,16 @@ public class PeopleManagerActivity extends DataActivity {
                 Collections.sort(data.people, new Resource.AlphabeticalComparator());
                 storage.commit();
 
+				/*
                 if (Resource.areIdenticalLists(personListBeforeSort, data.people)) {
 					Snackbar.with(getApplicationContext())
 							.text(getString(R.string.already_sorted))
 							.show(this);
                     break;
                 }
+				*/
 
-                if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
+				if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
                     adapter.notifyDataSetChanged();
 
                     Snackbar.with(getApplicationContext())

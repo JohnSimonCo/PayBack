@@ -24,16 +24,16 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 
         ContentResolver contentResolver = context.getContentResolver();
 
-        contacts.user.setNumber(getUserPhoneNumber(contentResolver));
+        contacts.user.setNumbers(getUserPhoneNumbers(contentResolver));
 
         for(Contact contact : contacts) {
-            contact.setNumber(getContactPhoneNumber(contentResolver, contact.id));
+            contact.setNumbers(getContactPhoneNumbers(contentResolver, contact.id));
         }
 
         return contacts;
     }
 
-    private static String getUserPhoneNumber(ContentResolver contentResolver) {
+    private static String[] getUserPhoneNumbers(ContentResolver contentResolver) {
         Cursor cursor = contentResolver.query(
                 Uri.withAppendedPath(
                         ContactsContract.Profile.CONTENT_URI,
@@ -41,30 +41,31 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
                 new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER},
                 null, null, null);
 
-        String number = null;
-        if(cursor.moveToFirst()) {
-            number = cursor.getString(0);
-        }
-
-        cursor.close();
-
-        return normalizePhoneNumber(number);
+		return getPhoneNumbers(cursor, 0);
     }
 
-    private static String getContactPhoneNumber(ContentResolver contentResolver, long id) {
+    private static String[] getContactPhoneNumbers(ContentResolver contentResolver, long id) {
         Cursor cursor = contentResolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
 
-        String number = null;
-        if(cursor.moveToFirst()) {
-            number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        }
-
-        cursor.close();
-
-        return normalizePhoneNumber(number);
+		return getPhoneNumbers(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
     }
+
+
+	private static String[] getPhoneNumbers(Cursor cursor, int column) {
+		int count = cursor.getCount();
+
+		if(count < 1) return null;
+
+		String[] numbers = new String[count];
+		int i = -1;
+		while(cursor.moveToNext()) {
+			numbers[++i] = normalizePhoneNumber(cursor.getString(column));
+		}
+		cursor.close();
+		return numbers;
+	}
 
     //Removes all formatting, so that numbers can be compared
     private static String normalizePhoneNumber(String number) {

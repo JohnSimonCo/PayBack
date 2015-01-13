@@ -8,45 +8,99 @@ import com.johnsimon.payback.util.Resource;
 
 import java.util.UUID;
 
-public class Debt implements Syncable<Debt> {
+public class Debt extends SyncedData<Debt> {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
 	private final static int POSITIVE_COLOR_DISABLED = R.color.green_disabled;
 	private final static int NEGATIVE_COLOR_DISABLED = R.color.red_disabled;
 
-	public Person owner;
-    public UUID id;
-	public float amount;
-	public String amountAsString;
-	public String note;
-	public long timestamp;
-	public int color;
-	public boolean isPaidBack;
+	private Person owner;
+	private float amount;
+	private String note;
+	public final long timestamp;
+	private boolean paidBack;
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, boolean isPaidBack) {
+    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack) {
+		super(id, touched);
+
         this.owner = owner;
-        this.id = id;
         this.amount = amount;
-        this.amountAsString = amountString(amount);
         this.note = note;
         this.timestamp = timestamp;
-        this.color = getColor(amount);
-        this.isPaidBack = isPaidBack;
+        this.paidBack = paidBack;
     }
+
+	public Debt(Person owner, float amount, String note, long time) {
+        this(owner, amount, note, UUID.randomUUID(), time, time, false);
+	}
 
 	//Used when creating new
 	public Debt(Person owner, float amount, String note) {
-        this(owner, amount, note, UUID.randomUUID(), System.currentTimeMillis(), false);
+		this(owner, amount, note, System.currentTimeMillis());
+	}
+
+	public Person getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Person owner) {
+		touch();
+		this.owner = owner;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		touch();
+		this.amount = amount;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		touch();
+		this.note = note;
+	}
+
+	public boolean isPaidBack() {
+		return paidBack;
+	}
+
+	public void setPaidBack(boolean isPaidBack) {
+		touch();
+		this.paidBack = isPaidBack;
+	}
+
+	public void edit(Person owner, float amount, String note) {
+		this.owner = owner;
+		this.amount = amount;
+		this.note = note;
+		touch();
+	}
+
+	public String amountString() {
+		return Debt.amountString(amount);
 	}
 
 	public static String amountString(float amount) {
 		return Float.toString(Math.abs(amount))
-//				.replaceAll("(\\.\\d)\\d+$", "$1")
 				.replaceAll("\\.0$", "")
 				+ " " + Resource.getCurrency();
 	}
 
+	public int getColor() {
+		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
+	}
+
+	public int getDisabledColor() {
+		return amount > 0 ? POSITIVE_COLOR_DISABLED : NEGATIVE_COLOR_DISABLED;
+	}
+	/*
 	public static int getColor(float amount) {
 		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
 	}
@@ -54,20 +108,14 @@ public class Debt implements Syncable<Debt> {
 	public static int getDisabledColor(float amount) {
 		return amount > 0 ? POSITIVE_COLOR_DISABLED : NEGATIVE_COLOR_DISABLED;
 	}
+	*/
 
 	public static String totalString(float amount, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
-            return isAll ? allEvenString : even;
+			return isAll ? allEvenString : even;
 		} else {
 			return (amount > 0 ? "+ " : "- ") + amountString(amount);
 		}
-	}
-
-	public void edit(Person owner, float amount, String note) {
-		this.owner = owner;
-		this.amount = amount;
-		this.amountAsString = amountString(amount);
-		this.note = note;
 	}
 
 	//Method to get a string usable for sharing.
@@ -77,34 +125,13 @@ public class Debt implements Syncable<Debt> {
 				ctx.getString(R.string.ioweyou) :
 				ctx.getString(R.string.youoweme);
 
-		shareText += " " + this.amountAsString;
+		shareText += " " + this.amountString();
 		if (!TextUtils.isEmpty(this.note)) {
 			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
 		}
 
 		return shareText;
 	}
-
-	@Override
-	public String toString() {
-		return amount + " for " + note;
-	}
-
-	@Override
-    public UUID getId() {
-        return id;
-    }
-
-
-    @Override
-    public Debt syncWith(Debt other) {
-        return Debt.sync(this, other);
-    }
-
-    public static Debt sync(Debt a, Debt b) {
-		//TODO implement
-        return a;
-    }
 
 	@Override
 	public boolean equals(Object o) {
@@ -114,9 +141,15 @@ public class Debt implements Syncable<Debt> {
 		Debt other = (Debt) o;
 
 		return id.equals(other.id)
+			&& touched == other.touched
 			&& owner.id.equals(other.owner.id)
 			&& amount == other.amount
 			&& (note == null ? other.note == null : note.equals(other.note))
-			&& isPaidBack == other.isPaidBack;
+			&& paidBack == other.paidBack;
+	}
+
+	@Override
+	public String toString() {
+		return amount + " for " + note;
 	}
 }

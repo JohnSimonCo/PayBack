@@ -209,6 +209,7 @@ public class Resource {
 		preferences.edit().putInt(SAVE_KEY_ACTIONS, actions).apply();
 	}
 
+	/*
 	public static <T extends Identifiable> boolean areIdenticalLists(ArrayList<T> before, ArrayList<T> after) {
 
 		if (before.size() != after.size()) {
@@ -226,7 +227,7 @@ public class Resource {
 
 		return true;
 
-	}
+	}*/
 
     public static void hideKeyboard(Activity activity) {
         InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -240,7 +241,7 @@ public class Resource {
     public static class AmountComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt2.amount - debt1.amount);
+            return Math.round(debt2.getAmount() - debt1.getAmount());
         }
     }
 
@@ -254,14 +255,14 @@ public class Resource {
     public static class AlphabeticalComparator implements Comparator<Person> {
         @Override
         public int compare(Person person1, Person person2) {
-            return person1.name.compareToIgnoreCase(person2.name);
+            return person1.getName().compareToIgnoreCase(person2.getName());
         }
     }
 
     public static void checkFull(BillingProcessor bp) {
         isFull =  bp.isPurchased("full_version");
 
-		//TODO dont use this
+		//TODO remove this
 		isFull = true;
     }
 

@@ -112,6 +112,8 @@ public class FeedActivity extends DataActivity implements
 
     @Override
     protected void onDataReceived() {
+		//TODO går tillbaka till all om man är inne på någon om man får data sent
+
         if(isAll()) {
             feed = data.debts;
         } else {
@@ -341,7 +343,7 @@ public class FeedActivity extends DataActivity implements
 				if(fullSync) {
 
                     new MaterialDialog.Builder(self)
-                            .content(String.format(self.getString(R.string.overwrite_nfc_text), person.name))
+                            .content(String.format(self.getString(R.string.overwrite_nfc_text), person.getName()))
                             .positiveText(R.string.overwrite_nfc_title)
                             .negativeText(R.string.cancel)
                             .callback(new MaterialDialog.ButtonCallback() {

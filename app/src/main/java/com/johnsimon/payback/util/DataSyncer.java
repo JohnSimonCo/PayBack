@@ -4,6 +4,7 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.Syncable;
+import com.johnsimon.payback.core.SyncedData;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,29 +32,29 @@ public class DataSyncer {
         return new AppData(people, debts, deleted);
     }
 
-    private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
+    private static <T extends SyncedData> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
         for(Iterator<T> iterator = array.iterator(); iterator.hasNext();) {
-            if(deleted.contains(iterator.next().getId())) {
+            if(deleted.contains(iterator.next().id)) {
                 iterator.remove();
             }
         }
     }
 
-    private static <T extends Identifiable> T find(ArrayList<T> array, UUID id) {
+    private static <T extends SyncedData> T find(ArrayList<T> array, UUID id) {
         for(T item : array) {
-            if(item.getId().equals(id)) {
+            if(item.id.equals(id)) {
                 return item;
             }
         }
         return null;
     }
 
-    private static <T extends Syncable<T>> ArrayList<T> sync(ArrayList<T> a, ArrayList<T> b) {
+    private static <T extends SyncedData<T>> ArrayList<T> sync(ArrayList<T> a, ArrayList<T> b) {
         ArrayList<T> array = new ArrayList<>();
 
         array.addAll(a);
         for(T item : b) {
-            T other = find(array, item.getId());
+            T other = find(array, item.id);
             if(other != null) {
                 array.remove(other);
                 array.add(item.syncWith(other));

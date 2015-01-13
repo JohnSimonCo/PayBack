@@ -140,7 +140,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
     @Override
 	public void onPaidBack(Debt debt) {
-		debt.isPaidBack = !debt.isPaidBack;
+		debt.setPaidBack(!debt.isPaidBack());
         storage.commit();
 		adapter.notifyDataSetChanged();
 		displayTotalDebt(getActivity());
@@ -166,7 +166,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                         .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
                 if(!FeedActivity.isAll()) {
-                    intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.name);
+                    intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.getName());
                 }
                 if (Resource.isLOrAbove()) {
                     startActivity(intent);
@@ -276,8 +276,13 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	public void onEdit(Debt debt) {
 		Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
 				.putExtra(CreateDebtActivity.ARG_FROM_FEED, true)
-				.putExtra(CreateDebtActivity.ARG_TIMESTAMP, debt.timestamp);
+				.putExtra(CreateDebtActivity.ARG_ID, debt.id);
 
 		startActivity(intent);
+	}
+
+	@Override
+	protected void onPhoneNumbersLoaded() {
+		adapter.notifyDataSetChanged();
 	}
 }

@@ -40,7 +40,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		View rootView = inflater.inflate(R.layout.person_detail_dialog, null);
 
         TextView personDetailTitle = (TextView) rootView.findViewById(R.id.person_detail_title);
-		personDetailTitle.setText(person.name);
+		personDetailTitle.setText(person.getName());
 
 		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.person_detail_dialog_avatar);
 		TextView avatarLetter = (TextView) rootView.findViewById(R.id.person_detail_dialog_avatar_letter);
@@ -82,7 +82,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 					Bundle argsMerge = new Bundle();
 					argsMerge.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
 					argsMerge.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
-                    argsMerge.putString(PersonPickerDialogFragment.BLACKLIST_KEY, person.name);
+                    argsMerge.putString(PersonPickerDialogFragment.BLACKLIST_KEY, person.getName());
 					personPickerDialogFragmentMerge.setArguments(argsMerge);
 
 					personPickerDialogFragmentMerge.show(getFragmentManager(), "people_detail_dialog_merge");
@@ -137,7 +137,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		@Override
 		public void onSelected(String name) {
 
-            final String oldName = person.name;
+            final String oldName = person.getName();
 
 			data.rename(person, name);
 
@@ -164,7 +164,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 			final Person other = data.findPersonByName(name);
 
             new MaterialDialog.Builder(getActivity())
-                    .content(String.format(getString(R.string.merge_confirm_text_format), person.name, other.name))
+                    .content(String.format(getString(R.string.merge_confirm_text_format), person.getName(), other.getName()))
                     .positiveText(R.string.merge)
                     .negativeText(R.string.cancel)
                     .callback(new MaterialDialog.ButtonCallback() {
@@ -175,7 +175,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                             final int index = data.people.indexOf(person);
                             final ArrayList<Debt> debts = new ArrayList<Debt>();
                             for(Debt debt : data.debts) {
-                                if(debt.owner == person) {
+                                if(debt.getOwner() == person) {
                                     debts.add(debt);
                                 }
                             }

@@ -52,33 +52,33 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
         Debt debt = data.debts.get(position);
 
-        if (debt.owner.hasImage()) {
-            ThumbnailLoader.getInstance().load(debt.owner.link.photoURI, new SimpleImageLoadingListener() {
+        if (debt.getOwner().hasImage()) {
+            ThumbnailLoader.getInstance().load(debt.getOwner().link.photoURI, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     row.setImageViewBitmap(R.id.list_item_avatar, loadedImage);
                 }
             });
         } else {
-            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.owner.color)));
+            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.getOwner().color)));
             row.setViewVisibility(R.id.list_item_avatar_letter, View.VISIBLE);
-            row.setTextViewText(R.id.list_item_avatar_letter, debt.owner.getAvatarLetter());
+            row.setTextViewText(R.id.list_item_avatar_letter, debt.getOwner().getAvatarLetter());
         }
 
-        row.setTextViewText(R.id.list_item_person, debt.owner.name);
-        row.setTextViewText(R.id.list_item_note, debt.note == null ? ctx.getResources().getString(R.string.cash) : debt.note);
+        row.setTextViewText(R.id.list_item_person, debt.getOwner().getName());
+        row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? ctx.getResources().getString(R.string.cash) : debt.getNote());
         row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
-        row.setTextViewText(R.id.list_item_amount, debt.amountAsString);
-        row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(Debt.getColor(debt.amount)));
+        row.setTextViewText(R.id.list_item_amount, debt.amountString());
+        row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
 
-        if (debt.isPaidBack) {
+        if (debt.isPaidBack()) {
             row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_very_light));
             row.setTextColor(R.id.list_item_note, ctx.getResources().getColor(R.color.gray_oncolor_light));
-            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(Debt.getDisabledColor(debt.amount)));
+            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getDisabledColor()));
         } else {
             row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_normal));
             row.setTextColor(R.id.list_item_note, ctx.getResources().getColor(R.color.gray_text_light));
-            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(Debt.getColor(debt.amount)));
+            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
         }
 
         Intent intent = new Intent();
@@ -88,7 +88,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         intent.putExtras(extras);
         row.setOnClickFillInIntent(R.id.feed_list_item_master, intent);
 
-        return(row);
+        return row;
     }
 
     @Override

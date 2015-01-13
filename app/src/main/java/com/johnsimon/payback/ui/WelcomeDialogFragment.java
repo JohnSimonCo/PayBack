@@ -154,10 +154,11 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 
 			Resource.setCurrency(currency);
 
+			/*
             int length = FeedActivity.feed.size();
             for (int i = 0; i < length; i++) {
-				FeedActivity.feed.get(i).amountAsString = Debt.amountString(FeedActivity.feed.get(i).amount);
-            }
+				//FeedActivity.feed.get(i).amountAsString = Debt.amountString(FeedActivity.feed.get(i).amount);
+            }*/
 
             FeedFragment.adapter.notifyDataSetChanged();
             FeedFragment.displayTotalDebt(getActivity());

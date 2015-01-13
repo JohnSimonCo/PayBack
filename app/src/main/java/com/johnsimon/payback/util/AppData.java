@@ -12,8 +12,6 @@ import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public class AppData {
@@ -41,7 +39,7 @@ public class AppData {
 
         ArrayList<Debt> feed = new ArrayList<Debt>();
         for(Debt debt : debts) {
-            if(debt.owner == person) {
+            if(debt.getOwner() == person) {
                 feed.add(debt);
             }
         }
@@ -51,8 +49,8 @@ public class AppData {
     public static float total(ArrayList<Debt> debts) {
         float total = 0;
         for(Debt debt : debts) {
-            if(!debt.isPaidBack) {
-                total += debt.amount;
+            if(!debt.isPaidBack()) {
+                total += debt.getAmount();
             }
         }
         return total;
@@ -61,8 +59,8 @@ public class AppData {
     public float totalPlus() {
         float sum = 0;
         for (Debt debt : debts) {
-            if (debt.amount > 0) {
-                sum += debt.amount;
+            if (debt.getAmount() > 0) {
+                sum += debt.getAmount();
             }
         }
         return sum;
@@ -71,8 +69,8 @@ public class AppData {
     public float totalMinus() {
         float sum = 0;
         for (Debt debt : debts) {
-            if (debt.amount < 0) {
-                sum += debt.amount;
+            if (debt.getAmount() < 0) {
+                sum += debt.getAmount();
             }
         }
         return sum;
@@ -94,7 +92,7 @@ public class AppData {
 
     public Person findPersonByName(String name) {
         for(Person p : people) {
-            if(p.name.equals(name)) return p;
+            if(p.getName().equals(name)) return p;
         }
         return null;
     }
@@ -109,8 +107,8 @@ public class AppData {
 
     public void merge(Person from, Person to) {
         for(Debt debt : debts) {
-            if(debt.owner == from) {
-                debt.owner = to;
+            if(debt.getOwner() == from) {
+                debt.setOwner(to);
             }
         }
         delete(from);
@@ -118,7 +116,7 @@ public class AppData {
 
     public void unmerge(Person restore, ArrayList<Debt> debts, int index) {
         for(Debt debt : debts) {
-            debt.owner = restore;
+            debt.setOwner(restore);
         }
         people.add(index, restore);
     }
@@ -141,11 +139,11 @@ public class AppData {
     }
 
     public void move(Debt debt, Person person) {
-        debt.owner = person;
+        debt.setOwner(person);
     }
 
     public void rename(Person person, String name) {
-        person.name = name;
+        person.setName(name);
     }
 
     public void sync(Person person, DebtSendable[] debts) {
@@ -183,8 +181,8 @@ public class AppData {
     public ArrayList<String> getPeopleNames() {
         ArrayList<String> names = new ArrayList<String>();
         for (Person person : people) {
-            if(!names.contains(person.name)) {
-                names.add(person.name);
+            if(!names.contains(person.getName())) {
+                names.add(person.getName());
             }
         }
 
@@ -195,8 +193,8 @@ public class AppData {
     public ArrayList<String> getAllNames(Contacts contacts) {
         ArrayList<String> names = new ArrayList<String>();
         for (Person person : people) {
-            if(!names.contains(person.name)) {
-                names.add(person.name);
+            if(!names.contains(person.getName())) {
+                names.add(person.getName());
             }
         }
         for (Contact contact : contacts) {
@@ -223,14 +221,14 @@ public class AppData {
     public String guessName(User sender, Contacts contacts) {
         //If user has no name, use currently viewed person
         if(contacts.user.name == null) {
-            return FeedActivity.isAll() ? null : FeedActivity.person.name;
+            return FeedActivity.isAll() ? null : FeedActivity.person.getName();
         }
 
         //If user has a name:
         //First match name and number in people and their links
         for(Person person : people) {
             if(person.matchTo(sender) || (person.isLinked() && person.link.matchTo(sender))) {
-                return person.name;
+                return person.getName();
             }
         }
 
@@ -244,6 +242,16 @@ public class AppData {
         //Otherwise, use the senders name
         return sender.name;
     }
+
+	public void link(Contacts contacts) {
+		for(Person person : people) {
+			for(Contact contact : contacts) {
+				if(contact.matchTo(person)) {
+					person.linkTo(contact);
+				}
+			}
+		}
+	}
 
     public static AppData fromJson(String JSON) {
         return JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract();

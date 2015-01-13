@@ -16,7 +16,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,13 +38,15 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
+import java.util.UUID;
+
 public class CreateDebtActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 	public static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
 	public static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
-	public static String ARG_TIMESTAMP = Resource.arg(ARG_PREFIX, "AMOUNT");
+	public static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
 
 	//Views
 	private TintEditText floatLabelAmountEditText;
@@ -82,8 +83,6 @@ public class CreateDebtActivity extends DataActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		Intent intent = getIntent();
-
 		floatLabelAmountEditText = (TintEditText) findViewById(R.id.create_edittext_amount);
 		floatLabelNoteEditText = (TintEditText) findViewById(R.id.create_edittext_note);
 		floatLabelNameAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.create_edittext_name);
@@ -94,26 +93,6 @@ public class CreateDebtActivity extends DataActivity {
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
-
-		if (intent.hasExtra(ARG_TIMESTAMP)) {
-			//TODO fix this
-			//editingDebt = data.findDebt(intent.getLongExtra(ARG_TIMESTAMP, 0));
-
-			floatLabelNameAutoCompleteTextView.setText(editingDebt.owner.name);
-
-			floatLabelAmountEditText.setText(Float.toString(Math.abs(editingDebt.amount)).replaceAll("\\.0*$", ""));
-
-			floatLabelNoteEditText.setText(editingDebt.note);
-			//Assume that the user wants to change the note
-			floatLabelNoteEditText.setSelection(floatLabelNoteEditText.getText().length());
-			floatLabelNoteEditText.requestFocus();
-
-			boolean iOwe = editingDebt.amount < 0;
-			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
-		} else if(intent.hasExtra(ARG_FROM_PERSON_NAME)) {
-			floatLabelNameAutoCompleteTextView.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
-			floatLabelAmountEditText.requestFocus();
-		}
 
 		Resources res = getResources();
 
@@ -228,7 +207,30 @@ public class CreateDebtActivity extends DataActivity {
 
     }
 
-    @Override
+	@Override
+	protected void onDataReceived() {
+		Intent intent = getIntent();
+		if (intent.hasExtra(ARG_ID)) {
+			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));
+
+			floatLabelNameAutoCompleteTextView.setText(editingDebt.getOwner().getName());
+
+			floatLabelAmountEditText.setText(Float.toString(Math.abs(editingDebt.getAmount())).replaceAll("\\.0*$", ""));
+
+			floatLabelNoteEditText.setText(editingDebt.getNote());
+			//Assume that the user wants to change the note
+			floatLabelNoteEditText.setSelection(floatLabelNoteEditText.getText().length());
+			floatLabelNoteEditText.requestFocus();
+
+			boolean iOwe = editingDebt.getAmount() < 0;
+			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
+		} else if(intent.hasExtra(ARG_FROM_PERSON_NAME)) {
+			floatLabelNameAutoCompleteTextView.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
+			floatLabelAmountEditText.requestFocus();
+		}
+	}
+
+	@Override
     protected void onFullyLoaded() {
         floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(
                 this,
@@ -285,8 +287,8 @@ public class CreateDebtActivity extends DataActivity {
 			person = data.getOrCreatePerson(name, contacts, this);
 			data.debts.add(0, new Debt(person, amount, note));
 		} else {
-			person = editingDebt.owner.name.equals(name)
-				? editingDebt.owner
+			person = editingDebt.getOwner().getName().equals(name)
+				? editingDebt.getOwner()
 				: data.getOrCreatePerson(name, contacts, this);
 
 			editingDebt.edit(person, amount, note);

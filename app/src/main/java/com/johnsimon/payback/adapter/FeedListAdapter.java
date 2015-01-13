@@ -60,27 +60,27 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	@Override
 	public void onBindViewHolder(ViewHolder holder, final int position) {
 		Debt debt = list.get(position);
-		Person owner = debt.owner;
+		Person owner = debt.getOwner();
 		Resources resources = context.getResources();
 
-		holder.person.setText(owner.name);
-		holder.note.setText(debt.note == null ? resources.getString(R.string.cash) : debt.note);
-		holder.amount.setText(debt.amountAsString);
-		holder.amount.setTextColor(resources.getColor(Debt.getColor(debt.amount)));
+		holder.person.setText(owner.getName());
+		holder.note.setText(debt.getNote() == null ? resources.getString(R.string.cash) : debt.getNote());
+		holder.amount.setText(debt.amountString());
+		holder.amount.setTextColor(resources.getColor(debt.getColor()));
 
 		holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));
 
 		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
 
-		if (debt.isPaidBack) {
+		if (debt.isPaidBack()) {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));
 			holder.note.setTextColor(context.getResources().getColor(R.color.gray_oncolor_light));
-			holder.amount.setTextColor(context.getResources().getColor(Debt.getDisabledColor(debt.amount)));
+			holder.amount.setTextColor(context.getResources().getColor(debt.getDisabledColor()));
 			holder.avatar.setAlpha(0.5f);
 		} else {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_normal));
 			holder.note.setTextColor(context.getResources().getColor(R.color.gray_text_light));
-			holder.amount.setTextColor(context.getResources().getColor(Debt.getColor(debt.amount)));
+			holder.amount.setTextColor(context.getResources().getColor(debt.getColor()));
 			holder.avatar.setAlpha(1f);
 		}
 

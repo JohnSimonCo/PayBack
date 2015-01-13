@@ -4,22 +4,35 @@ import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.UUID;
 
-public class Person implements Syncable<Person> {
-	public String name;
-	public UUID id;
-	public int color;
+public class Person extends SyncedData<Person> {
+	private String name;
+	public final int color;
 	//TODO delayed link
     public Contact link = null;
 
 	//Used for deserialization
-	public Person(String name, UUID id, Integer color) {
+	public Person(String name, UUID id, Integer color, long touched) {
+		super(id, touched);
+
 		this.name = name;
-		this.id = id;
 		this.color = color;
 	}
 	//Used for creating a person
 	public Person(String name, ColorPalette palette) {
-		this(name, UUID.randomUUID(), palette.nextColor());
+		this(name, UUID.randomUUID(), palette.nextColor(), System.currentTimeMillis());
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		touch();
+		this.name = name;
+	}
+
+	public void linkTo(Contact link) {
+		this.link = link;
 	}
 
 	public boolean isLinked() {
@@ -28,11 +41,10 @@ public class Person implements Syncable<Person> {
 	public boolean hasImage() {
 		return isLinked() && link.photoURI != null;
 	}
-
-	@Override
-	public String toString() {
-		return name;
+	public boolean hasNumbers() {
+		return isLinked() && link.hasNumbers();
 	}
+
 	public String getAvatarLetter() {
 		return name.substring(0, 1).toUpperCase();
 	}
@@ -40,21 +52,6 @@ public class Person implements Syncable<Person> {
 	public boolean matchTo(User user) {
 		return this.name.equals(user.name);
 	}
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public Person syncWith(Person other) {
-        return Person.sync(this, other);
-    }
-
-    public static Person sync(Person a, Person b) {
-		//TODO implement
-		return a;
-    }
 
 	@Override
 	public boolean equals(Object o) {
@@ -64,6 +61,12 @@ public class Person implements Syncable<Person> {
 		Person other = (Person) o;
 
 		return id.equals(other.id)
+			&& touched == other.touched
 			&& name.equals(other.name);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

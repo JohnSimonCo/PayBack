@@ -136,7 +136,7 @@ public abstract class DataActivity extends ActionBarActivity {
     }
 
     protected void onPhoneNumbersLoaded() {
-
+		data.link(contacts);
     }
 
     protected void onFullyLoaded() {

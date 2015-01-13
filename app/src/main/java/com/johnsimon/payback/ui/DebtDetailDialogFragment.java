@@ -48,7 +48,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         Button dialog_custom_cancel = (Button) rootView.findViewById(R.id.dialog_custom_cancel);
 
 
-        if (debt.isPaidBack) {
+        if (debt.isPaidBack()) {
             dialog_custom_confirm.setText(R.string.undo_pay_back);
             dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
         }
@@ -73,7 +73,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 
                 PaidBackDialogFragment paidBackDialogFragment;
 
-                if (debt.isPaidBack) {
+                if (debt.isPaidBack()) {
                     paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK, debt);
                 } else {
                     paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, debt);
@@ -86,12 +86,12 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         });
 
         TextView dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
-        if (debt.amount < 0) {
+        if (debt.getAmount() < 0) {
             //negative
-            dialog_custom_amount.setText(debt.amountAsString);
-            dialog_custom_amount.setTextColor(getResources().getColor(R.color.red));
+            dialog_custom_amount.setText(debt.amountString());
+            dialog_custom_amount.setTextColor(getResources().getColor(debt.getColor()));
         } else {
-            dialog_custom_amount.setText(debt.amountAsString);
+            dialog_custom_amount.setText(debt.amountString());
             dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
         }
 
@@ -99,12 +99,12 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         TextView dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
         TextView dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
 
-        dialog_custom_title.setText(debt.owner.name);
+        dialog_custom_title.setText(debt.getOwner().getName());
 
-        if (debt.note == null) {
+        if (debt.getNote() == null) {
             dialog_custom_content.setText(R.string.cash);
         } else {
-            dialog_custom_content.setText(debt.note);
+            dialog_custom_content.setText(debt.getNote());
         }
 
         ImageButton detailDialogOverflow = (ImageButton) rootView.findViewById(R.id.detail_dialog_overflow);
@@ -159,7 +159,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
         TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
 
-        Resource.createProfileImage(debt.owner, avatar, avatarLetter);
+        Resource.createProfileImage(debt.getOwner(), avatar, avatarLetter);
 
         builder.setView(rootView);
 
