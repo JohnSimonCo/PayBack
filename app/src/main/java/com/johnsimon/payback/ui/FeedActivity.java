@@ -41,8 +41,6 @@ public class FeedActivity extends DataActivity implements
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
-	public static boolean hasLoadedPhoneNumbers = false;
-
 	public static Toolbar toolbar;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
@@ -232,17 +230,26 @@ public class FeedActivity extends DataActivity implements
 
 				final Activity self = this;
 
-				new MaterialDialog.Builder(this)
-						.title(R.string.phone_number)
-						.items(new CharSequence[]{"0701111111", "0702222222", "0703333333", "0704444444"})
-						.itemsCallback(new MaterialDialog.ListCallback() {
-							@Override
-							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								data.feed(person);
-								SwishLauncher.startSwish(self, Float.toString(AppData.total(data.feed(person))).replaceAll("\\.0*$", ""), "0702222222");
-							}
-						})
-						.show();
+                if(person.hasNumbers()) {
+                    if(person.link.numbers.length > 1) {
+
+                        new MaterialDialog.Builder(this)
+                                .title(R.string.phone_number)
+                                .items(person.link.numbers)
+                                .itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence number) {
+                                        SwishLauncher.startSwish(self, AppData.total(data.feed(person)), number.toString());
+                                    }
+                                })
+                                .show();
+                    } else {
+                        SwishLauncher.startSwish(self, AppData.total(data.feed(person)), person.link.numbers[0]);
+                    }
+                } else {
+                    SwishLauncher.startSwish(self, AppData.total(data.feed(person)));
+                }
+
 				break;
 
 		}

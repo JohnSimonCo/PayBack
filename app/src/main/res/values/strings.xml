@@ -82,7 +82,7 @@
     <string name="upgrade_text">Purchase the full version of Pay Back to add more than 6 debts and sync them across devices.</string>
     <string name="upgrade_confirm_text">Upgrade</string>
     <string name="cloud_sync">Cloud sync</string>
-    <string name="cloud_sync_description_first">Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>
+    <string name="cloud_sync_description_first">Thanks for purchasing the full version of Pay Back! Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>
     <string name="cloud_sync_description">Activate cloud sync to sync debt data across devices using Google Drive.</string>
     <string name="activate">Activate</string>
     <string name="not_now">Not now</string>
