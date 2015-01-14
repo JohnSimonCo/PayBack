@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
@@ -32,6 +34,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		public RoundedImageView avatar;
 		public TextView avatarLetter;
 		public TextView date;
+        public LinearLayout detailContainer;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -42,6 +45,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			this.avatar = (RoundedImageView) itemView.findViewById(R.id.list_item_avatar);
 			this.avatarLetter = (TextView) itemView.findViewById(R.id.list_item_avatar_letter);
 			this.date = (TextView) itemView.findViewById(R.id.list_item_date);
+            this.detailContainer = (LinearLayout) itemView.findViewById(R.id.feed_list_detail_container);
 		}
 	}
 
@@ -58,13 +62,12 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, final int position) {
-		Debt debt = list.get(position);
-		Person owner = debt.getOwner();
-		Resources resources = context.getResources();
+	public void onBindViewHolder(final ViewHolder holder, final int position) {
+		final Debt debt = list.get(position);
+		final Person owner = debt.getOwner();
+		final Resources resources = context.getResources();
 
 		holder.person.setText(owner.getName());
-		holder.note.setText(debt.getNote() == null ? resources.getString(R.string.cash) : debt.getNote());
 		holder.amount.setText(debt.amountString());
 		holder.amount.setTextColor(resources.getColor(debt.getColor()));
 
@@ -92,6 +95,23 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				dialog.callback = callback;
 			}
 		});
+
+        ViewTreeObserver vto = holder.date.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                holder.date.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                int totalWidth = holder.detailContainer.getMeasuredWidth();
+                int dateWidth = holder.date.getMeasuredWidth();
+                holder.note.setMaxWidth(totalWidth - dateWidth);
+
+                holder.note.setText(debt.getNote() == null ? resources.getString(R.string.cash) : debt.getNote());
+
+                return false;
+            }
+        });
+
 	}
 
 	public void checkAdapterIsEmpty () {
