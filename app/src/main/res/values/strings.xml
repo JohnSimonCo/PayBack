@@ -25,7 +25,7 @@
     <string name="send">Send</string>
     <string name="about_title">About</string>
     <string name="filter">Filter</string>
-    <string name="welcome_text">In this free version you are limited to 6 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currency you wish to use. This can be changed later in settings.</string>
+    <string name="welcome_text">In this free version you are limited to 5 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currency you wish to use. This can be changed later in settings.</string>
     <string name="welcome_continue">Continue</string>
     <string name="welcome_currency_hint">Currency (ex. $)</string>
     <string name="welcome_using_nfc">Using NFC</string>
@@ -79,7 +79,7 @@
     <string name="nfc_error_all">Can\'t send entries from \"All\"</string>
     <string name="title_activity_people_manager">People</string>
     <string name="upgrade_title">Unlock full version</string>
-    <string name="upgrade_text">Purchase the full version of Pay Back to add more than 6 debts and sync them across devices.</string>
+    <string name="upgrade_text">Purchase the full version of Pay Back to add more than 5 debts and sync them across devices.</string>
     <string name="upgrade_confirm_text">Upgrade</string>
     <string name="cloud_sync">Cloud sync</string>
     <string name="cloud_sync_description_first">Thanks for purchasing the full version of Pay Back! Activate cloud sync to sync debt data across devices using Google Drive. This can be enabled later in settings.</string>

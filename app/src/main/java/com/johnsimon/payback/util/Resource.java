@@ -35,7 +35,7 @@ import java.util.HashSet;
 
 public class Resource {
     private final static int MAX_ACTIONS = 25;
-    private final static int MAX_FREE_DEBTS = 6;
+    private final static int MAX_FREE_DEBTS = 5;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
 	private final static String SAVE_KEY_CURRENCY = "CURRENCY_SAVE_KEY";
