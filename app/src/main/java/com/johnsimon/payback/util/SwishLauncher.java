@@ -16,7 +16,15 @@ import java.util.List;
 
 public class SwishLauncher {
 
-	public static void startSwish(Activity activity, String amount, String phoneNumber) {
+    public static void startSwish(Activity activity, float amount) {
+        startSwish(activity, amount, null);
+    }
+
+    public static void startSwish(Activity activity, float amount, String phoneNumber) {
+        startSwish(activity, amountToString(amount), phoneNumber);
+    }
+
+	private static void startSwish(Activity activity, String amount, String phoneNumber) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setComponent(ComponentName.unflattenFromString("se.bankgirot.swish/.ui.PaymentActivity"));
 		intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -33,6 +41,10 @@ public class SwishLauncher {
 		Toast.makeText(activity, activity.getString(R.string.amount) + " " + "\"" + amount + "\"" + " " + activity.getString(R.string.swish_copy_toast_end), Toast.LENGTH_LONG).show();
 
 	}
+
+    private static String amountToString(float amount) {
+        return Float.toString(amount).replaceAll("\\.0*$", "");
+    }
 
 	public static boolean hasService(Context ctx) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);

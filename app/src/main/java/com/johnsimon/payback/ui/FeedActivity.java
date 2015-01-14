@@ -201,14 +201,10 @@ public class FeedActivity extends DataActivity implements
 		if (isAll()) {
 			fulllMenuPay.setVisible(false);
 		} else {
-			if (hasLoadedPhoneNumbers) {
-				if (person.hasNumbers() && SwishLauncher.hasService(this)) {
-					fulllMenuPay.setEnabled(true);
-				} else {
-					fulllMenuPay.setEnabled(false);
-				}
-			} else {
-				fulllMenuPay.setEnabled(false);
+            if (SwishLauncher.hasService(this)) {
+                fulllMenuPay.setEnabled(true);
+            } else {
+                fulllMenuPay.setEnabled(false);
 			}
 
 		}
@@ -448,20 +444,6 @@ public class FeedActivity extends DataActivity implements
 
         super.onDestroy();
     }
-
-    /* TODO så han kan fixa det sen
-	@Override
-	protected void onPhoneNumbersLoaded() {
-		hasLoadedPhoneNumbers = true;
-
-		if (person.hasNumbers() && SwishLauncher.hasService(this)) {
-			fulllMenuPay.setEnabled(true);
-			detailMenuPay.setEnabled(true);
-		} else {
-			fulllMenuPay.setEnabled(false);
-			detailMenuPay.setEnabled(false);
-		}
-	}*/
 
 	@Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {

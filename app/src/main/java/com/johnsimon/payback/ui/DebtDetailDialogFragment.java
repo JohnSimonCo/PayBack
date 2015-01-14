@@ -18,7 +18,6 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
@@ -118,15 +117,11 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
 				FeedActivity.detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
-				if (FeedActivity.hasLoadedPhoneNumbers) {
-					if (debt.getOwner().hasNumbers() && SwishLauncher.hasService(getActivity())) {
-						FeedActivity.detailMenuPay.setEnabled(true);
-					} else {
-						FeedActivity.detailMenuPay.setEnabled(false);
-					}
-				} else {
-					FeedActivity.detailMenuPay.setEnabled(false);
-				}
+                if (SwishLauncher.hasService(getActivity())) {
+                    FeedActivity.detailMenuPay.setEnabled(true);
+                } else {
+                    FeedActivity.detailMenuPay.setEnabled(false);
+                }
 
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -166,17 +161,25 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 							case R.id.detail_dialog_pay_back:
 								final Activity self = getActivity();
 
-								new MaterialDialog.Builder(self)
-										.title(R.string.phone_number)
-										.items(new CharSequence[]{"0701111111", "0702222222", "0703333333", "0704444444"})
-										.itemsCallback(new MaterialDialog.ListCallback() {
-											@Override
-											public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-												data.feed(debt.getOwner());
-												SwishLauncher.startSwish(self, Float.toString(AppData.total(data.feed(debt.getOwner()))).replaceAll("\\.0*$", ""), "0702222222");
-											}
-										})
-										.show();
+                                if(debt.getOwner().hasNumbers()) {
+                                    if(debt.getOwner().link.numbers.length > 1) {
+
+                                    new MaterialDialog.Builder(self)
+                                            .title(R.string.phone_number)
+                                            .items(debt.getOwner().link.numbers)
+                                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                                @Override
+                                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence number) {
+                                                    SwishLauncher.startSwish(self, debt.getAmount(), number.toString());
+                                                }
+                                            })
+                                            .show();
+                                    } else {
+                                        SwishLauncher.startSwish(self, debt.getAmount(), debt.getOwner().link.numbers[0]);
+                                    }
+                                } else {
+                                    SwishLauncher.startSwish(self, debt.getAmount());
+                                }
 
 								return true;
 
