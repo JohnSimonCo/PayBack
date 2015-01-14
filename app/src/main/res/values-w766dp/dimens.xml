@@ -1,9 +1,0 @@
-<resources>
-
-    <dimen name="activity_horizontal_margin">96dp</dimen>
-
-    <dimen name="create_right_margin">248dp</dimen>
-    <dimen name="create_right_margin_small">200dp</dimen>
-
-    <dimen name="fab_create_right_margin">88dp</dimen>
-</resources>

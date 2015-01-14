@@ -44,9 +44,7 @@
 
         </RelativeLayout>
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            app:fontFamily="roboto"
-            app:textWeight="medium"
+        <TextView
             android:id="@+id/welcome_information_text"
             android:paddingBottom="8dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -73,9 +71,7 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"    />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
+            <TextView
                 android:paddingTop="@dimen/welcome_spinner_text_top_margin"
                 android:layout_gravity="center_horizontal"
                 android:paddingLeft="16dp"

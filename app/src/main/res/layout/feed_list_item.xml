@@ -86,9 +86,7 @@
                     android:ellipsize="end"
                     android:id="@+id/list_item_note"    />
 
-                <com.devspark.robototextview.widget.RobotoTextView
-                    app:fontFamily="roboto"
-                    app:textWeight="medium"
+                <TextView
                     android:textSize="@dimen/feed_info_size"
                     android:textColor="@color/gray_text_very_light"
                     android:layout_width="wrap_content"

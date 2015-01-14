@@ -27,9 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            app:fontFamily="roboto"
-            app:textWeight="medium"
+        <TextView
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:textColor="@color/gray_text_light"

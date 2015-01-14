@@ -66,6 +66,7 @@
                 dslv:use_default_controller="true" />
 
             <LinearLayout
+                style="@style/FeedRecyclerView"
                 android:id="@+id/people_manager_empty"
                 android:orientation="vertical"
                 android:layout_gravity="center"

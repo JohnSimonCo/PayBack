@@ -92,6 +92,7 @@
     </FrameLayout>
 
     <LinearLayout
+        style="@style/FeedRecyclerView"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
