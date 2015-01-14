@@ -46,11 +46,11 @@ public class SwishLauncher {
         }
     }
 
-    public static void startSwishApp(Activity activity, float amount) {
+    private static void startSwishApp(Activity activity, float amount) {
         startSwishApp(activity, amount, null);
     }
 
-    public static void startSwishApp(Activity activity, float amount, String phoneNumber) {
+	private static void startSwishApp(Activity activity, float amount, String phoneNumber) {
         startSwishApp(activity, amountToString(amount), phoneNumber);
     }
 
