@@ -124,9 +124,12 @@ public class FeedActivity extends DataActivity implements
         } else {
             feed = data.feed(person);
         }
-        if (filterAmount != null) {
-            sort();
-        }
+
+		if (filterAmount.isChecked()) {
+			sortAmount();
+		} else {
+			sortTime();
+		}
 
     }
 
@@ -193,10 +196,9 @@ public class FeedActivity extends DataActivity implements
 		// decide what to show in the action bar.
 		getMenuInflater().inflate(R.menu.feed, menu);
 
-		filterAmount = menu.findItem(R.id.menu_filter_amount);
-        fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+		filterAmount = menu.findItem(R.id.menu_filter).getSubMenu().getItem(1);//TODO make sure works	menu.findItem(R.id.menu_filter_amount);
 
-        sort();
+		fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
 
 		if (isAll()) {
 			fulllMenuPay.setVisible(false);
@@ -253,14 +255,6 @@ public class FeedActivity extends DataActivity implements
 
 		return result;
 	}
-
-    private void sort() {
-        if (filterAmount.isChecked()) {
-            sortAmount();
-        } else {
-            sortTime();
-        }
-    }
 
 	/*  This method is called by /res/navigation_drawer_list_footer.xml
 		to either navigate to settings or show the "About screen". New

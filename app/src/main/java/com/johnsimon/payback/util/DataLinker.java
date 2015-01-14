@@ -34,8 +34,6 @@ public class DataLinker {
 
 
 	public static void link(AppData data, ArrayList<Contact> contacts) {
-        data.contacts = contacts;
-
 		for(Person person : data.people) {
 			for(Contact contact : contacts) {
 				if(contact.matchTo(person)) {
