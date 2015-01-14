@@ -8,23 +8,53 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.view.View;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.core.Person;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SwishLauncher {
 
-    public static void startSwish(Activity activity, float amount) {
-        startSwish(activity, amount, null);
+    public static void startSwish(final Activity activity, final float amount, final Person owner) {
+        if (owner.hasNumbers()) {
+
+            String[] numbers = Resource.clearDuplicates(owner.link.numbers);
+
+            if (numbers.length > 1) {
+
+                new MaterialDialog.Builder(activity)
+                        .title(R.string.phone_number)
+                        .items(numbers)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence number) {
+                                SwishLauncher.startSwishApp(activity, amount, number.toString());
+                            }
+                        })
+                        .show();
+            } else {
+                SwishLauncher.startSwishApp(activity, amount, numbers[0]);
+            }
+        } else {
+            SwishLauncher.startSwishApp(activity, amount);
+        }
     }
 
-    public static void startSwish(Activity activity, float amount, String phoneNumber) {
-        startSwish(activity, amountToString(amount), phoneNumber);
+    public static void startSwishApp(Activity activity, float amount) {
+        startSwishApp(activity, amount, null);
     }
 
-	private static void startSwish(Activity activity, String amount, String phoneNumber) {
+    public static void startSwishApp(Activity activity, float amount, String phoneNumber) {
+        startSwishApp(activity, amountToString(amount), phoneNumber);
+    }
+
+	private static void startSwishApp(Activity activity, String amount, String phoneNumber) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setComponent(ComponentName.unflattenFromString("se.bankgirot.swish/.ui.PaymentActivity"));
 		intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -43,7 +73,7 @@ public class SwishLauncher {
 	}
 
     private static String amountToString(float amount) {
-        return Float.toString(amount).replaceAll("\\.0*$", "");
+        return Float.toString(Math.abs(amount)).replaceAll("\\.0*$", "");
     }
 
 	public static boolean hasService(Context ctx) {

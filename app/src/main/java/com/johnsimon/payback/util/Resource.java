@@ -29,7 +29,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 
 public class Resource {
     private final static int MAX_ACTIONS = 25;
@@ -278,6 +280,10 @@ public class Resource {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    public static String[] clearDuplicates(String[] list) {
+        return new HashSet<String>(Arrays.asList(list)).toArray(new String[0]);
     }
 
 }

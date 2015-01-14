@@ -173,6 +173,8 @@ public class FeedActivity extends DataActivity implements
 				.commit();
 
 		storage.requestRefresh();
+
+        invalidateOptionsMenu();
 	}
 
 	@Override
@@ -199,10 +201,10 @@ public class FeedActivity extends DataActivity implements
 		if (isAll()) {
 			fulllMenuPay.setVisible(false);
 		} else {
-            if (SwishLauncher.hasService(this)) {
-                fulllMenuPay.setEnabled(true);
-            } else {
+            if (!SwishLauncher.hasService(this) || AppData.total(feed) >= 0) {
                 fulllMenuPay.setEnabled(false);
+            } else {
+                fulllMenuPay.setEnabled(true);
 			}
 
 		}
@@ -227,29 +229,7 @@ public class FeedActivity extends DataActivity implements
 				break;
 
 			case R.id.feed_menu_pay_back:
-
-				final Activity self = this;
-
-                if(person.hasNumbers()) {
-                    if(person.link.numbers.length > 1) {
-
-                        new MaterialDialog.Builder(this)
-                                .title(R.string.phone_number)
-                                .items(person.link.numbers)
-                                .itemsCallback(new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence number) {
-                                        SwishLauncher.startSwish(self, AppData.total(data.feed(person)), number.toString());
-                                    }
-                                })
-                                .show();
-                    } else {
-                        SwishLauncher.startSwish(self, AppData.total(data.feed(person)), person.link.numbers[0]);
-                    }
-                } else {
-                    SwishLauncher.startSwish(self, AppData.total(data.feed(person)));
-                }
-
+				SwishLauncher.startSwish(this, AppData.total(feed), person);
 				break;
 
 		}

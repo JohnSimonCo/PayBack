@@ -18,6 +18,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
@@ -116,13 +117,17 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
-				FeedActivity.detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
-                if (SwishLauncher.hasService(getActivity())) {
-                    FeedActivity.detailMenuPay.setEnabled(true);
-                } else {
-                    FeedActivity.detailMenuPay.setEnabled(false);
-                }
+                FeedActivity.detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
 
+                if (debt.getAmount() < 0) {
+                    if (SwishLauncher.hasService(getActivity())) {
+                        FeedActivity.detailMenuPay.setEnabled(true);
+                    } else {
+                        FeedActivity.detailMenuPay.setEnabled(false);
+                    }
+                } else {
+                    FeedActivity.detailMenuPay.setVisible(false);
+                }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -159,28 +164,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 return true;
 
 							case R.id.detail_dialog_pay_back:
-								final Activity self = getActivity();
-
-                                if(debt.getOwner().hasNumbers()) {
-                                    if(debt.getOwner().link.numbers.length > 1) {
-
-                                    new MaterialDialog.Builder(self)
-                                            .title(R.string.phone_number)
-                                            .items(debt.getOwner().link.numbers)
-                                            .itemsCallback(new MaterialDialog.ListCallback() {
-                                                @Override
-                                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence number) {
-                                                    SwishLauncher.startSwish(self, debt.getAmount(), number.toString());
-                                                }
-                                            })
-                                            .show();
-                                    } else {
-                                        SwishLauncher.startSwish(self, debt.getAmount(), debt.getOwner().link.numbers[0]);
-                                    }
-                                } else {
-                                    SwishLauncher.startSwish(self, debt.getAmount());
-                                }
-
+                                SwishLauncher.startSwish(getActivity(), debt.getAmount(), debt.getOwner());
 								return true;
 
                             default:

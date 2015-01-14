@@ -7,10 +7,10 @@ public class StorageManager {
 
     public static Storage getStorage(Activity context) {
         if(storage == null) {
-            storage = new DriveStorage(context);
+            storage = new LocalStorage(context);
         }
 
-        ((DriveStorage) storage).activity = context;
+        //((DriveStorage) storage).activity = context;
 
         return storage;
     }
