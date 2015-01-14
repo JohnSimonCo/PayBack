@@ -20,6 +20,8 @@ public class AppData {
 
     public HashSet<UUID> deleted;
 
+    public ArrayList<Contact> contacts;
+
     public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted) {
         this.people = people;
         this.debts = debts;
@@ -32,6 +34,10 @@ public class AppData {
 
     public String save() {
         return AppData.toJson(this);
+    }
+
+    public boolean isLinked() {
+        return contacts != null;
     }
 
     public ArrayList<Debt> feed(Person person) {
@@ -153,7 +159,7 @@ public class AppData {
         }
     }
 
-    public Person getOrCreatePerson(String name, Contacts contacts, DataActivity context) {
+    public Person getOrCreatePerson(String name, DataActivity context) {
         //Try to find existing person
         Person person = findPersonByName(name);
         if(person != null) {
@@ -190,7 +196,7 @@ public class AppData {
     }
 
     //Returns all unique names (from people and contacts)
-    public ArrayList<String> getAllNames(Contacts contacts) {
+    public ArrayList<String> getAllNames() {
         ArrayList<String> names = new ArrayList<String>();
         for (Person person : people) {
             if(!names.contains(person.getName())) {
@@ -207,7 +213,7 @@ public class AppData {
     }
 
     //Returns all unique contact names
-    public ArrayList<String> getContactNames(Contacts contacts) {
+    public ArrayList<String> getContactNames() {
         ArrayList<String> names = new ArrayList<String>();
         for (Contact contact : contacts) {
             if(!names.contains(contact.name)) {
@@ -218,9 +224,9 @@ public class AppData {
         return names;
     }
 
-    public String guessName(User sender, Contacts contacts) {
+    public String guessName(User user, User sender) {
         //If user has no name, use currently viewed person
-        if(contacts.user.name == null) {
+        if(user.name == null) {
             return FeedActivity.isAll() ? null : FeedActivity.person.getName();
         }
 

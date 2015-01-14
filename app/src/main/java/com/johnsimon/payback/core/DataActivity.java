@@ -8,7 +8,6 @@ import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.Contacts;
 import com.johnsimon.payback.util.DataLinker;
 
 public abstract class DataActivity extends ActionBarActivity {
@@ -16,10 +15,10 @@ public abstract class DataActivity extends ActionBarActivity {
     protected Storage storage;
     public AppData data;
 
-	protected Subscription<AppData> dataLinkedSubscription;
+	protected Subscription<AppData> dataLink;
     protected ContactLoader contactLoader;
-    public Contacts contacts;
-	public User user;
+
+    public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,7 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		contactLoader = ContactLoader.getLoader(this);
 
-		dataLinkedSubscription = DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
+		dataLink = DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
     }
 
 	@Override
@@ -38,13 +37,9 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		dataLinkedSubscription.listen(dataLinkedCallback);
-
-		contactLoader.contactsLoaded.then(contactsLoadedCallback);
+		dataLink.listen(dataLinkedCallback);
 
 		contactLoader.userLoaded.then(userLoadedCallback);
-
-		contactLoader.phoneNumbersLoaded.then(phoneNumbersLoadedCallback);
 
 		storage.connect();
     }
@@ -55,11 +50,7 @@ public abstract class DataActivity extends ActionBarActivity {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactLoader.contactsLoaded.unregister(contactsLoadedCallback);
-
 		contactLoader.userLoaded.unregister(userLoadedCallback);
-
-		contactLoader.phoneNumbersLoaded.unregister(phoneNumbersLoadedCallback);
 
         storage.disconnect();
     }
@@ -89,20 +80,6 @@ public abstract class DataActivity extends ActionBarActivity {
 		}
 	};
 
-	private boolean contactsLoaded = false;
-    private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
-        @Override
-        public void onCalled(Contacts contacts) {
-			if(contactsLoaded) return;
-
-			contactsLoaded = true;
-
-            self.contacts = contacts;
-
-            onContactsLoaded();
-		}
-    };
-
 	private boolean userLoaded = false;
 	private Callback<User> userLoadedCallback = new Callback<User>() {
 		@Override
@@ -117,31 +94,13 @@ public abstract class DataActivity extends ActionBarActivity {
 		}
 	};
 
-	private boolean phoneNumbersLoaded = false;
-    private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
-        @Override
-        public void onCalled(Contacts contacts) {
-			if(phoneNumbersLoaded) return;
-
-			phoneNumbersLoaded = true;
-
-            onPhoneNumbersLoaded();
-        }
-    };
-
     protected void onDataReceived() {
     }
 
 	protected void onDataLinked() {
 	}
 
-    protected void onContactsLoaded() {
-    }
-
 	protected void onUserLoaded() {
 	}
-
-    protected void onPhoneNumbersLoaded() {
-    }
 
 }
