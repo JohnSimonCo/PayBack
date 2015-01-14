@@ -4,9 +4,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 
 import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.core.User;
-import com.johnsimon.payback.util.Contacts;
+
+import java.util.ArrayList;
 
 /**
  * Created by John on 2015-01-13.
@@ -15,8 +17,10 @@ public class ContactLoader {
 	private static ContactLoader instance = null;
 
 	public Promise<User> userLoaded;
-	public Promise<Contacts> contactsLoaded;
-	public Promise<Contacts> phoneNumbersLoaded;
+	public Promise<ArrayList<Contact>> contactsLoaded;
+	public Promise<Void> phoneNumbersLoaded;
+
+    private User user;
 
 	public ContactLoader(Context context) {
 		final ContentResolver contentResolver = context.getContentResolver();
@@ -34,15 +38,16 @@ public class ContactLoader {
 		userLoader.execute(contentResolver);
 		userLoaded.then(new Callback<User>() {
 			@Override
-			public void onCalled(User user) {
-				contactsLoader.execute(new ContactsLoader.Argument(contentResolver, user));
+			public void onCalled(User _user) {
+                user = _user;
+				contactsLoader.execute(contentResolver);
 			}
 		});
 
-		contactsLoaded.then(new Callback<Contacts>() {
+		contactsLoaded.then(new Callback<ArrayList<Contact>>() {
 			@Override
-			public void onCalled(Contacts contacts) {
-				phoneNumberLoader.execute(new PhoneNumberLoader.Argument(contentResolver, contacts));
+			public void onCalled(ArrayList<Contact> contacts) {
+				phoneNumberLoader.execute(new PhoneNumberLoader.Argument(contentResolver, contacts, user));
 			}
 		});
 	}

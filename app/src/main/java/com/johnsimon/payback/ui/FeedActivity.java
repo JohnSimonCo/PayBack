@@ -134,11 +134,6 @@ public class FeedActivity extends DataActivity implements
     }
 
     @Override
-    protected void onContactsLoaded() {
-        int i = 0;
-    }
-
-    @Override
 	protected void onStart() {
 		super.onStart();
 		Intent intent = getIntent();
@@ -375,7 +370,7 @@ public class FeedActivity extends DataActivity implements
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
 		Bundle arguments = new Bundle();
-		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(sender, contacts));
+		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(user, sender));
 		fragment.setArguments(arguments);
 
 		fragment.show(getFragmentManager(), "from_who");
@@ -384,7 +379,7 @@ public class FeedActivity extends DataActivity implements
 		fragment.completeCallback = new FromWhoDialogFragment.FromWhoSelected() {
 			@Override
 			public void onSelected(String name) {
-				person = data.getOrCreatePerson(name, contacts, self);
+				person = data.getOrCreatePerson(name, self);
 
 				if(fullSync) {
 
@@ -448,6 +443,7 @@ public class FeedActivity extends DataActivity implements
         super.onDestroy();
     }
 
+    /* TODO så han kan fixa det sen
 	@Override
 	protected void onPhoneNumbersLoaded() {
 		hasLoadedPhoneNumbers = true;
@@ -459,9 +455,7 @@ public class FeedActivity extends DataActivity implements
 			fulllMenuPay.setEnabled(false);
 			detailMenuPay.setEnabled(false);
 		}
-
-		super.onPhoneNumbersLoaded();
-	}
+	}*/
 
 	@Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {

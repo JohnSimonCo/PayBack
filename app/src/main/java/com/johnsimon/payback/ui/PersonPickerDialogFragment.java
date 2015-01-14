@@ -73,11 +73,11 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		ArrayList<String> people;
 
 		if (useOnlyContacts) {
-			people = data.getContactNames(contacts);
+			people = data.getContactNames();
 		} else if (useOnlyPeopleInApp) {
 			people = data.getPeopleNames();
 		} else {
-			people = data.getAllNames(contacts);
+			people = data.getAllNames();
 		}
 
         final String blacklist = getArguments().getString(BLACKLIST_KEY, "");

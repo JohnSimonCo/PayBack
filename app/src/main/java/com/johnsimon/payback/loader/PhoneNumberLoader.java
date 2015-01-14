@@ -1,7 +1,6 @@
 package com.johnsimon.payback.loader;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,32 +8,36 @@ import android.provider.ContactsContract;
 
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Promise;
-import com.johnsimon.payback.util.Contacts;
+import com.johnsimon.payback.core.User;
+
+import java.util.ArrayList;
 
 /**
  * Created by John on 2015-01-13.
  */
-public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Void, Contacts> {
+public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Void, Void> {
 
-	public Promise<Contacts> promise = new Promise<>();
+	public Promise<Void> promise = new Promise<>();
 
 	@Override
-	protected Contacts doInBackground(Argument... params) {
+	protected Void doInBackground(Argument... params) {
 		ContentResolver contentResolver = params[0].contentResolver;
-		Contacts contacts = params[0].contacts;
 
-		contacts.user.setNumbers(getUserPhoneNumbers(contentResolver));
+        User user = params[0].user;
+        ArrayList<Contact> contacts = params[0].contacts;
+
+		user.setNumbers(getUserPhoneNumbers(contentResolver));
 
 		for(Contact contact : contacts) {
 			contact.setNumbers(getContactPhoneNumbers(contentResolver, contact.id));
 		}
 
-		return contacts;
+		return null;
 	}
 
 	@Override
-	protected void onPostExecute(Contacts contacts) {
-		promise.fire(contacts);
+	protected void onPostExecute(Void v) {
+		promise.fire(v);
 	}
 
 	private String[] getUserPhoneNumbers(ContentResolver contentResolver) {
@@ -78,11 +81,13 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 
 	public static class Argument {
 		public ContentResolver contentResolver;
-		public Contacts contacts;
+        public ArrayList<Contact> contacts;
+        public User user;
 
-		public Argument(ContentResolver contentResolver, Contacts contacts) {
+		public Argument(ContentResolver contentResolver, ArrayList<Contact> contacts, User user) {
 			this.contentResolver = contentResolver;
 			this.contacts = contacts;
+            this.user = user;
 		}
 	}
 }

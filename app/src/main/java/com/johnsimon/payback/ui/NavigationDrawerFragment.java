@@ -165,7 +165,7 @@ public class NavigationDrawerFragment extends DataFragment {
     }
 
     @Override
-    protected void onContactsLoaded() {
+    protected void onUserLoaded() {
         updateName();
     }
 
@@ -320,7 +320,7 @@ public class NavigationDrawerFragment extends DataFragment {
 	}
 
 	private void updateName() {
-        headerName.setText(contacts.user.getName(getResources()));
+        headerName.setText(user.getName(getResources()));
 	}
 
     public boolean isDrawerOpen() {

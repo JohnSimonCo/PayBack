@@ -230,13 +230,13 @@ public class CreateDebtActivity extends DataActivity {
 		}
 	}
 
-	@Override
-    protected void onFullyLoaded() {
-        floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(
+    @Override
+    protected void onDataLinked() {
+        floatLabelNameAutoCompleteTextView.setAdapter(new ArrayAdapter<>(
                 this,
                 R.layout.autocomplete_list_item,
                 R.id.autocomplete_list_item_title,
-                data.getAllNames(contacts)
+                data.getAllNames()
         ));
     }
 
@@ -284,12 +284,12 @@ public class CreateDebtActivity extends DataActivity {
 
 		Person person;
 		if(editingDebt == null) {
-			person = data.getOrCreatePerson(name, contacts, this);
+			person = data.getOrCreatePerson(name, this);
 			data.debts.add(0, new Debt(person, amount, note));
 		} else {
 			person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()
-				: data.getOrCreatePerson(name, contacts, this);
+				: data.getOrCreatePerson(name, this);
 
 			editingDebt.edit(person, amount, note);
 		}

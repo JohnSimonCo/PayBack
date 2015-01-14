@@ -47,7 +47,7 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	}
 
 	private NdefMessage createMessage(Debt[] debts, boolean fullSync) {
-		String JSON = new Gson().toJson(new NfcData(debts, context.contacts.user, fullSync), NfcData.class);
+		String JSON = new Gson().toJson(new NfcData(debts, context.user, fullSync), NfcData.class);
 		return new NdefMessage(
 				new NdefRecord[]{
 						createMime("application/vnd.com.johnsimon.payback", JSON.getBytes()),

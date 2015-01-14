@@ -2,35 +2,35 @@ package com.johnsimon.payback.core;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.Contacts;
-import com.johnsimon.payback.loader.ContactsLoader;
+
+import java.util.ArrayList;
 
 public abstract class DataFragment extends Fragment {
     protected Storage storage;
     public AppData data;
+    public User user;
 
-    public Contacts contacts;
+    public ArrayList<Contact> contacts;
 
 	private ContactLoader contactLoader;
 
-    @Nullable
+    private Subscription<AppData> dataLink;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         DataActivity activity = (DataActivity) getActivity();
+
         this.storage = activity.storage;
 
-		contactLoader = activity.contactLoader;
+        contactLoader = activity.contactLoader;
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        dataLink = activity.dataLink;
     }
 
 	@Override
@@ -39,9 +39,9 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactLoader.contactsLoaded.then(contactsLoadedCallback);
+        dataLink.listen(dataLinkedCallback);
 
-		contactLoader.phoneNumbersLoaded.then(phoneNumbersLoadedCallback);
+		contactLoader.userLoaded.then(userLoadedCallback);
 	}
 
 	@Override
@@ -50,55 +50,37 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactLoader.contactsLoaded.unregister(contactsLoadedCallback);
+        dataLink.unregister(dataLinkedCallback);
 
-		contactLoader.phoneNumbersLoaded.unregister(phoneNumbersLoadedCallback);
+        contactLoader.userLoaded.unregister(userLoadedCallback);
 	}
 
-	private DataFragment self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
-        public void onCalled(AppData data) {
-            self.data = data;
+        public void onCalled(AppData _data) {
+            data = _data;
             onDataReceived();
         }
     };
 
-	private boolean contactsLoaded = false;
-	private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
+    private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
         @Override
-        public void onCalled(Contacts contacts) {
-			if(contactsLoaded) return;
-
-			contactsLoaded = true;
-
-			self.contacts = contacts;
-
-			onContactsLoaded();
+        public void onCalled(AppData data) {
+            onDataLinked();
         }
     };
 
-	private boolean phoneNumbersLoaded = false;
-	private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
+    private boolean userLoaded = false;
+    private Callback<User> userLoadedCallback = new Callback<User>() {
         @Override
-        public void onCalled(Contacts contacts) {
-			if(phoneNumbersLoaded) return;
+        public void onCalled(User _user) {
+            if(userLoaded) return;
 
-			phoneNumbersLoaded = true;
+            userLoaded = true;
 
-			onPhoneNumbersLoaded();
-        }
-    };
+            user = _user;
 
-	private boolean fullyLoaded = false;
-	private Callback fullyLoadedCallback = new Callback() {
-        @Override
-        public void onCalled(Object data) {
-			if(fullyLoaded) return;
-
-			fullyLoaded = true;
-
-			onFullyLoaded();
+            onUserLoaded();
         }
     };
 
@@ -108,12 +90,7 @@ public abstract class DataFragment extends Fragment {
 	protected void onDataLinked() {
 	}
 
-	protected void onContactsLoaded() {
-	}
-
 	protected void onUserLoaded() {
 	}
 
-	protected void onPhoneNumbersLoaded() {
-	}
 }

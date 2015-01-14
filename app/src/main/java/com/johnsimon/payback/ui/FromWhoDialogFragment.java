@@ -73,7 +73,7 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 				getActivity(),
 				R.layout.autocomplete_list_item,
 				R.id.autocomplete_list_item_title,
-				data.getAllNames(contacts));
+				data.getAllNames());
 
 		actv.setAdapter(adapter);
 

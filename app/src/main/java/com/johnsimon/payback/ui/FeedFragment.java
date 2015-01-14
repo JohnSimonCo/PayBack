@@ -279,8 +279,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		startActivity(intent);
 	}
 
-	@Override
-	protected void onPhoneNumbersLoaded() {
-		adapter.notifyDataSetChanged();
-	}
+    @Override
+    protected void onDataLinked() {
+        adapter.notifyDataSetChanged();
+    }
 }

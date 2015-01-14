@@ -7,11 +7,7 @@ import android.provider.ContactsContract;
 
 import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.core.User;
-import com.johnsimon.payback.util.Contacts;
 
-/**
- * Created by John on 2015-01-13.
- */
 public class UserLoader extends AsyncTask<ContentResolver, Void, User> {
 
 	public Promise<User> promise = new Promise<>();

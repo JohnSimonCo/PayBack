@@ -3,120 +3,93 @@ package com.johnsimon.payback.core;
 import android.app.DialogFragment;
 import android.os.Bundle;
 
+import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.Contacts;
-import com.johnsimon.payback.loader.ContactsLoader;
+
+import java.util.ArrayList;
 
 public abstract class DataDialogFragment extends DialogFragment {
     protected Storage storage;
     public AppData data;
+    public User user;
 
-    public Contacts contacts;
+    public ArrayList<Contact> contacts;
 
-	private ContactsLoader contactsLoader;
-	private Promise fullyLoadedPromise;
+    private ContactLoader contactLoader;
+
+    private Subscription<AppData> dataLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         DataActivity activity = (DataActivity) getActivity();
+
         this.storage = activity.storage;
 
-		contactsLoader = activity.contactsLoader;
+        contactLoader = activity.contactLoader;
 
-		fullyLoadedPromise = activity.fullyLoadedPromise;
-
-        super.onCreate(savedInstanceState);
+        dataLink = activity.dataLink;
     }
 
-	@Override
-	public void onStart() {
-		super.onStart();
+    @Override
+    public void onStart() {
+        super.onStart();
 
-		storage.subscription.listen(dataLoadedCallback);
+        storage.subscription.listen(dataLoadedCallback);
 
-		contactsLoader.contactsLoaded.then(contactsLoadedCallback);
+        dataLink.listen(dataLinkedCallback);
 
-		contactsLoader.numbersLoaded.then(phoneNumbersLoadedCallback);
+        contactLoader.userLoaded.then(userLoadedCallback);
+    }
 
-	}
+    @Override
+    public void onStop() {
+        super.onStop();
 
-	@Override
-	public void onStop() {
-		super.onStop();
+        storage.subscription.unregister(dataLoadedCallback);
 
-		storage.subscription.unregister(dataLoadedCallback);
+        dataLink.unregister(dataLinkedCallback);
 
-		contactsLoader.contactsLoaded.unregister(contactsLoadedCallback);
+        contactLoader.userLoaded.unregister(userLoadedCallback);
+    }
 
-		contactsLoader.numbersLoaded.unregister(phoneNumbersLoadedCallback);
-
-		fullyLoadedPromise.unregister(fullyLoadedCallback);
-	}
-
-	private DataDialogFragment self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
         @Override
-        public void onCalled(AppData data) {
-            self.data = data;
+        public void onCalled(AppData _data) {
+            data = _data;
             onDataReceived();
         }
     };
 
-	private boolean contactsLoaded = false;
-	private Callback<Contacts> contactsLoadedCallback = new Callback<Contacts>() {
+    private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
         @Override
-        public void onCalled(Contacts contacts) {
-			if(contactsLoaded) return;
-
-			contactsLoaded = true;
-
-			self.contacts = contacts;
-
-			onContactsLoaded();
-
-			fullyLoadedPromise.then(fullyLoadedCallback);
-		}
-    };
-
-	private boolean phoneNumbersLoaded = false;
-	private Callback<Contacts> phoneNumbersLoadedCallback = new Callback<Contacts>() {
-        @Override
-        public void onCalled(Contacts contacts) {
-			if(phoneNumbersLoaded) return;
-
-			phoneNumbersLoaded = true;
-
-			onPhoneNumbersLoaded();
+        public void onCalled(AppData data) {
+            onDataLinked();
         }
     };
 
-	private boolean fullyLoaded = false;
-	private Callback fullyLoadedCallback = new Callback() {
+    private boolean userLoaded = false;
+    private Callback<User> userLoadedCallback = new Callback<User>() {
         @Override
-        public void onCalled(Object data) {
-			if(fullyLoaded) return;
+        public void onCalled(User _user) {
+            if(userLoaded) return;
 
-			fullyLoaded = true;
+            userLoaded = true;
 
-			onFullyLoaded();
+            user = _user;
+
+            onUserLoaded();
         }
     };
 
     protected void onDataReceived() {
-
     }
 
-    protected void onContactsLoaded() {
-
+    protected void onDataLinked() {
     }
 
-    protected void onPhoneNumbersLoaded() {
-
-    }
-
-    protected void onFullyLoaded() {
-
+    protected void onUserLoaded() {
     }
 }
