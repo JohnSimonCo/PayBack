@@ -34,6 +34,7 @@ import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
+import com.johnsimon.payback.view.FloatLabelLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
@@ -89,6 +90,8 @@ public class CreateDebtActivity extends DataActivity {
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
+        FloatLabelLayout floatLabelLayout = (FloatLabelLayout) findViewById(R.id.float_label_layout_amount);
+        floatLabelLayout.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
 		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
