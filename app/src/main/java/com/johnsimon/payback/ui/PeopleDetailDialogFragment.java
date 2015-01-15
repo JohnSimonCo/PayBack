@@ -1,5 +1,6 @@
 package com.johnsimon.payback.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -99,18 +100,22 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
                                     final int restorePersonIndex = data.people.indexOf(person);
 
-                                    Snackbar.with(getActivity().getApplicationContext())
-                                            .text(getString(R.string.deleted_person))
-                                            .actionLabel(getString(R.string.undo))
-                                            .actionColor(getResources().getColor(R.color.green))
-                                            .actionListener(new Snackbar.ActionClickListener() {
-                                                @Override
-                                                public void onActionClicked() {
-                                                    data.people.add(restorePersonIndex, person);
-                                                    editPersonCallback.onEdit();
-                                                }
-                                            })
-                                            .show(getActivity());
+									Activity activity = getActivity();
+									if (activity != null) {
+										Snackbar.with(getActivity().getApplicationContext())
+												.text(getString(R.string.deleted_person))
+												.actionLabel(getString(R.string.undo))
+												.actionColor(getResources().getColor(R.color.green))
+												.actionListener(new Snackbar.ActionClickListener() {
+													@Override
+													public void onActionClicked() {
+														data.people.add(restorePersonIndex, person);
+														editPersonCallback.onEdit();
+													}
+												})
+												.show(getActivity());
+									}
+
 
                                     data.delete(person);
                                     cancel();
