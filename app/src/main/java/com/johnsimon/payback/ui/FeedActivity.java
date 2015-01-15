@@ -1,7 +1,6 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -126,6 +125,11 @@ public class FeedActivity extends DataActivity implements
             sort();
         }
 
+    }
+
+    @Override
+    protected void onDataLinked() {
+        NavigationDrawerFragment.adapter.notifyDataSetChanged();
     }
 
     @Override

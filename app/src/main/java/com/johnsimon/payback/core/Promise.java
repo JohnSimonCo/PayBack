@@ -8,11 +8,18 @@ public class Promise<D> {
 
     private boolean hasFired = false;
 
+    //TODO then unique
     public void then(Callback<D> callback) {
         if(hasFired) {
             callback.onCalled(data);
         } else {
             callbacks.add(callback);
+        }
+    }
+
+    public void thenUnique(Callback<D> callback) {
+        if(!callbacks.contains(callback)) {
+            then(callback);
         }
     }
 

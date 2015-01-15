@@ -13,19 +13,15 @@ import java.util.ArrayList;
  */
 public class DataLinker {
 
-	public static Subscription<AppData> link(Subscription<AppData> dataSubscription, final Promise<ArrayList<Contact>> contactsPromise) {
-		final Subscription<AppData> output = new Subscription<>();
+    private AppData data;
+    private Subscription<AppData> output = new Subscription<>();
 
+	public Subscription<AppData> link(Subscription<AppData> dataSubscription, final Promise<ArrayList<Contact>> contactsPromise) {
 		dataSubscription.listen(new Callback<AppData>() {
 			@Override
-			public void onCalled(final AppData data) {
-				contactsPromise.then(new Callback<ArrayList<Contact>>() {
-					@Override
-					public void onCalled(ArrayList<Contact> contacts) {
-						link(data, contacts);
-						output.broadcast(data);
-					}
-				});
+			public void onCalled(final AppData _data) {
+                data = _data;
+				contactsPromise.thenUnique(contactsLoadedCallback);
 			}
 		});
 
@@ -44,4 +40,12 @@ public class DataLinker {
 			}
 		}
 	}
+
+    Callback<ArrayList<Contact>> contactsLoadedCallback = new Callback<ArrayList<Contact>>() {
+        @Override
+        public void onCalled(ArrayList<Contact> contacts) {
+            link(data, contacts);
+            output.broadcast(data);
+        }
+    };
 }

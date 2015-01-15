@@ -21,6 +21,8 @@ public class AppData {
 
     public transient ArrayList<Contact> contacts;
 
+    //TODO preferences
+
     public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted) {
         this.people = people;
         this.debts = debts;

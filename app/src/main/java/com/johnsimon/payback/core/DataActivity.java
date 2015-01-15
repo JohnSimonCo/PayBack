@@ -41,7 +41,7 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		contactLoader = ContactLoader.getLoader(this);
 
-		dataLink = DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
+		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
     }
 
 	@Override
