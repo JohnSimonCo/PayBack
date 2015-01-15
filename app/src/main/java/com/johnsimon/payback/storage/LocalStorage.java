@@ -29,7 +29,7 @@ public class LocalStorage extends Storage {
 
         emit(AppData.fromJson(JSON));
 
-		test();
+		//test();
     }
 
 	public void test() {

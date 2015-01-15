@@ -21,9 +21,11 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.internal.p;
 import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
+import com.nostra13.universalimageloader.utils.IoUtils;
 import com.williammora.snackbar.Snackbar;
 
 import java.io.BufferedReader;
@@ -118,10 +120,16 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		}
 	}
 
-	private final static long MAX_REFRESH_FREQ = 3000;
+	private final static long MAX_REFRESH_FREQ = 5000;
 	private Long lastRefresh;
 	private boolean mayRefresh() {
-		return  System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
+		return System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
+	}
+
+	public void logout() {
+		client.clearDefaultAccountAndReconnect();
+		emit(new AppData());
+		localStorage.commit(data);
 	}
 
 	private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
@@ -309,7 +317,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
+		if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(activity, REQUEST_CODE_RESOLUTION);
             } catch (IntentSender.SendIntentException e) {
