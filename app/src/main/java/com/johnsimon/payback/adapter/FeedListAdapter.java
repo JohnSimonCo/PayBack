@@ -97,7 +97,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				dialog.callback = callback;
 			}
 		});
-
+		//TODO THIS LAGS LIKE HELL!!!
         ViewTreeObserver vto = holder.date.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
