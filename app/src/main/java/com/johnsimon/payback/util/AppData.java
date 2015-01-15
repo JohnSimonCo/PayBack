@@ -7,7 +7,6 @@ import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
-import com.johnsimon.payback.serialize.AppDataSerializable;
 import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class AppData {
 
     public HashSet<UUID> deleted;
 
-    public ArrayList<Contact> contacts;
+    public transient ArrayList<Contact> contacts;
 
     public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted) {
         this.people = people;
@@ -250,11 +249,19 @@ public class AppData {
     }
 
     public static AppData fromJson(String JSON) {
-        return JSON == null ? new AppData() : new Gson().fromJson(JSON, AppDataSerializable.class).extract();
+		if(JSON == null) {
+			return new AppData();
+		}
+
+		AppData data = new Gson().fromJson(JSON, AppData.class);
+		for(Debt debt : data.debts) {
+			debt.linkOwner(data.people);
+		}
+		return data;
     }
 
     public static String toJson(AppData data) {
-        return new Gson().toJson(new AppDataSerializable(data), AppDataSerializable.class);
+        return new Gson().toJson(data, AppData.class);
     }
 
 	@Override

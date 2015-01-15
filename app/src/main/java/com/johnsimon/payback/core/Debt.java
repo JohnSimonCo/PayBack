@@ -3,9 +3,19 @@ package com.johnsimon.payback.core;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.Resource;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Debt extends SyncedData<Debt> {
@@ -15,16 +25,21 @@ public class Debt extends SyncedData<Debt> {
 	private final static int POSITIVE_COLOR_DISABLED = R.color.green_disabled;
 	private final static int NEGATIVE_COLOR_DISABLED = R.color.red_disabled;
 
-	private Person owner;
+
+	private transient Person owner;
+	//Used for (de)serialization
+	private UUID ownerId;
 	private float amount;
 	private String note;
 	public final long timestamp;
 	private boolean paidBack;
+	public String currency;
 
     public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack) {
 		super(id, touched);
 
         this.owner = owner;
+		this.ownerId = owner.id;
         this.amount = amount;
         this.note = note;
         this.timestamp = timestamp;
@@ -40,6 +55,15 @@ public class Debt extends SyncedData<Debt> {
 		this(owner, amount, note, System.currentTimeMillis());
 	}
 
+	public void linkOwner(ArrayList<Person> people) {
+		for(Person person : people) {
+			if(person.id.equals(ownerId)) {
+				this.owner = person;
+				return;
+			}
+		}
+	}
+
 	public Person getOwner() {
 		return owner;
 	}
@@ -47,6 +71,7 @@ public class Debt extends SyncedData<Debt> {
 	public void setOwner(Person owner) {
 		touch();
 		this.owner = owner;
+		this.ownerId = owner.id;
 	}
 
 	public float getAmount() {
@@ -152,4 +177,5 @@ public class Debt extends SyncedData<Debt> {
 	public String toString() {
 		return amount + " for " + note;
 	}
+
 }

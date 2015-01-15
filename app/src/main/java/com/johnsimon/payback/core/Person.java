@@ -7,8 +7,7 @@ import java.util.UUID;
 public class Person extends SyncedData<Person> {
 	private String name;
 	public final int color;
-	//TODO delayed link
-    public Contact link = null;
+    public transient  Contact link = null;
 
 	//Used for deserialization
 	public Person(String name, UUID id, Integer color, long touched) {
