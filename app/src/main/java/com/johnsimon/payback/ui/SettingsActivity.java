@@ -135,14 +135,13 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                                     super.onPositive(dialog);
                                     Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
 
-                                    dialog.cancel();
+                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onNegative(MaterialDialog dialog) {
-                                    super.onNegative(dialog);
-                                    dialog.cancel();
-                                    pref_cloud_sync.setChecked(false);
+									pref_cloud_sync.setChecked(false);
+									super.onNegative(dialog);
                                 }
                             })
                             .show();
@@ -174,13 +173,12 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 								super.onPositive(dialog);
 								//TODO wipe data
 
-								dialog.cancel();
+								dialog.dismiss();
 							}
 
 							@Override
 							public void onNegative(MaterialDialog dialog) {
 								super.onNegative(dialog);
-								dialog.cancel();
 							}
 						})
 						.show();

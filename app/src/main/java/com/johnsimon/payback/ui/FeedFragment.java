@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +63,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
 
-		displayTotalDebt(getActivity());
+		if (getActivity() != null && getResources() != null) {
+			displayTotalDebt(getResources());
+		}
 
         //FAB is different on L
         if (Resource.isLOrAbove()) {
@@ -139,9 +142,14 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		debt.setPaidBack(!debt.isPaidBack());
         storage.commit();
 		adapter.notifyDataSetChanged();
-		displayTotalDebt(getActivity());
+
+		if (getActivity() != null && getResources() != null) {
+			if (getActivity() != null && getResources() != null) {
+				displayTotalDebt(getResources());
+			}
+		}
 	}
-	public static void displayTotalDebt(Activity ctx) {
+	public static void displayTotalDebt(Resources resources) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -150,7 +158,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, ctx.getResources().getString(R.string.even), FeedActivity.isAll(), ctx.getResources().getString(R.string.debt_free)));
+		totalDebtTextView.setText(Debt.totalString(debt, resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -183,13 +191,12 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
                                 FeedActivity.bp.purchase(self, "full_version");
-                                dialog.cancel();
+                                dialog.dismiss();
                             }
 
                             @Override
                             public void onNegative(MaterialDialog dialog) {
                                 super.onNegative(dialog);
-                                dialog.cancel();
                             }
                         })
                         .show();
@@ -226,7 +233,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                                             FeedActivity.feed.add(indexFeed, debt);
                                         }
 
-                                        displayTotalDebt(getActivity());
+										if (getActivity() != null && getResources() != null) {
+											displayTotalDebt(getResources());
+										}
                                         adapter.notifyItemInserted(indexFeed);
                                         adapter.checkAdapterIsEmpty();
                                     }
@@ -239,7 +248,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                             FeedActivity.feed.remove(debt);
                         }
 
-                        displayTotalDebt(getActivity());
+						if (getActivity() != null && getResources() != null) {
+							displayTotalDebt(getResources());
+						}
                         adapter.notifyItemRemoved(index);
                         adapter.checkAdapterIsEmpty();
 

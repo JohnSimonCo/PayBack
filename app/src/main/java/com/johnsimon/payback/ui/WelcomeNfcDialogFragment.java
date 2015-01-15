@@ -26,7 +26,7 @@ public class WelcomeNfcDialogFragment extends DialogFragment {
 		welcome_got_it.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				alertDialog.cancel();
+				alertDialog.dismiss();
 			}
 		});
 

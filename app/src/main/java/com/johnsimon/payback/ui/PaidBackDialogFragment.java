@@ -83,7 +83,7 @@ public class PaidBackDialogFragment extends DialogFragment {
 			@Override
 			public void run() {
 				completeCallback.onComplete(debt);
-				alertDialog.cancel();
+				alertDialog.dismiss();
 			}
 		}, 1000);
 

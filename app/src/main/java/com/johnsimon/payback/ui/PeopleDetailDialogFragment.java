@@ -115,13 +115,12 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                     data.delete(person);
                                     cancel();
 
-                                    dialog.cancel();
+                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onNegative(MaterialDialog dialog) {
                                     super.onNegative(dialog);
-                                    dialog.cancel();
                                 }
                             })
                             .show();
@@ -197,13 +196,12 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                             data.merge(person, other);
                             cancel();
 
-                            dialog.cancel();
+                            dialog.dismiss();
                         }
 
                         @Override
                         public void onNegative(MaterialDialog dialog) {
                             super.onNegative(dialog);
-                            dialog.cancel();
                         }
                     })
                     .show();

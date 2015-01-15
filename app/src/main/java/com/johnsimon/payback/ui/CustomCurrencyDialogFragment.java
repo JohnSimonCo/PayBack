@@ -36,7 +36,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		dialogCustomCurrencyCancel.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				alertDialog.cancel();
+				alertDialog.dismiss();
 			}
 		});
 
@@ -83,7 +83,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		@Override
 		public void onClick(View v) {
 			completeCallback.onSelected(customCurrencyEditText.getText().toString());
-			alertDialog.cancel();
+			alertDialog.dismiss();
 		}
 	};
 

@@ -165,7 +165,7 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 		@Override
 		public void onClick(View v) {
 			completeCallback.onSelected(actv.getText().toString());
-			alertDialog.cancel();
+			alertDialog.dismiss();
 		}
 	};
 

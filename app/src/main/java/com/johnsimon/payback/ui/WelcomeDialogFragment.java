@@ -153,6 +153,7 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 
 			Resource.setCurrency(currency);
 
+			//TODO look into and test
 			/*
             int length = FeedActivity.feed.size();
             for (int i = 0; i < length; i++) {
@@ -160,13 +161,17 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
             }*/
 
             FeedFragment.adapter.notifyDataSetChanged();
-            FeedFragment.displayTotalDebt(getActivity());
+
+			if (getActivity() != null && getResources() != null) {
+				FeedFragment.displayTotalDebt(getResources());
+			}
+
 			NavigationDrawerFragment.updateBalance(data);
 			if (SettingsActivity.pref_currency != null) {
 				SettingsActivity.pref_currency.setSummary(currency);
 			}
 
-			alertDialog.cancel();
+			alertDialog.dismiss();
 		}
 	};
 

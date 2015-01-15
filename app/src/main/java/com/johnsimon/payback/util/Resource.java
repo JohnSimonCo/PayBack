@@ -183,7 +183,7 @@ public class Resource {
 
                             neverRate = true;
                             preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
-                            dialog.cancel();
+                            dialog.dismiss();
                         }
 
                         @Override
@@ -191,13 +191,12 @@ public class Resource {
                             super.onNegative(dialog);
                             neverRate = true;
                             preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
-                            dialog.cancel();
                         }
 
                         @Override
                         public void onNeutral(MaterialDialog dialog) {
                             super.onNeutral(dialog);
-                            dialog.cancel();
+                            dialog.dismiss();
                         }
                     })
                     .show();

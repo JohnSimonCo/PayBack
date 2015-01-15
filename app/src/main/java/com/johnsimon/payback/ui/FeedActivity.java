@@ -280,13 +280,13 @@ public class FeedActivity extends DataActivity implements
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
                                 bp.purchase(self, "full_version");
-                                dialog.cancel();
+                                dialog.dismiss();
                             }
 
                             @Override
                             public void onNegative(MaterialDialog dialog) {
                                 super.onNegative(dialog);
-                                dialog.cancel();
+                                dialog.dismiss();
                             }
                         })
                         .show();
@@ -347,13 +347,12 @@ public class FeedActivity extends DataActivity implements
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
                             bp.purchase(self, "full_version");
-                            dialog.cancel();
+                            dialog.dismiss();
                         }
 
                         @Override
                         public void onNegative(MaterialDialog dialog) {
                             super.onNegative(dialog);
-                            dialog.cancel();
                         }
                     })
                     .show();
@@ -386,13 +385,12 @@ public class FeedActivity extends DataActivity implements
                                     super.onPositive(dialog);
                                     data.sync(person, debts);
                                     commitBeam();
-                                    dialog.cancel();
+                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onNegative(MaterialDialog dialog) {
                                     super.onNegative(dialog);
-                                    dialog.cancel();
                                 }
                             })
                             .show();
@@ -454,13 +452,13 @@ public class FeedActivity extends DataActivity implements
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 })
                 .show();

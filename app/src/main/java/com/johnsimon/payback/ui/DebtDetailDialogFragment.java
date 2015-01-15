@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -81,7 +82,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                 paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
                 paidBackDialogFragment.completeCallback = self;
 
-                alertDialog.cancel();
+                alertDialog.dismiss();
             }
         });
 
@@ -134,14 +135,14 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 if (callback != null) {
                                     callback.onEdit(debt);
                                 }
-                                alertDialog.cancel();
+                                alertDialog.dismiss();
 
                                 return true;
                             case R.id.detail_dialog_delete:
                                 if (callback != null) {
                                     callback.onDelete(debt);
                                 }
-                                alertDialog.cancel();
+                                alertDialog.dismiss();
 
                                 return true;
                             case R.id.detail_dialog_change:
@@ -153,10 +154,13 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 args.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
                                 personPickerDialogFragment.setArguments(args);
 
-                                personPickerDialogFragment.show(getFragmentManager(), "person_dialog");
-                                personPickerDialogFragment.completeCallback = changePersonCallback;
+								FragmentManager fm = getFragmentManager();
+								if (fm != null) {
+									personPickerDialogFragment.show(fm, "person_dialog");
+									personPickerDialogFragment.completeCallback = changePersonCallback;
+								}
 
-                                alertDialog.cancel();
+                                alertDialog.dismiss();
                                 return true;
 
 							case R.id.detail_dialog_pay_back:

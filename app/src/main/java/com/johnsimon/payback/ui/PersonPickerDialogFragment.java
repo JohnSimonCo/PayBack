@@ -171,7 +171,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		@Override
 		public void onClick(View v) {
 			completeCallback.onSelected(autoCompleteTextView.getText().toString());
-			alertDialog.cancel();
+			alertDialog.dismiss();
 		}
 	};
 
