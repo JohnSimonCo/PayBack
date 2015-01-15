@@ -46,7 +46,7 @@ public class Debt extends SyncedData<Debt> {
         this.paidBack = paidBack;
     }
 
-	public Debt(Person owner, float amount, String note, long time) {
+	private Debt(Person owner, float amount, String note, long time) {
         this(owner, amount, note, UUID.randomUUID(), time, time, false);
 	}
 

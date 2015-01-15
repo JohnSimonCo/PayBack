@@ -11,6 +11,7 @@ import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.UUID;
 
 public class AppData {
@@ -259,6 +260,7 @@ public class AppData {
 		for(Debt debt : data.debts) {
 			debt.linkOwner(data.people);
 		}
+
 		return data;
     }
 
