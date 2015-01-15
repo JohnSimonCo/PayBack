@@ -53,7 +53,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
-		//TODO använda app folder
+		//TODO innan release: använda app folder
            .addScope(Drive.SCOPE_FILE)
            .addConnectionCallbacks(this)
            .addOnConnectionFailedListener(this)

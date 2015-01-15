@@ -10,7 +10,6 @@ import com.johnsimon.payback.util.AppData;
 public abstract class Storage {
     protected Context context;
     public Subscription<AppData> subscription = new Subscription<>();
-    public Promise<AppData> promise = new Promise<>();
 
     protected AppData data;
 
@@ -20,11 +19,15 @@ public abstract class Storage {
 
     protected void emit(AppData data) {
         this.data = data;
-        promise.fire(data);
         subscription.broadcast(data);
     }
 
     public abstract void commit();
+
+	public void wipe() {
+		emit(new AppData());
+		commit();
+	}
 
     public void commit(AppData data) {
         this.data = data;
@@ -39,7 +42,6 @@ public abstract class Storage {
     }
 
 	public void requestRefresh() {
-
 	}
 
     public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {

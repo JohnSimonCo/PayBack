@@ -43,6 +43,7 @@ public class ContactsLoader extends AsyncTask<ContentResolver, Void, ArrayList<C
 		}
 		cursor.close();
 
+
 		return contacts;
 	}
 

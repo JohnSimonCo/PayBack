@@ -115,7 +115,7 @@ public class FeedActivity extends DataActivity implements
 
     @Override
     protected void onDataReceived() {
-		//TODO går tillbaka till all om man är inne på någon om man får data sent
+		//TODO går tillbaka till all om man är inne på någon och man får dataRecieved
 
         if(isAll()) {
             feed = data.debts;

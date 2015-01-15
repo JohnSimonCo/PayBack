@@ -261,7 +261,7 @@ public class Resource {
     public static void checkFull(BillingProcessor bp) {
         isFull =  bp.isPurchased("full_version");
 
-		//TODO remove this
+		//TODO innan release: Ta bort detta
 		isFull = true;
     }
 
