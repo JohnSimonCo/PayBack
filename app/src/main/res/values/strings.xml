@@ -114,8 +114,8 @@
     <string name="author_gson">Google</string>
     <string name="lib_uil">Universal Image Loader</string>
     <string name="author_uil">Sergey Tarasevich</string>
-    <string name="lib_dslv">DragSortListView</string>
-    <string name="author_dslv">Carl Bauer</string>
+    <string name="lib_dsr">DragSortRecycler</string>
+    <string name="author_dsr">Emile Belanger</string>
     <string name="lib_qr">QuickReturn</string>
     <string name="author_qr">Etienne Lawlor</string>
     <string name="lib_snb">Snackbar</string>

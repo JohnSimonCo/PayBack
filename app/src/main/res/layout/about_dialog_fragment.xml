@@ -134,14 +134,14 @@
 
             <TextView
                 style="@style/library_title"
-                android:text="@string/lib_dslv"
+                android:text="@string/lib_dsr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <com.devspark.robototextview.widget.RobotoTextView
                 app:fontFamily="roboto"
                 app:textWeight="medium"
-                android:text="@string/author_dslv"
+                android:text="@string/author_dsr"
                 style="@style/library_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

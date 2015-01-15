@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -30,9 +33,7 @@ import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
-import com.mobeta.android.dslv.DragSortController;
-import com.mobeta.android.dslv.DragSortListView;
-import com.mobeta.android.dslv.SimpleFloatViewManager;
+import com.johnsimon.payback.view.DragSortRecycler;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
@@ -47,7 +48,7 @@ public class PeopleManagerActivity extends DataActivity {
 	//TODO behålla ordning till drive
 
 	private PeopleListAdapter adapter;
-    private DragSortListView listView;
+    private RecyclerView recyclerView;
 
     private int sortAzX;
     private int sortAzY;
@@ -79,43 +80,34 @@ public class PeopleManagerActivity extends DataActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        listView = (DragSortListView) findViewById(R.id.people_listview);
+		recyclerView = (RecyclerView) findViewById(R.id.people_recycler_view);
 
-        listView.setDropListener(onDrop);
+		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager( new LinearLayoutManager(this));
+		recyclerView.setItemAnimator(null);
 
-        DragSortController controller = new DragSortController(listView);
-        controller.setRemoveEnabled(false);
-        controller.setSortEnabled(true);
-        controller.setDragInitMode(DragSortController.ON_DRAG);
-		controller.setDragHandleId(R.id.people_list_item_handle);
+		DragSortRecycler dragSortRecycler = new DragSortRecycler();
+		dragSortRecycler.setViewHandleId(R.id.people_list_item_handle);
+		dragSortRecycler.setFloatingAlpha(0.4f);
+		dragSortRecycler.setFloatingBgColor(getResources().getColor(android.R.color.transparent));
+		dragSortRecycler.setAutoScrollSpeed(0.3f);
+		dragSortRecycler.setAutoScrollWindow(0.1f);
 
-        listView.setFloatViewManager(controller);
-        listView.setOnTouchListener(controller);
-        listView.setDragEnabled(true);
-
-        SimpleFloatViewManager simpleFloatViewManager = new SimpleFloatViewManager(listView);
-        simpleFloatViewManager.setBackgroundColor(Color.TRANSPARENT);
-        listView.setFloatViewManager(simpleFloatViewManager);
-
-        final Activity self = this;
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		dragSortRecycler.setOnItemMovedListener(new DragSortRecycler.OnItemMovedListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Person person = adapter.getItem(position);
-				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
-				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");
-				peopleDetailDialogFragment.editPersonCallback = new PeopleDetailDialogFragment.EditPersonCallback() {
-
-					@Override
-					public void onEdit() {
-						adapter.notifyDataSetChanged();
-                        storage.commit();
-						Resource.actionComplete(self);
-					}
-				};
+			public void onItemMoved(int from, int to) {
+				if (from != to) {
+					Person item = adapter.getItem(from);
+					adapter.remove(item);
+					adapter.insert(item, to);
+					adapter.notifyDataSetChanged();
+				}
 			}
 		});
+
+		recyclerView.addItemDecoration(dragSortRecycler);
+		recyclerView.addOnItemTouchListener(dragSortRecycler);
+		recyclerView.setOnScrollListener(dragSortRecycler.getScrollListener());
 
         final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
 		people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
@@ -159,9 +151,31 @@ public class PeopleManagerActivity extends DataActivity {
 
 	@Override
 	protected void onDataReceived() {
-		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title));
-		listView.setAdapter(adapter);
+		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title), data.people);
+		recyclerView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		adapter.updateEmptyViewVisibility();
+
+		final PeopleManagerActivity self = this;
+
+		adapter.clickListener = new PeopleListAdapter.PeopleListClickListener() {
+			@Override
+			public void onListItemClick(int position) {
+				Person person = adapter.getItem(position);
+				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
+				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");
+				peopleDetailDialogFragment.editPersonCallback = new PeopleDetailDialogFragment.EditPersonCallback() {
+
+					@Override
+					public void onEdit() {
+						adapter.notifyDataSetChanged();
+						adapter.updateEmptyViewVisibility();
+						storage.commit();
+						Resource.actionComplete(self);
+					}
+				};
+			}
+		};
 	}
 
 	@Override
@@ -185,6 +199,7 @@ public class PeopleManagerActivity extends DataActivity {
 					data.people.add(person);
 					storage.commit();
 					adapter.notifyDataSetChanged();
+					adapter.updateEmptyViewVisibility();
 				}
 			};
 
@@ -225,6 +240,7 @@ public class PeopleManagerActivity extends DataActivity {
 
 				if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
                     adapter.notifyDataSetChanged();
+					adapter.updateEmptyViewVisibility();
 
                     Snackbar.with(getApplicationContext())
                             .text(getString(R.string.sort_list))
@@ -239,6 +255,7 @@ public class PeopleManagerActivity extends DataActivity {
                                     adapter.clear();
                                     adapter.addAll(data.people);
                                     adapter.notifyDataSetChanged();
+									adapter.updateEmptyViewVisibility();
                                 }
                             })
                             .show(this);
@@ -246,10 +263,10 @@ public class PeopleManagerActivity extends DataActivity {
                     break;
                 }
 
-                int initialRadius = listView.getWidth();
+                int initialRadius = recyclerView.getWidth();
 
                 Animator anim =
-                        ViewAnimationUtils.createCircularReveal(listView, sortAzX, sortAzY, initialRadius, 0);
+                        ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, initialRadius, 0);
 
                 anim.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -257,13 +274,14 @@ public class PeopleManagerActivity extends DataActivity {
                         super.onAnimationEnd(animation);
 
                         adapter.notifyDataSetChanged();
+						adapter.updateEmptyViewVisibility();
 
-                        int finalRadius = Math.max(listView.getWidth(), listView.getHeight());
+                        int finalRadius = Math.max(recyclerView.getWidth(), recyclerView.getHeight());
 
                         Animator anim =
-                                ViewAnimationUtils.createCircularReveal(listView, sortAzX, sortAzY, 0, finalRadius);
+                                ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, finalRadius);
 
-                        listView.setVisibility(View.VISIBLE);
+						recyclerView.setVisibility(View.VISIBLE);
                         anim.setDuration(300);
 
                         anim.addListener(new Animator.AnimatorListener() {
@@ -287,6 +305,7 @@ public class PeopleManagerActivity extends DataActivity {
                                                 adapter.clear();
                                                 adapter.addAll(data.people);
                                                 adapter.notifyDataSetChanged();
+												adapter.updateEmptyViewVisibility();
                                             }
                                         })
                                         .show(self);
@@ -314,17 +333,6 @@ public class PeopleManagerActivity extends DataActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	private DragSortListView.DropListener onDrop = new DragSortListView.DropListener() {
-		@Override
-		public void drop(int from, int to) {
-			if (from != to) {
-				Person item = adapter.getItem(from);
-				adapter.remove(item);
-				adapter.insert(item, to);
-			}
-		}
-	};
 
 	@Override
 	public void onBackPressed() {

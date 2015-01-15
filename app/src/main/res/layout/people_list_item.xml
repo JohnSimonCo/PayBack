@@ -8,6 +8,7 @@
     android:paddingBottom="8dp"
     android:paddingLeft="@dimen/base_padding"
     android:paddingRight="@dimen/base_padding"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
