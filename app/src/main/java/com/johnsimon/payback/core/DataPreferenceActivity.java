@@ -41,7 +41,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader = ContactLoader.getLoader(this);
 
-		dataLink = DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
+		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
 	}
 
 	@Override
