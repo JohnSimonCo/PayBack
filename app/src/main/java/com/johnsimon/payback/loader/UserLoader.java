@@ -14,13 +14,19 @@ public class UserLoader extends AsyncTask<ContentResolver, Void, User> {
 
 	@Override
 	protected User doInBackground(ContentResolver... params) {
-		String name = null;
-
 		Cursor cursor = params[0].query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-		if(cursor.moveToFirst()) {
-			name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
-		}
+
+		String name = cursor.moveToFirst()
+			? cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME))
+			: null;
+
 		cursor.close();
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		return new User(name);
 	}

@@ -162,6 +162,11 @@ public class PeopleManagerActivity extends DataActivity {
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
+	protected void onDataLinked() {
+		adapter.notifyDataSetChanged();
+	}
+
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {

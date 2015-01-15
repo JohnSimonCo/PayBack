@@ -39,8 +39,8 @@ public class Promise<D> {
         callbacks.clear();
     }
 
-    public static Promise all(Promise... promises) {
-        final Promise promise = new Promise();
+    public static Promise<Void> all(Promise... promises) {
+        final Promise<Void> promise = new Promise<>();
 
         final Counter counter = new Counter(promises.length);
 

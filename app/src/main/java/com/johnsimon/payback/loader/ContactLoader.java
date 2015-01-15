@@ -2,6 +2,7 @@ package com.johnsimon.payback.loader;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.core.Contact;
@@ -20,7 +21,8 @@ public class ContactLoader {
 	public Promise<ArrayList<Contact>> contactsLoaded;
 	public Promise<Void> phoneNumbersLoaded;
 
-    private User user;
+	private User user;
+	private ArrayList<Contact> contacts;
 
 	public ContactLoader(Context context) {
 		final ContentResolver contentResolver = context.getContentResolver();
@@ -35,19 +37,27 @@ public class ContactLoader {
 		phoneNumbersLoaded = phoneNumberLoader.promise;
 
 
-		userLoader.execute(contentResolver);
+		userLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, contentResolver);
+		contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, contentResolver);
 		userLoaded.then(new Callback<User>() {
 			@Override
 			public void onCalled(User _user) {
                 user = _user;
-				contactsLoader.execute(contentResolver);
 			}
 		});
 
 		contactsLoaded.then(new Callback<ArrayList<Contact>>() {
 			@Override
-			public void onCalled(ArrayList<Contact> contacts) {
-				phoneNumberLoader.execute(new PhoneNumberLoader.Argument(contentResolver, contacts, user));
+			public void onCalled(ArrayList<Contact> _contacts) {
+				contacts = _contacts;
+			}
+		});
+
+		Promise.all(userLoaded, contactsLoaded).then(new Callback<Void>() {
+			@Override
+			public void onCalled(Void v) {
+				phoneNumberLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+						new PhoneNumberLoader.Argument(contentResolver, contacts, user));
 			}
 		});
 	}

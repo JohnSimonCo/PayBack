@@ -43,6 +43,11 @@ public class ContactsLoader extends AsyncTask<ContentResolver, Void, ArrayList<C
 		}
 		cursor.close();
 
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		return contacts;
 	}
