@@ -135,6 +135,16 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 		return alertDialog;
 	}
 
+	@Override
+	protected void onDataReceived() {
+
+	}
+
+	@Override
+	protected void onDataLinked() {
+
+	}
+
 	private void disableButton(Button btn) {
 		btn.setTextColor(getResources().getColor(R.color.green_disabled));
 		btn.setOnClickListener(null);

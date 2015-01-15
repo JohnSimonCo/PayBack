@@ -13,12 +13,10 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
@@ -60,7 +58,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         dialog_custom_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity()));
@@ -97,7 +94,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             dialog_custom_amount.setText(debt.amountString());
             dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
         }
-
 
         TextView dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
         TextView dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);

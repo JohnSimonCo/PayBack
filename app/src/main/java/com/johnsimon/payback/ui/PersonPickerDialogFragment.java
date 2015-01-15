@@ -24,11 +24,16 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 	private AlertDialog alertDialog;
 	private String title;
 	private boolean useOnlyPeopleInApp = false;
+	private boolean useOnlyContacts;
+	private Button confirmButton;
+	private ArrayAdapter adapter;
+	private String blacklist;
 
 	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
 	public final static String TITLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_TITLE_KEY";
 	public final static String PEOPLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_PERSON_KEY";
-    public final static String BLACKLIST_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_BLACKLIST_KEY";
+	public final static String BLACKLIST_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_BLACKLIST_KEY";
+	public final static String NO_EXISTING_PEOPLE_FLAG = "PERSON_PICKER_DIALOG_FRAGMENT_NO_EXISTING_PEOPLE_FLAG";
 
 	private AutoCompleteTextView autoCompleteTextView;
 
@@ -47,7 +52,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
             useOnlyPeopleInApp = args.getBoolean(PEOPLE_KEY, false);
         }
 
-        boolean useOnlyContacts = false;
+        useOnlyContacts = false;
 
         TextView person_picker_dialog_title = (TextView) rootView.findViewById(R.id.person_picker_dialog_title);
 		if (!title.equals(USE_DEFAULT_TITLE)) {
@@ -57,7 +62,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 			}
 		}
 
-		final Button confirmButton = (Button) rootView.findViewById(R.id.dialog_select_person_confirm);
+		confirmButton = (Button) rootView.findViewById(R.id.dialog_select_person_confirm);
 		Button cancelButton = (Button) rootView.findViewById(R.id.dialog_select_person_cancel);
 
 		cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -70,34 +75,11 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.select_person_actv);
 		autoCompleteTextView.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
-		ArrayList<String> people;
-
-		if (useOnlyContacts) {
-			people = data.getContactNames();
-		} else if (useOnlyPeopleInApp) {
-			people = data.getPeopleNames();
-		} else {
-			people = data.getAllNames();
-		}
-
-        final String blacklist = getArguments().getString(BLACKLIST_KEY, "");
-        if (!TextUtils.isEmpty(blacklist)) {
-            for (int i = 0; i < people.size(); i++) {
-                if (people.get(i).equals(blacklist)) {
-                    people.remove(i);
-                }
-            }
-        }
-
-		autoCompleteTextView.setAdapter(new ArrayAdapter<>(
-				getActivity(),
-				R.layout.autocomplete_list_item,
-				R.id.autocomplete_list_item_title,
-				people));
-
-		if (autoCompleteTextView.getText().toString().equals("")) {
+		if (TextUtils.isEmpty(autoCompleteTextView.getText())) {
 			disableButton(confirmButton);
 		}
+
+		blacklist = getArguments().getString(BLACKLIST_KEY, "");
 
 		autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -123,6 +105,35 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 
 		alertDialog = builder.create();
 		return alertDialog;
+	}
+
+	@Override
+	protected void onDataLinked() {
+		ArrayList<String> people;
+
+		if (useOnlyContacts) {
+			people = data.getContactNames();
+		} else if (useOnlyPeopleInApp) {
+			people = data.getPeopleNames();
+		} else {
+			people = data.getAllNames();
+		}
+
+		if (!TextUtils.isEmpty(blacklist)) {
+			for (int i = 0; i < people.size(); i++) {
+				if (people.get(i).equals(blacklist)) {
+					people.remove(i);
+				}
+			}
+		}
+
+		adapter = new ArrayAdapter<>(
+				getActivity(),
+				R.layout.autocomplete_list_item,
+				R.id.autocomplete_list_item_title,
+				people);
+
+		autoCompleteTextView.setAdapter(adapter);
 	}
 
 	private void disableButton(Button btn) {

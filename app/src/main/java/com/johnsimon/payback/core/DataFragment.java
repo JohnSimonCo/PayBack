@@ -14,24 +14,22 @@ public abstract class DataFragment extends Fragment {
     public AppData data;
     public User user;
 
-    public ArrayList<Contact> contacts;
-
 	private ContactLoader contactLoader;
 
     private Subscription<AppData> dataLink;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
-        DataActivity activity = (DataActivity) getActivity();
+		DataActivity activity = (DataActivity) getActivity();
 
-        this.storage = activity.storage;
+		this.storage = activity.storage;
 
-        contactLoader = activity.contactLoader;
+		contactLoader = activity.contactLoader;
 
-        dataLink = activity.dataLink;
-    }
+		dataLink = activity.dataLink;
+	}
 
 	@Override
 	public void onStart() {
