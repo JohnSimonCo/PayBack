@@ -43,8 +43,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	public static TextView totalDebtTextView;
     public static TextView feed_header_balance;
 
-    private final Person person = FeedActivity.person;
-
     private RecyclerView recyclerView;
     private View emptyView;
 
@@ -164,7 +162,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                         .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
 
                 if(!FeedActivity.isAll()) {
-                    intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, person.getName());
+                    intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, FeedActivity.person.getName());
                 }
                 if (Resource.isLOrAbove()) {
                     startActivity(intent);
