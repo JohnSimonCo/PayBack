@@ -17,6 +17,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PersonPickerDialogFragment extends DataDialogFragment {
 
@@ -35,6 +36,8 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 	public final static String BLACKLIST_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_BLACKLIST_KEY";
 	public final static String NO_EXISTING_PEOPLE_FLAG = "PERSON_PICKER_DIALOG_FRAGMENT_NO_EXISTING_PEOPLE_FLAG";
 
+	private boolean noExistingPeople = false;
+
 	private AutoCompleteTextView autoCompleteTextView;
 
 	@Override
@@ -50,7 +53,8 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
         if (args != null) {
             title = args.getString(TITLE_KEY, USE_DEFAULT_TITLE);
             useOnlyPeopleInApp = args.getBoolean(PEOPLE_KEY, false);
-        }
+			noExistingPeople = args.getBoolean(NO_EXISTING_PEOPLE_FLAG, false);
+		}
 
         useOnlyContacts = false;
 
@@ -123,6 +127,19 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 			for (int i = 0; i < people.size(); i++) {
 				if (people.get(i).equals(blacklist)) {
 					people.remove(i);
+				}
+			}
+		}
+
+		ArrayList<String> dataPeopleNames = new ArrayList<>();
+		for (int i = 0; i < data.people.size(); i++) {
+			dataPeopleNames.add(data.people.get(i).getName());
+		}
+
+		if (noExistingPeople) {
+			for(Iterator<String> iterator = people.iterator(); iterator.hasNext();) {
+				if(dataPeopleNames.contains(iterator.next())) {
+					iterator.remove();
 				}
 			}
 		}

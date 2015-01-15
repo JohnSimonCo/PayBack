@@ -22,13 +22,13 @@ public abstract class DataDialogFragment extends DialogFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		DataActivity activity = (DataActivity) getActivity();
+		DataActivityInterface activity = (DataActivityInterface) getActivity();
 
-		this.storage = activity.storage;
+		this.storage = activity.getStorage();
 
-		contactLoader = activity.contactLoader;
+		contactLoader = activity.getContactLoader();
 
-		dataLink = activity.dataLink;
+		dataLink = activity.getDataLink();
 	}
 
     @Override

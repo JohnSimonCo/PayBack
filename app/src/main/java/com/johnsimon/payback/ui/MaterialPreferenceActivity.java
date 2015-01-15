@@ -10,9 +10,10 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataPreferenceActivity;
 import com.johnsimon.payback.util.Resource;
 
-public abstract class MaterialPreferenceActivity extends PreferenceActivity
+public abstract class MaterialPreferenceActivity extends DataPreferenceActivity
 {
 	private static int getResIdFromAttribute(final Activity activity,final int attr)
 	{

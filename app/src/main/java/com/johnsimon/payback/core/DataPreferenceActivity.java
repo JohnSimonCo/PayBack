@@ -2,7 +2,7 @@ package com.johnsimon.payback.core;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.preference.PreferenceActivity;
 
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
@@ -10,15 +10,15 @@ import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataLinker;
 
-public abstract class DataActivity extends ActionBarActivity implements DataActivityInterface {
+public class DataPreferenceActivity extends PreferenceActivity implements DataActivityInterface {
 
-    protected Storage storage;
-    public AppData data;
+	protected Storage storage;
+	public AppData data;
 
 	protected Subscription<AppData> dataLink;
-    protected ContactLoader contactLoader;
+	protected ContactLoader contactLoader;
 
-    public User user;
+	public User user;
 
 	@Override
 	public Storage getStorage() {
@@ -33,20 +33,20 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		return dataLink;
 	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        storage = StorageManager.getStorage(this);
+		storage = StorageManager.getStorage(this);
 
 		contactLoader = ContactLoader.getLoader(this);
 
 		dataLink = DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
-    }
+	}
 
 	@Override
-    protected void onStart() {
-        super.onStart();
+	protected void onStart() {
+		super.onStart();
 
 		storage.subscription.listen(dataLoadedCallback);
 
@@ -55,36 +55,36 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		contactLoader.userLoaded.then(userLoadedCallback);
 
 		storage.connect();
-    }
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+	@Override
+	protected void onStop() {
+		super.onStop();
 
 		storage.subscription.unregister(dataLoadedCallback);
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
-        storage.disconnect();
-    }
+		storage.disconnect();
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean handled = storage.handleActivityResult(requestCode, resultCode, data);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		boolean handled = storage.handleActivityResult(requestCode, resultCode, data);
 
-        if(!handled) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+		if(!handled) {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
 
-    private DataActivity self = this;
-    private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
-        @Override
-        public void onCalled(AppData data) {
-            self.data = data;
-            onDataReceived();
-        }
-    };
+	private DataPreferenceActivity self = this;
+	private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
+		@Override
+		public void onCalled(AppData data) {
+			self.data = data;
+			onDataReceived();
+		}
+	};
 
 	private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
 		@Override
@@ -107,8 +107,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		}
 	};
 
-    protected void onDataReceived() {
-    }
+	protected void onDataReceived() {
+	}
 
 	protected void onDataLinked() {
 	}

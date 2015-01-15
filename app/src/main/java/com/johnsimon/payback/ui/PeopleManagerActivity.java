@@ -168,6 +168,7 @@ public class PeopleManagerActivity extends DataActivity {
 			PersonPickerDialogFragment fragment = new PersonPickerDialogFragment();
 			Bundle args = new Bundle();
 			args.putString(PersonPickerDialogFragment.TITLE_KEY, getString(R.string.add_person));
+			args.putBoolean(PersonPickerDialogFragment.NO_EXISTING_PEOPLE_FLAG, true);
 			fragment.setArguments(args);
 
 			fragment.completeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
