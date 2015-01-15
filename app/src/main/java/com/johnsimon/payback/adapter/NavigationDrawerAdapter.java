@@ -1,6 +1,5 @@
 package com.johnsimon.payback.adapter;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
 	private final static NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
-	private final ArrayList<NavigationDrawerItem> items = new ArrayList<NavigationDrawerItem>();
+	private final ArrayList<NavigationDrawerItem> items = new ArrayList<>();
 
 	private final DataActivity context;
 
