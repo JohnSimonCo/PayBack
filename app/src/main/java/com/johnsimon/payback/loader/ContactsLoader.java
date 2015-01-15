@@ -42,13 +42,7 @@ public class ContactsLoader extends AsyncTask<ContentResolver, Void, ArrayList<C
 			contacts.add(new Contact(name, photoURI, id));
 		}
 		cursor.close();
-
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
+		
 		return contacts;
 	}
 

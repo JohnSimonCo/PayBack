@@ -22,12 +22,6 @@ public class UserLoader extends AsyncTask<ContentResolver, Void, User> {
 
 		cursor.close();
 
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		return new User(name);
 	}
 
