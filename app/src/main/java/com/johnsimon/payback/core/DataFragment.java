@@ -22,13 +22,17 @@ public abstract class DataFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		DataActivity activity = (DataActivity) getActivity();
+		DataActivityInterface activity = getDataActivity();
 
-		this.storage = activity.storage;
+		this.storage = activity.getStorage();
 
-		contactLoader = activity.contactLoader;
+		contactLoader = activity.getContactLoader();
 
-		dataLink = activity.dataLink;
+		dataLink = activity.getDataLink();
+	}
+
+	protected DataActivityInterface getDataActivity() {
+		return (DataActivityInterface) getActivity();
 	}
 
 	@Override

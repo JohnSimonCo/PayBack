@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.R;
@@ -20,9 +21,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	private final static NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
 	private final ArrayList<NavigationDrawerItem> items = new ArrayList<NavigationDrawerItem>();
 
-	private final Activity context;
+	private final DataActivity context;
 
-	public NavigationDrawerAdapter(Activity context, ArrayList<Person> people) {
+	public NavigationDrawerAdapter(DataActivity context, ArrayList<Person> people) {
 		this.context = context;
 
 		setItems(people);
@@ -94,7 +95,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		Person owner = item.owner;
 
-		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
 
 		holder.title.setText(item.title);
 

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
@@ -137,7 +138,7 @@ public class Resource {
 					DateUtils.FORMAT_ABBREV_ALL);
     }
 
-	public static void createProfileImage(Person person, final RoundedImageView avatar, TextView avatarLetter) {
+	public static void createProfileImage(DataActivityInterface dataActivity, Person person, final RoundedImageView avatar, TextView avatarLetter) {
 		if(person.hasImage()) {
 			avatarLetter.setVisibility(View.GONE);
 
@@ -148,7 +149,7 @@ public class Resource {
 				}
 			});
 		} else {
-			avatar.setImageDrawable(new AvatarPlaceholderDrawable(person.color));
+			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity, person.paletteIndex));
 			avatarLetter.setVisibility(View.VISIBLE);
 			avatarLetter.setText(person.getAvatarLetter());
 		}

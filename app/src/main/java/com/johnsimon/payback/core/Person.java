@@ -6,19 +6,18 @@ import java.util.UUID;
 
 public class Person extends SyncedData<Person> {
 	private String name;
-	public final int color;
-    public transient  Contact link = null;
+	public final int paletteIndex;
+    public transient Contact link = null;
 
-	//Used for deserialization
-	public Person(String name, UUID id, Integer color, long touched) {
+	private Person(String name, UUID id, int paletteIndex, long touched) {
 		super(id, touched);
 
 		this.name = name;
-		this.color = color;
+		this.paletteIndex = paletteIndex;
 	}
 	//Used for creating a person
 	public Person(String name, ColorPalette palette) {
-		this(name, UUID.randomUUID(), palette.nextColor(), System.currentTimeMillis());
+		this(name, UUID.randomUUID(), palette.nextIndex(), System.currentTimeMillis());
 	}
 
 	public String getName() {
@@ -56,7 +55,7 @@ public class Person extends SyncedData<Person> {
 	public boolean equals(Object o) {
 		if (o == null) return false;
 		if (o == this) return true;
-		if (!(o instanceof Person))return false;
+		if (!(o instanceof Person)) return false;
 		Person other = (Person) o;
 
 		return id.equals(other.id)

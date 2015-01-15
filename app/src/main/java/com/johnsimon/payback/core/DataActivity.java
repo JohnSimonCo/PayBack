@@ -1,5 +1,6 @@
 package com.johnsimon.payback.core;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,10 +16,25 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
     protected Storage storage;
     public AppData data;
 
+	public User user;
+
 	protected Subscription<AppData> dataLink;
     protected ContactLoader contactLoader;
 
-    public User user;
+	@Override
+	public Activity getContext() {
+		return this;
+	}
+
+	@Override
+	public AppData getData() {
+		return data;
+	}
+
+	@Override
+	public User getUser() {
+		return user;
+	}
 
 	@Override
 	public Storage getStorage() {
@@ -36,6 +52,7 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         storage = StorageManager.getStorage(this);
 

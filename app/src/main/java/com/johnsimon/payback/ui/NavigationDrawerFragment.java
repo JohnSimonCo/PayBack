@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
@@ -154,7 +155,7 @@ public class NavigationDrawerFragment extends DataFragment {
 
     @Override
     protected void onDataReceived() {
-        adapter = new NavigationDrawerAdapter(getActivity(), data.people);
+        adapter = new NavigationDrawerAdapter((DataActivity) getActivity(), data.people);
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 

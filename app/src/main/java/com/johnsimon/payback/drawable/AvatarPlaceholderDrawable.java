@@ -4,10 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 
+import com.johnsimon.payback.core.DataActivityInterface;
+import com.johnsimon.payback.util.ColorPalette;
+
 public class AvatarPlaceholderDrawable extends Drawable {
 	private int color;
-	public AvatarPlaceholderDrawable(int color) {
-		this.color = color;
+	public AvatarPlaceholderDrawable(DataActivityInterface dataActivity, int paletteIndex) {
+		this.color = ColorPalette.getInstance(dataActivity).getColor(paletteIndex);
 	}
 	@Override
 	public void draw(Canvas canvas) {

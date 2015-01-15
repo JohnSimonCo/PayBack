@@ -5,18 +5,21 @@ import android.util.SparseIntArray;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.core.Person;
+
+import java.util.ArrayList;
 
 public class ColorPalette {
 	private static ColorPalette instance = null;
 
-    private DataActivity context;
+    private DataActivityInterface dataAcitivity;
 
 	private int[] palette;
-	public ColorPalette(DataActivity context) {
-        this.context = context;
+	public ColorPalette(DataActivityInterface dataAcitivity) {
+        this.dataAcitivity = dataAcitivity;
 
-        Resources resources = context.getResources();
+        Resources resources = dataAcitivity.getContext().getResources();
         palette = new int[] {
 			resources.getColor(R.color.color1),
 			resources.getColor(R.color.color2),
@@ -28,33 +31,38 @@ public class ColorPalette {
 		};
 	}
 
-	public int nextColor() {
-		SparseIntArray usedColors = new SparseIntArray(palette.length);
-		for(int color : palette) {
-			usedColors.put(color, 0);
+	public int nextIndex() {
+		SparseIntArray usedIndices = new SparseIntArray(palette.length);
+
+		for (Person person : dataAcitivity.getData().people) {
+			usedIndices.put(person.paletteIndex, usedIndices.get(person.paletteIndex) + 1);
 		}
 
-		for (Person person : context.data.people) {
-			usedColors.put(person.color, usedColors.get(person.color) + 1);
-		}
-
-		int color = 0, smallest = -1;
-		//#perfmatters
-		for(int i = 0, length = usedColors.size(); i < length; i++) {
-			int value = usedColors.valueAt(i);
-			if(smallest == -1 || value < smallest) {
+		//Start at 0
+		int index = usedIndices.keyAt(0), smallest = usedIndices.valueAt(0);
+		//Proceed at 1
+		for(int i = 1, length = usedIndices.size(); i < length; i++) {
+			int value = usedIndices.valueAt(i);
+			if(value < smallest) {
 				smallest = value;
-				color = usedColors.keyAt(i);
+				index = usedIndices.keyAt(i);
 			}
 		}
 
-		return color;
+		return index;
 	}
 
-	public static ColorPalette getInstance(DataActivity context) {
+	public int getColor(int index) {
+		return palette[index];
+	}
+
+	public static ColorPalette getInstance(DataActivityInterface dataAcitivity) {
 		if(instance == null) {
-			instance = new ColorPalette(context);
+			instance = new ColorPalette(dataAcitivity);
 		}
+
+		instance.dataAcitivity = dataAcitivity;
+
 		return instance;
 	}
 }

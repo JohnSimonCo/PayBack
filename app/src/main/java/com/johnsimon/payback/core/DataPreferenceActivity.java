@@ -1,5 +1,6 @@
 package com.johnsimon.payback.core;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -15,10 +16,10 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	protected Storage storage;
 	public AppData data;
 
+	public User user;
+
 	protected Subscription<AppData> dataLink;
 	protected ContactLoader contactLoader;
-
-	public User user;
 
 	@Override
 	public Storage getStorage() {
@@ -31,6 +32,21 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	@Override
 	public Subscription<AppData> getDataLink() {
 		return dataLink;
+	}
+
+	@Override
+	public Activity getContext() {
+		return this;
+	}
+
+	@Override
+	public AppData getData() {
+		return data;
+	}
+
+	@Override
+	public User getUser() {
+		return user;
 	}
 
 	@Override

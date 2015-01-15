@@ -15,6 +15,7 @@ import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ThumbnailLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -60,7 +61,8 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
                 }
             });
         } else {
-            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.getOwner().color)));
+			//TODO hope this will work...
+            //row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.getOwner().color)));
             row.setViewVisibility(R.id.list_item_avatar_letter, View.VISIBLE);
             row.setTextViewText(R.id.list_item_avatar_letter, debt.getOwner().getAvatarLetter());
         }

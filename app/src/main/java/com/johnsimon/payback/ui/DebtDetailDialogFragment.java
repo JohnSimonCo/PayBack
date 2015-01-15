@@ -179,7 +179,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
         TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
 
-        Resource.createProfileImage(debt.getOwner(), avatar, avatarLetter);
+        Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
 
         builder.setView(rootView);
 

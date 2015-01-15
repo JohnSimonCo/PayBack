@@ -43,7 +43,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.person_detail_dialog_avatar);
 		TextView avatarLetter = (TextView) rootView.findViewById(R.id.person_detail_dialog_avatar_letter);
 
-		Resource.createProfileImage(person, avatar, avatarLetter);
+		Resource.createProfileImage(getDataActivity(), person, avatar, avatarLetter);
 
 		Button personRename = (Button) rootView.findViewById(R.id.person_detail_dialog_rename);
 		Button personMerge = (Button) rootView.findViewById(R.id.person_detail_dialog_merge);

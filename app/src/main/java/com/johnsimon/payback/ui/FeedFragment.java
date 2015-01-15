@@ -27,6 +27,7 @@ import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.FeedListAdapter;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
@@ -131,7 +132,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
     @Override
     protected void onDataReceived() {
-        adapter = new FeedListAdapter(FeedActivity.feed, getActivity(), this, emptyView);
+        adapter = new FeedListAdapter(FeedActivity.feed, (DataActivity) getActivity(), this, emptyView);
         recyclerView.setAdapter(adapter);
 
         adapter.checkAdapterIsEmpty();

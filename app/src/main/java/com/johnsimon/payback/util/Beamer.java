@@ -8,6 +8,7 @@ import android.nfc.NfcEvent;
 
 import com.google.gson.Gson;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
@@ -19,10 +20,10 @@ import static android.nfc.NdefRecord.createMime;
 
 public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	private BeamListener callback;
-    private DataActivity context;
+    private DataActivityInterface dataActivity;
 
-	public Beamer(DataActivity context, BeamListener callback) {
-		this.context = context;
+	public Beamer(DataActivityInterface dataActivity, BeamListener callback) {
+		this.dataActivity = dataActivity;
         this.callback = callback;
 	}
 
@@ -47,7 +48,7 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 	}
 
 	private NdefMessage createMessage(Debt[] debts, boolean fullSync) {
-		String JSON = new Gson().toJson(new NfcData(debts, context.user, fullSync), NfcData.class);
+		String JSON = new Gson().toJson(new NfcData(debts, dataActivity.getUser(), fullSync), NfcData.class);
 		return new NdefMessage(
 				new NdefRecord[]{
 						createMime("application/vnd.com.johnsimon.payback", JSON.getBytes()),

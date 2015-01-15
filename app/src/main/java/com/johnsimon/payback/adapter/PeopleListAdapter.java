@@ -8,18 +8,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
 public class PeopleListAdapter extends ArrayAdapter<Person> {
-	private final Activity context;
+	private final DataActivity context;
 	private View emptyView;
     private AppData data;
     private TextView managerTitle;
 
-	public PeopleListAdapter(Activity context, View emptyView, AppData data, TextView managerTitle) {
+	public PeopleListAdapter(DataActivity context, View emptyView, AppData data, TextView managerTitle) {
 		super(context, R.layout.people_list_item, data.people);
 		this.context = context;
 		this.emptyView = emptyView;
@@ -53,7 +54,7 @@ public class PeopleListAdapter extends ArrayAdapter<Person> {
         } else {
             holder.debtsCount.setText(debts +  " " + context.getString(R.string.debt_plural));
         }
-		Resource.createProfileImage(person, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(context, person, holder.avatar, holder.avatarLetter);
 
 		return convertView;
 	}

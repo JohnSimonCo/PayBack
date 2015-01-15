@@ -2,6 +2,7 @@ package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.ui.DebtDetailDialogFragment;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 	private final ArrayList<Debt> list;
-	private final Activity context;
+	private final DataActivity context;
 	private final View emptyView;
 	private DebtDetailDialogFragment.Callback callback;
 
@@ -49,7 +51,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		}
 	}
 
-	public FeedListAdapter(ArrayList<Debt> debts, Activity ctx, DebtDetailDialogFragment.Callback _callback, View _emptyView) {
+	public FeedListAdapter(ArrayList<Debt> debts, DataActivity ctx, DebtDetailDialogFragment.Callback _callback, View _emptyView) {
 		list = debts;
 		context = ctx;
 		callback = _callback;
@@ -73,7 +75,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
 		holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));
 
-		Resource.createProfileImage(owner, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
 
 		if (debt.isPaidBack()) {
 			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));

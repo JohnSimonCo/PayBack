@@ -44,6 +44,8 @@ public class PeopleManagerActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
+	//TODO behålla ordning till drive
+
 	private PeopleListAdapter adapter;
     private DragSortListView listView;
 
