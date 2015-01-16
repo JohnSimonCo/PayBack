@@ -8,7 +8,6 @@ public class Promise<D> {
 
     private boolean hasFired = false;
 
-    //TODO then unique
     public void then(Callback<D> callback) {
         if(hasFired) {
             callback.onCalled(data);

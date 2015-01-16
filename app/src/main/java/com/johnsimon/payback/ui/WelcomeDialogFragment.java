@@ -146,14 +146,14 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 			//Button was disabled when no currency so we're free
 			//to continue since the user was able to press the button
 
-			if (!(!hasNfc || currencyOnly)) {
+			if (hasNfc && !currencyOnly) {
 				WelcomeNfcDialogFragment welcomeNfcDialogFragment = new WelcomeNfcDialogFragment();
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
 			Resource.setCurrency(currency);
 
-			//TODO look into and test
+			//TODO look into and test (John: verkar funka)
 			/*
             int length = FeedActivity.feed.size();
             for (int i = 0; i < length; i++) {
