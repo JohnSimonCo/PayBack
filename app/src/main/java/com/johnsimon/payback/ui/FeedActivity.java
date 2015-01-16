@@ -51,7 +51,7 @@ public class FeedActivity extends DataActivity implements
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
-	public Subscription<Void> feedSubscription = new Subscription<>();
+	public Subscription<ArrayList<Debt>> feedSubscription = new Subscription<>();
 	public Subscription<Void> feedLinkedSubscription = new Subscription<>();
 
 	private MenuItem filterAmount;
@@ -144,7 +144,7 @@ public class FeedActivity extends DataActivity implements
             sort();
         }
 
-		feedSubscription.broadcast(null);
+		feedSubscription.broadcast(feed);
 
     }
 
@@ -195,7 +195,7 @@ public class FeedActivity extends DataActivity implements
 
         feed = data.feed(person);
 
-		feedSubscription.broadcast(null);
+		feedSubscription.broadcast(feed);
 		feedLinkedSubscription.broadcast(null);
 
 		storage.requestRefresh();

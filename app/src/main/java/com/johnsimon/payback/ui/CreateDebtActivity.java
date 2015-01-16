@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -350,4 +351,10 @@ public class CreateDebtActivity extends DataActivity {
             overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
         }
 	}
+
+	protected void onNewIntent(Intent intent){
+		super.onNewIntent(intent);
+		Log.i("my_app", "New intent with flags " + intent.getFlags());
+	}
+
 }

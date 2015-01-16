@@ -53,7 +53,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
     private RecyclerView recyclerView;
     private View emptyView;
 
-	private Subscription<Void> feedSubscription;
+	private Subscription<ArrayList<Debt>> feedSubscription;
 	private Subscription<Void> feedLinkedSubscription;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -155,10 +155,10 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	}
 
 	private FeedFragment self = this;
-	Callback<Void> onFeedCallback = new Callback<Void>() {
+	Callback<ArrayList<Debt>> onFeedCallback = new Callback<ArrayList<Debt>>() {
 		@Override
-		public void onCalled(Void data) {
-			adapter = new FeedListAdapter(FeedActivity.feed, (DataActivity) getActivity(), self, emptyView);
+		public void onCalled(ArrayList<Debt> feed) {
+			adapter = new FeedListAdapter(feed, (DataActivity) getActivity(), self, emptyView);
 			recyclerView.setAdapter(adapter);
 
 			adapter.checkAdapterIsEmpty();

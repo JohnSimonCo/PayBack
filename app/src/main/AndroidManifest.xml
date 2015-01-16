@@ -53,6 +53,7 @@
             android:name=".ui.CreateDebtActivity"
             android:icon="@drawable/ic_actionbar_left"
             android:label=""
+            android:launchMode="singleInstance"
             android:theme="@style/AppThemeParent" >
         </activity>
         <activity
