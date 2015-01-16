@@ -15,10 +15,11 @@ public class UserLoader extends AsyncTask<ContentResolver, Void, User> {
 	@Override
 	protected User doInBackground(ContentResolver... params) {
 		Cursor cursor = params[0].query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+		String name = null;
 
-		String name = cursor.moveToFirst()
-			? cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME))
-			: null;
+		if(cursor.moveToFirst()) {
+			name = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+		}
 
 		cursor.close();
 

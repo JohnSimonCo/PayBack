@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Promise;
@@ -16,7 +17,7 @@ public class ContactsLoader extends AsyncTask<ContentResolver, Void, ArrayList<C
 
 	@Override
 	protected ArrayList<Contact> doInBackground(ContentResolver... params) {
-        ArrayList<Contact> contacts = new ArrayList<>();
+		ArrayList<Contact> contacts = new ArrayList<>();
 
 		Cursor cursor = params[0].query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		while (cursor.moveToNext()) {
@@ -41,6 +42,7 @@ public class ContactsLoader extends AsyncTask<ContentResolver, Void, ArrayList<C
 
 			contacts.add(new Contact(name, photoURI, id));
 		}
+
 		cursor.close();
 
 		return contacts;

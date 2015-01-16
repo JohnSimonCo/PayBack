@@ -48,7 +48,11 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 				new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER},
 				null, null, null);
 
-		return getPhoneNumbers(cursor, 0);
+		String[] phoneNumbers = getPhoneNumbers(cursor, 0);
+
+		cursor.close();
+
+		return phoneNumbers;
 	}
 
 	private String[] getContactPhoneNumbers(ContentResolver contentResolver, long id) {
@@ -56,7 +60,11 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
 				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
 
-		return getPhoneNumbers(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+		String[] phoneNumbers = getPhoneNumbers(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+		cursor.close();
+
+		return phoneNumbers;
 	}
 
 
@@ -66,11 +74,12 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 		if(count < 1) return null;
 
 		String[] numbers = new String[count];
+
 		int i = -1;
 		while(cursor.moveToNext()) {
 			numbers[++i] = normalizePhoneNumber(cursor.getString(column));
 		}
-		cursor.close();
+
 		return numbers;
 	}
 

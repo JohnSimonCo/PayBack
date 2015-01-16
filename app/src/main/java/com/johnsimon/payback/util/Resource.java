@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -70,6 +71,12 @@ public class Resource {
 
 		//Default configuration
 		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
+
+		StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
+				.detectAll()
+				.penaltyLog()
+				.build();
+		StrictMode.setVmPolicy(policy);
     }
 
     /*  Method to detect if it's the first time the user uses the app.
