@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,14 +28,18 @@ import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.FeedListAdapter;
+import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.core.Subscription;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
@@ -47,6 +52,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
     private RecyclerView recyclerView;
     private View emptyView;
+
+	private Subscription<ArrayList<Debt>> feedSubscription;
+	private Subscription<Void> feedLinkedSubscription;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -63,10 +71,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         feed_header_balance = (TextView) headerView.findViewById(R.id.feed_header_balance);
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
-
-		if (getActivity() != null && getResources() != null) {
-			displayTotalDebt(getResources());
-		}
 
         //FAB is different on L
         if (Resource.isLOrAbove()) {
@@ -125,18 +129,52 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
 
+		FeedActivity host = (FeedActivity) getActivity();
+		feedSubscription = host.feedSubscription;
+		feedLinkedSubscription = host.feedLinkedSubscription;
+
         super.onCreateView(inflater, container, savedInstanceState);
 
 		return rootView;
 	}
 
-    @Override
-    protected void onDataReceived() {
-        adapter = new FeedListAdapter(FeedActivity.feed, (DataActivity) getActivity(), this, emptyView);
-        recyclerView.setAdapter(adapter);
+	@Override
+	public void onStart() {
+		super.onStart();
 
-        adapter.checkAdapterIsEmpty();
-    }
+		feedSubscription.listen(onFeedCallback);
+		feedLinkedSubscription.listen(onFeedLinkedCallback);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+
+		feedSubscription.unregister(onFeedCallback);
+		feedLinkedSubscription.unregister(onFeedLinkedCallback);
+	}
+
+	private FeedFragment self = this;
+	Callback<ArrayList<Debt>> onFeedCallback = new Callback<ArrayList<Debt>>() {
+		@Override
+		public void onCalled(ArrayList<Debt> feed) {
+			adapter = new FeedListAdapter(feed, (DataActivity) getActivity(), self, emptyView);
+			recyclerView.setAdapter(adapter);
+
+			adapter.checkAdapterIsEmpty();
+
+			if (getActivity() != null && getResources() != null) {
+				displayTotalDebt(getResources());
+			}
+		}
+	};
+
+	Callback<Void> onFeedLinkedCallback = new Callback<Void>() {
+		@Override
+		public void onCalled(Void data) {
+			adapter.notifyDataSetChanged();
+		}
+	};
 
     @Override
 	public void onPaidBack(Debt debt) {
@@ -288,9 +326,4 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 		startActivity(intent);
 	}
-
-    @Override
-    protected void onDataLinked() {
-        adapter.notifyDataSetChanged();
-    }
 }

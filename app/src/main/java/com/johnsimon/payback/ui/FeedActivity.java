@@ -27,6 +27,7 @@ import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.core.Subscription;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.util.AppData;
@@ -50,6 +51,9 @@ public class FeedActivity extends DataActivity implements
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
+	public Subscription<ArrayList<Debt>> feedSubscription = new Subscription<>();
+	public Subscription<Void> feedLinkedSubscription = new Subscription<>();
+
 	private MenuItem filterAmount;
 	private MenuItem fulllMenuPay;
 	public static MenuItem detailMenuPay;
@@ -61,6 +65,8 @@ public class FeedActivity extends DataActivity implements
 	private Beamer beamer;
 
 	private CharSequence title;
+
+	private FeedFragment feedFragment;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -116,6 +122,11 @@ public class FeedActivity extends DataActivity implements
 		} else {
 			feed_activity_status_bar_pusher.setVisibility(View.GONE);
 		}
+
+		getFragmentManager().beginTransaction()
+				.replace(R.id.container, feedFragment = new FeedFragment(), "feed_fragment_tag")
+				.commit();
+
 	}
 
     @Override
@@ -131,11 +142,15 @@ public class FeedActivity extends DataActivity implements
             sort();
         }
 
+		feedSubscription.broadcast(feed);
+
     }
 
     @Override
     protected void onDataLinked() {
         NavigationDrawerFragment.adapter.notifyDataSetChanged();
+
+		feedLinkedSubscription.broadcast(null);
     }
 
     @Override
@@ -178,9 +193,8 @@ public class FeedActivity extends DataActivity implements
 
         feed = data.feed(person);
 
-        getFragmentManager().beginTransaction()
-				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
-				.commit();
+		feedSubscription.broadcast(feed);
+		feedLinkedSubscription.broadcast(null);
 
 		storage.requestRefresh();
 
