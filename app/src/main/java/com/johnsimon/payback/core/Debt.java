@@ -33,6 +33,7 @@ public class Debt extends SyncedData<Debt> {
 	private String note;
 	public final long timestamp;
 	private boolean paidBack;
+	//TODO ta med currency för framtiden
 	public String currency;
 
     public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack) {
