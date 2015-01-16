@@ -103,7 +103,7 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 			}
 		}
 
-		if (actv.getText().toString().equals("")) {
+		if (TextUtils.isEmpty(actv.getText().toString())) {
 			disableButton(confirmButton);
 		}
 

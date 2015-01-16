@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +44,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		customCurrencyEditText = (TintEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
-		if (customCurrencyEditText.getText().toString().equals("")) {
+		if (TextUtils.isEmpty(customCurrencyEditText.getText().toString())) {
 			disableButton(dialogCustomCurrencyConfirm);
 		}
 

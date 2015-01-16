@@ -281,7 +281,7 @@ public class CreateDebtActivity extends DataActivity {
 		if(iOwe) {
 			amount = -amount;
 		}
-		if (note.equals("")) {
+		if (TextUtils.isEmpty(note)) {
 			note = null;
 		}
 
