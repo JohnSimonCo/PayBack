@@ -18,7 +18,7 @@ public class LocalStorage extends Storage {
 
     private final static String SAVE_KEY_DATA = "DATA";
 
-    public static SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     public LocalStorage(Context context) {
         super(context);
@@ -29,8 +29,13 @@ public class LocalStorage extends Storage {
 
         emit(AppData.fromJson(JSON));
 
-		test();
+		//test();
     }
+
+	@Override
+	public SharedPreferences getPreferences() {
+		return preferences;
+	}
 
 	public void test() {
 		Random r = new Random();

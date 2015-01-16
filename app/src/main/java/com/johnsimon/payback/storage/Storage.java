@@ -2,6 +2,7 @@ package com.johnsimon.payback.storage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import com.johnsimon.payback.core.Promise;
 import com.johnsimon.payback.core.Subscription;
@@ -16,6 +17,8 @@ public abstract class Storage {
     public Storage(Context context) {
         this.context = context;
     }
+
+	public abstract SharedPreferences getPreferences();
 
     protected void emit(AppData data) {
         this.data = data;

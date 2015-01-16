@@ -1,8 +1,10 @@
 package com.johnsimon.payback.storage;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,6 +38,8 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     private final static int REQUEST_CODE_RESOLUTION = 14795;
     private final static String FILE_NAME = "data.json";
 
+	public final static String PREFERENCE_ACCOUNT_NAME = "ACCOUNT_NAME";
+
     public Activity activity;
 
     private GoogleApiClient client;
@@ -51,7 +55,13 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         activity = context;
 
         localStorage = new LocalStorage(context);
-        localStorage.subscription.listen(localStorageDataRecieved);
+        localStorage.subscription.listen(new Callback<AppData>() {
+			@Override
+			public void onCalled(AppData data) {
+				show("emit localStorage data");
+				emit(data);
+			}
+		});
 
         client = new GoogleApiClient.Builder(context)
            .addApi(Drive.API)
@@ -63,13 +73,10 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	}
 
-    private Callback<AppData> localStorageDataRecieved = new Callback<AppData>() {
-        @Override
-        public void onCalled(AppData data) {
-            show("emit localStorage data");
-            emit(data);
-        }
-    };
+	@Override
+	public SharedPreferences getPreferences() {
+		return localStorage.getPreferences();
+	}
 
     public void sync(AppData driveData) {
 		show("checking for changes from drive");
@@ -130,6 +137,10 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		client.clearDefaultAccountAndReconnect();
 		emit(new AppData());
 		localStorage.commit(data);
+
+		getPreferences().edit()
+			.remove(PREFERENCE_ACCOUNT_NAME)
+			.apply();
 	}
 
 	private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
@@ -276,7 +287,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                     return;
                 }
 
-                DriveContents contents = result.getDriveContents();
+	            DriveContents contents = result.getDriveContents();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
                 StringBuilder builder = new StringBuilder();
                 try {
@@ -284,10 +295,12 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                     while ((line = reader.readLine()) != null) {
                         builder.append(line);
                     }
-                } catch (IOException e) {
+					//reader.close();
+				} catch (IOException e) {
                     e.printStackTrace();
                 }
-                callback.onResult(new FileResult(file, builder.toString(), result.getStatus()));
+
+				callback.onResult(new FileResult(file, builder.toString(), result.getStatus()));
             }
         });
     }
@@ -331,15 +344,20 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     }
 
     @Override
-    public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent intent) {
         switch (requestCode) {
             case REQUEST_CODE_RESOLUTION:
                 if (resultCode == Activity.RESULT_OK) {
                     client.connect();
+
+					//A bit of a hack, but it works :)
+					getPreferences().edit()
+						.putString(PREFERENCE_ACCOUNT_NAME, intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME))
+						.apply();
                 }
                 return true;
         }
-        return super.handleActivityResult(requestCode, resultCode, data);
+        return super.handleActivityResult(requestCode, resultCode, intent);
     }
 
     @Override

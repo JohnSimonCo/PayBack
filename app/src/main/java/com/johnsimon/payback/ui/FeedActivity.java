@@ -1,5 +1,7 @@
 package com.johnsimon.payback.ui;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
