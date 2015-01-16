@@ -94,11 +94,14 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		Person owner = item.owner;
 
+		if (holder.avatarLetter == null) {
+			holder.avatarLetter = (TextView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar_letter);
+		}
+
 		Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
 
 		holder.title.setText(item.title);
 
-        //As per the new design guidelines
 		if (isSelected) {
 			holder.title.setTypeface(null, Typeface.BOLD);
             holder.title.setTextColor(context.getResources().getColor(R.color.green));
