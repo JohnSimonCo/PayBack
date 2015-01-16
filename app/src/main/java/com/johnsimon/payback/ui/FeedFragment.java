@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,12 +27,14 @@ import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.FeedListAdapter;
-import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.Subscription;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
@@ -54,7 +55,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
     private View emptyView;
 
 	private Subscription<ArrayList<Debt>> feedSubscription;
-	private Subscription<Void> feedLinkedSubscription;
+	private Notification feedLinkedNotification;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -131,7 +132,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 		FeedActivity host = (FeedActivity) getActivity();
 		feedSubscription = host.feedSubscription;
-		feedLinkedSubscription = host.feedLinkedSubscription;
+		feedLinkedNotification = host.feedLinkedNotification;
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -143,7 +144,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		super.onStart();
 
 		feedSubscription.listen(onFeedCallback);
-		feedLinkedSubscription.listen(onFeedLinkedCallback);
+		feedLinkedNotification.listen(onFeedLinkedCallback);
 	}
 
 	@Override
@@ -151,7 +152,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		super.onStop();
 
 		feedSubscription.unregister(onFeedCallback);
-		feedLinkedSubscription.unregister(onFeedLinkedCallback);
+		feedLinkedNotification.unregister(onFeedLinkedCallback);
 	}
 
 	private FeedFragment self = this;
@@ -169,9 +170,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		}
 	};
 
-	Callback<Void> onFeedLinkedCallback = new Callback<Void>() {
+	NotificationCallback onFeedLinkedCallback = new NotificationCallback() {
 		@Override
-		public void onCalled(Void data) {
+		public void onNotify() {
 			adapter.notifyDataSetChanged();
 		}
 	};

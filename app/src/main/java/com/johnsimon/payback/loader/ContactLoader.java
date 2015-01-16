@@ -4,9 +4,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.Contact;
-import com.johnsimon.payback.core.Promise;
+import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.core.User;
 
 import java.util.ArrayList;

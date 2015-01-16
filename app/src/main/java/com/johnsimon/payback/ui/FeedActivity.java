@@ -1,19 +1,14 @@
 package com.johnsimon.payback.ui;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +17,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Contact;
+import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.Subscription;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.core.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.util.AppData;
@@ -52,7 +47,7 @@ public class FeedActivity extends DataActivity implements
 	public static ArrayList<Debt> feed;
 
 	public Subscription<ArrayList<Debt>> feedSubscription = new Subscription<>();
-	public Subscription<Void> feedLinkedSubscription = new Subscription<>();
+	public Notification feedLinkedNotification = new Notification();
 
 	private MenuItem filterAmount;
 	private MenuItem fulllMenuPay;
@@ -149,7 +144,7 @@ public class FeedActivity extends DataActivity implements
     protected void onDataLinked() {
         NavigationDrawerFragment.adapter.notifyDataSetChanged();
 
-		feedLinkedSubscription.broadcast(null);
+		feedLinkedNotification.broadcast();
     }
 
     @Override
@@ -193,7 +188,7 @@ public class FeedActivity extends DataActivity implements
         feed = data.feed(person);
 
 		feedSubscription.broadcast(feed);
-		feedLinkedSubscription.broadcast(null);
+		feedLinkedNotification.broadcast();
 
 		storage.requestRefresh();
 

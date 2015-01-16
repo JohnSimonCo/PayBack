@@ -4,10 +4,9 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.johnsimon.payback.core.Contact;
-import com.johnsimon.payback.core.Promise;
+import com.johnsimon.payback.async.Promise;
 
 import java.util.ArrayList;
 

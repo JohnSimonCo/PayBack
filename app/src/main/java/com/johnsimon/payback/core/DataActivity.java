@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
@@ -18,7 +22,7 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 	public User user;
 
-	protected Subscription<AppData> dataLink;
+	protected Notification dataLink;
     protected ContactLoader contactLoader;
 
 	@Override
@@ -45,7 +49,7 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		return contactLoader;
 	}
 	@Override
-	public Subscription<AppData> getDataLink() {
+	public Notification getDataLink() {
 		return dataLink;
 	}
 
@@ -103,9 +107,10 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
         }
     };
 
-	private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
+
+	private NotificationCallback dataLinkedCallback = new NotificationCallback() {
 		@Override
-		public void onCalled(AppData data) {
+		public void onNotify() {
 			onDataLinked();
 		}
 	};

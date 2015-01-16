@@ -24,8 +24,8 @@ import android.text.TextUtils;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Callback;
-import com.johnsimon.payback.core.Subscription;
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;

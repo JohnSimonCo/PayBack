@@ -27507,7 +27507,7 @@ com.johnsimon.payback.adapter.PeopleListAdapter$ViewHolder -> com.johnsimon.payb
     android.widget.TextView avatarLetter -> avatarLetter
     android.widget.TextView debtsCount -> debtsCount
     android.view.View itemView -> itemView
-com.johnsimon.payback.core.Callback -> com.johnsimon.payback.core.Callback:
+com.johnsimon.payback.async.Callback -> com.johnsimon.payback.async.Callback:
     void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.Contact -> com.johnsimon.payback.core.Contact:
     java.lang.String name -> name
@@ -27523,19 +27523,19 @@ com.johnsimon.payback.core.DataActivity -> com.johnsimon.payback.core.DataActivi
     com.johnsimon.payback.storage.Storage storage -> storage
     com.johnsimon.payback.util.AppData data -> data
     com.johnsimon.payback.core.User user -> user
-    com.johnsimon.payback.core.Subscription dataLink -> dataLink
+    com.johnsimon.payback.async.Subscription dataLink -> dataLink
     com.johnsimon.payback.loader.ContactLoader contactLoader -> contactLoader
     com.johnsimon.payback.core.DataActivity self -> n
-    com.johnsimon.payback.core.Callback dataLoadedCallback -> o
-    com.johnsimon.payback.core.Callback dataLinkedCallback -> p
+    com.johnsimon.payback.async.Callback dataLoadedCallback -> o
+    com.johnsimon.payback.async.Callback dataLinkedCallback -> p
     boolean userLoaded -> q
-    com.johnsimon.payback.core.Callback userLoadedCallback -> r
+    com.johnsimon.payback.async.Callback userLoadedCallback -> r
     26:26:android.app.Activity getContext() -> getContext
     31:31:com.johnsimon.payback.util.AppData getData() -> getData
     36:36:com.johnsimon.payback.core.User getUser() -> getUser
     41:41:com.johnsimon.payback.storage.Storage getStorage() -> getStorage
     45:45:com.johnsimon.payback.loader.ContactLoader getContactLoader() -> getContactLoader
-    49:49:com.johnsimon.payback.core.Subscription getDataLink() -> getDataLink
+    49:49:com.johnsimon.payback.async.Subscription getDataLink() -> getDataLink
     54:62:void onCreate(android.os.Bundle) -> onCreate
     66:75:void onStart() -> onStart
     79:86:void onStop() -> onStop
@@ -27564,17 +27564,17 @@ com.johnsimon.payback.core.DataActivityInterface -> com.johnsimon.payback.core.D
     android.app.Activity getContext() -> getContext
     com.johnsimon.payback.storage.Storage getStorage() -> getStorage
     com.johnsimon.payback.loader.ContactLoader getContactLoader() -> getContactLoader
-    com.johnsimon.payback.core.Subscription getDataLink() -> getDataLink
+    com.johnsimon.payback.async.Subscription getDataLink() -> getDataLink
 com.johnsimon.payback.core.DataDialogFragment -> com.johnsimon.payback.core.DataDialogFragment:
     com.johnsimon.payback.storage.Storage storage -> storage
     com.johnsimon.payback.util.AppData data -> data
     com.johnsimon.payback.core.User user -> user
     com.johnsimon.payback.loader.ContactLoader contactLoader -> a
-    com.johnsimon.payback.core.Subscription dataLink -> b
-    com.johnsimon.payback.core.Callback dataLoadedCallback -> c
-    com.johnsimon.payback.core.Callback dataLinkedCallback -> d
+    com.johnsimon.payback.async.Subscription dataLink -> b
+    com.johnsimon.payback.async.Callback dataLoadedCallback -> c
+    com.johnsimon.payback.async.Callback dataLinkedCallback -> d
     boolean userLoaded -> e
-    com.johnsimon.payback.core.Callback userLoadedCallback -> f
+    com.johnsimon.payback.async.Callback userLoadedCallback -> f
     23:32:void onActivityCreated(android.os.Bundle) -> onActivityCreated
     35:35:com.johnsimon.payback.core.DataActivityInterface getDataActivity() -> getDataActivity
     40:47:void onStart() -> onStart
@@ -27601,11 +27601,11 @@ com.johnsimon.payback.core.DataFragment -> com.johnsimon.payback.core.DataFragme
     com.johnsimon.payback.util.AppData data -> data
     com.johnsimon.payback.core.User user -> user
     com.johnsimon.payback.loader.ContactLoader contactLoader -> a
-    com.johnsimon.payback.core.Subscription dataLink -> b
-    com.johnsimon.payback.core.Callback dataLoadedCallback -> c
-    com.johnsimon.payback.core.Callback dataLinkedCallback -> d
+    com.johnsimon.payback.async.Subscription dataLink -> b
+    com.johnsimon.payback.async.Callback dataLoadedCallback -> c
+    com.johnsimon.payback.async.Callback dataLinkedCallback -> d
     boolean userLoaded -> e
-    com.johnsimon.payback.core.Callback userLoadedCallback -> f
+    com.johnsimon.payback.async.Callback userLoadedCallback -> f
     23:32:void onActivityCreated(android.os.Bundle) -> onActivityCreated
     35:35:com.johnsimon.payback.core.DataActivityInterface getDataActivity() -> getDataActivity
     40:47:void onStart() -> onStart
@@ -27631,16 +27631,16 @@ com.johnsimon.payback.core.DataPreferenceActivity -> com.johnsimon.payback.core.
     com.johnsimon.payback.storage.Storage storage -> storage
     com.johnsimon.payback.util.AppData data -> data
     com.johnsimon.payback.core.User user -> user
-    com.johnsimon.payback.core.Subscription dataLink -> dataLink
+    com.johnsimon.payback.async.Subscription dataLink -> dataLink
     com.johnsimon.payback.loader.ContactLoader contactLoader -> contactLoader
     com.johnsimon.payback.core.DataPreferenceActivity self -> a
-    com.johnsimon.payback.core.Callback dataLoadedCallback -> b
-    com.johnsimon.payback.core.Callback dataLinkedCallback -> c
+    com.johnsimon.payback.async.Callback dataLoadedCallback -> b
+    com.johnsimon.payback.async.Callback dataLinkedCallback -> c
     boolean userLoaded -> d
-    com.johnsimon.payback.core.Callback userLoadedCallback -> e
+    com.johnsimon.payback.async.Callback userLoadedCallback -> e
     26:26:com.johnsimon.payback.storage.Storage getStorage() -> getStorage
     30:30:com.johnsimon.payback.loader.ContactLoader getContactLoader() -> getContactLoader
-    34:34:com.johnsimon.payback.core.Subscription getDataLink() -> getDataLink
+    34:34:com.johnsimon.payback.async.Subscription getDataLink() -> getDataLink
     39:39:android.app.Activity getContext() -> getContext
     44:44:com.johnsimon.payback.util.AppData getData() -> getData
     49:49:com.johnsimon.payback.core.User getUser() -> getUser
@@ -27720,29 +27720,29 @@ com.johnsimon.payback.core.Person -> com.johnsimon.payback.core.Person:
     51:51:boolean matchTo(com.johnsimon.payback.core.User) -> matchTo
     56:63:boolean equals(java.lang.Object) -> equals
     68:68:java.lang.String toString() -> toString
-com.johnsimon.payback.core.Promise -> com.johnsimon.payback.core.Promise:
+com.johnsimon.payback.async.Promise -> com.johnsimon.payback.async.Promise:
     java.util.ArrayList callbacks -> a
     java.lang.Object data -> b
     boolean hasFired -> c
-    13:18:void then(com.johnsimon.payback.core.Callback) -> then
-    21:24:void thenUnique(com.johnsimon.payback.core.Callback) -> thenUnique
-    27:28:void unregister(com.johnsimon.payback.core.Callback) -> unregister
+    13:18:void then(com.johnsimon.payback.async.Callback) -> then
+    21:24:void thenUnique(com.johnsimon.payback.async.Callback) -> thenUnique
+    27:28:void unregister(com.johnsimon.payback.async.Callback) -> unregister
     31:40:void fire(java.lang.Object) -> fire
-    43:60:com.johnsimon.payback.core.Promise all(com.johnsimon.payback.core.Promise[]) -> all
-com.johnsimon.payback.core.Promise$1 -> atl:
-    com.johnsimon.payback.core.Promise$Counter val$counter -> a
-    com.johnsimon.payback.core.Promise val$promise -> b
+    43:60:com.johnsimon.payback.async.Promise all(com.johnsimon.payback.async.Promise[]) -> all
+com.johnsimon.payback.async.Promise$1 -> atl:
+    com.johnsimon.payback.async.Promise$Counter val$counter -> a
+    com.johnsimon.payback.async.Promise val$promise -> b
     50:53:void onCalled(java.lang.Object) -> onCalled
-com.johnsimon.payback.core.Promise$Counter -> atm:
+com.johnsimon.payback.async.Promise$Counter -> atm:
     int i -> a
     int max -> b
-    72:73:com.johnsimon.payback.core.Promise$Counter increment() -> a
+    72:73:com.johnsimon.payback.async.Promise$Counter increment() -> a
     77:77:boolean isDone() -> b
-com.johnsimon.payback.core.Subscription -> com.johnsimon.payback.core.Subscription:
+com.johnsimon.payback.async.Subscription -> com.johnsimon.payback.async.Subscription:
     java.util.ArrayList callbacks -> a
     java.lang.Object data -> b
-    10:14:void listen(com.johnsimon.payback.core.Callback) -> listen
-    17:18:void unregister(com.johnsimon.payback.core.Callback) -> unregister
+    10:14:void listen(com.johnsimon.payback.async.Callback) -> listen
+    17:18:void unregister(com.johnsimon.payback.async.Callback) -> unregister
     21:26:void broadcast(java.lang.Object) -> broadcast
 com.johnsimon.payback.core.Syncable -> com.johnsimon.payback.core.Syncable:
     java.lang.Object syncWith(java.lang.Object) -> syncWith
@@ -27766,9 +27766,9 @@ com.johnsimon.payback.drawable.AvatarPlaceholderDrawable -> com.johnsimon.paybac
     30:30:int getOpacity() -> getOpacity
 com.johnsimon.payback.loader.ContactLoader -> com.johnsimon.payback.loader.ContactLoader:
     com.johnsimon.payback.loader.ContactLoader instance -> a
-    com.johnsimon.payback.core.Promise userLoaded -> userLoaded
-    com.johnsimon.payback.core.Promise contactsLoaded -> contactsLoaded
-    com.johnsimon.payback.core.Promise phoneNumbersLoaded -> phoneNumbersLoaded
+    com.johnsimon.payback.async.Promise userLoaded -> userLoaded
+    com.johnsimon.payback.async.Promise contactsLoaded -> contactsLoaded
+    com.johnsimon.payback.async.Promise phoneNumbersLoaded -> phoneNumbersLoaded
     com.johnsimon.payback.core.User user -> b
     java.util.ArrayList contacts -> c
     66:70:com.johnsimon.payback.loader.ContactLoader getLoader(android.content.Context) -> getLoader
@@ -27791,13 +27791,13 @@ com.johnsimon.payback.loader.ContactLoader$3 -> atp:
     59:61:void onCalled(java.lang.Void) -> a
     56:56:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.loader.ContactsLoader -> com.johnsimon.payback.loader.ContactsLoader:
-    com.johnsimon.payback.core.Promise promise -> promise
+    com.johnsimon.payback.async.Promise promise -> promise
     20:48:java.util.ArrayList doInBackground(android.content.ContentResolver[]) -> doInBackground
     53:54:void onPostExecute(java.util.ArrayList) -> onPostExecute
     14:14:void onPostExecute(java.lang.Object) -> onPostExecute
     14:14:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 com.johnsimon.payback.loader.PhoneNumberLoader -> com.johnsimon.payback.loader.PhoneNumberLoader:
-    com.johnsimon.payback.core.Promise promise -> promise
+    com.johnsimon.payback.async.Promise promise -> promise
     24:35:java.lang.Void doInBackground(com.johnsimon.payback.loader.PhoneNumberLoader$Argument[]) -> doInBackground
     40:41:void onPostExecute(java.lang.Void) -> onPostExecute
     44:55:java.lang.String[] getUserPhoneNumbers(android.content.ContentResolver) -> a
@@ -27811,7 +27811,7 @@ com.johnsimon.payback.loader.PhoneNumberLoader$Argument -> com.johnsimon.payback
     java.util.ArrayList contacts -> contacts
     com.johnsimon.payback.core.User user -> user
 com.johnsimon.payback.loader.UserLoader -> com.johnsimon.payback.loader.UserLoader:
-    com.johnsimon.payback.core.Promise promise -> promise
+    com.johnsimon.payback.async.Promise promise -> promise
     17:26:com.johnsimon.payback.core.User doInBackground(android.content.ContentResolver[]) -> doInBackground
     31:32:void onPostExecute(com.johnsimon.payback.core.User) -> onPostExecute
     11:11:void onPostExecute(java.lang.Object) -> onPostExecute
@@ -27833,7 +27833,7 @@ com.johnsimon.payback.storage.DriveStorage -> com.johnsimon.payback.storage.Driv
     com.google.android.gms.common.api.GoogleApiClient client -> a
     com.johnsimon.payback.storage.LocalStorage localStorage -> b
     com.google.android.gms.drive.DriveFile file -> c
-    com.johnsimon.payback.core.Subscription loginSubscription -> loginSubscription
+    com.johnsimon.payback.async.Subscription loginSubscription -> loginSubscription
     java.lang.Long lastRefresh -> d
     com.google.android.gms.common.api.ResultCallback requestSyncCallback -> e
     com.google.android.gms.common.api.ResultCallback fileFoundCallback -> f
@@ -27931,7 +27931,7 @@ com.johnsimon.payback.storage.LocalStorage -> com.johnsimon.payback.storage.Loca
     61:62:void commit() -> commit
 com.johnsimon.payback.storage.Storage -> com.johnsimon.payback.storage.Storage:
     android.content.Context context -> context
-    com.johnsimon.payback.core.Subscription subscription -> subscription
+    com.johnsimon.payback.async.Subscription subscription -> subscription
     com.johnsimon.payback.util.AppData data -> data
     android.content.SharedPreferences getPreferences() -> getPreferences
     24:26:void emit(com.johnsimon.payback.util.AppData) -> emit
@@ -28071,8 +28071,8 @@ com.johnsimon.payback.ui.FeedActivity -> com.johnsimon.payback.ui.FeedActivity:
     android.support.v7.widget.Toolbar toolbar -> toolbar
     com.johnsimon.payback.core.Person person -> person
     java.util.ArrayList feed -> feed
-    com.johnsimon.payback.core.Subscription feedSubscription -> feedSubscription
-    com.johnsimon.payback.core.Subscription feedLinkedSubscription -> feedLinkedSubscription
+    com.johnsimon.payback.async.Subscription feedSubscription -> feedSubscription
+    com.johnsimon.payback.async.Subscription feedLinkedSubscription -> feedLinkedSubscription
     android.view.MenuItem filterAmount -> o
     android.view.MenuItem fulllMenuPay -> p
     android.view.MenuItem detailMenuPay -> detailMenuPay
@@ -28141,11 +28141,11 @@ com.johnsimon.payback.ui.FeedFragment -> com.johnsimon.payback.ui.FeedFragment:
     android.widget.TextView feed_header_balance -> feed_header_balance
     android.support.v7.widget.RecyclerView recyclerView -> d
     android.view.View emptyView -> e
-    com.johnsimon.payback.core.Subscription feedSubscription -> f
-    com.johnsimon.payback.core.Subscription feedLinkedSubscription -> g
+    com.johnsimon.payback.async.Subscription feedSubscription -> f
+    com.johnsimon.payback.async.Subscription feedLinkedSubscription -> g
     com.johnsimon.payback.ui.FeedFragment self -> h
-    com.johnsimon.payback.core.Callback onFeedCallback -> a
-    com.johnsimon.payback.core.Callback onFeedLinkedCallback -> b
+    com.johnsimon.payback.async.Callback onFeedCallback -> a
+    com.johnsimon.payback.async.Callback onFeedLinkedCallback -> b
     android.view.View$OnClickListener fabClickListener -> i
     63:138:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
     143:147:void onStart() -> onStart
@@ -28495,10 +28495,10 @@ com.johnsimon.payback.ui.SettingsActivity -> com.johnsimon.payback.ui.SettingsAc
     android.preference.Preference pref_currency -> pref_currency
     android.preference.ListPreference pref_background -> b
     java.lang.String backgroundPrefValue -> c
-    com.johnsimon.payback.core.Subscription loginSubscription -> loginSubscription
+    com.johnsimon.payback.async.Subscription loginSubscription -> loginSubscription
     android.preference.Preference pref_cloud_sync_account -> d
     android.preference.Preference$OnPreferenceChangeListener sBindPreferenceSummaryToValueListener -> e
-    com.johnsimon.payback.core.Callback onLoginCallback -> a
+    com.johnsimon.payback.async.Callback onLoginCallback -> a
     68:68:int getPreferencesXmlId() -> getPreferencesXmlId
     74:204:void onCreate(android.os.Bundle) -> onCreate
     208:211:void onPostCreate(android.os.Bundle) -> onPostCreate
@@ -28658,15 +28658,15 @@ com.johnsimon.payback.util.ColorPalette -> com.johnsimon.payback.util.ColorPalet
     60:66:com.johnsimon.payback.util.ColorPalette getInstance(com.johnsimon.payback.core.DataActivityInterface) -> getInstance
 com.johnsimon.payback.util.DataLinker -> com.johnsimon.payback.util.DataLinker:
     com.johnsimon.payback.util.AppData data -> b
-    com.johnsimon.payback.core.Subscription output -> c
-    com.johnsimon.payback.core.Callback contactsLoadedCallback -> a
-    20:28:com.johnsimon.payback.core.Subscription link(com.johnsimon.payback.core.Subscription,com.johnsimon.payback.core.Promise) -> link
+    com.johnsimon.payback.async.Subscription output -> c
+    com.johnsimon.payback.async.Callback contactsLoadedCallback -> a
+    20:28:com.johnsimon.payback.async.Subscription link(com.johnsimon.payback.async.Subscription,com.johnsimon.payback.async.Promise) -> link
     33:42:void link(com.johnsimon.payback.util.AppData,java.util.ArrayList) -> link
     14:14:com.johnsimon.payback.util.AppData access$002(com.johnsimon.payback.util.DataLinker,com.johnsimon.payback.util.AppData) -> a
     14:14:com.johnsimon.payback.util.AppData access$000(com.johnsimon.payback.util.DataLinker) -> a
-    14:14:com.johnsimon.payback.core.Subscription access$100(com.johnsimon.payback.util.DataLinker) -> b
+    14:14:com.johnsimon.payback.async.Subscription access$100(com.johnsimon.payback.util.DataLinker) -> b
 com.johnsimon.payback.util.DataLinker$1 -> axf:
-    com.johnsimon.payback.core.Promise val$contactsPromise -> a
+    com.johnsimon.payback.async.Promise val$contactsPromise -> a
     com.johnsimon.payback.util.DataLinker this$0 -> b
     23:25:void onCalled(com.johnsimon.payback.util.AppData) -> a
     20:20:void onCalled(java.lang.Object) -> onCalled

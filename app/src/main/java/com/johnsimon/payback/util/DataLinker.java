@@ -1,10 +1,11 @@
 package com.johnsimon.payback.util;
 
-import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.Promise;
-import com.johnsimon.payback.core.Subscription;
+import com.johnsimon.payback.async.Promise;
+import com.johnsimon.payback.async.Subscription;
 
 import java.util.ArrayList;
 
@@ -14,9 +15,9 @@ import java.util.ArrayList;
 public class DataLinker {
 
     private AppData data;
-    private Subscription<AppData> output = new Subscription<>();
+    private Notification output = new Notification();
 
-	public Subscription<AppData> link(Subscription<AppData> dataSubscription, final Promise<ArrayList<Contact>> contactsPromise) {
+	public Notification link(Subscription<AppData> dataSubscription, final Promise<ArrayList<Contact>> contactsPromise) {
 		dataSubscription.listen(new Callback<AppData>() {
 			@Override
 			public void onCalled(final AppData _data) {
@@ -45,7 +46,7 @@ public class DataLinker {
         @Override
         public void onCalled(ArrayList<Contact> contacts) {
             link(data, contacts);
-            output.broadcast(data);
+            output.broadcast();
         }
     };
 }

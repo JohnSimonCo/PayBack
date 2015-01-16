@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.johnsimon.payback.core.Promise;
-import com.johnsimon.payback.core.Subscription;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.util.AppData;
 
 public abstract class Storage {

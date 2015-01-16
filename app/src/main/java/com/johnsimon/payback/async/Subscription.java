@@ -1,4 +1,6 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.async;
+
+import com.johnsimon.payback.async.Callback;
 
 import java.util.ArrayList;
 

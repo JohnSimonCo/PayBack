@@ -3,11 +3,13 @@ package com.johnsimon.payback.core;
 import android.app.Fragment;
 import android.os.Bundle;
 
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.AppData;
-
-import java.util.ArrayList;
 
 public abstract class DataFragment extends Fragment {
     protected Storage storage;
@@ -16,7 +18,7 @@ public abstract class DataFragment extends Fragment {
 
 	private ContactLoader contactLoader;
 
-    private Subscription<AppData> dataLink;
+    private Notification dataLink;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -65,12 +67,12 @@ public abstract class DataFragment extends Fragment {
         }
     };
 
-    private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
-        @Override
-        public void onCalled(AppData data) {
-            onDataLinked();
-        }
-    };
+    private NotificationCallback dataLinkedCallback = new NotificationCallback() {
+		@Override
+		public void onNotify() {
+			onDataLinked();
+		}
+	};
 
     private boolean userLoaded = false;
     private Callback<User> userLoadedCallback = new Callback<User>() {

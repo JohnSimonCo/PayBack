@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
@@ -18,7 +22,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 	public User user;
 
-	protected Subscription<AppData> dataLink;
+	protected Notification dataLink;
 	protected ContactLoader contactLoader;
 
 	@Override
@@ -30,7 +34,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 		return contactLoader;
 	}
 	@Override
-	public Subscription<AppData> getDataLink() {
+	public Notification getDataLink() {
 		return dataLink;
 	}
 
@@ -102,9 +106,9 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 		}
 	};
 
-	private Callback<AppData> dataLinkedCallback = new Callback<AppData>() {
+	private NotificationCallback dataLinkedCallback = new NotificationCallback() {
 		@Override
-		public void onCalled(AppData data) {
+		public void onNotify() {
 			onDataLinked();
 		}
 	};

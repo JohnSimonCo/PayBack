@@ -23,12 +23,10 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.drive.internal.p;
-import com.johnsimon.payback.core.Callback;
-import com.johnsimon.payback.core.Subscription;
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
-import com.nostra13.universalimageloader.utils.IoUtils;
 import com.williammora.snackbar.Snackbar;
 
 import java.io.BufferedReader;
