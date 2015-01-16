@@ -136,7 +136,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		return System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
 	}
 
-	public void logout() {
+	public void changeAccount() {
 		client.clearDefaultAccountAndReconnect();
 		emit(new AppData());
 		localStorage.commit(data);

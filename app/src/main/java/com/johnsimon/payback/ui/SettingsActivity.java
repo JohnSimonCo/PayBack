@@ -23,8 +23,6 @@ import android.text.TextUtils;
 
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveFile;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.Callback;
 import com.johnsimon.payback.core.Subscription;
@@ -111,7 +109,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				((DriveStorage) storage).logout();
+				((DriveStorage) storage).changeAccount();
 				return false;
 			}
 		});
