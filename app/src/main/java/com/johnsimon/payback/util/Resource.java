@@ -72,6 +72,7 @@ public class Resource {
 		//Default configuration
 		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
 
+		//TODO innan release: Ta bort detta
 		StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
 				.detectAll()
 				.penaltyLog()
