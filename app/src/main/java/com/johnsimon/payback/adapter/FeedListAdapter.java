@@ -1,13 +1,17 @@
 package com.johnsimon.payback.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -97,23 +101,33 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				dialog.callback = callback;
 			}
 		});
-		//TODO THIS LAGS LIKE HELL!!!
-        ViewTreeObserver vto = holder.date.getViewTreeObserver();
-        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                holder.date.getViewTreeObserver().removeOnPreDrawListener(this);
 
-                int totalWidth = holder.detailContainer.getMeasuredWidth();
-                int dateWidth = holder.date.getMeasuredWidth();
-                holder.note.setMaxWidth(totalWidth - dateWidth);
+		holder.note.setText(debt.getNote() == null ? resources.getString(R.string.cash) : debt.getNote());
 
-                holder.note.setText(debt.getNote() == null ? resources.getString(R.string.cash) : debt.getNote());
+		holder.note.post(new Runnable() {
+			@Override
+			public void run() {
+				int widthTextView2 = measureTextWidthTextView(holder.date);
+				if(holder.note.getWidth() + widthTextView2 > holder.detailContainer.getWidth()) {
+					holder.note.setWidth(holder.note.getWidth() - widthTextView2);
+				}
+			}
+		});
+	}
 
-                return false;
-            }
-        });
+	private int measureTextWidthTextView(TextView textView) {
+		int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(getScreenWidth(), View.MeasureSpec.AT_MOST);
+		int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		textView.measure(widthMeasureSpec, heightMeasureSpec);
+		return textView.getMeasuredWidth();
+	}
 
+	private int getScreenWidth() {
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size.x;
 	}
 
 	public void checkAdapterIsEmpty () {
