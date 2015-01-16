@@ -1,6 +1,7 @@
 package com.johnsimon.payback.adapter;
 
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -73,12 +74,6 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		ViewHolder holder;
 		boolean isSelected = (position == NavigationDrawerFragment.mCurrentSelectedPosition);
 
-		if (position == 0) {
-			return getAllView(convertView, isSelected);
-		}
-
-		NavigationDrawerItem item = items.get(--position);
-
 		if (convertView == null) {
 			convertView = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
 
@@ -92,15 +87,18 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Person owner = item.owner;
+		if (position == 0) {
+			holder.title.setText(R.string.all);
+			holder.avatar.setImageResource(R.drawable.ic_people_placeholder);
+			holder.avatarLetter.setVisibility(View.GONE);
+		} else {
+			NavigationDrawerItem item = items.get(--position);
+			Person owner = item.owner;
 
-		if (holder.avatarLetter == null) {
-			holder.avatarLetter = (TextView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar_letter);
+			Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
+
+			holder.title.setText(item.title);
 		}
-
-		Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
-
-		holder.title.setText(item.title);
 
 		if (isSelected) {
 			holder.title.setTypeface(null, Typeface.BOLD);
@@ -111,34 +109,6 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		}
 
 		return convertView;
-	}
-
-	public View getAllView(View view, boolean isSelected) {
-		ViewHolder holder;
-		if (view == null) {
-			view = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
-
-			holder = new ViewHolder(
-					(TextView) view.findViewById(R.id.navigation_drawer_list_item_text),
-					(RoundedImageView) view.findViewById(R.id.navigation_drawer_list_item_avatar),
-					null
-			);
-			view.setTag(holder);
-		} else {
-			holder = (ViewHolder) view.getTag();
-		}
-
-		holder.title.setText(R.string.all);
-
-        if (isSelected) {
-            holder.title.setTypeface(null, Typeface.BOLD);
-            holder.title.setTextColor(context.getResources().getColor(R.color.green));
-        } else {
-            holder.title.setTypeface(null, Typeface.NORMAL);
-            holder.title.setTextColor(context.getResources().getColor(R.color.gray_text_light));
-        }
-
-		return view;
 	}
 
 	static class ViewHolder {
