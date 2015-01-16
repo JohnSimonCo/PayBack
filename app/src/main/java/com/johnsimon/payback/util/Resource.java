@@ -158,8 +158,10 @@ public class Resource {
 			});
 		} else {
 			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity, person.paletteIndex));
-			avatarLetter.setVisibility(View.VISIBLE);
-			avatarLetter.setText(person.getAvatarLetter());
+			if (avatarLetter != null) {
+				avatarLetter.setVisibility(View.VISIBLE);
+				avatarLetter.setText(person.getAvatarLetter());
+			}
 		}
 	}
 
