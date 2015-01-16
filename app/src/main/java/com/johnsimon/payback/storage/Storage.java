@@ -37,6 +37,14 @@ public abstract class Storage {
         commit();
     }
 
+	public boolean isDriveStorage() {
+		return this instanceof DriveStorage;
+	}
+
+	public DriveStorage asDriveStorage() {
+		return (DriveStorage) this;
+	}
+
     public void connect() {
 
     }

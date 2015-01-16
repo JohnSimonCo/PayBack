@@ -23,8 +23,11 @@ import android.text.TextUtils;
 
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveFile;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.core.Subscription;
 import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -55,6 +58,10 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
     private ListPreference pref_background;
     private String backgroundPrefValue;
+
+	public Subscription<String> loginSubscription = null;
+
+	private Preference pref_cloud_sync_account;
 
 	@Override
 	protected int getPreferencesXmlId() {
@@ -99,7 +106,8 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
         final CheckBoxPreference pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
 
-		final Preference pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
+		pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
+		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveStorage.PREFERENCE_ACCOUNT_NAME, null));
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -188,6 +196,10 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 				return false;
 			}
 		});
+
+		if(storage.isDriveStorage()) {
+			loginSubscription = storage.asDriveStorage().loginSubscription;
+		}
 
     }
 
@@ -321,15 +333,27 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     protected void onStart() {
         super.onStart();
         backgroundPrefValue = pref_background.getValue();
+
+		if(loginSubscription != null) {
+			loginSubscription.listen(onLoginCallback);
+		}
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (!backgroundPrefValue.equals(pref_background.getValue())) {
-            //Changed
-        }
+
+		if(loginSubscription != null) {
+			loginSubscription.unregister(onLoginCallback);
+		}
     }
+
+	Callback<String> onLoginCallback = new Callback<String>() {
+		@Override
+		public void onCalled(String name) {
+			pref_cloud_sync_account.setSummary(name);
+		}
+	};
 
     @Override
     public void onBackPressed() {

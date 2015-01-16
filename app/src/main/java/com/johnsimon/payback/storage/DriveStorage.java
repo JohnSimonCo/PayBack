@@ -25,6 +25,7 @@ import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.internal.p;
 import com.johnsimon.payback.core.Callback;
+import com.johnsimon.payback.core.Subscription;
 import com.johnsimon.payback.util.AppData;
 import com.johnsimon.payback.util.DataSyncer;
 import com.nostra13.universalimageloader.utils.IoUtils;
@@ -47,6 +48,8 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     private LocalStorage localStorage;
 
     private DriveFile file = null;
+
+	public Subscription<String> loginSubscription = new Subscription<>();
 
     public DriveStorage(Activity context) {
         super(context);
@@ -351,8 +354,10 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                     client.connect();
 
 					//A bit of a hack, but it works :)
+					String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+					loginSubscription.broadcast(accountName);
 					getPreferences().edit()
-						.putString(PREFERENCE_ACCOUNT_NAME, intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME))
+						.putString(PREFERENCE_ACCOUNT_NAME, accountName)
 						.apply();
                 }
                 return true;
