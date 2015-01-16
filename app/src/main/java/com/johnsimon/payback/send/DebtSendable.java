@@ -11,6 +11,7 @@ public class DebtSendable {
 	public String note;
 	public long timestamp;
 	public boolean isPaidBack;
+	public String currency;
 
 	public DebtSendable(Debt debt) {
 		this.id = debt.id;
@@ -18,10 +19,11 @@ public class DebtSendable {
 		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
 		this.isPaidBack = debt.isPaidBack();
+		this.currency = debt.currency;
 	}
 
 	public Debt extract(Person person) {
 		//Reverse amount
-		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), isPaidBack);
+		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), isPaidBack, currency);
 	}
 }

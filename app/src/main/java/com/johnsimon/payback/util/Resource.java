@@ -105,8 +105,7 @@ public class Resource {
     }
 
     public static String getCurrency() {
-        //return preferences.getString(SAVE_KEY_CURRENCY, "$");
-        return "$";
+        return preferences.getString(SAVE_KEY_CURRENCY, "$");
     }
 
     public static void toast(Context context, String text) {

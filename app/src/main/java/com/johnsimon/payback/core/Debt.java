@@ -33,10 +33,9 @@ public class Debt extends SyncedData<Debt> {
 	private String note;
 	public final long timestamp;
 	private boolean paidBack;
-	//TODO ta med currency för framtiden
 	public String currency;
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack) {
+    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
 		super(id, touched);
 
         this.owner = owner;
@@ -45,10 +44,11 @@ public class Debt extends SyncedData<Debt> {
         this.note = note;
         this.timestamp = timestamp;
         this.paidBack = paidBack;
+		this.currency = currency;
     }
 
 	private Debt(Person owner, float amount, String note, long time) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false);
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, Resource.getCurrency());
 	}
 
 	//Used when creating new

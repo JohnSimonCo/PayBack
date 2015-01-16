@@ -355,25 +355,15 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
     @Override
     public void onBackPressed() {
-        if (!backgroundPrefValue.equals(pref_background.getValue())) {
-            //Changed
-            finishAffinity();
-            startActivity(new Intent(this, FeedActivity.class));
-        } else {
-            super.onBackPressed();
-        }
+		finishAffinity();
+		startActivity(new Intent(this, FeedActivity.class));
     }
 
     @Override
     public boolean onNavigateUp() {
-        if (!backgroundPrefValue.equals(pref_background.getValue())) {
-            //Changed
-            finishAffinity();
-            startActivity(new Intent(this, FeedActivity.class));
+		finishAffinity();
+		startActivity(new Intent(this, FeedActivity.class));
 
-            return true;
-        } else {
-            return super.onNavigateUp();
-        }
+		return true;
     }
 }
