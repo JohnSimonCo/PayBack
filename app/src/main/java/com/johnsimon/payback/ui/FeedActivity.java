@@ -133,8 +133,6 @@ public class FeedActivity extends DataActivity implements
 
     @Override
     protected void onDataReceived() {
-		//TODO går tillbaka till all om man är inne på någon och man får dataRecieved
-
         if(isAll()) {
             feed = data.debts;
         } else {
@@ -145,7 +143,6 @@ public class FeedActivity extends DataActivity implements
         }
 
 		feedSubscription.broadcast(feed);
-
     }
 
     @Override
