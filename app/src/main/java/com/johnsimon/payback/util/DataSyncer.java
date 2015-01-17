@@ -1,6 +1,7 @@
 package com.johnsimon.payback.util;
 
 import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.core.Identifiable;
 import com.johnsimon.payback.core.Person;
 import com.johnsimon.payback.core.SyncedData;
 
@@ -26,29 +27,29 @@ public class DataSyncer {
         return new AppData(people, debts, deleted);
     }
 
-    private static <T extends SyncedData> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
+    private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
         for(Iterator<T> iterator = array.iterator(); iterator.hasNext();) {
-            if(deleted.contains(iterator.next().id)) {
+            if(deleted.contains(iterator.next().getId())) {
                 iterator.remove();
             }
         }
     }
 
-    private static <T extends SyncedData> T find(ArrayList<T> array, UUID id) {
+    private static <T extends Identifiable> T find(ArrayList<T> array, UUID id) {
         for(T item : array) {
-            if(item.id.equals(id)) {
+            if(item.getId().equals(id)) {
                 return item;
             }
         }
         return null;
     }
 
-    private static <T extends SyncedData<T>> ArrayList<T> sync(ArrayList<T> a, ArrayList<T> b) {
+    private static <T extends SyncedData<T> & Identifiable> ArrayList<T> sync(ArrayList<T> a, ArrayList<T> b) {
         ArrayList<T> array = new ArrayList<>();
 
         array.addAll(a);
         for(T item : b) {
-            T other = find(array, item.id);
+            T other = find(array, item.getId());
             if(other != null) {
                 array.remove(other);
                 array.add(item.syncWith(other));

@@ -1,14 +1,9 @@
 package com.johnsimon.payback.core;
 
-import java.util.UUID;
-
 public abstract class SyncedData<T extends SyncedData> {
-	public final UUID id;
 	public long touched;
 
-	public SyncedData(UUID id, long touched) {
-		this.id = id;
-
+	public SyncedData(long touched) {
 		this.touched = touched;
 	}
 

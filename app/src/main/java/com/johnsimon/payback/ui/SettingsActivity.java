@@ -114,7 +114,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 			}
 		});
 
-
         if (!Resource.isFull) {
             pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
             pref_cloud_sync.setEnabled(false);

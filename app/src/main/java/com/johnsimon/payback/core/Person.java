@@ -4,14 +4,16 @@ import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.UUID;
 
-public class Person extends SyncedData<Person> {
-	private String name;
+public class Person extends SyncedData<Person> implements Identifiable {
+    public final UUID id;
+    private String name;
 	public final int paletteIndex;
     public transient Contact link = null;
 
 	private Person(String name, UUID id, int paletteIndex, long touched) {
-		super(id, touched);
+		super(touched);
 
+        this.id = id;
 		this.name = name;
 		this.paletteIndex = paletteIndex;
 	}
@@ -51,7 +53,12 @@ public class Person extends SyncedData<Person> {
 		return this.name.equals(user.name);
 	}
 
-	@Override
+    @Override
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
 	public boolean equals(Object o) {
 		if (o == null) return false;
 		if (o == this) return true;
