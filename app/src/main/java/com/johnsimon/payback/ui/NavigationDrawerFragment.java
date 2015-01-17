@@ -350,8 +350,6 @@ public class NavigationDrawerFragment extends DataFragment {
                 if (!isAdded()) {
                     return;
                 }
-
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
             @Override
@@ -368,8 +366,6 @@ public class NavigationDrawerFragment extends DataFragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,

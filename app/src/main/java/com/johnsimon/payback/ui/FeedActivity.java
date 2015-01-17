@@ -56,12 +56,9 @@ public class FeedActivity extends DataActivity implements
 	private NavigationDrawerFragment navigationDrawerFragment;
 
 	private NfcAdapter nfcAdapter;
-
 	private Beamer beamer;
 
-	private CharSequence title;
-
-	private FeedFragment feedFragment;
+    private boolean attemptCheckFilterAmount = false;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -90,7 +87,6 @@ public class FeedActivity extends DataActivity implements
 		setSupportActionBar(toolbar);
 
 		navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-		title = getTitle();
 
 		// Set up the drawer.
 		navigationDrawerFragment.setUp(
@@ -119,10 +115,8 @@ public class FeedActivity extends DataActivity implements
 		}
 
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, feedFragment = new FeedFragment(), "feed_fragment_tag")
+				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 				.commit();
-
-
 
 	}
 
@@ -133,10 +127,7 @@ public class FeedActivity extends DataActivity implements
         } else {
             feed = data.feed(person);
         }
-        if (filterAmount != null) {
-            sort();
-        }
-
+        sort();
 		feedSubscription.broadcast(feed);
     }
 
@@ -186,6 +177,7 @@ public class FeedActivity extends DataActivity implements
 		}
 
         feed = data.feed(person);
+        sort();
 
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
@@ -200,10 +192,6 @@ public class FeedActivity extends DataActivity implements
 		getSupportActionBar().setTitle(R.string.app_name);
 	}
 
-	public void restoreActionBar() {
-		getSupportActionBar().setTitle(title);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Only show items in the action bar relevant to this screen
@@ -213,6 +201,10 @@ public class FeedActivity extends DataActivity implements
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
         fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+
+        if (attemptCheckFilterAmount) {
+            filterAmount.setChecked(true);
+        }
 
         sort();
 
@@ -226,8 +218,6 @@ public class FeedActivity extends DataActivity implements
 			}
 
 		}
-
-		restoreActionBar();
 		return true;
 	}
 
@@ -256,6 +246,9 @@ public class FeedActivity extends DataActivity implements
 	}
 
     private void sort() {
+        if (filterAmount == null)
+            return;
+
         if (filterAmount.isChecked()) {
             sortAmount();
         } else {
@@ -330,17 +323,20 @@ public class FeedActivity extends DataActivity implements
 		super.onRestoreInstanceState(savedInstanceState);
 
 		if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
+            attemptCheckFilterAmount = true;
 			sortAmount();
 		}
 	}
 
 	public void sortTime() {
 		Collections.sort(feed, new Resource.TimeComparator());
+        FeedFragment.adapter.updateList(feed);
 		FeedFragment.adapter.notifyDataSetChanged();
 	}
 
 	public void sortAmount() {
 		Collections.sort(feed, new Resource.AmountComparator());
+        FeedFragment.adapter.updateList(feed);
 		FeedFragment.adapter.notifyDataSetChanged();
 	}
 

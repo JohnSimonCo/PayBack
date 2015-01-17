@@ -24,7 +24,7 @@ import com.makeramen.RoundedImageView;
 import java.util.ArrayList;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
-	private final ArrayList<Debt> list;
+	private ArrayList<Debt> list;
 	private final DataActivity context;
 	private final View emptyView;
 	private DebtDetailDialogFragment.Callback callback;
@@ -105,8 +105,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			@Override
 			public void run() {
 				int widthTextView2 = measureTextWidthTextView(holder.date);
-				if(holder.note.getWidth() + widthTextView2 > holder.detailContainer.getWidth()) {
-					holder.note.setWidth(holder.note.getWidth() - widthTextView2);
+				if (holder.note.getWidth() + widthTextView2 > holder.detailContainer.getWidth()) {
+					holder.note.setMaxWidth(holder.note.getWidth() - widthTextView2);
 				}
 			}
 		});
@@ -134,6 +134,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			emptyView.setVisibility(View.GONE);
 		}
 	}
+
+    public void updateList(ArrayList<Debt> feed) {
+        list = feed;
+    }
 
 	// Return the size of your dataset (invoked by the layout manager)
 	@Override
