@@ -170,15 +170,20 @@ public class FeedActivity extends DataActivity implements
 
 	@Override
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
+
+        Person oldPerson = person;
+
 		if(item.type == NavigationDrawerItem.Type.All) {
 			person = null;
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
 			person = item.owner;
 		}
 
+        if (person == oldPerson)
+            return;
+
         feed = data.feed(person);
         sort();
-
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
 

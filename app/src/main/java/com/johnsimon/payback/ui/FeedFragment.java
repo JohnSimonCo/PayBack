@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -159,8 +160,16 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	Callback<ArrayList<Debt>> onFeedCallback = new Callback<ArrayList<Debt>>() {
 		@Override
 		public void onCalled(ArrayList<Debt> feed) {
-			adapter = new FeedListAdapter(feed, (DataActivity) getActivity(), self, emptyView);
-			recyclerView.setAdapter(adapter);
+            if (adapter == null) {
+                //First time
+                adapter = new FeedListAdapter(feed, (DataActivity) getActivity(), self, emptyView);
+                recyclerView.setAdapter(adapter);
+            } else {
+                adapter.updateList(feed);
+                adapter.notifyDataSetChanged();
+
+                recyclerView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in));
+            }
 
 			adapter.checkAdapterIsEmpty();
 

@@ -22,10 +22,13 @@ import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
-	private ArrayList<Debt> list;
+	public ArrayList<Debt> list;
 	private final DataActivity context;
 	private final View emptyView;
 	private DebtDetailDialogFragment.Callback callback;
