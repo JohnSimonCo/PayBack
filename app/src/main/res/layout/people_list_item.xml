@@ -5,7 +5,6 @@
     style="@style/Elevation4DP"
     android:focusable="false"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     android:paddingLeft="@dimen/base_padding"
     android:paddingRight="@dimen/base_padding"
     android:background="?android:attr/selectableItemBackground"
@@ -49,6 +48,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/people_list_item_name_container"
         android:paddingRight="56dp"
         android:orientation="vertical"
         android:layout_toRightOf="@id/people_list_item_avatar_layout"
@@ -79,8 +79,6 @@
 
      </LinearLayout>
 
-
-
     <ImageView
         android:scaleType="center"
         android:background="@android:color/transparent"
@@ -89,5 +87,12 @@
         android:src="@drawable/ic_action_handle"
         android:layout_width="48dp"
         android:layout_height="48dp"/>
+
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/people_list_item_name_container"
+        android:background="@color/gray_oncolor_very_light"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
 
 </RelativeLayout>
