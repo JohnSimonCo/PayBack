@@ -83,7 +83,6 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:ellipsize="end"
                     android:id="@+id/list_item_note"    />
 
                 <TextView

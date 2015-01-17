@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,6 +108,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				int widthTextView2 = measureTextWidthTextView(holder.date);
 				if (holder.note.getWidth() + widthTextView2 > holder.detailContainer.getWidth()) {
 					holder.note.setMaxWidth(holder.note.getWidth() - widthTextView2);
+                    holder.note.setEllipsize(TextUtils.TruncateAt.END);
+                    holder.note.setHorizontallyScrolling(true);
 				}
 			}
 		});
