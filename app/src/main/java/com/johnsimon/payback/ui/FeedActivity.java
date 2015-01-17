@@ -188,9 +188,7 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	@Override
-	public void onShowGlobalContextActionBar() {
-		getSupportActionBar().setTitle(R.string.app_name);
-	}
+	public void onShowGlobalContextActionBar() {}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

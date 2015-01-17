@@ -331,6 +331,9 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (activity.isFinishing())
+            return;
+
 		if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(activity, REQUEST_CODE_RESOLUTION);
