@@ -81,7 +81,6 @@
 
     <ImageView
         android:scaleType="center"
-        android:background="@android:color/transparent"
         android:layout_alignParentRight="true"
         android:id="@+id/people_list_item_handle"
         android:src="@drawable/ic_action_handle"
