@@ -46,6 +46,7 @@ import java.util.ArrayList;
 public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
+    public static boolean reloadNext = false;
 	public static FeedListAdapter adapter;
     public static FrameLayout headerView;
 
@@ -160,7 +161,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	Callback<ArrayList<Debt>> onFeedCallback = new Callback<ArrayList<Debt>>() {
 		@Override
 		public void onCalled(ArrayList<Debt> feed) {
-            if (adapter == null) {
+            if (adapter == null || reloadNext) {
+                reloadNext = false;
                 //First time
                 adapter = new FeedListAdapter(feed, (DataActivity) getActivity(), self, emptyView);
                 recyclerView.setAdapter(adapter);

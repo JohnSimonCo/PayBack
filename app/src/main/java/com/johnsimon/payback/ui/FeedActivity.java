@@ -63,6 +63,15 @@ public class FeedActivity extends DataActivity implements
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+        Intent sentIntent = getIntent();
+
+        if (sentIntent.getBooleanExtra(ARG_FROM_CREATE, false)) {
+            Resource.actionComplete(this);
+            sentIntent.removeExtra(ARG_FROM_CREATE);
+            FeedFragment.reloadNext = true;
+        }
+
 		super.onCreate(savedInstanceState);
 
         bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
@@ -137,16 +146,6 @@ public class FeedActivity extends DataActivity implements
 
 		feedLinkedNotification.broadcast();
     }
-
-    @Override
-	protected void onStart() {
-		super.onStart();
-		Intent intent = getIntent();
-		if (intent.getBooleanExtra(ARG_FROM_CREATE, false)) {
-			Resource.actionComplete(this);
-			intent.removeExtra(ARG_FROM_CREATE);
-		}
-	}
 
     public static boolean isAll() {
 		return person == null;
