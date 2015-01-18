@@ -63,6 +63,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        reloadNext = true;
+
 		final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
 		recyclerView.setHasFixedSize(true);
