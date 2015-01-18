@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.johnsimon.payback.core.DataActivity;
@@ -80,8 +81,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			holder = new ViewHolder(
 				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_text),
 				(RoundedImageView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar),
-				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar_letter)
-			);
+				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar_letter),
+                convertView);
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -103,9 +105,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		if (isSelected) {
 			holder.title.setTypeface(null, Typeface.BOLD);
             holder.title.setTextColor(context.getResources().getColor(R.color.green));
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray_oncolor_very_light));
 		} else {
 			holder.title.setTypeface(null, Typeface.NORMAL);
             holder.title.setTextColor(context.getResources().getColor(R.color.gray_text_light));
+            holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
 		}
 
 		return convertView;
@@ -115,11 +119,13 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		public TextView title;
         public RoundedImageView avatar;
 		public TextView avatarLetter;
+        public View itemView;
 
-		ViewHolder(TextView title, RoundedImageView avatar, TextView avatarLetter) {
+		ViewHolder(TextView title, RoundedImageView avatar, TextView avatarLetter, View itemView) {
 			this.title = title;
             this.avatar = avatar;
 			this.avatarLetter = avatarLetter;
+            this.itemView = itemView;
 		}
 	}
 }

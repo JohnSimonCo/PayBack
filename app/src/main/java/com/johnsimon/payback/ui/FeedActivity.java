@@ -42,6 +42,7 @@ public class FeedActivity extends DataActivity implements
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
+
 	public static Toolbar toolbar;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
@@ -50,7 +51,6 @@ public class FeedActivity extends DataActivity implements
 	public Notification feedLinkedNotification = new Notification();
 
 	private MenuItem filterAmount;
-	private MenuItem fulllMenuPay;
 	public static MenuItem detailMenuPay;
 
 	private NavigationDrawerFragment navigationDrawerFragment;
@@ -142,7 +142,7 @@ public class FeedActivity extends DataActivity implements
 	protected void onStart() {
 		super.onStart();
 		Intent intent = getIntent();
-		if(intent.getBooleanExtra(ARG_FROM_CREATE, false)) {
+		if (intent.getBooleanExtra(ARG_FROM_CREATE, false)) {
 			Resource.actionComplete(this);
 			intent.removeExtra(ARG_FROM_CREATE);
 		}
@@ -203,7 +203,7 @@ public class FeedActivity extends DataActivity implements
 		getMenuInflater().inflate(R.menu.feed, menu);
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
-        fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+        MenuItem fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
 
         if (attemptCheckFilterAmount) {
             filterAmount.setChecked(true);
