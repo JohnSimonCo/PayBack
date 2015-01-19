@@ -78,6 +78,20 @@
 
             <TextView
                 style="@style/library_title"
+                android:text="@string/lib_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:fontFamily="roboto"
+                app:textWeight="medium"
+                android:text="@string/author_icon"
+                style="@style/library_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/library_title"
                 android:text="@string/lib_riv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

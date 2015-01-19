@@ -106,6 +106,8 @@
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
     <string name="author_johnsimon">John Rapp Farnes\nSimon Halvdansson</string>
+    <string name="lib_icon">Icon</string>
+    <string name="author_icon">Jovie Brett Bardoles</string>
     <string name="lib_riv">RoundedImageView</string>
     <string name="author_riv">Vince Mi</string>
     <string name="lib_fab">Floating Action Button</string>
