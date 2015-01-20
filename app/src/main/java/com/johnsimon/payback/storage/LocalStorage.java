@@ -50,7 +50,7 @@ public class LocalStorage extends Storage {
 		}
 
 		for(int i = 0; i < 100; i++) {
-			data.debts.add(new Debt(data.people.get(r.nextInt(data.people.size())), r.nextFloat() * 200, null, data.preferences.getCurrency()));
+			data.debts.add(new Debt(data.people.get(r.nextInt(data.people.size())), r.nextFloat() * 200, null, data.preferences.getCurrency().id));
 		}
 	}
 

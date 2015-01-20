@@ -19,7 +19,7 @@ public class DebtSendable {
 		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
 		this.isPaidBack = debt.isPaidBack();
-		this.currency = debt.currency;
+		this.currency = debt.currencyId;
 	}
 
 	public Debt extract(Person person) {

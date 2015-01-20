@@ -101,8 +101,8 @@ public class Resource {
         return ARG_PREFIX + prefix + "_" + arg;
     }
 
-    /*public static void setCurrency(String currency) {
-        preferences.edit().putString(SAVE_KEY_CURRENCY, currency).apply();
+    /*public static void setCurrency(String currencyId) {
+        preferences.edit().putString(SAVE_KEY_CURRENCY, currencyId).apply();
     }*/
 
     /*public static String getCurrency() {

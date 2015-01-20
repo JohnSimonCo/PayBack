@@ -32,6 +32,8 @@ import com.johnsimon.payback.util.SwishLauncher;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Currency;
+import java.util.Set;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
@@ -126,7 +128,6 @@ public class FeedActivity extends DataActivity implements
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
 				.commit();
-
 	}
 
     @Override

@@ -68,7 +68,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         row.setTextViewText(R.id.list_item_person, debt.getOwner().getName());
         row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? ctx.getResources().getString(R.string.cash) : debt.getNote());
         row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
-        row.setTextViewText(R.id.list_item_amount, debt.amountString(data.preferences));
+      //  row.setTextViewText(R.id.list_item_amount, debt.amountString(data.preferences));
         row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
 
         if (debt.isPaidBack()) {

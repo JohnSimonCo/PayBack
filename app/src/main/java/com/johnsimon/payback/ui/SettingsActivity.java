@@ -263,7 +263,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             String stringValue = value.toString();
 
             if (preference.getKey().equals("pref_currency")) {
-                preference.setSummary(data.preferences.getCurrency());
+                preference.setSummary(data.preferences.getCurrency().id);
                 return true;
             }
 

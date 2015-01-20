@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.Currency;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.view.NDSpinner;
@@ -190,7 +191,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 	View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			//Button was disabled when no currency so we're free
+			//Button was disabled when no currencyId so we're free
 			//to continue since the user was able to press the button
 
 			if (hasNfc && !currencyOnly) {
@@ -198,8 +199,8 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			data.preferences.set("currency", currency);
-			data.preferences.set("currency_before", currencyBefore);
+			//TODO simme shit måste in här
+			data.preferences.set("currency", new Currency());
 			storage.commit();
 
             FeedFragment.adapter.notifyDataSetChanged();
