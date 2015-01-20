@@ -183,7 +183,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		//if (getActivity() != null && getResources() != null) {
 			displayTotalDebt(getResources());
 		//}
-		headerImage.setImageDrawable(Resource.getBackgroundDrawable(getResources(), data.preferences.getBackground()));
+		headerImage.setImageDrawable(Background.getDrawable(getResources(), data.preferences.getBackground()));
 	}
 
 	NotificationCallback onFeedLinkedCallback = new NotificationCallback() {

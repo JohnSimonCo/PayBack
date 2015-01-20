@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
@@ -194,7 +195,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 		if(storage.isDriveStorage()) {
 			loginSubscription = storage.asDriveStorage().loginSubscription;
 		}
-
     }
 
 	@Override
@@ -266,6 +266,11 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                 preference.setSummary(data.preferences.getCurrency());
                 return true;
             }
+
+			if (preference.getKey().equals("pref_background")) {
+				data.preferences.set("background", value);
+				return true;
+			}
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
