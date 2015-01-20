@@ -25,7 +25,7 @@
     <string name="send">Send</string>
     <string name="about_title">About</string>
     <string name="filter">Filter</string>
-    <string name="welcome_text">In this free version you are limited to 5 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currencyId you wish to use. This can be changed later in settings.</string>
+    <string name="welcome_text">In this free version you are limited to 5 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currency you wish to use. This can be changed later in settings.</string>
     <string name="welcome_continue">Continue</string>
     <string name="welcome_currency_hint">Currency (ex. $)</string>
     <string name="welcome_using_nfc">Using NFC</string>
@@ -45,7 +45,7 @@
     <string name="clear">Clear</string>
     <string name="justnow">Just now</string>
     <string name="done">Done</string>
-    <string name="welcome_currency">Select your preferred currencyId</string>
+    <string name="welcome_currency">Select your preferred currency</string>
     <string name="sort_az">Sort alphabetically</string>
     <string name="people_empty_text">No people added</string>
     <string name="select_person">Select a person</string>
@@ -138,7 +138,7 @@
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>
     <string name="pref_general">General</string>
-    <string name="currencyId">Currency</string>
+    <string name="currency">Currency</string>
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
 

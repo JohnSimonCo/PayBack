@@ -5,7 +5,7 @@
         android:title="@string/pref_general"  >
 
         <Preference
-            android:title="@string/currencyId"
+            android:title="@string/currency"
             android:key="pref_currency" />
 
         <ListPreference
