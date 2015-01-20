@@ -10,7 +10,7 @@ public class Preferences extends HashMap<String, Preference> {
 	private final static String DEFAULT_CURRENCY = "$";
 
 	private final static String[] KEYS = {
-		"background", "currency"
+		"background", "currency", "currency_before"
 	};
 
 	public static Preferences defaultPreferences() {
