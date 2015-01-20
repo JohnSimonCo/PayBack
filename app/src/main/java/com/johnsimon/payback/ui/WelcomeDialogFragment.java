@@ -25,8 +25,10 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 	private String currency, lastSpinnerValue;
     private boolean listenForSpinnerSelect = false;
 	private boolean currencyOnly;
+	private boolean currencyBefore = true;
 
     private final String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
+    private final String CURRENCY_BEFORE_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
 
 	private NDSpinner currencySpinner;
 	private TextView welcomeCurrencyPreview;
@@ -126,6 +128,7 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             setCurrency(savedInstanceState.getString(CURRENCY_SAVE_KEY));
+            currencyBefore = savedInstanceState.getBoolean(CURRENCY_BEFORE_SAVE_KEY, true);
         }
     }
 
@@ -133,6 +136,7 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(CURRENCY_SAVE_KEY, currency);
+        outState.putBoolean(CURRENCY_BEFORE_SAVE_KEY, currencyBefore);
     }
 
 	private void setCurrency(String currency) {
@@ -152,6 +156,7 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 			}
 
 			data.preferences.set("currency", currency);
+			data.preferences.set("currency_before", currencyBefore);
 			storage.commit();
 
             FeedFragment.adapter.notifyDataSetChanged();
@@ -170,7 +175,8 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 	};
 
 	@Override
-	public void onSelected(String currency) {
+	public void onSelected(String currency, boolean before) {
 		setCurrency(currency);
+		currencyBefore = before;
 	}
 }

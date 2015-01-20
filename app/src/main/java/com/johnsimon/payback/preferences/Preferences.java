@@ -2,9 +2,6 @@ package com.johnsimon.payback.preferences;
 
 import java.util.HashMap;
 
-/**
- * Created by johnrs on 2015-01-17.
- */
 public class Preferences extends HashMap<String, Preference> {
 
 	private final static String DEFAULT_CURRENCY = "$";
@@ -35,6 +32,9 @@ public class Preferences extends HashMap<String, Preference> {
 		return value == null ? defaultValue : value;
 	}
 
+	public boolean getCurrencyBefore() {
+		return get("currency_before", true);
+	}
 
 	public String getCurrency() {
 		return get("currency", DEFAULT_CURRENCY);

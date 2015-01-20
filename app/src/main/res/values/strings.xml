@@ -150,9 +150,9 @@
         <item>City</item>
     </string-array>
 
-    <string-array name="bg_entries">
-        <item>mountains</item>
-        <item>city</item>
-    </string-array>
+    <integer-array name="bg_entries">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
 
 </resources>
