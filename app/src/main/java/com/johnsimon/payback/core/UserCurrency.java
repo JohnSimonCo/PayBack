@@ -4,13 +4,13 @@ import com.johnsimon.payback.data.Debt;
 
 public class UserCurrency {
 	public final String id;
-	public final boolean before;
 	public final String displayName;
+	public final boolean before;
 
-	public UserCurrency(String id, boolean before, String displayName) {
+	public UserCurrency(String id, String displayName, boolean before) {
 		this.id = id;
-		this.before = before;
 		this.displayName = displayName;
+		this.before = before;
 	}
 
 	public String render(float amount) {

@@ -157,7 +157,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 
 	private static Set<Currency> getAllCurrencies()
 	{
-		Set<Currency> toret = new HashSet<Currency>();
+		Set<Currency> toret = new HashSet<>();
 		Locale[] locs = Locale.getAvailableLocales();
 
 		for(Locale loc : locs) {
@@ -198,8 +198,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			//TODO simme shit måste in här
-			data.preferences.set("currency", new UserCurrency());
+			data.preferences.set("currency", new UserCurrency(selectedCurrency.getSymbol(), displayCurrency, custom_currency_radio_before.isChecked()));
 			storage.commit();
 
             FeedFragment.adapter.notifyDataSetChanged();
