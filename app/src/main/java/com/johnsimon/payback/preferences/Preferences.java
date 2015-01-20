@@ -28,6 +28,10 @@ public class Preferences extends HashMap<String, Preference> {
 
 	public <T> T get(String key, T defaultValue) {
 		Preference preference = get(key);
+		if(preference == null) {
+			put(key, new Preference<>(null));
+			return defaultValue;
+		}
 		T value = (T) preference.getValue();
 		return value == null ? defaultValue : value;
 	}
