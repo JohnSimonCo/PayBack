@@ -139,6 +139,8 @@ public class FeedActivity extends DataActivity implements
         }
         sort();
 		feedSubscription.broadcast(feed);
+
+		storage.wipe();
     }
 
     @Override
