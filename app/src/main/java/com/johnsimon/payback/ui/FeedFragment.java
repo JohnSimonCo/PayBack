@@ -56,6 +56,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
     private RecyclerView recyclerView;
     private View emptyView;
 
+	ImageView headerImage;
+
 	private Subscription<ArrayList<Debt>> feedSubscription;
 	private Notification feedLinkedNotification;
 
@@ -123,10 +125,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         View header = new View(getActivity());
         header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
 
-        ImageView headerImage = (ImageView) rootView.findViewById(R.id.feed_list_image);
-        if (!Resource.preferences.getString("pref_background", "mountains").equals("mountains")) {
-            headerImage.setImageDrawable(getResources().getDrawable(R.drawable.art_old));
-        }
+        headerImage = (ImageView) rootView.findViewById(R.id.feed_list_image);
 
         int headerHeight = headerView.getLayoutParams().height;
         QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
@@ -184,6 +183,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		//if (getActivity() != null && getResources() != null) {
 			displayTotalDebt(getResources());
 		//}
+		headerImage.setImageDrawable(Resource.getBackgroundDrawable(getResources(), data.preferences.getBackground()));
 	}
 
 	NotificationCallback onFeedLinkedCallback = new NotificationCallback() {

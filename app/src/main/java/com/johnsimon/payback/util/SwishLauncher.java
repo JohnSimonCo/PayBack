@@ -22,7 +22,7 @@ public class SwishLauncher {
     public static void startSwish(final Activity activity, final float amount, final Person owner) {
         if (owner.hasNumbers()) {
 
-            String[] numbers = Resource.clearDuplicates(owner.link.numbers);
+            String[] numbers = owner.link.numbers;
 
             if (numbers.length > 1) {
 

@@ -256,10 +256,6 @@ public class Resource {
         return isFull || debts + addition <= MAX_FREE_DEBTS;
     }
 
-    public static String[] clearDuplicates(String[] list) {
-        return new HashSet<>(Arrays.asList(list)).toArray(new String[0]);
-    }
-
 	public static <T> boolean nullEquals(T a, T b) {
 		return a == null ? b == null : a.equals(b);
 	}

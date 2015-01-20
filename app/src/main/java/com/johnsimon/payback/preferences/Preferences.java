@@ -29,13 +29,18 @@ public class Preferences extends HashMap<String, Preference> {
 		getTyped(key).setValue(value);
 	}
 
-	public String getString(String key, String defaultValue) {
+	public <T> T get(String key, T defaultValue) {
 		Preference preference = get(key);
-		String value = (String) preference.getValue();
+		T value = (T) preference.getValue();
 		return value == null ? defaultValue : value;
 	}
 
+
 	public String getCurrency() {
-		return getString("currency", DEFAULT_CURRENCY);
+		return get("currency", DEFAULT_CURRENCY);
+	}
+
+	public int getBackground() {
+		return get("background", 0);
 	}
 }
