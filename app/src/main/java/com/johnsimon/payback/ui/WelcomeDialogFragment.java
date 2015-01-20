@@ -20,9 +20,12 @@ import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.UserCurrency;
 import com.johnsimon.payback.core.DataDialogFragment;
+import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.view.NDSpinner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.Locale;
@@ -109,6 +112,9 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 		for (int i = 0; i < currencyList.length; i++) {
 			currencyNameList[i] = currencyList[i].getSymbol();
 		}
+
+		Arrays.sort(currencyList, new Resource.AlphabeticalCurrencyComparator());
+		Arrays.sort(currencyNameList, new Resource.AlphabeticalStringComparator());
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
