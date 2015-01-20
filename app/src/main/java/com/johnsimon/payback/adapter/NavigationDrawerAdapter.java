@@ -80,7 +80,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_text),
 				(RoundedImageView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar),
 				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_avatar_letter),
-				convertView);
+				convertView.findViewById(R.id.navigation_drawer_list_item_background));
 
 			convertView.setTag(holder);
 		} else {
@@ -103,8 +103,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		if (isSelected) {
 			holder.title.setTypeface(null, Typeface.BOLD);
             holder.title.setTextColor(context.getResources().getColor(R.color.green));
-			holder.itemView.setBackgroundResource(R.drawable.navigation_drawer_selected);
-         //   holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray_oncolor_very_light));
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray_oncolor_very_light));
 		} else {
 			holder.title.setTypeface(null, Typeface.NORMAL);
             holder.title.setTextColor(context.getResources().getColor(R.color.gray_text_light));

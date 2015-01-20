@@ -50,10 +50,10 @@ public class CreateDebtActivity extends DataActivity {
 	public static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
 	public static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
 
-	//Views
 	private TintEditText floatLabelAmountEditText;
 	private TintEditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
+	private FloatLabelLayout floatLabelLayout;
 
 	private RadioGroup radioGroup;
 
@@ -91,9 +91,7 @@ public class CreateDebtActivity extends DataActivity {
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
-        FloatLabelLayout floatLabelLayout = (FloatLabelLayout) findViewById(R.id.float_label_layout_amount);
-        floatLabelLayout.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
-		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
+        floatLabelLayout = (FloatLabelLayout) findViewById(R.id.float_label_layout_amount);
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
@@ -214,6 +212,10 @@ public class CreateDebtActivity extends DataActivity {
 	@Override
 	protected void onDataReceived() {
 		Intent intent = getIntent();
+
+		floatLabelLayout.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
+		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
+
 		if (intent.hasExtra(ARG_ID)) {
 			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));
 
