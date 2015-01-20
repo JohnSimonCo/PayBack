@@ -6,6 +6,7 @@
     <color name="green_strong">#4c775e</color>
     <color name="red_disabled">#e9adaf</color>
     <color name="green_disabled">#bad3c4</color>
+    <color name="icon_green">#0e9c57</color>
 
     <color name="gray_text_dark">#181818</color>
     <color name="gray_text_normal">#333333</color>

@@ -92,13 +92,13 @@ public class SettingsActivity extends MaterialPreferenceActivity {
         pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                WelcomeDialogFragment aboutDialogFragment = new WelcomeDialogFragment();
+				CurrencyDialogFragment currencyDialogFragment = new CurrencyDialogFragment();
 
                 Bundle args = new Bundle();
-                args.putBoolean("SETTINGS", true);
+                args.putBoolean(CurrencyDialogFragment.CONTINUE_TO_NFC, false);
 
-                aboutDialogFragment.setArguments(args);
-                aboutDialogFragment.show(getFragmentManager(), "settings_currency");
+				currencyDialogFragment.setArguments(args);
+				currencyDialogFragment.show(getFragmentManager(), "settings_currency");
                 return false;
             }
         });

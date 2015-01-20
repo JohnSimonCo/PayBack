@@ -25,7 +25,8 @@
     <string name="send">Send</string>
     <string name="about_title">About</string>
     <string name="filter">Filter</string>
-    <string name="welcome_text">In this free version you are limited to 5 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.\n\nBefore we get started, enter the currency you wish to use. This can be changed later in settings.</string>
+    <string name="welcome_text">In this free version you are limited to 5 debts at a time and no cloud sync. An in app purchase is required to unlock the full version.</string>
+    <string name="currency_text">Before we get started, enter the currency you wish to use. This can be changed later in settings.</string>
     <string name="welcome_continue">Continue</string>
     <string name="welcome_currency_hint">Currency (ex. $)</string>
     <string name="welcome_using_nfc">Using NFC</string>
@@ -102,9 +103,7 @@
     <string name="phone_number">Phone number</string>
     <string name="swish_copy_toast_end">copied to clipboard</string>
     <string name="pay_with_swish">Pay with Swish</string>
-    <string name="currency_before">Currency before amount</string>
-    <string name="currency_after">Currency after amount</string>
-    <string name="currency_title">Currency symbol</string>
+    <string name="currency_checkbox">Symbol after amount</string>
     <string name="select_currency">Select currency</string>
     <string name="select">Select</string>
     <string name="currency_symbol">Currency symbol</string>

@@ -56,66 +56,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="8dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.devspark.robototextview.widget.RobotoButton
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                style="@style/Elevation2DP"
-                android:text="@string/currency"
-                android:id="@+id/welcome_select_currency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <com.devspark.robototextview.widget.RobotoButton
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                style="@style/Elevation2DP"
-                android:text="@string/currency_symbol"
-                android:id="@+id/welcome_select_currency_display"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:layout_marginLeft="16dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.internal.widget.TintRadioButton
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
-                android:id="@+id/custom_currency_radio_before"
-                android:checked="true"
-                android:textSize="16sp"
-                android:text="@string/currency_before"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.internal.widget.TintRadioButton
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
-                android:id="@+id/custom_currency_radio_after"
-                android:text="@string/currency_after"
-                android:textSize="16sp"
-                android:layout_width="match_parent"
-                android:layout_height="36dp" />
-
-        </RadioGroup>
-
-        <com.devspark.robototextview.widget.RobotoTextView
-            app:fontFamily="roboto"
-            app:textWeight="medium"
-            android:id="@+id/welcome_currency_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"    />
-
         <com.devspark.robototextview.widget.RobotoButton
             app:fontFamily="roboto"
             app:textWeight="medium"
