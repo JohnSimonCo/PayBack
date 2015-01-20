@@ -36,6 +36,7 @@
 
         <android.support.v7.internal.widget.TintRadioButton
             app:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:id="@+id/custom_currency_radio_before"
             android:checked="true"
             android:text="@string/currency_before"
             android:layout_width="match_parent"

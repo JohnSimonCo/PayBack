@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v7.internal.widget.TintRadioButton;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 	private TintEditText customCurrencyEditText;
 	private AlertDialog alertDialog;
+	private TintRadioButton custom_currency_radio_before;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 				alertDialog.dismiss();
 			}
 		});
+
+		custom_currency_radio_before = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_before);
 
 		customCurrencyEditText = (TintEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
@@ -83,7 +87,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 	private View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			//completeCallback.onSelected(customCurrencyEditText.getText().toString());
+			completeCallback.onSelected(customCurrencyEditText.getText().toString(), custom_currency_radio_before.isChecked());
 			alertDialog.dismiss();
 		}
 	};

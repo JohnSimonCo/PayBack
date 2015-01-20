@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
@@ -103,14 +104,18 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 	}
 
-	public String amountString(String currency) {
-		return Debt.amountString(amount, currency);
+	public String amountString(Preferences preferences) {
+		return Debt.amountString(amount, preferences);
 	}
 
-	public static String amountString(float amount, String currency) {
-		return Float.toString(Math.abs(amount))
-				.replaceAll("\\.0$", "")
-				+ " " + currency;
+	public static String amountString(float amount, Preferences preferences) {
+		String string = Float.toString(Math.abs(amount))
+				.replaceAll("\\.0$", "");
+
+		return preferences.getCurrencyBefore()
+			? preferences.getCurrency() + " " + string
+			: string + " " + preferences.getCurrency();
+
 	}
 
 	public int getColor() {
@@ -130,21 +135,21 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 	*/
 
-	public static String totalString(float amount, String currency, String even, boolean isAll, String allEvenString) {
+	public static String totalString(float amount, Preferences preferences, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
 			return isAll ? allEvenString : even;
 		} else {
-			return (amount > 0 ? "+ " : "- ") + amountString(amount, currency);
+			return (amount > 0 ? "+ " : "- ") + amountString(amount, preferences);
 		}
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context ctx, String currency) {
+	public String getShareString(Context ctx, Preferences preferences) {
 		String shareText = this.amount < 0
 			? ctx.getString(R.string.ioweyou)
 			: ctx.getString(R.string.youoweme);
 
-		shareText += " " + amountString(currency);
+		shareText += " " + amountString(preferences);
 		if (!TextUtils.isEmpty(this.note)) {
 			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
 		}
