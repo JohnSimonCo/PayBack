@@ -1,13 +1,13 @@
 package com.johnsimon.payback.preferences;
 
+import com.johnsimon.payback.core.Currency;
+
 import java.util.HashMap;
 
 public class Preferences extends HashMap<String, Preference> {
 
-	private final static String DEFAULT_CURRENCY = "$";
-
 	private final static String[] KEYS = {
-		"background", "currency", "currency_before"
+		"background", "currency"
 	};
 
 	public static Preferences defaultPreferences() {
@@ -36,12 +36,8 @@ public class Preferences extends HashMap<String, Preference> {
 		return value == null ? defaultValue : value;
 	}
 
-	public boolean getCurrencyBefore() {
-		return get("currency_before", true);
-	}
-
-	public String getCurrency() {
-		return get("currency", DEFAULT_CURRENCY);
+	public Currency getCurrency() {
+		return get("currency", null);
 	}
 
 	public String getBackground() {

@@ -1,10 +1,11 @@
 package com.johnsimon.payback.data;
 
 import android.content.Context;
+import android.database.CursorIndexOutOfBoundsException;
 import android.text.TextUtils;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.core.Currency;
 import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.util.Resource;
 
@@ -27,7 +28,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	private String note;
 	public final long timestamp;
 	private boolean paidBack;
-	public String currency;
+	public String currencyId;
 
     public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
 		super(touched);
@@ -39,16 +40,16 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
         this.note = note;
         this.timestamp = timestamp;
         this.paidBack = paidBack;
-		this.currency = currency;
+		this.currencyId = currency;
     }
 
-	private Debt(Person owner, float amount, String note, long time, String currency) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false, currency);
+	private Debt(Person owner, float amount, String note, long time, String currencyId) {
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, currencyId);
 	}
 
 	//Used when creating new
-	public Debt(Person owner, float amount, String note, String currency) {
-		this(owner, amount, note, System.currentTimeMillis(), currency);
+	public Debt(Person owner, float amount, String note, String currencyId) {
+		this(owner, amount, note, System.currentTimeMillis(), currencyId);
 	}
 
 	public void linkOwner(ArrayList<Person> people) {
@@ -104,19 +105,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 	}
 
-	public String amountString(Preferences preferences) {
-		return Debt.amountString(amount, preferences);
-	}
-
-	public static String amountString(float amount, Preferences preferences) {
-		String string = Float.toString(Math.abs(amount))
-				.replaceAll("\\.0$", "");
-
-		return preferences.getCurrencyBefore()
-			? preferences.getCurrency() + " " + string
-			: string + " " + preferences.getCurrency();
-
-	}
 
 	public int getColor() {
 		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
@@ -135,21 +123,21 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 	*/
 
-	public static String totalString(float amount, Preferences preferences, String even, boolean isAll, String allEvenString) {
+	public static String totalString(float amount, Currency currency, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
 			return isAll ? allEvenString : even;
 		} else {
-			return (amount > 0 ? "+ " : "- ") + amountString(amount, preferences);
+			return (amount > 0 ? "+ " : "- ") + currency.render(amount);
 		}
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context ctx, Preferences preferences) {
+	public String getShareString(Context ctx, Currency currency) {
 		String shareText = this.amount < 0
 			? ctx.getString(R.string.ioweyou)
 			: ctx.getString(R.string.youoweme);
 
-		shareText += " " + amountString(preferences);
+		shareText += " " + currency.render(this);
 		if (!TextUtils.isEmpty(this.note)) {
 			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
 		}
