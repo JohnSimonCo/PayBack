@@ -18,9 +18,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Currency;
+import com.johnsimon.payback.core.UserCurrency;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.view.NDSpinner;
 
 import java.util.ArrayList;
@@ -200,7 +199,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 			}
 
 			//TODO simme shit måste in här
-			data.preferences.set("currency", new Currency());
+			data.preferences.set("currency", new UserCurrency());
 			storage.commit();
 
             FeedFragment.adapter.notifyDataSetChanged();

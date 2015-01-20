@@ -1,6 +1,6 @@
 package com.johnsimon.payback.preferences;
 
-import com.johnsimon.payback.core.Currency;
+import com.johnsimon.payback.core.UserCurrency;
 
 import java.util.HashMap;
 
@@ -36,7 +36,7 @@ public class Preferences extends HashMap<String, Preference> {
 		return value == null ? defaultValue : value;
 	}
 
-	public Currency getCurrency() {
+	public UserCurrency getCurrency() {
 		return get("currency", null);
 	}
 

@@ -1,12 +1,10 @@
 package com.johnsimon.payback.data;
 
 import android.content.Context;
-import android.database.CursorIndexOutOfBoundsException;
 import android.text.TextUtils;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Currency;
-import com.johnsimon.payback.preferences.Preferences;
+import com.johnsimon.payback.core.UserCurrency;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
@@ -123,21 +121,21 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 	*/
 
-	public static String totalString(float amount, Currency currency, String even, boolean isAll, String allEvenString) {
+	public static String totalString(float amount, UserCurrency userCurrency, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
 			return isAll ? allEvenString : even;
 		} else {
-			return (amount > 0 ? "+ " : "- ") + currency.render(amount);
+			return (amount > 0 ? "+ " : "- ") + userCurrency.render(amount);
 		}
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context ctx, Currency currency) {
+	public String getShareString(Context ctx, UserCurrency userCurrency) {
 		String shareText = this.amount < 0
 			? ctx.getString(R.string.ioweyou)
 			: ctx.getString(R.string.youoweme);
 
-		shareText += " " + currency.render(this);
+		shareText += " " + userCurrency.render(this);
 		if (!TextUtils.isEmpty(this.note)) {
 			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
 		}
