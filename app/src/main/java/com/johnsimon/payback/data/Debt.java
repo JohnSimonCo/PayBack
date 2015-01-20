@@ -167,7 +167,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		return id.equals(other.id)
 			&& owner.id.equals(other.owner.id)
 			&& amount == other.amount
-			&& (note == null ? other.note == null : note.equals(other.note))
+			&& Resource.nullEquals(note, other.note)
 			&& paidBack == other.paidBack;
 	}
 

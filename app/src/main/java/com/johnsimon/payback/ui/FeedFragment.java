@@ -176,12 +176,15 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
             }
 
 			adapter.checkAdapterIsEmpty();
-
-			if (getActivity() != null && getResources() != null) {
-				displayTotalDebt(getResources());
-			}
 		}
 	};
+
+	@Override
+	protected void onDataReceived() {
+		//if (getActivity() != null && getResources() != null) {
+			displayTotalDebt(getResources());
+		//}
+	}
 
 	NotificationCallback onFeedLinkedCallback = new NotificationCallback() {
 		@Override

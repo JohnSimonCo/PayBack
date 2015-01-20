@@ -128,7 +128,8 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		}
 	}
 
-	private final static long MAX_REFRESH_FREQ = 5000;
+//	private final static long MAX_REFRESH_FREQ = 5000;
+	private final static long MAX_REFRESH_FREQ = 500;
 	private Long lastRefresh;
 	private boolean mayRefresh() {
 		return System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;

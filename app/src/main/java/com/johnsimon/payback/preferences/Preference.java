@@ -1,6 +1,7 @@
 package com.johnsimon.payback.preferences;
 
 import com.johnsimon.payback.data.SyncedData;
+import com.johnsimon.payback.util.Resource;
 
 public class Preference<T> extends SyncedData<Preference<T>> {
 
@@ -28,6 +29,6 @@ public class Preference<T> extends SyncedData<Preference<T>> {
         if (!(o instanceof Preference))return false;
         Preference other = (Preference) o;
 
-        return value == null ? other.value == null : value.equals(other.value);
+        return Resource.nullEquals(value, other.value);
     }
 }

@@ -151,7 +151,8 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			Resource.setCurrency(currency);
+			data.preferences.set("currency", currency);
+			storage.commit();
 
             FeedFragment.adapter.notifyDataSetChanged();
 

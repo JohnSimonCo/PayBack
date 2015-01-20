@@ -100,9 +100,9 @@ public class Resource {
         return ARG_PREFIX + prefix + "_" + arg;
     }
 
-    public static void setCurrency(String currency) {
+    /*public static void setCurrency(String currency) {
         preferences.edit().putString(SAVE_KEY_CURRENCY, currency).apply();
-    }
+    }*/
 
     /*public static String getCurrency() {
         return preferences.getString(SAVE_KEY_CURRENCY, "$");
@@ -260,4 +260,7 @@ public class Resource {
         return new HashSet<>(Arrays.asList(list)).toArray(new String[0]);
     }
 
+	public static <T> boolean nullEquals(T a, T b) {
+		return a == null ? b == null : a.equals(b);
+	}
 }

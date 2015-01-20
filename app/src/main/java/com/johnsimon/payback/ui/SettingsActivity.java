@@ -160,9 +160,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
 
         pref_background = (ListPreference) findPreference("pref_background");
-        bindPreferenceSummaryToValue(pref_background);
-
-        bindPreferenceSummaryToValue(pref_currency);
 
 		Preference pref_wipe_data = findPreference("pref_wipe_data");
 		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -200,7 +197,14 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
     }
 
-    @Override
+	@Override
+	protected void onDataReceived() {
+		bindPreferenceSummaryToValue(pref_background);
+
+		bindPreferenceSummaryToValue(pref_currency);
+	}
+
+	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
