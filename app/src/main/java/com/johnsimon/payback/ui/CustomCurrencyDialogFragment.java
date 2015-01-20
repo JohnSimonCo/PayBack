@@ -83,7 +83,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 	private View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			completeCallback.onSelected(customCurrencyEditText.getText().toString());
+			//completeCallback.onSelected(customCurrencyEditText.getText().toString());
 			alertDialog.dismiss();
 		}
 	};

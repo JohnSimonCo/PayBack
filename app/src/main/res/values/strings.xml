@@ -102,6 +102,8 @@
     <string name="phone_number">Phone number</string>
     <string name="swish_copy_toast_end">copied to clipboard</string>
     <string name="pay_with_swish">Pay with Swish</string>
+    <string name="currency_before">Currency before amount</string>
+    <string name="currency_after">Currency after amount</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -150,9 +152,9 @@
         <item>City</item>
     </string-array>
 
-    <integer-array name="bg_entries">
-        <item>0</item>
-        <item>1</item>
-    </integer-array>
+    <string-array name="bg_entries">
+        <item>mountains</item>
+        <item>city</item>
+    </string-array>
 
 </resources>
