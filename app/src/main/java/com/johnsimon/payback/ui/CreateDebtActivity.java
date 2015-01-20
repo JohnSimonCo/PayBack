@@ -213,8 +213,9 @@ public class CreateDebtActivity extends DataActivity {
 	protected void onDataReceived() {
 		Intent intent = getIntent();
 
-		floatLabelLayout.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
-		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
+		String currencyText = getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency().getDisplayName() + ")";
+		floatLabelLayout.setHint(currencyText);
+		floatLabelAmountEditText.setHint(currencyText);
 
 		if (intent.hasExtra(ARG_ID)) {
 			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));

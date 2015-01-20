@@ -68,7 +68,7 @@
                 app:fontFamily="roboto"
                 app:textWeight="medium"
                 style="@style/Elevation2DP"
-                android:text="@string/currencyId"
+                android:text="@string/currency"
                 android:id="@+id/welcome_select_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

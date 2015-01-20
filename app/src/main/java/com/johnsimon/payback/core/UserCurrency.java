@@ -13,12 +13,16 @@ public class UserCurrency {
 		this.before = before;
 	}
 
+	public String getDisplayName() {
+		return displayName == null ? id : displayName;
+	}
+
 	public String render(float amount) {
 		return render(Float.toString(Math.abs(amount)).replaceAll("\\.0$", ""));
 	}
 
 	public String render(String amount) {
-		return renderCurrency(amount, id);
+		return renderCurrency(amount, getDisplayName());
 	}
 
 	public String render(Debt debt) {
@@ -30,7 +34,7 @@ public class UserCurrency {
 	}
 
 	public String render(String amount, String currencyId) {
-		return renderCurrency(amount, currencyId.equals(id) ? displayName : currencyId);
+		return renderCurrency(amount, currencyId.equals(id) && displayName != null ? displayName : currencyId);
 	}
 
 	private String renderCurrency(String amount, String symbol) {

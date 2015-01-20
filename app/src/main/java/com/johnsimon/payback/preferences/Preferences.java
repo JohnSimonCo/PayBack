@@ -37,7 +37,8 @@ public class Preferences extends HashMap<String, Preference> {
 	}
 
 	public UserCurrency getCurrency() {
-		return get("currency", null);
+		//TODO null
+		return get("currency", new UserCurrency("CURR_ID", "CURR_DISPN", true));
 	}
 
 	public String getBackground() {

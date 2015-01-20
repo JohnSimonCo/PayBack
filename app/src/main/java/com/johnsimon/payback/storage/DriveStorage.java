@@ -81,7 +81,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     public void sync(AppData driveData) {
 		show("checking for changes from drive");
-
 		if(!driveData.equals(localStorage.data)) {
 			show("found changes and synced");
 
