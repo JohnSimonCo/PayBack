@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.internal.widget.TintRadioButton;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +24,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 	private TintEditText customCurrencyEditText;
 	private AlertDialog alertDialog;
-	private TintRadioButton custom_currency_radio_before;
+	private TintRadioButton custom_currency_radio_before, custom_currency_radio_after;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -44,6 +46,21 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		});
 
 		custom_currency_radio_before = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_before);
+		custom_currency_radio_after = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_after);
+
+		custom_currency_radio_before.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				updatePreview();
+			}
+		});
+
+		custom_currency_radio_after.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				updatePreview();
+			}
+		});
 
 		customCurrencyEditText = (TintEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
@@ -51,6 +68,23 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 		if (TextUtils.isEmpty(customCurrencyEditText.getText().toString())) {
 			disableButton(dialogCustomCurrencyConfirm);
 		}
+
+		customCurrencyEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				updatePreview();
+			}
+		});
 
 		new RequiredValidator(new EditText[] {customCurrencyEditText}, new ValidatorListener() {
 			@Override
@@ -68,6 +102,10 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 		alertDialog = builder.create();
 		return alertDialog;
+	}
+
+	private void updatePreview() {
+
 	}
 
 	private void disableButton(Button btn) {

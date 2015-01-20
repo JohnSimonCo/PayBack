@@ -30,6 +30,7 @@
         android:textSize="18dp" />
 
     <RadioGroup
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -38,17 +39,27 @@
             app:theme="@style/ThemeOverlay.AppCompat.Light"
             android:id="@+id/custom_currency_radio_before"
             android:checked="true"
+            android:textSize="18sp"
             android:text="@string/currency_before"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <android.support.v7.internal.widget.TintRadioButton
             app:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:text="@string/currency_before"
+            android:id="@+id/custom_currency_radio_after"
+            android:text="@string/currency_after"
+            android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="36dp" />
 
     </RadioGroup>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:id="@+id/custom_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"    />
 
     <LinearLayout
         android:layout_width="wrap_content"
