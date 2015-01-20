@@ -15,17 +15,14 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.ui.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 	public ArrayList<Debt> list;
@@ -75,7 +72,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		final Resources resources = context.getResources();
 
 		holder.person.setText(owner.getName());
-		holder.amount.setText(debt.amountString());
+		holder.amount.setText(debt.amountString(context.data.preferences.getCurrency()));
 		holder.amount.setTextColor(resources.getColor(debt.getColor()));
 
 		holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));

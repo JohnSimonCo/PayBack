@@ -1,4 +1,4 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.data;
 
 import android.content.res.Resources;
 import android.text.TextUtils;

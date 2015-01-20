@@ -23,8 +23,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivityInterface;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -104,9 +104,9 @@ public class Resource {
         preferences.edit().putString(SAVE_KEY_CURRENCY, currency).apply();
     }
 
-    public static String getCurrency() {
+    /*public static String getCurrency() {
         return preferences.getString(SAVE_KEY_CURRENCY, "$");
-    }
+    }*/
 
     public static void toast(Context context, String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();

@@ -1,4 +1,4 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.data;
 
 import java.util.UUID;
 

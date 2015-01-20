@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.data.AppData;
 
 public abstract class Storage {
     protected Context context;

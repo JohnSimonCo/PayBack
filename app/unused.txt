@@ -1138,7 +1138,7 @@ com.google.gson.stream.JsonReader:
     private static final int NUMBER_CHAR_EXP_SIGN
     private static final int NUMBER_CHAR_EXP_DIGIT
 com.google.gson.stream.JsonScope
-com.johnsimon.payback.core.Debt:
+com.johnsimon.payback.data.Debt:
     private static final int POSITIVE_COLOR
     private static final int NEGATIVE_COLOR
     private static final int POSITIVE_COLOR_DISABLED

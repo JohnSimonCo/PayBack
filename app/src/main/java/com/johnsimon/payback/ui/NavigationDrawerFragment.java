@@ -27,10 +27,10 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
-import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
-import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
 
 /**
@@ -316,8 +316,8 @@ public class NavigationDrawerFragment extends DataFragment {
     }
 
 	public static void updateBalance(AppData data) {
-		headerPlus.setText("+ " + Debt.amountString(data.totalPlus()));
-		headerMinus.setText("- " + Debt.amountString(data.totalMinus()));
+		headerPlus.setText("+ " + Debt.amountString(data.totalPlus(), data.preferences.getCurrency()));
+		headerMinus.setText("- " + Debt.amountString(data.totalMinus(), data.preferences.getCurrency()));
 	}
 
 	private void updateName() {

@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.async.Promise;
-import com.johnsimon.payback.core.User;
+import com.johnsimon.payback.data.User;
 
 import java.util.ArrayList;
 

@@ -155,9 +155,9 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 
             FeedFragment.adapter.notifyDataSetChanged();
 
-			if (getActivity() != null && getResources() != null) {
+			/*if (getActivity() != null && getResources() != null) {
 				FeedFragment.displayTotalDebt(getResources());
-			}
+			}*/
 
 			NavigationDrawerFragment.updateBalance(data);
 			if (SettingsActivity.pref_currency != null) {

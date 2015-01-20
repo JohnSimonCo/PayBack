@@ -1,4 +1,4 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.data;
 
 public abstract class SyncedData<T extends SyncedData> {
 	public long touched;

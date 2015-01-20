@@ -1,9 +1,10 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.data;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
@@ -40,13 +41,13 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.currency = currency;
     }
 
-	private Debt(Person owner, float amount, String note, long time) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false, Resource.getCurrency());
+	private Debt(Person owner, float amount, String note, long time, String currency) {
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, currency);
 	}
 
 	//Used when creating new
-	public Debt(Person owner, float amount, String note) {
-		this(owner, amount, note, System.currentTimeMillis());
+	public Debt(Person owner, float amount, String note, String currency) {
+		this(owner, amount, note, System.currentTimeMillis(), currency);
 	}
 
 	public void linkOwner(ArrayList<Person> people) {
@@ -102,14 +103,14 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 	}
 
-	public String amountString() {
-		return Debt.amountString(amount);
+	public String amountString(String currency) {
+		return Debt.amountString(amount, currency);
 	}
 
-	public static String amountString(float amount) {
+	public static String amountString(float amount, String currency) {
 		return Float.toString(Math.abs(amount))
 				.replaceAll("\\.0$", "")
-				+ " " + Resource.getCurrency();
+				+ " " + currency;
 	}
 
 	public int getColor() {
@@ -129,22 +130,21 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 	*/
 
-	public static String totalString(float amount, String even, boolean isAll, String allEvenString) {
+	public static String totalString(float amount, String currency, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
 			return isAll ? allEvenString : even;
 		} else {
-			return (amount > 0 ? "+ " : "- ") + amountString(amount);
+			return (amount > 0 ? "+ " : "- ") + amountString(amount, currency);
 		}
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context ctx) {
-		String shareText =
-				this.amount < 0 ?
-				ctx.getString(R.string.ioweyou) :
-				ctx.getString(R.string.youoweme);
+	public String getShareString(Context ctx, String currency) {
+		String shareText = this.amount < 0
+			? ctx.getString(R.string.ioweyou)
+			: ctx.getString(R.string.youoweme);
 
-		shareText += " " + this.amountString();
+		shareText += " " + amountString(currency);
 		if (!TextUtils.isEmpty(this.note)) {
 			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
 		}
@@ -165,7 +165,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		Debt other = (Debt) o;
 
 		return id.equals(other.id)
-			&& touched == other.touched
 			&& owner.id.equals(other.owner.id)
 			&& amount == other.amount
 			&& (note == null ? other.note == null : note.equals(other.note))

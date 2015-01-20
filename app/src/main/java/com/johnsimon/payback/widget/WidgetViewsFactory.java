@@ -10,10 +10,10 @@ import android.widget.RemoteViewsService;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ThumbnailLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -68,7 +68,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         row.setTextViewText(R.id.list_item_person, debt.getOwner().getName());
         row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? ctx.getResources().getString(R.string.cash) : debt.getNote());
         row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
-        row.setTextViewText(R.id.list_item_amount, debt.amountString());
+        row.setTextViewText(R.id.list_item_amount, debt.amountString(data.preferences.getCurrency()));
         row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
 
         if (debt.isPaidBack()) {

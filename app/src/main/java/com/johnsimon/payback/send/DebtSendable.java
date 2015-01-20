@@ -1,7 +1,7 @@
 package com.johnsimon.payback.send;
 
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Person;
 
 import java.util.UUID;
 

@@ -30,8 +30,8 @@ import android.widget.ScrollView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
@@ -92,8 +92,8 @@ public class CreateDebtActivity extends DataActivity {
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
         FloatLabelLayout floatLabelLayout = (FloatLabelLayout) findViewById(R.id.float_label_layout_amount);
-        floatLabelLayout.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
-		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + Resource.getCurrency() + ")");
+        floatLabelLayout.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
+		floatLabelAmountEditText.setHint(getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency() + ")");
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
@@ -289,7 +289,7 @@ public class CreateDebtActivity extends DataActivity {
 		Person person;
 		if(editingDebt == null) {
 			person = data.getOrCreatePerson(name, this);
-			data.debts.add(0, new Debt(person, amount, note));
+			data.debts.add(0, new Debt(person, amount, note, data.preferences.getCurrency()));
 		} else {
 			person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()

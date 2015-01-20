@@ -1,5 +1,6 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.data;
 
+import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.UUID;
@@ -66,7 +67,6 @@ public class Person extends SyncedData<Person> implements Identifiable {
 		Person other = (Person) o;
 
 		return id.equals(other.id)
-			&& touched == other.touched
 			&& name.equals(other.name);
 	}
 

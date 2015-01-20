@@ -1,5 +1,8 @@
 package com.johnsimon.payback.core;
 
+import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.User;
+
 public class Contact {
 	public String name;
 	public String[] numbers;

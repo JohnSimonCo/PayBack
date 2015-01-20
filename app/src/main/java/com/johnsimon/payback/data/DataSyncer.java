@@ -1,13 +1,19 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.data;
 
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Identifiable;
-import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.core.SyncedData;
+import android.os.DropBoxManager;
+
+import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Identifiable;
+import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.SyncedData;
+import com.johnsimon.payback.preferences.Preference;
+import com.johnsimon.payback.preferences.Preferences;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 public class DataSyncer {
@@ -24,7 +30,9 @@ public class DataSyncer {
         ArrayList<Person> people = sync(a.people, b.people);
         ArrayList<Debt> debts = sync(a.debts, b.debts);
 
-        return new AppData(people, debts, deleted);
+		Preferences preferences = syncPreferences(a.preferences, b.preferences);
+
+        return new AppData(people, debts, deleted, preferences);
     }
 
     private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
@@ -60,4 +68,14 @@ public class DataSyncer {
 
         return array;
     }
+
+	private static Preferences syncPreferences(Preferences a, Preferences b) {
+		Preferences preferences = new Preferences();
+		for(Map.Entry<String, Preference> entry : a.entrySet()) {
+			String key = entry.getKey();
+			Preference aValue = entry.getValue(), bValue = b.get(key);
+			preferences.put(key, aValue.equals(bValue) ? aValue : (Preference) aValue.syncWith(bValue));
+		}
+		return preferences;
+	}
 }

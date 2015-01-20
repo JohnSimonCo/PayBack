@@ -7,10 +7,9 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 
 import com.google.gson.Gson;
-import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataActivityInterface;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.User;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.send.NfcData;
 import com.johnsimon.payback.ui.DebtDetailDialogFragment;

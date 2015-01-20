@@ -1,24 +1,15 @@
 package com.johnsimon.payback.adapter;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.provider.Contacts;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
-import com.johnsimon.payback.ui.DebtDetailDialogFragment;
-import com.johnsimon.payback.ui.FeedActivity;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 

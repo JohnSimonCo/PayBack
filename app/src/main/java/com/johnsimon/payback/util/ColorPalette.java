@@ -4,11 +4,8 @@ import android.content.res.Resources;
 import android.util.SparseIntArray;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataActivityInterface;
-import com.johnsimon.payback.core.Person;
-
-import java.util.ArrayList;
+import com.johnsimon.payback.data.Person;
 
 public class ColorPalette {
 	private static ColorPalette instance = null;

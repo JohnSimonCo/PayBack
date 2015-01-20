@@ -33,10 +33,10 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.util.AppData;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
@@ -202,7 +202,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 			}
 		}
 	}
-	public static void displayTotalDebt(Resources resources) {
+	public /*static*/ void displayTotalDebt(Resources resources) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -211,7 +211,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
+		totalDebtTextView.setText(Debt.totalString(debt, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {

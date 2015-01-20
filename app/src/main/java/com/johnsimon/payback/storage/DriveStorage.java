@@ -25,8 +25,8 @@ import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.DataSyncer;
+import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.DataSyncer;
 import com.williammora.snackbar.Snackbar;
 
 import java.io.BufferedReader;

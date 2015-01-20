@@ -1,9 +1,10 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.data;
 
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.core.Contact;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.async.Subscription;
 

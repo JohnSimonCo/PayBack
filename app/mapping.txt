@@ -27467,7 +27467,7 @@ com.johnsimon.payback.adapter.NavigationDrawerAdapter -> com.johnsimon.payback.a
     com.johnsimon.payback.core.DataActivity context -> c
     33:34:void clearItems() -> clearItems
     36:39:void setItems(java.util.ArrayList) -> setItems
-    42:51:int selectPerson(com.johnsimon.payback.core.Person) -> selectPerson
+    42:51:int selectPerson(com.johnsimon.payback.data.Person) -> selectPerson
     57:57:int getCount() -> getCount
     62:64:com.johnsimon.payback.core.NavigationDrawerItem getItem(int) -> getItem
     69:69:long getItemId(int) -> getItemId
@@ -27480,7 +27480,7 @@ com.johnsimon.payback.adapter.NavigationDrawerAdapter$ViewHolder -> asx:
 com.johnsimon.payback.adapter.PeopleListAdapter -> com.johnsimon.payback.adapter.PeopleListAdapter:
     com.johnsimon.payback.core.DataActivity context -> a
     android.view.View emptyView -> b
-    com.johnsimon.payback.util.AppData data -> c
+    com.johnsimon.payback.data.AppData data -> c
     android.widget.TextView managerTitle -> d
     java.util.ArrayList people -> e
     com.johnsimon.payback.adapter.PeopleListAdapter$PeopleListClickListener clickListener -> clickListener
@@ -27490,9 +27490,9 @@ com.johnsimon.payback.adapter.PeopleListAdapter -> com.johnsimon.payback.adapter
     96:107:void updateEmptyViewVisibility() -> updateEmptyViewVisibility
     110:111:void clear() -> clear
     114:115:void addAll(java.util.ArrayList) -> addAll
-    118:119:void remove(com.johnsimon.payback.core.Person) -> remove
-    122:122:com.johnsimon.payback.core.Person getItem(int) -> getItem
-    126:127:void insert(com.johnsimon.payback.core.Person,int) -> insert
+    118:119:void remove(com.johnsimon.payback.data.Person) -> remove
+    122:122:com.johnsimon.payback.data.Person getItem(int) -> getItem
+    126:127:void insert(com.johnsimon.payback.data.Person,int) -> insert
     27:27:void onBindViewHolder(android.support.v7.widget.RecyclerView$ViewHolder,int) -> onBindViewHolder
     27:27:android.support.v7.widget.RecyclerView$ViewHolder onCreateViewHolder(android.view.ViewGroup,int) -> onCreateViewHolder
 com.johnsimon.payback.adapter.PeopleListAdapter$1 -> asy:
@@ -27516,13 +27516,13 @@ com.johnsimon.payback.core.Contact -> com.johnsimon.payback.core.Contact:
     long id -> id
     16:17:void setNumbers(java.lang.String[]) -> setNumbers
     20:20:boolean hasNumbers() -> hasNumbers
-    24:25:boolean matchTo(com.johnsimon.payback.core.User) -> matchTo
-    29:29:boolean matchTo(com.johnsimon.payback.core.Person) -> matchTo
+    24:25:boolean matchTo(com.johnsimon.payback.data.User) -> matchTo
+    29:29:boolean matchTo(com.johnsimon.payback.data.Person) -> matchTo
     33:38:boolean matchNumbers(java.lang.String[]) -> a
 com.johnsimon.payback.core.DataActivity -> com.johnsimon.payback.core.DataActivity:
     com.johnsimon.payback.storage.Storage storage -> storage
-    com.johnsimon.payback.util.AppData data -> data
-    com.johnsimon.payback.core.User user -> user
+    com.johnsimon.payback.data.AppData data -> data
+    com.johnsimon.payback.data.User user -> user
     com.johnsimon.payback.async.Subscription dataLink -> dataLink
     com.johnsimon.payback.loader.ContactLoader contactLoader -> contactLoader
     com.johnsimon.payback.core.DataActivity self -> n
@@ -27531,8 +27531,8 @@ com.johnsimon.payback.core.DataActivity -> com.johnsimon.payback.core.DataActivi
     boolean userLoaded -> q
     com.johnsimon.payback.async.Callback userLoadedCallback -> r
     26:26:android.app.Activity getContext() -> getContext
-    31:31:com.johnsimon.payback.util.AppData getData() -> getData
-    36:36:com.johnsimon.payback.core.User getUser() -> getUser
+    31:31:com.johnsimon.payback.data.AppData getData() -> getData
+    36:36:com.johnsimon.payback.data.User getUser() -> getUser
     41:41:com.johnsimon.payback.storage.Storage getStorage() -> getStorage
     45:45:com.johnsimon.payback.loader.ContactLoader getContactLoader() -> getContactLoader
     49:49:com.johnsimon.payback.async.Subscription getDataLink() -> getDataLink
@@ -27548,27 +27548,27 @@ com.johnsimon.payback.core.DataActivity -> com.johnsimon.payback.core.DataActivi
     14:14:boolean access$102(com.johnsimon.payback.core.DataActivity,boolean) -> a
 com.johnsimon.payback.core.DataActivity$1 -> asz:
     com.johnsimon.payback.core.DataActivity this$0 -> a
-    101:103:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    101:103:void onCalled(com.johnsimon.payback.data.AppData) -> a
     98:98:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataActivity$2 -> ata:
     com.johnsimon.payback.core.DataActivity this$0 -> a
-    109:110:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    109:110:void onCalled(com.johnsimon.payback.data.AppData) -> a
     106:106:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataActivity$3 -> atb:
     com.johnsimon.payback.core.DataActivity this$0 -> a
-    117:124:void onCalled(com.johnsimon.payback.core.User) -> a
+    117:124:void onCalled(com.johnsimon.payback.data.User) -> a
     114:114:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataActivityInterface -> com.johnsimon.payback.core.DataActivityInterface:
-    com.johnsimon.payback.util.AppData getData() -> getData
-    com.johnsimon.payback.core.User getUser() -> getUser
+    com.johnsimon.payback.data.AppData getData() -> getData
+    com.johnsimon.payback.data.User getUser() -> getUser
     android.app.Activity getContext() -> getContext
     com.johnsimon.payback.storage.Storage getStorage() -> getStorage
     com.johnsimon.payback.loader.ContactLoader getContactLoader() -> getContactLoader
     com.johnsimon.payback.async.Subscription getDataLink() -> getDataLink
 com.johnsimon.payback.core.DataDialogFragment -> com.johnsimon.payback.core.DataDialogFragment:
     com.johnsimon.payback.storage.Storage storage -> storage
-    com.johnsimon.payback.util.AppData data -> data
-    com.johnsimon.payback.core.User user -> user
+    com.johnsimon.payback.data.AppData data -> data
+    com.johnsimon.payback.data.User user -> user
     com.johnsimon.payback.loader.ContactLoader contactLoader -> a
     com.johnsimon.payback.async.Subscription dataLink -> b
     com.johnsimon.payback.async.Callback dataLoadedCallback -> c
@@ -27586,20 +27586,20 @@ com.johnsimon.payback.core.DataDialogFragment -> com.johnsimon.payback.core.Data
     12:12:boolean access$002(com.johnsimon.payback.core.DataDialogFragment,boolean) -> a
 com.johnsimon.payback.core.DataDialogFragment$1 -> atc:
     com.johnsimon.payback.core.DataDialogFragment this$0 -> a
-    63:65:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    63:65:void onCalled(com.johnsimon.payback.data.AppData) -> a
     60:60:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataDialogFragment$2 -> atd:
     com.johnsimon.payback.core.DataDialogFragment this$0 -> a
-    71:72:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    71:72:void onCalled(com.johnsimon.payback.data.AppData) -> a
     68:68:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataDialogFragment$3 -> ate:
     com.johnsimon.payback.core.DataDialogFragment this$0 -> a
-    79:86:void onCalled(com.johnsimon.payback.core.User) -> a
+    79:86:void onCalled(com.johnsimon.payback.data.User) -> a
     76:76:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataFragment -> com.johnsimon.payback.core.DataFragment:
     com.johnsimon.payback.storage.Storage storage -> storage
-    com.johnsimon.payback.util.AppData data -> data
-    com.johnsimon.payback.core.User user -> user
+    com.johnsimon.payback.data.AppData data -> data
+    com.johnsimon.payback.data.User user -> user
     com.johnsimon.payback.loader.ContactLoader contactLoader -> a
     com.johnsimon.payback.async.Subscription dataLink -> b
     com.johnsimon.payback.async.Callback dataLoadedCallback -> c
@@ -27617,20 +27617,20 @@ com.johnsimon.payback.core.DataFragment -> com.johnsimon.payback.core.DataFragme
     12:12:boolean access$002(com.johnsimon.payback.core.DataFragment,boolean) -> a
 com.johnsimon.payback.core.DataFragment$1 -> atf:
     com.johnsimon.payback.core.DataFragment this$0 -> a
-    63:65:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    63:65:void onCalled(com.johnsimon.payback.data.AppData) -> a
     60:60:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataFragment$2 -> atg:
     com.johnsimon.payback.core.DataFragment this$0 -> a
-    71:72:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    71:72:void onCalled(com.johnsimon.payback.data.AppData) -> a
     68:68:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataFragment$3 -> ath:
     com.johnsimon.payback.core.DataFragment this$0 -> a
-    79:86:void onCalled(com.johnsimon.payback.core.User) -> a
+    79:86:void onCalled(com.johnsimon.payback.data.User) -> a
     76:76:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataPreferenceActivity -> com.johnsimon.payback.core.DataPreferenceActivity:
     com.johnsimon.payback.storage.Storage storage -> storage
-    com.johnsimon.payback.util.AppData data -> data
-    com.johnsimon.payback.core.User user -> user
+    com.johnsimon.payback.data.AppData data -> data
+    com.johnsimon.payback.data.User user -> user
     com.johnsimon.payback.async.Subscription dataLink -> dataLink
     com.johnsimon.payback.loader.ContactLoader contactLoader -> contactLoader
     com.johnsimon.payback.core.DataPreferenceActivity self -> a
@@ -27642,8 +27642,8 @@ com.johnsimon.payback.core.DataPreferenceActivity -> com.johnsimon.payback.core.
     30:30:com.johnsimon.payback.loader.ContactLoader getContactLoader() -> getContactLoader
     34:34:com.johnsimon.payback.async.Subscription getDataLink() -> getDataLink
     39:39:android.app.Activity getContext() -> getContext
-    44:44:com.johnsimon.payback.util.AppData getData() -> getData
-    49:49:com.johnsimon.payback.core.User getUser() -> getUser
+    44:44:com.johnsimon.payback.data.AppData getData() -> getData
+    49:49:com.johnsimon.payback.data.User getUser() -> getUser
     54:61:void onCreate(android.os.Bundle) -> onCreate
     65:74:void onStart() -> onStart
     78:85:void onStop() -> onStop
@@ -27656,18 +27656,18 @@ com.johnsimon.payback.core.DataPreferenceActivity -> com.johnsimon.payback.core.
     14:14:boolean access$102(com.johnsimon.payback.core.DataPreferenceActivity,boolean) -> a
 com.johnsimon.payback.core.DataPreferenceActivity$1 -> ati:
     com.johnsimon.payback.core.DataPreferenceActivity this$0 -> a
-    100:102:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    100:102:void onCalled(com.johnsimon.payback.data.AppData) -> a
     97:97:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataPreferenceActivity$2 -> atj:
     com.johnsimon.payback.core.DataPreferenceActivity this$0 -> a
-    108:109:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    108:109:void onCalled(com.johnsimon.payback.data.AppData) -> a
     105:105:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.core.DataPreferenceActivity$3 -> atk:
     com.johnsimon.payback.core.DataPreferenceActivity this$0 -> a
-    116:123:void onCalled(com.johnsimon.payback.core.User) -> a
+    116:123:void onCalled(com.johnsimon.payback.data.User) -> a
     113:113:void onCalled(java.lang.Object) -> onCalled
-com.johnsimon.payback.core.Debt -> com.johnsimon.payback.core.Debt:
-    com.johnsimon.payback.core.Person owner -> a
+com.johnsimon.payback.data.Debt -> com.johnsimon.payback.data.Debt:
+    com.johnsimon.payback.data.Person owner -> a
     java.util.UUID ownerId -> b
     float amount -> c
     java.lang.String note -> d
@@ -27675,15 +27675,15 @@ com.johnsimon.payback.core.Debt -> com.johnsimon.payback.core.Debt:
     boolean paidBack -> e
     java.lang.String currency -> currency
     59:65:void linkOwner(java.util.ArrayList) -> linkOwner
-    68:68:com.johnsimon.payback.core.Person getOwner() -> getOwner
-    72:75:void setOwner(com.johnsimon.payback.core.Person) -> setOwner
+    68:68:com.johnsimon.payback.data.Person getOwner() -> getOwner
+    72:75:void setOwner(com.johnsimon.payback.data.Person) -> setOwner
     78:78:float getAmount() -> getAmount
     82:84:void setAmount(float) -> setAmount
     87:87:java.lang.String getNote() -> getNote
     91:93:void setNote(java.lang.String) -> setNote
     96:96:boolean isPaidBack() -> isPaidBack
     100:102:void setPaidBack(boolean) -> setPaidBack
-    105:109:void edit(com.johnsimon.payback.core.Person,float,java.lang.String) -> edit
+    105:109:void edit(com.johnsimon.payback.data.Person,float,java.lang.String) -> edit
     112:112:java.lang.String amountString() -> amountString
     116:118:java.lang.String amountString(float) -> amountString
     122:122:int getColor() -> getColor
@@ -27692,21 +27692,21 @@ com.johnsimon.payback.core.Debt -> com.johnsimon.payback.core.Debt:
     148:158:java.lang.String getShareString(android.content.Context) -> getShareString
     163:172:boolean equals(java.lang.Object) -> equals
     178:178:java.lang.String toString() -> toString
-com.johnsimon.payback.core.Identifiable -> com.johnsimon.payback.core.Identifiable:
+com.johnsimon.payback.data.Identifiable -> com.johnsimon.payback.data.Identifiable:
     java.util.UUID getId() -> getId
 com.johnsimon.payback.core.NavigationDrawerItem -> com.johnsimon.payback.core.NavigationDrawerItem:
     com.johnsimon.payback.core.NavigationDrawerItem$Type type -> type
     java.lang.String title -> title
     java.util.UUID personId -> personId
     android.graphics.Bitmap image -> image
-    com.johnsimon.payback.core.Person owner -> owner
+    com.johnsimon.payback.data.Person owner -> owner
 com.johnsimon.payback.core.NavigationDrawerItem$Type -> com.johnsimon.payback.core.NavigationDrawerItem$Type:
     com.johnsimon.payback.core.NavigationDrawerItem$Type All -> All
     com.johnsimon.payback.core.NavigationDrawerItem$Type Person -> Person
     com.johnsimon.payback.core.NavigationDrawerItem$Type[] $VALUES -> a
     8:8:com.johnsimon.payback.core.NavigationDrawerItem$Type[] values() -> values
     8:8:com.johnsimon.payback.core.NavigationDrawerItem$Type valueOf(java.lang.String) -> valueOf
-com.johnsimon.payback.core.Person -> com.johnsimon.payback.core.Person:
+com.johnsimon.payback.data.Person -> com.johnsimon.payback.data.Person:
     java.lang.String name -> a
     int paletteIndex -> paletteIndex
     com.johnsimon.payback.core.Contact link -> link
@@ -27717,7 +27717,7 @@ com.johnsimon.payback.core.Person -> com.johnsimon.payback.core.Person:
     40:40:boolean hasImage() -> hasImage
     43:43:boolean hasNumbers() -> hasNumbers
     47:47:java.lang.String getAvatarLetter() -> getAvatarLetter
-    51:51:boolean matchTo(com.johnsimon.payback.core.User) -> matchTo
+    51:51:boolean matchTo(com.johnsimon.payback.data.User) -> matchTo
     56:63:boolean equals(java.lang.Object) -> equals
     68:68:java.lang.String toString() -> toString
 com.johnsimon.payback.async.Promise -> com.johnsimon.payback.async.Promise:
@@ -27744,15 +27744,15 @@ com.johnsimon.payback.async.Subscription -> com.johnsimon.payback.async.Subscrip
     10:14:void listen(com.johnsimon.payback.async.Callback) -> listen
     17:18:void unregister(com.johnsimon.payback.async.Callback) -> unregister
     21:26:void broadcast(java.lang.Object) -> broadcast
-com.johnsimon.payback.core.Syncable -> com.johnsimon.payback.core.Syncable:
+com.johnsimon.payback.data.Syncable -> com.johnsimon.payback.data.Syncable:
     java.lang.Object syncWith(java.lang.Object) -> syncWith
-com.johnsimon.payback.core.SyncedData -> com.johnsimon.payback.core.SyncedData:
+com.johnsimon.payback.data.SyncedData -> com.johnsimon.payback.data.SyncedData:
     java.util.UUID id -> id
     long touched -> touched
     16:17:void touch() -> touch
-    20:20:com.johnsimon.payback.core.SyncedData syncWith(com.johnsimon.payback.core.SyncedData) -> syncWith
+    20:20:com.johnsimon.payback.data.SyncedData syncWith(com.johnsimon.payback.data.SyncedData) -> syncWith
     boolean equals(java.lang.Object) -> equals
-com.johnsimon.payback.core.User -> com.johnsimon.payback.core.User:
+com.johnsimon.payback.data.User -> com.johnsimon.payback.data.User:
     java.lang.String name -> name
     java.lang.String[] numbers -> numbers
     17:18:void setNumbers(java.lang.String[]) -> setNumbers
@@ -27769,16 +27769,16 @@ com.johnsimon.payback.loader.ContactLoader -> com.johnsimon.payback.loader.Conta
     com.johnsimon.payback.async.Promise userLoaded -> userLoaded
     com.johnsimon.payback.async.Promise contactsLoaded -> contactsLoaded
     com.johnsimon.payback.async.Promise phoneNumbersLoaded -> phoneNumbersLoaded
-    com.johnsimon.payback.core.User user -> b
+    com.johnsimon.payback.data.User user -> b
     java.util.ArrayList contacts -> c
     66:70:com.johnsimon.payback.loader.ContactLoader getLoader(android.content.Context) -> getLoader
-    17:17:com.johnsimon.payback.core.User access$002(com.johnsimon.payback.loader.ContactLoader,com.johnsimon.payback.core.User) -> a
+    17:17:com.johnsimon.payback.data.User access$002(com.johnsimon.payback.loader.ContactLoader,com.johnsimon.payback.data.User) -> a
     17:17:java.util.ArrayList access$102(com.johnsimon.payback.loader.ContactLoader,java.util.ArrayList) -> a
     17:17:java.util.ArrayList access$100(com.johnsimon.payback.loader.ContactLoader) -> a
-    17:17:com.johnsimon.payback.core.User access$000(com.johnsimon.payback.loader.ContactLoader) -> b
+    17:17:com.johnsimon.payback.data.User access$000(com.johnsimon.payback.loader.ContactLoader) -> b
 com.johnsimon.payback.loader.ContactLoader$1 -> atn:
     com.johnsimon.payback.loader.ContactLoader this$0 -> a
-    45:46:void onCalled(com.johnsimon.payback.core.User) -> a
+    45:46:void onCalled(com.johnsimon.payback.data.User) -> a
     42:42:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.loader.ContactLoader$2 -> ato:
     com.johnsimon.payback.loader.ContactLoader this$0 -> a
@@ -27809,11 +27809,11 @@ com.johnsimon.payback.loader.PhoneNumberLoader -> com.johnsimon.payback.loader.P
 com.johnsimon.payback.loader.PhoneNumberLoader$Argument -> com.johnsimon.payback.loader.PhoneNumberLoader$Argument:
     android.content.ContentResolver contentResolver -> contentResolver
     java.util.ArrayList contacts -> contacts
-    com.johnsimon.payback.core.User user -> user
+    com.johnsimon.payback.data.User user -> user
 com.johnsimon.payback.loader.UserLoader -> com.johnsimon.payback.loader.UserLoader:
     com.johnsimon.payback.async.Promise promise -> promise
-    17:26:com.johnsimon.payback.core.User doInBackground(android.content.ContentResolver[]) -> doInBackground
-    31:32:void onPostExecute(com.johnsimon.payback.core.User) -> onPostExecute
+    17:26:com.johnsimon.payback.data.User doInBackground(android.content.ContentResolver[]) -> doInBackground
+    31:32:void onPostExecute(com.johnsimon.payback.data.User) -> onPostExecute
     11:11:void onPostExecute(java.lang.Object) -> onPostExecute
     11:11:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 com.johnsimon.payback.send.DebtSendable -> com.johnsimon.payback.send.DebtSendable:
@@ -27822,10 +27822,10 @@ com.johnsimon.payback.send.DebtSendable -> com.johnsimon.payback.send.DebtSendab
     java.lang.String note -> note
     long timestamp -> timestamp
     boolean isPaidBack -> isPaidBack
-    25:25:com.johnsimon.payback.core.Debt extract(com.johnsimon.payback.core.Person) -> extract
+    25:25:com.johnsimon.payback.data.Debt extract(com.johnsimon.payback.data.Person) -> extract
 com.johnsimon.payback.send.NfcData -> com.johnsimon.payback.send.NfcData:
     com.johnsimon.payback.send.DebtSendable[] debts -> debts
-    com.johnsimon.payback.core.User sender -> sender
+    com.johnsimon.payback.data.User sender -> sender
     boolean fullSync -> fullSync
 com.johnsimon.payback.storage.DriveStorage -> com.johnsimon.payback.storage.DriveStorage:
     java.lang.String PREFERENCE_ACCOUNT_NAME -> PREFERENCE_ACCOUNT_NAME
@@ -27840,7 +27840,7 @@ com.johnsimon.payback.storage.DriveStorage -> com.johnsimon.payback.storage.Driv
     com.google.android.gms.common.api.ResultCallback fileCreatedCallback -> g
     boolean keepAlive -> h
     81:81:android.content.SharedPreferences getPreferences() -> getPreferences
-    85:95:void sync(com.johnsimon.payback.util.AppData) -> sync
+    85:95:void sync(com.johnsimon.payback.data.AppData) -> sync
     99:114:void commit() -> commit
     118:119:void onConnected(android.os.Bundle) -> onConnected
     122:124:void refresh() -> a
@@ -27868,7 +27868,7 @@ com.johnsimon.payback.storage.DriveStorage -> com.johnsimon.payback.storage.Driv
     38:38:void access$600(com.johnsimon.payback.storage.DriveStorage,java.lang.String,com.google.android.gms.drive.DriveFile,com.google.android.gms.common.api.ResultCallback) -> a
 com.johnsimon.payback.storage.DriveStorage$1 -> atq:
     com.johnsimon.payback.storage.DriveStorage this$0 -> a
-    64:66:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    64:66:void onCalled(com.johnsimon.payback.data.AppData) -> a
     61:61:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.storage.DriveStorage$2 -> atr:
     com.johnsimon.payback.storage.DriveStorage this$0 -> a
@@ -27932,12 +27932,12 @@ com.johnsimon.payback.storage.LocalStorage -> com.johnsimon.payback.storage.Loca
 com.johnsimon.payback.storage.Storage -> com.johnsimon.payback.storage.Storage:
     android.content.Context context -> context
     com.johnsimon.payback.async.Subscription subscription -> subscription
-    com.johnsimon.payback.util.AppData data -> data
+    com.johnsimon.payback.data.AppData data -> data
     android.content.SharedPreferences getPreferences() -> getPreferences
-    24:26:void emit(com.johnsimon.payback.util.AppData) -> emit
+    24:26:void emit(com.johnsimon.payback.data.AppData) -> emit
     void commit() -> commit
     31:33:void wipe() -> wipe
-    36:38:void commit(com.johnsimon.payback.util.AppData) -> commit
+    36:38:void commit(com.johnsimon.payback.data.AppData) -> commit
     41:41:boolean isDriveStorage() -> isDriveStorage
     45:45:com.johnsimon.payback.storage.DriveStorage asDriveStorage() -> asDriveStorage
     50:50:void connect() -> connect
@@ -27960,12 +27960,12 @@ com.johnsimon.payback.ui.CreateDebtActivity -> com.johnsimon.payback.ui.CreateDe
     android.widget.AutoCompleteTextView floatLabelNameAutoCompleteTextView -> q
     android.widget.RadioGroup radioGroup -> r
     com.johnsimon.payback.util.RequiredValidator validator -> s
-    com.johnsimon.payback.core.Debt editingDebt -> t
+    com.johnsimon.payback.data.Debt editingDebt -> t
     android.view.View$OnClickListener fabClickListener -> u
     66:211:void onCreate(android.os.Bundle) -> onCreate
     215:234:void onDataReceived() -> onDataReceived
     238:244:void onDataLinked() -> onDataLinked
-    281:301:com.johnsimon.payback.core.Person saveDebt(java.lang.String,boolean,float,java.lang.String) -> saveDebt
+    281:301:com.johnsimon.payback.data.Person saveDebt(java.lang.String,boolean,float,java.lang.String) -> saveDebt
     306:308:void onResume() -> onResume
     313:314:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     319:343:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
@@ -28033,16 +28033,16 @@ com.johnsimon.payback.ui.CustomCurrencyDialogFragment$3 -> aum:
 com.johnsimon.payback.ui.CustomCurrencyDialogFragment$CustomCurrencySelectedCallback -> com.johnsimon.payback.ui.CustomCurrencyDialogFragment$CustomCurrencySelectedCallback:
     void onSelected(java.lang.String) -> onSelected
 com.johnsimon.payback.ui.DebtDetailDialogFragment -> com.johnsimon.payback.ui.DebtDetailDialogFragment:
-    com.johnsimon.payback.core.Debt debtAccessible -> debtAccessible
-    com.johnsimon.payback.core.Debt debt -> a
+    com.johnsimon.payback.data.Debt debtAccessible -> debtAccessible
+    com.johnsimon.payback.data.Debt debt -> a
     com.johnsimon.payback.ui.DebtDetailDialogFragment$Callback callback -> callback
     android.app.AlertDialog alertDialog -> alertDialog
     com.johnsimon.payback.ui.PersonPickerDialogFragment$PersonSelectedCallback changePersonCallback -> changePersonCallback
-    34:37:com.johnsimon.payback.ui.DebtDetailDialogFragment newInstance(com.johnsimon.payback.core.Debt) -> newInstance
+    34:37:com.johnsimon.payback.ui.DebtDetailDialogFragment newInstance(com.johnsimon.payback.data.Debt) -> newInstance
     43:188:android.app.Dialog onCreateDialog(android.os.Bundle) -> onCreateDialog
     193:195:void onDestroy() -> onDestroy
-    199:202:void onComplete(com.johnsimon.payback.core.Debt) -> onComplete
-    25:25:com.johnsimon.payback.core.Debt access$000() -> a
+    199:202:void onComplete(com.johnsimon.payback.data.Debt) -> onComplete
+    25:25:com.johnsimon.payback.data.Debt access$000() -> a
 com.johnsimon.payback.ui.DebtDetailDialogFragment$1 -> aun:
     com.johnsimon.payback.ui.DebtDetailDialogFragment this$0 -> a
     62:67:void onClick(android.view.View) -> onClick
@@ -28060,16 +28060,16 @@ com.johnsimon.payback.ui.DebtDetailDialogFragment$4 -> aur:
     com.johnsimon.payback.ui.DebtDetailDialogFragment this$0 -> a
     214:217:void onSelected(java.lang.String) -> onSelected
 com.johnsimon.payback.ui.DebtDetailDialogFragment$Callback -> com.johnsimon.payback.ui.DebtDetailDialogFragment$Callback:
-    void onPaidBack(com.johnsimon.payback.core.Debt) -> onPaidBack
-    void onDelete(com.johnsimon.payback.core.Debt) -> onDelete
-    void onEdit(com.johnsimon.payback.core.Debt) -> onEdit
-    void onMove(com.johnsimon.payback.core.Debt,com.johnsimon.payback.core.Person) -> onMove
+    void onPaidBack(com.johnsimon.payback.data.Debt) -> onPaidBack
+    void onDelete(com.johnsimon.payback.data.Debt) -> onDelete
+    void onEdit(com.johnsimon.payback.data.Debt) -> onEdit
+    void onMove(com.johnsimon.payback.data.Debt,com.johnsimon.payback.data.Person) -> onMove
 com.johnsimon.payback.ui.FeedActivity -> com.johnsimon.payback.ui.FeedActivity:
     com.anjlab.android.iab.v3.BillingProcessor bp -> bp
     java.lang.String ARG_PREFIX -> n
     java.lang.String ARG_FROM_CREATE -> ARG_FROM_CREATE
     android.support.v7.widget.Toolbar toolbar -> toolbar
-    com.johnsimon.payback.core.Person person -> person
+    com.johnsimon.payback.data.Person person -> person
     java.util.ArrayList feed -> feed
     com.johnsimon.payback.async.Subscription feedSubscription -> feedSubscription
     com.johnsimon.payback.async.Subscription feedLinkedSubscription -> feedLinkedSubscription
@@ -28100,7 +28100,7 @@ com.johnsimon.payback.ui.FeedActivity -> com.johnsimon.payback.ui.FeedActivity:
     336:341:void onRestoreInstanceState(android.os.Bundle) -> onRestoreInstanceState
     344:346:void sortTime() -> sortTime
     349:351:void sortAmount() -> sortAmount
-    356:424:void onReceivedBeam(com.johnsimon.payback.send.DebtSendable[],com.johnsimon.payback.core.User,boolean) -> onReceivedBeam
+    356:424:void onReceivedBeam(com.johnsimon.payback.send.DebtSendable[],com.johnsimon.payback.data.User,boolean) -> onReceivedBeam
     426:437:void commitBeam() -> c
     441:446:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     450:455:void onDestroy() -> onDestroy
@@ -28150,11 +28150,11 @@ com.johnsimon.payback.ui.FeedFragment -> com.johnsimon.payback.ui.FeedFragment:
     63:138:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
     143:147:void onStart() -> onStart
     151:155:void onStop() -> onStop
-    181:190:void onPaidBack(com.johnsimon.payback.core.Debt) -> onPaidBack
+    181:190:void onPaidBack(com.johnsimon.payback.data.Debt) -> onPaidBack
     192:201:void displayTotalDebt(android.content.res.Resources) -> displayTotalDebt
-    250:306:void onDelete(com.johnsimon.payback.core.Debt) -> onDelete
-    310:319:void onMove(com.johnsimon.payback.core.Debt,com.johnsimon.payback.core.Person) -> onMove
-    323:328:void onEdit(com.johnsimon.payback.core.Debt) -> onEdit
+    250:306:void onDelete(com.johnsimon.payback.data.Debt) -> onDelete
+    310:319:void onMove(com.johnsimon.payback.data.Debt,com.johnsimon.payback.data.Person) -> onMove
+    323:328:void onEdit(com.johnsimon.payback.data.Debt) -> onEdit
     44:44:android.view.View access$000(com.johnsimon.payback.ui.FeedFragment) -> a
     44:44:com.johnsimon.payback.ui.FeedFragment access$100(com.johnsimon.payback.ui.FeedFragment) -> b
     44:44:android.support.v7.widget.RecyclerView access$200(com.johnsimon.payback.ui.FeedFragment) -> c
@@ -28186,7 +28186,7 @@ com.johnsimon.payback.ui.FeedFragment$5$1 -> avc:
     231:234:void onPositive(com.afollestad.materialdialogs.MaterialDialog) -> onPositive
     238:239:void onNegative(com.afollestad.materialdialogs.MaterialDialog) -> onNegative
 com.johnsimon.payback.ui.FeedFragment$6 -> avd:
-    com.johnsimon.payback.core.Debt val$debt -> a
+    com.johnsimon.payback.data.Debt val$debt -> a
     com.johnsimon.payback.ui.FeedFragment this$0 -> b
     257:297:void onPositive(com.afollestad.materialdialogs.MaterialDialog) -> onPositive
     301:303:void onNegative(com.afollestad.materialdialogs.MaterialDialog) -> onNegative
@@ -28266,11 +28266,11 @@ com.johnsimon.payback.ui.NavigationDrawerFragment -> com.johnsimon.payback.ui.Na
     158:166:void onDataReceived() -> onDataReceived
     170:171:void onUserLoaded() -> onUserLoaded
     174:316:void toggleHeaderVisibility() -> toggleHeaderVisibility
-    319:321:void updateBalance(com.johnsimon.payback.util.AppData) -> updateBalance
+    319:321:void updateBalance(com.johnsimon.payback.data.AppData) -> updateBalance
     324:325:void updateName() -> c
     328:328:boolean isDrawerOpen() -> isDrawerOpen
     338:390:void setUp(int,android.support.v4.widget.DrawerLayout) -> setUp
-    393:395:void setSelectedPerson(com.johnsimon.payback.core.Person) -> setSelectedPerson
+    393:395:void setSelectedPerson(com.johnsimon.payback.data.Person) -> setSelectedPerson
     398:412:void selectItem(int) -> a
     416:422:void onAttach(android.app.Activity) -> onAttach
     426:428:void onDetach() -> onDetach
@@ -28319,12 +28319,12 @@ com.johnsimon.payback.ui.PaidBackDialogFragment -> com.johnsimon.payback.ui.Paid
     int PAY_BACK -> PAY_BACK
     int UNDO_PAY_BACK -> UNDO_PAY_BACK
     boolean payBack -> a
-    com.johnsimon.payback.core.Debt debt -> b
+    com.johnsimon.payback.data.Debt debt -> b
     com.johnsimon.payback.ui.PaidBackDialogFragment$CompleteCallback completeCallback -> completeCallback
-    25:27:com.johnsimon.payback.ui.PaidBackDialogFragment newInstance(int,com.johnsimon.payback.core.Debt) -> newInstance
+    25:27:com.johnsimon.payback.ui.PaidBackDialogFragment newInstance(int,com.johnsimon.payback.data.Debt) -> newInstance
     34:41:void onStart() -> onStart
     46:91:android.app.Dialog onCreateDialog(android.os.Bundle) -> onCreateDialog
-    16:16:com.johnsimon.payback.core.Debt access$000() -> a
+    16:16:com.johnsimon.payback.data.Debt access$000() -> a
 com.johnsimon.payback.ui.PaidBackDialogFragment$1 -> avr:
     android.widget.ImageView val$image -> a
     com.johnsimon.payback.ui.PaidBackDialogFragment this$0 -> b
@@ -28338,15 +28338,15 @@ com.johnsimon.payback.ui.PaidBackDialogFragment$3 -> avt:
     com.johnsimon.payback.ui.PaidBackDialogFragment this$0 -> b
     85:87:void run() -> run
 com.johnsimon.payback.ui.PaidBackDialogFragment$CompleteCallback -> com.johnsimon.payback.ui.PaidBackDialogFragment$CompleteCallback:
-    void onComplete(com.johnsimon.payback.core.Debt) -> onComplete
+    void onComplete(com.johnsimon.payback.data.Debt) -> onComplete
 com.johnsimon.payback.ui.PeopleDetailDialogFragment -> com.johnsimon.payback.ui.PeopleDetailDialogFragment:
-    com.johnsimon.payback.core.Person person -> person
+    com.johnsimon.payback.data.Person person -> person
     com.johnsimon.payback.ui.PeopleDetailDialogFragment$EditPersonCallback editPersonCallback -> editPersonCallback
     android.app.AlertDialog alertDialog -> a
     android.view.View$OnClickListener clickListener -> b
     com.johnsimon.payback.ui.PersonPickerDialogFragment$PersonSelectedCallback renameCallback -> renameCallback
     com.johnsimon.payback.ui.PersonPickerDialogFragment$PersonSelectedCallback mergeCallback -> mergeCallback
-    30:31:com.johnsimon.payback.ui.PeopleDetailDialogFragment newInstance(com.johnsimon.payback.core.Person) -> newInstance
+    30:31:com.johnsimon.payback.ui.PeopleDetailDialogFragment newInstance(com.johnsimon.payback.data.Person) -> newInstance
     36:61:android.app.Dialog onCreateDialog(android.os.Bundle) -> onCreateDialog
     218:220:void cancel() -> a
     23:23:void access$000(com.johnsimon.payback.ui.PeopleDetailDialogFragment) -> a
@@ -28372,7 +28372,7 @@ com.johnsimon.payback.ui.PeopleDetailDialogFragment$3 -> avz:
     com.johnsimon.payback.ui.PeopleDetailDialogFragment this$0 -> a
     166:214:void onSelected(java.lang.String) -> onSelected
 com.johnsimon.payback.ui.PeopleDetailDialogFragment$3$1 -> awa:
-    com.johnsimon.payback.core.Person val$other -> a
+    com.johnsimon.payback.data.Person val$other -> a
     com.johnsimon.payback.ui.PeopleDetailDialogFragment$3 this$1 -> b
     175:205:void onPositive(com.afollestad.materialdialogs.MaterialDialog) -> onPositive
     209:210:void onNegative(com.afollestad.materialdialogs.MaterialDialog) -> onNegative
@@ -28608,47 +28608,47 @@ com.johnsimon.payback.util.Animator$2 -> axd:
 com.johnsimon.payback.util.Animator$3 -> axe:
     android.view.View val$view -> a
     119:120:void onAnimationEnd(android.animation.Animator) -> onAnimationEnd
-com.johnsimon.payback.util.AppData -> com.johnsimon.payback.util.AppData:
+com.johnsimon.payback.data.AppData -> com.johnsimon.payback.data.AppData:
     java.util.ArrayList people -> people
     java.util.ArrayList debts -> debts
     java.util.HashSet deleted -> deleted
     java.util.ArrayList contacts -> contacts
     38:38:java.lang.String save() -> save
     42:42:boolean isLinked() -> isLinked
-    46:54:java.util.ArrayList feed(com.johnsimon.payback.core.Person) -> feed
+    46:54:java.util.ArrayList feed(com.johnsimon.payback.data.Person) -> feed
     58:64:float total(java.util.ArrayList) -> total
     68:74:float totalPlus() -> totalPlus
     78:84:float totalMinus() -> totalMinus
-    88:88:com.johnsimon.payback.core.Person findPerson(java.util.UUID) -> findPerson
-    91:91:com.johnsimon.payback.core.Person findPerson(java.lang.String) -> findPerson
-    95:98:com.johnsimon.payback.core.Person findPerson(java.util.ArrayList,java.util.UUID) -> findPerson
-    102:105:com.johnsimon.payback.core.Person findPersonByName(java.lang.String) -> findPersonByName
-    109:113:com.johnsimon.payback.core.Debt findDebt(java.util.UUID) -> findDebt
-    117:123:void merge(com.johnsimon.payback.core.Person,com.johnsimon.payback.core.Person) -> merge
-    126:130:void unmerge(com.johnsimon.payback.core.Person,java.util.ArrayList,int) -> unmerge
-    132:135:void delete(com.johnsimon.payback.core.Person) -> delete
-    137:139:void delete(com.johnsimon.payback.core.Debt) -> delete
-    142:147:void deleteDebts(com.johnsimon.payback.core.Person) -> a
-    150:151:void move(com.johnsimon.payback.core.Debt,com.johnsimon.payback.core.Person) -> move
-    154:155:void rename(com.johnsimon.payback.core.Person,java.lang.String) -> rename
-    158:162:void sync(com.johnsimon.payback.core.Person,com.johnsimon.payback.send.DebtSendable[]) -> sync
-    166:185:com.johnsimon.payback.core.Person getOrCreatePerson(java.lang.String,com.johnsimon.payback.core.DataActivity) -> getOrCreatePerson
+    88:88:com.johnsimon.payback.data.Person findPerson(java.util.UUID) -> findPerson
+    91:91:com.johnsimon.payback.data.Person findPerson(java.lang.String) -> findPerson
+    95:98:com.johnsimon.payback.data.Person findPerson(java.util.ArrayList,java.util.UUID) -> findPerson
+    102:105:com.johnsimon.payback.data.Person findPersonByName(java.lang.String) -> findPersonByName
+    109:113:com.johnsimon.payback.data.Debt findDebt(java.util.UUID) -> findDebt
+    117:123:void merge(com.johnsimon.payback.data.Person,com.johnsimon.payback.data.Person) -> merge
+    126:130:void unmerge(com.johnsimon.payback.data.Person,java.util.ArrayList,int) -> unmerge
+    132:135:void delete(com.johnsimon.payback.data.Person) -> delete
+    137:139:void delete(com.johnsimon.payback.data.Debt) -> delete
+    142:147:void deleteDebts(com.johnsimon.payback.data.Person) -> a
+    150:151:void move(com.johnsimon.payback.data.Debt,com.johnsimon.payback.data.Person) -> move
+    154:155:void rename(com.johnsimon.payback.data.Person,java.lang.String) -> rename
+    158:162:void sync(com.johnsimon.payback.data.Person,com.johnsimon.payback.send.DebtSendable[]) -> sync
+    166:185:com.johnsimon.payback.data.Person getOrCreatePerson(java.lang.String,com.johnsimon.payback.core.DataActivity) -> getOrCreatePerson
     190:197:java.util.ArrayList getPeopleNames() -> getPeopleNames
     202:214:java.util.ArrayList getAllNames() -> getAllNames
     219:226:java.util.ArrayList getContactNames() -> getContactNames
-    231:251:java.lang.String guessName(com.johnsimon.payback.core.User,com.johnsimon.payback.core.User) -> guessName
-    255:264:com.johnsimon.payback.util.AppData fromJson(java.lang.String) -> fromJson
-    268:268:java.lang.String toJson(com.johnsimon.payback.util.AppData) -> toJson
+    231:251:java.lang.String guessName(com.johnsimon.payback.data.User,com.johnsimon.payback.data.User) -> guessName
+    255:264:com.johnsimon.payback.data.AppData fromJson(java.lang.String) -> fromJson
+    268:268:java.lang.String toJson(com.johnsimon.payback.data.AppData) -> toJson
     273:280:boolean equals(java.lang.Object) -> equals
 com.johnsimon.payback.util.Beamer -> com.johnsimon.payback.util.Beamer:
     com.johnsimon.payback.util.Beamer$BeamListener callback -> a
     com.johnsimon.payback.core.DataActivityInterface dataActivity -> b
     32:37:android.nfc.NdefMessage createNdefMessage(android.nfc.NfcEvent) -> createNdefMessage
     42:48:void processIntent(android.content.Intent) -> processIntent
-    51:55:android.nfc.NdefMessage createMessage(com.johnsimon.payback.core.Debt[],boolean) -> a
+    51:55:android.nfc.NdefMessage createMessage(com.johnsimon.payback.data.Debt[],boolean) -> a
     60:66:com.johnsimon.payback.send.NfcData readMessage(android.nfc.NdefMessage) -> a
 com.johnsimon.payback.util.Beamer$BeamListener -> com.johnsimon.payback.util.Beamer$BeamListener:
-    void onReceivedBeam(com.johnsimon.payback.send.DebtSendable[],com.johnsimon.payback.core.User,boolean) -> onReceivedBeam
+    void onReceivedBeam(com.johnsimon.payback.send.DebtSendable[],com.johnsimon.payback.data.User,boolean) -> onReceivedBeam
 com.johnsimon.payback.util.ColorPalette -> com.johnsimon.payback.util.ColorPalette:
     com.johnsimon.payback.util.ColorPalette instance -> a
     com.johnsimon.payback.core.DataActivityInterface dataAcitivity -> b
@@ -28656,28 +28656,28 @@ com.johnsimon.payback.util.ColorPalette -> com.johnsimon.payback.util.ColorPalet
     35:52:int nextIndex() -> nextIndex
     56:56:int getColor(int) -> getColor
     60:66:com.johnsimon.payback.util.ColorPalette getInstance(com.johnsimon.payback.core.DataActivityInterface) -> getInstance
-com.johnsimon.payback.util.DataLinker -> com.johnsimon.payback.util.DataLinker:
-    com.johnsimon.payback.util.AppData data -> b
+com.johnsimon.payback.data.DataLinker -> com.johnsimon.payback.data.DataLinker:
+    com.johnsimon.payback.data.AppData data -> b
     com.johnsimon.payback.async.Subscription output -> c
     com.johnsimon.payback.async.Callback contactsLoadedCallback -> a
     20:28:com.johnsimon.payback.async.Subscription link(com.johnsimon.payback.async.Subscription,com.johnsimon.payback.async.Promise) -> link
-    33:42:void link(com.johnsimon.payback.util.AppData,java.util.ArrayList) -> link
-    14:14:com.johnsimon.payback.util.AppData access$002(com.johnsimon.payback.util.DataLinker,com.johnsimon.payback.util.AppData) -> a
-    14:14:com.johnsimon.payback.util.AppData access$000(com.johnsimon.payback.util.DataLinker) -> a
-    14:14:com.johnsimon.payback.async.Subscription access$100(com.johnsimon.payback.util.DataLinker) -> b
-com.johnsimon.payback.util.DataLinker$1 -> axf:
+    33:42:void link(com.johnsimon.payback.data.AppData,java.util.ArrayList) -> link
+    14:14:com.johnsimon.payback.data.AppData access$002(com.johnsimon.payback.data.DataLinker,com.johnsimon.payback.data.AppData) -> a
+    14:14:com.johnsimon.payback.data.AppData access$000(com.johnsimon.payback.data.DataLinker) -> a
+    14:14:com.johnsimon.payback.async.Subscription access$100(com.johnsimon.payback.data.DataLinker) -> b
+com.johnsimon.payback.data.DataLinker$1 -> axf:
     com.johnsimon.payback.async.Promise val$contactsPromise -> a
-    com.johnsimon.payback.util.DataLinker this$0 -> b
-    23:25:void onCalled(com.johnsimon.payback.util.AppData) -> a
+    com.johnsimon.payback.data.DataLinker this$0 -> b
+    23:25:void onCalled(com.johnsimon.payback.data.AppData) -> a
     20:20:void onCalled(java.lang.Object) -> onCalled
-com.johnsimon.payback.util.DataLinker$2 -> axg:
-    com.johnsimon.payback.util.DataLinker this$0 -> a
+com.johnsimon.payback.data.DataLinker$2 -> axg:
+    com.johnsimon.payback.data.DataLinker this$0 -> a
     47:49:void onCalled(java.util.ArrayList) -> a
     44:44:void onCalled(java.lang.Object) -> onCalled
-com.johnsimon.payback.util.DataSyncer -> com.johnsimon.payback.util.DataSyncer:
-    14:26:com.johnsimon.payback.util.AppData sync(com.johnsimon.payback.util.AppData,com.johnsimon.payback.util.AppData) -> sync
+com.johnsimon.payback.data.DataSyncer -> com.johnsimon.payback.data.DataSyncer:
+    14:26:com.johnsimon.payback.data.AppData sync(com.johnsimon.payback.data.AppData,com.johnsimon.payback.data.AppData) -> sync
     30:35:void removeDeleted(java.util.ArrayList,java.util.HashSet) -> a
-    38:43:com.johnsimon.payback.core.SyncedData find(java.util.ArrayList,java.util.UUID) -> a
+    38:43:com.johnsimon.payback.data.SyncedData find(java.util.ArrayList,java.util.UUID) -> a
     47:60:java.util.ArrayList sync(java.util.ArrayList,java.util.ArrayList) -> a
 com.johnsimon.payback.util.RequiredValidator -> com.johnsimon.payback.util.RequiredValidator:
     android.widget.EditText[] editTexts -> a
@@ -28706,7 +28706,7 @@ com.johnsimon.payback.util.Resource -> com.johnsimon.payback.util.Resource:
     132:132:boolean isKkOrAbove() -> isKkOrAbove
     135:135:boolean isLOrAbove() -> isLOrAbove
     139:142:java.lang.CharSequence getRelativeTimeString(android.content.Context,long) -> getRelativeTimeString
-    150:164:void createProfileImage(com.johnsimon.payback.core.DataActivityInterface,com.johnsimon.payback.core.Person,com.makeramen.RoundedImageView,android.widget.TextView) -> createProfileImage
+    150:164:void createProfileImage(com.johnsimon.payback.core.DataActivityInterface,com.johnsimon.payback.data.Person,com.makeramen.RoundedImageView,android.widget.TextView) -> createProfileImage
     168:217:void actionComplete(android.app.Activity) -> actionComplete
     240:246:void hideKeyboard(android.app.Activity) -> hideKeyboard
     270:274:void checkFull(com.anjlab.android.iab.v3.BillingProcessor) -> checkFull
@@ -28723,16 +28723,16 @@ com.johnsimon.payback.util.Resource$2 -> axi:
     200:203:void onNegative(com.afollestad.materialdialogs.MaterialDialog) -> onNegative
     207:209:void onNeutral(com.afollestad.materialdialogs.MaterialDialog) -> onNeutral
 com.johnsimon.payback.util.Resource$AlphabeticalComparator -> com.johnsimon.payback.util.Resource$AlphabeticalComparator:
-    265:265:int compare(com.johnsimon.payback.core.Person,com.johnsimon.payback.core.Person) -> compare
+    265:265:int compare(com.johnsimon.payback.data.Person,com.johnsimon.payback.data.Person) -> compare
     262:262:int compare(java.lang.Object,java.lang.Object) -> compare
 com.johnsimon.payback.util.Resource$AmountComparator -> com.johnsimon.payback.util.Resource$AmountComparator:
-    251:251:int compare(com.johnsimon.payback.core.Debt,com.johnsimon.payback.core.Debt) -> compare
+    251:251:int compare(com.johnsimon.payback.data.Debt,com.johnsimon.payback.data.Debt) -> compare
     248:248:int compare(java.lang.Object,java.lang.Object) -> compare
 com.johnsimon.payback.util.Resource$TimeComparator -> com.johnsimon.payback.util.Resource$TimeComparator:
-    258:258:int compare(com.johnsimon.payback.core.Debt,com.johnsimon.payback.core.Debt) -> compare
+    258:258:int compare(com.johnsimon.payback.data.Debt,com.johnsimon.payback.data.Debt) -> compare
     255:255:int compare(java.lang.Object,java.lang.Object) -> compare
 com.johnsimon.payback.util.SwishLauncher -> com.johnsimon.payback.util.SwishLauncher:
-    25:47:void startSwish(android.app.Activity,float,com.johnsimon.payback.core.Person) -> startSwish
+    25:47:void startSwish(android.app.Activity,float,com.johnsimon.payback.data.Person) -> startSwish
     50:51:void startSwishApp(android.app.Activity,float) -> a
     54:55:void startSwishApp(android.app.Activity,float,java.lang.String) -> b
     58:73:void startSwishApp(android.app.Activity,java.lang.String,java.lang.String) -> a
@@ -28847,7 +28847,7 @@ com.johnsimon.payback.widget.ListWidgetService -> com.johnsimon.payback.widget.L
     12:12:android.widget.RemoteViewsService$RemoteViewsFactory onGetViewFactory(android.content.Intent) -> onGetViewFactory
 com.johnsimon.payback.widget.WidgetViewsFactory -> com.johnsimon.payback.widget.WidgetViewsFactory:
     android.content.Context ctx -> a
-    com.johnsimon.payback.util.AppData data -> b
+    com.johnsimon.payback.data.AppData data -> b
     com.johnsimon.payback.storage.Storage storage -> c
     38:38:void onCreate() -> onCreate
     43:43:void onDestroy() -> onDestroy
@@ -28858,7 +28858,7 @@ com.johnsimon.payback.widget.WidgetViewsFactory -> com.johnsimon.payback.widget.
     108:108:long getItemId(int) -> getItemId
     113:113:boolean hasStableIds() -> hasStableIds
     119:119:void onDataSetChanged() -> onDataSetChanged
-    123:124:void onCalled(com.johnsimon.payback.util.AppData) -> onCalled
+    123:124:void onCalled(com.johnsimon.payback.data.AppData) -> onCalled
     23:23:void onCalled(java.lang.Object) -> onCalled
 com.johnsimon.payback.widget.WidgetViewsFactory$1 -> axo:
     android.widget.RemoteViews val$row -> a

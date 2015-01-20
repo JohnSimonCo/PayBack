@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
 import com.johnsimon.payback.async.Promise;
-import com.johnsimon.payback.core.User;
+import com.johnsimon.payback.data.User;
 
 public class UserLoader extends AsyncTask<ContentResolver, Void, User> {
 

@@ -8,12 +8,12 @@ import android.support.v7.app.ActionBarActivity;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
-import com.johnsimon.payback.async.Subscription;
+import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
-import com.johnsimon.payback.util.AppData;
-import com.johnsimon.payback.util.DataLinker;
+import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.DataLinker;
 
 public abstract class DataActivity extends ActionBarActivity implements DataActivityInterface {
 

@@ -1,7 +1,7 @@
 package com.johnsimon.payback.send;
 
-import com.johnsimon.payback.core.Debt;
-import com.johnsimon.payback.core.User;
+import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.User;
 
 public class NfcData {
 	public DebtSendable[] debts;

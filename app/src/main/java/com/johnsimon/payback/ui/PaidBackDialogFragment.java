@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.Debt;
+import com.johnsimon.payback.data.Debt;
 
 public class PaidBackDialogFragment extends DialogFragment {
 

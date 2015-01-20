@@ -1,16 +1,14 @@
 package com.johnsimon.payback.adapter;
 
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.NavigationDrawerItem;
-import com.johnsimon.payback.core.Person;
+import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.ui.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Resource;

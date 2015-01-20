@@ -2,6 +2,8 @@ package com.johnsimon.payback.core;
 
 import android.graphics.Bitmap;
 
+import com.johnsimon.payback.data.Person;
+
 import java.util.UUID;
 
 public class NavigationDrawerItem {
