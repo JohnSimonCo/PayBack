@@ -215,26 +215,6 @@ public class Resource {
 		preferences.edit().putInt(SAVE_KEY_ACTIONS, actions).apply();
 	}
 
-	/*
-	public static <T extends Identifiable> boolean areIdenticalLists(ArrayList<T> before, ArrayList<T> after) {
-
-		if (before.size() != after.size()) {
-			return false;
-		}
-
-		int size = before.size();
-
-
-		for (int i = 0; i < size; i++) {
-			if (before.get(i).getId() != after.get(i).getId()) {
-				return false;
-			}
-		}
-
-		return true;
-
-	}*/
-
     public static void hideKeyboard(Activity activity) {
         InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -276,21 +256,8 @@ public class Resource {
         return isFull || debts + addition <= MAX_FREE_DEBTS;
     }
 
-    public static Bitmap drawableToBitmap (Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable)drawable).getBitmap();
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
-
     public static String[] clearDuplicates(String[] list) {
-        return new HashSet<String>(Arrays.asList(list)).toArray(new String[0]);
+        return new HashSet<>(Arrays.asList(list)).toArray(new String[0]);
     }
 
 }

@@ -124,7 +124,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         header.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, headerView.getLayoutParams().height));
 
         ImageView headerImage = (ImageView) rootView.findViewById(R.id.feed_list_image);
-        if (!PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).getString("pref_background", "mountains").equals("mountains")) {
+        if (!Resource.preferences.getString("pref_background", "mountains").equals("mountains")) {
             headerImage.setImageDrawable(getResources().getDrawable(R.drawable.art_old));
         }
 
