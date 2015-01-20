@@ -1,12 +1,5 @@
 package com.johnsimon.payback.data;
 
-import android.os.DropBoxManager;
-
-import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.data.Debt;
-import com.johnsimon.payback.data.Identifiable;
-import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.data.SyncedData;
 import com.johnsimon.payback.preferences.Preference;
 import com.johnsimon.payback.preferences.Preferences;
 
@@ -30,9 +23,11 @@ public class DataSyncer {
         ArrayList<Person> people = sync(a.people, b.people);
         ArrayList<Debt> debts = sync(a.debts, b.debts);
 
+		PeopleOrder peopleOrder = a.peopleOrder.syncWith(b.peopleOrder);
+
 		Preferences preferences = syncPreferences(a.preferences, b.preferences);
 
-        return new AppData(people, debts, deleted, preferences);
+        return new AppData(people, debts, deleted, peopleOrder, preferences);
     }
 
     private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {

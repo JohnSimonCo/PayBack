@@ -288,7 +288,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                                 .actionListener(new Snackbar.ActionClickListener() {
                                     @Override
                                     public void onActionClicked() {
-                                        data.debts.add(index, debt);
+                                        //TODO fixa undos
+                                        //data.add(index, debt);
                                         storage.commit();
                                         if(!FeedActivity.isAll()) {
                                             FeedActivity.feed.add(indexFeed, debt);

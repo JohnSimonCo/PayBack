@@ -127,8 +127,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		}
 	}
 
-//	private final static long MAX_REFRESH_FREQ = 5000;
-	private final static long MAX_REFRESH_FREQ = 500;
+	private final static long MAX_REFRESH_FREQ = 5000;
 	private Long lastRefresh;
 	private boolean mayRefresh() {
 		return System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
@@ -151,7 +150,8 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
                 show("Sync error");
             }
 
-            Drive.DriveApi.getRootFolder(client)
+			//TODO innan release: använda app folder
+			Drive.DriveApi.getRootFolder(client)
 				.listChildren(client)
 				.setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
 					@Override

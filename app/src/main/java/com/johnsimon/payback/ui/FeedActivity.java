@@ -406,7 +406,7 @@ public class FeedActivity extends DataActivity implements
                             .show();
 
 				} else {
-					data.debts.add(debts[0].extract(person));
+					data.add(debts[0].extract(person));
 					commitBeam();
 				}
 			}
@@ -418,7 +418,7 @@ public class FeedActivity extends DataActivity implements
 		feed = data.feed(person);
 
 		NavigationDrawerFragment.adapter.clearItems();
-		NavigationDrawerFragment.adapter.setItems(data.people);
+		NavigationDrawerFragment.adapter.setItems(data.peopleOrdered());
 		navigationDrawerFragment.setSelectedPerson(person);
 
 		getFragmentManager().beginTransaction()

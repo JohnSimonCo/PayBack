@@ -89,7 +89,8 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 					break;
 				case R.id.person_detail_dialog_delete:
 
-                    new MaterialDialog.Builder(getActivity())
+					//TODO ALLA UNDOS
+					new MaterialDialog.Builder(getActivity())
                             .content(R.string.delete_person_text)
                             .positiveText(R.string.delete)
                             .negativeText(R.string.cancel)
@@ -109,7 +110,8 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 												.actionListener(new Snackbar.ActionClickListener() {
 													@Override
 													public void onActionClicked() {
-														data.people.add(restorePersonIndex, person);
+														//TODO ALLA UNDOS
+														//data.people.add(restorePersonIndex, person);
 														editPersonCallback.onEdit();
 													}
 												})
@@ -170,45 +172,53 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                     .positiveText(R.string.merge)
                     .negativeText(R.string.cancel)
                     .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
+						@Override
+						public void onPositive(MaterialDialog dialog) {
+							super.onPositive(dialog);
 
-                            final int index = data.people.indexOf(person);
-                            final ArrayList<Debt> debts = new ArrayList<Debt>();
-                            for(Debt debt : data.debts) {
-                                if(debt.getOwner() == person) {
-                                    debts.add(debt);
-                                }
-                            }
+							final int index = data.people.indexOf(person);
+							final ArrayList<Debt> debts = new ArrayList<Debt>();
+							for (Debt debt : data.debts) {
+								if (debt.getOwner() == person) {
+									debts.add(debt);
+								}
+							}
 
-                            Snackbar.with(getActivity().getApplicationContext())
-                                    .text(getString(R.string.merged_people))
-                                    .actionLabel(getString(R.string.undo))
-                                    .actionColor(getResources().getColor(R.color.green))
-                                    .actionListener(new Snackbar.ActionClickListener() {
-                                        @Override
-                                        public void onActionClicked() {
-                                            data.unmerge(person, debts, index);
+							Snackbar.with(getActivity().getApplicationContext())
+									.text(getString(R.string.merged_people))
+									.actionLabel(getString(R.string.undo))
+									.actionColor(getResources().getColor(R.color.green))
+									.actionListener(new Snackbar.ActionClickListener() {
+										@Override
+										public void onActionClicked() {
+											data.unmerge(person, debts, index);
 
-                                            editPersonCallback.onEdit();
-                                        }
-                                    })
-                                    .show(getActivity());
+											editPersonCallback.onEdit();
+										}
+									})
+									.eventListener(new Snackbar.EventListener() {
+										@Override public void onShow(int i) {}
+
+										@Override
+										public void onDismiss(int i) {
+
+										}
+									})
+									.show(getActivity());
 
 
-                            //from, to
-                            data.merge(person, other);
-                            cancel();
+							//from, to
+							data.merge(person, other);
+							cancel();
 
-                            dialog.dismiss();
-                        }
+							dialog.dismiss();
+						}
 
-                        @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            super.onNegative(dialog);
-                        }
-                    })
+						@Override
+						public void onNegative(MaterialDialog dialog) {
+							super.onNegative(dialog);
+						}
+					})
                     .show();
 
 		}

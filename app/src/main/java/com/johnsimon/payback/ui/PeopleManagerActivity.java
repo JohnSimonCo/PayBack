@@ -147,7 +147,7 @@ public class PeopleManagerActivity extends DataActivity {
 
 	@Override
 	protected void onDataReceived() {
-		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title), data.people);
+		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title), data.peopleOrdered());
 		recyclerView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		adapter.updateEmptyViewVisibility();
@@ -192,7 +192,7 @@ public class PeopleManagerActivity extends DataActivity {
 				@Override
 				public void onSelected(String name) {
 					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
-					data.people.add(person);
+					data.add(person);
 					storage.commit();
 					adapter.notifyDataSetChanged();
 					adapter.updateEmptyViewVisibility();
@@ -231,7 +231,7 @@ public class PeopleManagerActivity extends DataActivity {
 
                 personListBeforeSort = (ArrayList<Person>) data.people.clone();
 
-                Collections.sort(data.people, new Resource.AlphabeticalComparator());
+                //Collections.sort(data.people, new Resource.AlphabeticalComparator());
                 storage.commit();
 
 				if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {

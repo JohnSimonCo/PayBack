@@ -1,5 +1,7 @@
 package com.johnsimon.payback.data;
 
+import android.provider.Contacts;
+
 import com.google.gson.Gson;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
@@ -19,19 +21,22 @@ public class AppData {
 
     public HashSet<UUID> deleted;
 
+	public PeopleOrder peopleOrder;
+
 	public Preferences preferences;
 
     public transient ArrayList<Contact> contacts;
 
-    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted, Preferences preferences) {
+    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted, PeopleOrder peopleOrder, Preferences preferences) {
         this.people = people;
         this.debts = debts;
         this.deleted = deleted;
+		this.peopleOrder = peopleOrder;
 		this.preferences = preferences;
     }
 
     public AppData() {
-        this(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), Preferences.defaultPreferences());
+        this(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), new PeopleOrder(), Preferences.defaultPreferences());
     }
 
     public String save() {
@@ -41,6 +46,10 @@ public class AppData {
     public boolean isLinked() {
         return contacts != null;
     }
+
+	public ArrayList<Person> peopleOrdered() {
+		return peopleOrder.order(people);
+	}
 
     public ArrayList<Debt> feed(Person person) {
         if(person == null) return debts;
@@ -126,17 +135,27 @@ public class AppData {
         for(Debt debt : debts) {
             debt.setOwner(restore);
         }
-        people.add(index, restore);
+        //people.add(index, restore);
     }
     public void delete(Person person) {
         deleteDebts(person);
         deleted.add(person.id);
+		peopleOrder.remove(person.id);
         people.remove(person);
     }
     public void delete(Debt debt) {
         deleted.add(debt.id);
         debts.remove(debt);
     }
+
+	public void add(Debt debt) {
+		debts.add(debt);
+	}
+
+	public void add(Person person) {
+		people.add(person);
+		peopleOrder.add(person.id);
+	}
 
     private void deleteDebts(Person person) {
         ArrayList<Debt> debts = feed(person);
@@ -157,7 +176,7 @@ public class AppData {
     public void sync(Person person, DebtSendable[] debts) {
         deleteDebts(person);
         for(DebtSendable debt : debts) {
-            this.debts.add(debt.extract(person));
+            add(debt.extract(person));
         }
     }
 
@@ -181,7 +200,7 @@ public class AppData {
         person = new Person(name, ColorPalette.getInstance(context));
         person.link = link;
 
-        people.add(person);
+        add(person);
         return person;
     }
 
@@ -278,6 +297,7 @@ public class AppData {
 		return people.equals(other.people)
 			&& debts.equals(other.debts)
 			&& deleted.equals(other.deleted)
+			&& peopleOrder.equals(other.peopleOrder)
 			&& preferences.equals(other.preferences);
 	}
 }

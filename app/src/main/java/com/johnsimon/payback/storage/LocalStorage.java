@@ -46,11 +46,11 @@ public class LocalStorage extends Storage {
 
 		for(int i = 0; i < 25; i++) {
 
-			data.people.add(new Person(Integer.toHexString(r.nextInt()), colorPalette));
+			data.add(new Person(Integer.toHexString(r.nextInt()), colorPalette));
 		}
 
 		for(int i = 0; i < 100; i++) {
-			data.debts.add(new Debt(data.people.get(r.nextInt(data.people.size())), r.nextFloat() * 200, null, data.preferences.getCurrency().id));
+			data.add(new Debt(data.people.get(r.nextInt(data.people.size())), r.nextFloat() * 200, null, data.preferences.getCurrency().id));
 		}
 	}
 

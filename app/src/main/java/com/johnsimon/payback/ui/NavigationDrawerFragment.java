@@ -155,7 +155,7 @@ public class NavigationDrawerFragment extends DataFragment {
 
     @Override
     protected void onDataReceived() {
-        adapter = new NavigationDrawerAdapter((DataActivity) getActivity(), data.people);
+        adapter = new NavigationDrawerAdapter((DataActivity) getActivity(), data.peopleOrdered());
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
