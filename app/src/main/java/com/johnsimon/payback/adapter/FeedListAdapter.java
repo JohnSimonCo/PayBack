@@ -72,7 +72,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		final Resources resources = context.getResources();
 
 		holder.person.setText(owner.getName());
-		holder.amount.setText(debt.amountString(context.data.preferences.getCurrency()));
+		holder.amount.setText(debt.amountString(context.data.preferences));
 		holder.amount.setTextColor(resources.getColor(debt.getColor()));
 
 		holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));

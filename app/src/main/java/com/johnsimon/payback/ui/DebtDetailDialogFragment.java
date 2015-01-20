@@ -60,9 +60,9 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
+                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences));
                 sendIntent.setType("text/plain");
-                startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences.getCurrency()) : getString(R.string.share)));
+                startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences) : getString(R.string.share)));
             }
         });
 
@@ -88,10 +88,10 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         TextView dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
         if (debt.getAmount() < 0) {
             //negative
-            dialog_custom_amount.setText(debt.amountString(data.preferences.getCurrency()));
+            dialog_custom_amount.setText(debt.amountString(data.preferences));
             dialog_custom_amount.setTextColor(getResources().getColor(debt.getColor()));
         } else {
-            dialog_custom_amount.setText(debt.amountString(data.preferences.getCurrency()));
+            dialog_custom_amount.setText(debt.amountString(data.preferences));
             dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
         }
 
