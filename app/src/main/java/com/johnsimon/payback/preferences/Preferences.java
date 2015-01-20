@@ -40,7 +40,7 @@ public class Preferences extends HashMap<String, Preference> {
 		return get("currency", DEFAULT_CURRENCY);
 	}
 
-	public int getBackground() {
-		return get("background", 0);
+	public String getBackground() {
+		return get("background", "mountains");
 	}
 }
