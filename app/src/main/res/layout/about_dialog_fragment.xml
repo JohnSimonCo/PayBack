@@ -56,179 +56,310 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/about_dialog_list_parent"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_devdesign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="devdesign"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_johnsimon"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_devdesign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_johnsimon"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_icon"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_riv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="icon"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_riv"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_icon"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_fab"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_gson"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/vinc3m1/RoundedImageView"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_gson"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_riv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_uil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_riv"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_uil"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_dsr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/FaizMalkani/FloatingActionButton"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_dsr"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_qr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_fab"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_qr"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_snb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://code.google.com/p/google-gson/"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_snb"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_gson"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-            style="@style/library_title"
-            android:text="@string/lib_md"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_gson"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_md"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_rbm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/nostra13/Android-Universal-Image-Loader"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_rbm"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_uil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/library_title"
-                android:text="@string/lib_iab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_uil"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                android:text="@string/author_iab"
-                style="@style/library_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/emileb/DragSortRecycler"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_dsr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_dsr"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/lawloretienne/QuickReturn"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_qr"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/nispok/snackbar"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_snb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_snb"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/afollestad/material-dialogs"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_md"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_md"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/johnkil/Android-RobotoTextView"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_rbm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_rbm"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/anjlab/android-inapp-billing-v3"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_iab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_iab"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

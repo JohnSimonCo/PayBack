@@ -8,4 +8,5 @@
     android:divider="@null"
     android:dividerHeight="0dp"
     android:background="#eee"
+    android:drawSelectorOnTop="@bool/lollipop"
     tools:context="com.johnsimon.payback.ui.NavigationDrawerFragment" />

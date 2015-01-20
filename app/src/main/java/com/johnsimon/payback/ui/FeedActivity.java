@@ -300,9 +300,6 @@ public class FeedActivity extends DataActivity implements
                         })
                         .show();
                 break;
-
-			default:
-				break;
 		}
 	}
 

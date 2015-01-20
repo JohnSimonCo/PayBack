@@ -5,8 +5,8 @@
 
     <item
         android:state_pressed="true"
-        android:drawable="@color/white_on_red_darker_selector" />
+        android:drawable="@color/gray_text_very_light" />
     <item
-        android:drawable="@color/white_on_red_selector" />
+        android:drawable="@color/gray_oncolor_very_light" />
 
 </selector>
