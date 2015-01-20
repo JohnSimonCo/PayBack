@@ -24,7 +24,6 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 	private TintEditText customCurrencyEditText;
 	private AlertDialog alertDialog;
-	private TintRadioButton custom_currency_radio_before, custom_currency_radio_after;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -42,23 +41,6 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				alertDialog.dismiss();
-			}
-		});
-
-		custom_currency_radio_before = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_before);
-		custom_currency_radio_after = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_after);
-
-		custom_currency_radio_before.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updatePreview();
-			}
-		});
-
-		custom_currency_radio_after.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updatePreview();
 			}
 		});
 
@@ -125,13 +107,13 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 	private View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			completeCallback.onSelected(customCurrencyEditText.getText().toString(), custom_currency_radio_before.isChecked());
+			completeCallback.onSelected(customCurrencyEditText.getText().toString());
 			alertDialog.dismiss();
 		}
 	};
 
 	public interface CustomCurrencySelectedCallback {
-		public void onSelected(String currency, boolean currencyBefore);
+		public void onSelected(String currency);
 	}
 
 }

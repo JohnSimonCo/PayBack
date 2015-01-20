@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.internal.widget.TintRadioButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,25 +14,42 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.devspark.robototextview.widget.RobotoButton;
+import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.view.NDSpinner;
 
-public class WelcomeDialogFragment extends DataDialogFragment implements CustomCurrencyDialogFragment.CustomCurrencySelectedCallback {
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+public class WelcomeDialogFragment extends DataDialogFragment {
 
 	private AlertDialog alertDialog;
 	private boolean hasNfc = false;
-	private String currency, lastSpinnerValue;
-    private boolean listenForSpinnerSelect = false;
+	private String currency;
 	private boolean currencyOnly;
 	private boolean currencyBefore = true;
 
     private final String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
     private final String CURRENCY_BEFORE_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
 
-	private NDSpinner currencySpinner;
-	private TextView welcomeCurrencyPreview;
+	private RobotoButton welcome_select_currency;
+	private RobotoButton welcome_select_currency_display;
+
+	private TintRadioButton custom_currency_radio_before;
+	private TintRadioButton custom_currency_radio_after;
+
+	private RobotoTextView welcome_currency_preview;
+
+	private String displayCurrency;
+	private Currency selectedCurrency;
+
 
 	@Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -46,26 +64,7 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 			currencyOnly = getArguments().getBoolean("SETTINGS", false);
 		}
 
-		welcomeCurrencyPreview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
-
         final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
-
-        Handler handler = new Handler();
-        Runnable r = new Runnable() {
-            public void run() {
-                listenForSpinnerSelect = true;
-            }
-        };
-        handler.postDelayed(r, 300);
-
-		currencySpinner = (NDSpinner) rootView.findViewById(R.id.welcome_currency_spinner);
-
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-				R.array.currencies, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		currencySpinner.setAdapter(adapter);
 
 		hasNfc = NfcAdapter.getDefaultAdapter(getActivity()) != null;
 
@@ -81,28 +80,6 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
             welcome_continue.setText(R.string.done);
         }
 
-		final WelcomeDialogFragment self = this;
-		currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
-                if (listenForSpinnerSelect || savedInstanceState == null) {
-                    if (pos == parent.getCount() - 1) {
-                        // "Custom"
-                        CustomCurrencyDialogFragment fragment = new CustomCurrencyDialogFragment();
-                        fragment.completeCallback = self;
-                        fragment.show(getFragmentManager(), "CustomCurrencyDialogFragment");
-                    } else {
-                        Object item = parent.getItemAtPosition(pos);
-                        lastSpinnerValue = item.toString();
-                        setCurrency(lastSpinnerValue);
-                    }
-                }
-
-			}
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
-
 		if (currencyOnly) {
 			RelativeLayout rl = (RelativeLayout) rootView.findViewById(R.id.welcome_header);
 			rl.setVisibility(View.GONE);
@@ -117,17 +94,88 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
             setCancelable(false);
         }
 
+		welcome_select_currency = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency);
+		welcome_select_currency_display = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency_display);
+
+		custom_currency_radio_before = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_before);
+		custom_currency_radio_after = (TintRadioButton) rootView.findViewById(R.id.custom_currency_radio_after);
+
+		welcome_currency_preview = (RobotoTextView) rootView.findViewById(R.id.welcome_currency_preview);
+
+		Set<Currency> currencySet = getAllCurrencies();
+
+		final Currency[] currencyList = currencySet.toArray(new Currency[currencySet.size()]);
+		final String[] currencyNameList = new String[currencyList.length];
+		for (int i = 0; i < currencyList.length; i++) {
+			currencyNameList[i] = currencyList[i].getSymbol();
+		}
+
+		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new MaterialDialog.Builder(getActivity())
+						.title(R.string.select_currency)
+						.items(currencyNameList)
+						.itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallback() {
+							@Override
+							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								selectedCurrency = currencyList[which];
+								displayCurrency = text.toString();
+								updatePreview();
+							}
+						})
+						.positiveText(R.string.select)
+						.show();
+			}
+		});
+
+		welcome_select_currency_display.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				CustomCurrencyDialogFragment fragment = new CustomCurrencyDialogFragment();
+				fragment.completeCallback = new CustomCurrencyDialogFragment.CustomCurrencySelectedCallback() {
+					@Override
+					public void onSelected(String currency) {
+						displayCurrency = currency;
+						updatePreview();
+					}
+				};
+
+				fragment.show(getFragmentManager(), "custom_currency");
+			}
+		});
+
 		builder.setView(rootView);
 
 		alertDialog = builder.create();
         return alertDialog;
     }
 
+	private void updatePreview() {
+
+	}
+
+	private static Set<Currency> getAllCurrencies()
+	{
+		Set<Currency> toret = new HashSet<Currency>();
+		Locale[] locs = Locale.getAvailableLocales();
+
+		for(Locale loc : locs) {
+			try {
+				toret.add( Currency.getInstance( loc ) );
+			} catch(Exception exc)
+			{
+				// Locale not found
+			}
+		}
+
+		return toret;
+	}
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            setCurrency(savedInstanceState.getString(CURRENCY_SAVE_KEY));
             currencyBefore = savedInstanceState.getBoolean(CURRENCY_BEFORE_SAVE_KEY, true);
         }
     }
@@ -138,11 +186,6 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
         outState.putString(CURRENCY_SAVE_KEY, currency);
         outState.putBoolean(CURRENCY_BEFORE_SAVE_KEY, currencyBefore);
     }
-
-	private void setCurrency(String currency) {
-		this.currency = currency;
-		welcomeCurrencyPreview.setText(this.currency);
-	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
@@ -173,10 +216,4 @@ public class WelcomeDialogFragment extends DataDialogFragment implements CustomC
 			alertDialog.dismiss();
 		}
 	};
-
-	@Override
-	public void onSelected(String currency, boolean before) {
-		setCurrency(currency);
-		currencyBefore = before;
-	}
 }

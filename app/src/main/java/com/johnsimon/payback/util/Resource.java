@@ -33,6 +33,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.HashSet;
 
 public class Resource {
@@ -244,6 +245,20 @@ public class Resource {
             return person1.getName().compareToIgnoreCase(person2.getName());
         }
     }
+
+	public static class AlphabeticalStringComparator implements Comparator<String> {
+		@Override
+		public int compare(String string1, String string2) {
+			return string1.compareToIgnoreCase(string2);
+		}
+	}
+
+	public static class AlphabeticalCurrencyComparator implements Comparator<Currency> {
+		@Override
+		public int compare(Currency currency1, Currency currency2) {
+			return currency1.getSymbol().compareToIgnoreCase(currency2.getSymbol());
+		}
+	}
 
     public static void checkFull(BillingProcessor bp) {
         isFull =  bp.isPurchased("full_version");
