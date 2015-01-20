@@ -2,12 +2,12 @@ package com.johnsimon.payback.core;
 
 import com.johnsimon.payback.data.Debt;
 
-public class Currency {
+public class UserCurrency {
 	public final String id;
 	public final boolean before;
 	public final String displayName;
 
-	public Currency(String id, boolean before, String displayName) {
+	public UserCurrency(String id, boolean before, String displayName) {
 		this.id = id;
 		this.before = before;
 		this.displayName = displayName;
