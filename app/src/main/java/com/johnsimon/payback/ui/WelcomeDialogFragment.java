@@ -35,9 +35,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 
 	private AlertDialog alertDialog;
 	private boolean hasNfc = false;
-	private String currency;
 	private boolean currencyOnly;
-	private boolean currencyBefore = true;
 
     private final String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
     private final String CURRENCY_BEFORE_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
@@ -50,9 +48,8 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 
 	private RobotoTextView welcome_currency_preview;
 
-	private String displayCurrency;
-	private Currency selectedCurrency;
-
+	private String displayCurrency = "$";
+	private Currency selectedCurrency = Currency.getInstance(Locale.getDefault());
 
 	@Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -158,11 +155,11 @@ public class WelcomeDialogFragment extends DataDialogFragment {
     }
 
 	private void updatePreview() {
-
+		UserCurrency cur = new UserCurrency(selectedCurrency.getSymbol(), displayCurrency, custom_currency_radio_before.isChecked());
+		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency.getSymbol()) ? "" : " (" + selectedCurrency.getSymbol() + ")"));
 	}
 
-	private static Set<Currency> getAllCurrencies()
-	{
+	private static Set<Currency> getAllCurrencies() {
 		Set<Currency> toret = new HashSet<>();
 		Locale[] locs = Locale.getAvailableLocales();
 
@@ -182,15 +179,15 @@ public class WelcomeDialogFragment extends DataDialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            currencyBefore = savedInstanceState.getBoolean(CURRENCY_BEFORE_SAVE_KEY, true);
-        }
+
+		}
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(CURRENCY_SAVE_KEY, currency);
-        outState.putBoolean(CURRENCY_BEFORE_SAVE_KEY, currencyBefore);
+		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency.getCurrencyCode());
+		outState.putString(CURRENCY_BEFORE_SAVE_KEY, displayCurrency);
     }
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -215,7 +212,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 
 			NavigationDrawerFragment.updateBalance(data);
 			if (SettingsActivity.pref_currency != null) {
-				SettingsActivity.pref_currency.setSummary(currency);
+				SettingsActivity.pref_currency.setSummary(displayCurrency);
 			}
 
 			alertDialog.dismiss();
