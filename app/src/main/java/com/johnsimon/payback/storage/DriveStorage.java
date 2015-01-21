@@ -95,7 +95,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         show("commited data to localStorage");
         localStorage.commit(JSON);
 
-
         if(file == null) return;
         write(JSON, file, new ResultCallback<FileResult>() {
             @Override

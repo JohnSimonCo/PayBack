@@ -180,9 +180,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 	@Override
 	protected void onDataReceived() {
-		//if (getActivity() != null && getResources() != null) {
-			displayTotalDebt(getResources());
-		//}
+		displayTotalDebt(getResources());
 
 		if (data.preferences.getBackground().equals("mountains")) {
 			headerImage.setImageResource(R.drawable.art);

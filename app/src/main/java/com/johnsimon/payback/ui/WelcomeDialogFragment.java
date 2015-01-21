@@ -60,7 +60,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 
 			CurrencyDialogFragment fragment = new CurrencyDialogFragment();
 			Bundle args = new Bundle();
-			args.putBoolean(CurrencyDialogFragment.CONTINUE_TO_NFC, true);
+			args.putBoolean(CurrencyDialogFragment.CONTINUE, true);
 			fragment.show(getFragmentManager(), "currenct_shit");
 
 			alertDialog.dismiss();

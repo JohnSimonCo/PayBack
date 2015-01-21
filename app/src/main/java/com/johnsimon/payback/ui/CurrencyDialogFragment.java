@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class CurrencyDialogFragment extends DataDialogFragment {
 
-	public final static String CONTINUE_TO_NFC = "CONTINUE_TO_NFC";
+	public final static String CONTINUE = "CONTINUE";
 
 	private AlertDialog alertDialog;
 
@@ -57,7 +57,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		Bundle args = getArguments();
 		if (args != null) {
-			continueToNfc = getArguments().getBoolean(CONTINUE_TO_NFC, false);
+			continueToNfc = getArguments().getBoolean(CONTINUE, false);
 			if (continueToNfc) {
 				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
 			}

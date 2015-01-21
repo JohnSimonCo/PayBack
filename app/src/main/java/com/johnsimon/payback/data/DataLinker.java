@@ -10,9 +10,6 @@ import com.johnsimon.payback.async.Subscription;
 
 import java.util.ArrayList;
 
-/**
- * Created by John on 2015-01-13.
- */
 public class DataLinker {
 
     private AppData data;

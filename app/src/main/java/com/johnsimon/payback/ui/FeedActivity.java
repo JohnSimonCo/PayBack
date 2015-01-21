@@ -132,7 +132,7 @@ public class FeedActivity extends DataActivity implements
 
     @Override
     protected void onDataReceived() {
-        if(isAll()) {
+        if (isAll()) {
             feed = data.debts;
         } else {
             feed = data.feed(person);
