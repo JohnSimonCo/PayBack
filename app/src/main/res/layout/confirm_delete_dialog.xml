@@ -42,18 +42,14 @@
             android:layout_height="36dp" />
 
         <com.devspark.robototextview.widget.RobotoButton
-            app:fontFamily="roboto"
-            app:textWeight="medium"
-            android:textAllCaps="true"
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
             android:text="@string/confirm"
             android:id="@+id/confirm_delete_confirm"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_height="36dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="@color/green_strong"
-            android:textSize="14sp"/>
+            android:layout_height="36dp"    />
     </LinearLayout>
 
 </LinearLayout>

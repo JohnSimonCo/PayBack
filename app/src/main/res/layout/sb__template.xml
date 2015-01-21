@@ -14,7 +14,6 @@
         android:textStyle="bold"
         android:textAllCaps="true"
         android:textColor="@color/sb__action_text_color"
-        android:background="#ff0000"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 

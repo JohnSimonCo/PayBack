@@ -56,30 +56,22 @@
         android:orientation="horizontal">
 
         <com.devspark.robototextview.widget.RobotoButton
-            app:fontFamily="roboto"
-            app:textWeight="medium"
-            android:textAllCaps="true"
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
             android:text="@string/cancel"
             android:id="@+id/from_who_dialog_cancel"
             android:layout_width="88dp"
-            android:layout_height="36dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:textSize="14sp"
-            android:textColor="@color/green_strong"/>
+            android:layout_height="36dp"/>
 
         <com.devspark.robototextview.widget.RobotoButton
-            app:fontFamily="roboto"
-            app:textWeight="medium"
-            android:textAllCaps="true"
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
             android:text="@string/ok"
             android:id="@+id/from_who_dialog_confirm"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_height="36dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="@color/green_strong"
-            android:textSize="14sp"/>
+            android:layout_height="36dp"    />
     </LinearLayout>
 
 </LinearLayout>
