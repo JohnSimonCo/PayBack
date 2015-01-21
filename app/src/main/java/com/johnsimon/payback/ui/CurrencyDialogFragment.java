@@ -30,6 +30,7 @@ import java.util.Set;
 public class CurrencyDialogFragment extends DataDialogFragment {
 
 	public final static String CONTINUE = "CONTINUE";
+	public final static String CANCELABLE = "CANCELABLE";
 	public final static String SHOW_INFO_TEXT = "SHOW_INFO_TEXT";
 
 	private AlertDialog alertDialog;
@@ -58,12 +59,13 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		Bundle args = getArguments();
 		if (args != null) {
-			continueToNfc = getArguments().getBoolean(CONTINUE, false);
-			if (getArguments().getBoolean(SHOW_INFO_TEXT, false)) {
+			continueToNfc = args.getBoolean(CONTINUE, false);
+			if (args.getBoolean(SHOW_INFO_TEXT, false)) {
 				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
 			} else {
 				rootView.findViewById(R.id.currency_info_text_pusher).setVisibility(View.VISIBLE);
 			}
+			setCancelable(args.getBoolean(CANCELABLE));
 		}
 
 		final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);

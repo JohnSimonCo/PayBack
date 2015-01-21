@@ -32,6 +32,10 @@ public class ColorPalette {
 	public int nextIndex() {
 		SparseIntArray usedIndices = new SparseIntArray(palette.length);
 
+		for (int i = 0; i < palette.length; i++) {
+			usedIndices.put(i, 0);
+		}
+
 		for (Person person : dataAcitivity.getData().people) {
 			usedIndices.put(person.paletteIndex, usedIndices.get(person.paletteIndex) + 1);
 		}

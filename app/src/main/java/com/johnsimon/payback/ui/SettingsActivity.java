@@ -99,6 +99,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                 Bundle args = new Bundle();
 				args.putBoolean(CurrencyDialogFragment.CONTINUE, false);
 				args.putBoolean(CurrencyDialogFragment.SHOW_INFO_TEXT, false);
+				args.putBoolean(CurrencyDialogFragment.CANCELABLE, true);
 
 				currencyDialogFragment.setArguments(args);
 				currencyDialogFragment.show(getFragmentManager(), "settings_currency");

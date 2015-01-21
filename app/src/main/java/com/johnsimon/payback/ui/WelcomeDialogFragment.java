@@ -62,6 +62,9 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 			Bundle args = new Bundle();
 			args.putBoolean(CurrencyDialogFragment.CONTINUE, true);
 			args.putBoolean(CurrencyDialogFragment.SHOW_INFO_TEXT, true);
+			args.putBoolean(CurrencyDialogFragment.CANCELABLE, false);
+
+			fragment.setArguments(args);
 			fragment.show(getFragmentManager(), "currenct_shit");
 
 			alertDialog.dismiss();
