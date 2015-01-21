@@ -12,14 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.devspark.robototextview.widget.RobotoTextView
-            app:fontFamily="roboto"
-            app:textWeight="medium"
+        <TextView
+            android:gravity="center_horizontal"
+            android:fontFamily="sans-serif-light"
             android:textColor="#ffffff"
-            android:text="20 Kr (SEK)"
-            android:background="@color/green"
+            android:background="#009688"
             android:id="@+id/welcome_currency_preview"
-            android:textSize="28sp"
+            android:textSize="36sp"
             android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"    />
@@ -31,6 +30,8 @@
             android:paddingTop="16dp"
             android:textColor="@color/gray_text_light"
             android:textSize="18sp"
+            android:visibility="gone"
+            android:id="@+id/currency_info_text"
             android:text="@string/currency_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -75,18 +76,15 @@
         <com.devspark.robototextview.widget.RobotoButton
             app:fontFamily="roboto"
             app:textWeight="medium"
+            style="@style/FlatButton"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_gravity="end"
-            android:textAllCaps="true"
             android:text="@string/welcome_continue"
             android:id="@+id/welcome_continue"
             android:layout_width="94dp"
             android:layout_height="42dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="@color/green_strong"
-            android:clickable="false"
-            android:textSize="16sp"/>
+            android:clickable="false"/>
 
     </LinearLayout>
 </ScrollView>

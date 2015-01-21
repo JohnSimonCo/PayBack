@@ -77,14 +77,14 @@
         <item name="android:textColor">@color/sb__text_color</item>
     </style>
 
+
+    <!-- Material API 21 Compability styles -->
     <style name="FlatButton">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/button_color</item>
     </style>
-
-    <!-- Material API 21 Compability styles -->
 
     <style name="FeedRecyclerView">
 

@@ -107,6 +107,8 @@
     <string name="select_currency">Select currency</string>
     <string name="select">Select</string>
     <string name="currency_symbol">Currency symbol</string>
+    <string name="change_currency">Change currency</string>
+    <string name="change_currency_symbol">Currency symbol</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

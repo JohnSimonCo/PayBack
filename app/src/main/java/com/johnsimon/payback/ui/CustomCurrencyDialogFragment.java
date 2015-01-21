@@ -91,14 +91,14 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 	}
 
 	private void disableButton(Button btn) {
-		btn.setTextColor(getResources().getColor(R.color.green_disabled));
+		btn.setTextColor(getResources().getColor(R.color.button_color_disabled));
 		btn.setOnClickListener(null);
 		btn.setClickable(false);
 		btn.setEnabled(false);
 	}
 
 	private void enableButton(Button btn) {
-		btn.setTextColor(getResources().getColor(R.color.green_strong));
+		btn.setTextColor(getResources().getColor(R.color.button_color));
 		btn.setOnClickListener(clickListener);
 		btn.setClickable(true);
 		btn.setEnabled(true);

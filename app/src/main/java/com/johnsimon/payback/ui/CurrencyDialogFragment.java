@@ -5,24 +5,25 @@ import android.app.Dialog;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.v7.internal.widget.TintCheckBox;
+import android.support.v7.internal.widget.TintSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
-import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.UserCurrency;
-import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -40,10 +41,10 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	private TintCheckBox custom_currency_check_after;
 
-	private RobotoTextView welcome_currency_preview;
+	private TextView welcome_currency_preview;
 
 	private String displayCurrency = "$";
-	private Currency selectedCurrency = Currency.getInstance(Locale.getDefault());
+	private String selectedCurrency = Currency.getInstance(Locale.getDefault()).getSymbol();
 
 	private boolean continueToNfc = false;
 
@@ -57,6 +58,9 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			continueToNfc = getArguments().getBoolean(CONTINUE_TO_NFC, false);
+			if (continueToNfc) {
+				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
+			}
 		}
 
 		final Button welcome_continue = (Button) rootView.findViewById(R.id.welcome_continue);
@@ -87,54 +91,57 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		custom_currency_check_after = (TintCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
 
-		welcome_currency_preview = (RobotoTextView) rootView.findViewById(R.id.welcome_currency_preview);
+		welcome_currency_preview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
+
+		final List<String> order = Arrays.asList("$", "€", "£", "₪", "₫", "₩", "¥", "฿");
 
 		Set<Currency> currencySet = getAllCurrencies();
 
-		final ArrayList<Currency> currencyListUnsorted = new ArrayList<>(currencySet);
-		final ArrayList<Currency> currencyList = new ArrayList<>();
+		final ArrayList<String> currencyNames = new ArrayList<>(currencySet.size());
+		for(Currency currency : currencySet) {
+			currencyNames.add(currency.getSymbol());
+		}
 
-		for (int i = 0; i < currencyListUnsorted.size(); i++) {
-			if (currencyListUnsorted.get(i).getSymbol().length() == 1) {
-				currencyList.add(currencyListUnsorted.get(i));
+		Collections.sort(currencyNames, new Comparator<String>() {
+			@Override
+			public int compare(String a, String b) {
+				if(a.length() == 1) {
+					if(b.length() == 1) {
+						if(order.contains(a)) {
+							return order.contains(b) ? order.indexOf(a) - order.indexOf(b) : -1;
+						} else return 1;
+					} else return -1;
+				} else if(b.length() == 1) {
+					return 1;
+				} else {
+					return a.compareToIgnoreCase(b);
+				}
 			}
-		}
+		});
 
-		for(Iterator<Currency> iterator = currencyListUnsorted.iterator(); iterator.hasNext();) {
-			if (iterator.next().getSymbol().length() == 1) {
-				iterator.remove();
-			}
-		}
-
-		Collections.sort(currencyListUnsorted, new Resource.AlphabeticalCurrencyComparator());
-
-		for (int i = 0; i < currencyListUnsorted.size(); i++) {
-			currencyList.add(currencyListUnsorted.get(i));
-		}
-
-		final String[] currencyNameList = new String[currencyList.size()];
-
-		for (int i = 0; i < currencyList.size(); i++) {
-			currencyNameList[i] = currencyList.get(i).getSymbol();
-		}
 
 		if (savedInstanceState != null) {
-			selectedCurrency = currencyList.get(3);
-			displayCurrency = currencyNameList[3];
-		}
 
-		Toast.makeText(getActivity(), "ONCERATEVIEW", Toast.LENGTH_LONG).show();
+			String cc = savedInstanceState.getString(CURRENCY_SAVE_KEY, "FAILED");
+			if (cc.equals("FAILED")) {
+				selectedCurrency = Currency.getInstance(Locale.getDefault()).getSymbol();
+			} else {
+				selectedCurrency = cc;
+			}
+
+			displayCurrency = savedInstanceState.getString(CURRENCY_DISPLAY_SAVE_KEY, "$");
+		}
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new MaterialDialog.Builder(getActivity())
 						.title(R.string.select_currency)
-						.items(currencyNameList)
-						.itemsCallbackSingleChoice(currencyList.indexOf(displayCurrency), new MaterialDialog.ListCallback() {
+						.items(currencyNames.toArray(new String[currencyNames.size()]))
+						.itemsCallbackSingleChoice(currencyNames.indexOf(selectedCurrency), new MaterialDialog.ListCallback() {
 							@Override
 							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								selectedCurrency = currencyList.get(which);
+								selectedCurrency = currencyNames.get(which);
 								displayCurrency = text.toString();
 								updatePreview();
 							}
@@ -176,8 +183,11 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	}
 
 	private void updatePreview() {
-		UserCurrency cur = new UserCurrency(selectedCurrency.getSymbol(), displayCurrency, !custom_currency_check_after.isChecked());
-		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency.getSymbol()) ? "" : " (" + selectedCurrency.getSymbol() + ")"));
+		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked());
+		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
+
+		welcome_select_currency.setText(selectedCurrency);
+		welcome_select_currency_display.setText(getString(R.string.change_currency_symbol));
 	}
 
 	private static Set<Currency> getAllCurrencies() {
@@ -187,9 +197,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		for(Locale loc : locs) {
 			try {
 				toret.add( Currency.getInstance( loc ) );
-			} catch(Exception exc)
-			{
-				// Locale not found
+			} catch(Exception exc){
 			}
 		}
 
@@ -197,29 +205,9 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		if (savedInstanceState != null) {
-
-			Toast.makeText(getActivity(), "ONACTIVITYCERATYE", Toast.LENGTH_LONG).show();
-
-			Currency.getInstance(Locale.getDefault()).getCurrencyCode();
-
-			String cc = savedInstanceState.getString(CURRENCY_SAVE_KEY, "FAILED");
-			if (cc.equals("FAILED")) {
-				selectedCurrency = Currency.getInstance(Locale.getDefault());
-			} else {
-				selectedCurrency = Currency.getInstance(cc);
-			}
-
-			displayCurrency = savedInstanceState.getString(CURRENCY_DISPLAY_SAVE_KEY, "$");
-		}
-	}
-
-	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency.getCurrencyCode());
+		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency);
 		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
 	}
 
@@ -234,7 +222,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			data.preferences.set("currency", new UserCurrency(selectedCurrency.getSymbol(), displayCurrency, !custom_currency_check_after.isChecked()));
+			data.preferences.set("currency", new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()));
 			storage.commit();
 
 			FeedFragment.adapter.notifyDataSetChanged();
