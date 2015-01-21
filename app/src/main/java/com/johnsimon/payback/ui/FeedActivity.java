@@ -173,7 +173,9 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 
-        Person oldPerson = person;
+		Undo.completeActions();
+
+		Person oldPerson = person;
 
 		if(item.type == NavigationDrawerItem.Type.All) {
 			person = null;
@@ -188,8 +190,6 @@ public class FeedActivity extends DataActivity implements
         sort();
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
-
-		Undo.completeActions();
 
 		storage.requestRefresh();
 
