@@ -77,7 +77,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 					personPickerDialogFragmentRename.completeCallback = renameCallback;
 					break;
 				case R.id.person_detail_dialog_merge:
-					PersonPickerDialogFragment personPickerDialogFragmentMerge = new PersonPickerDialogFragment();
+					final PersonPickerDialogFragment personPickerDialogFragmentMerge = new PersonPickerDialogFragment();
 
 					Bundle argsMerge = new Bundle();
 					argsMerge.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
@@ -89,8 +89,6 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 					personPickerDialogFragmentMerge.completeCallback = mergeCallback;
 					break;
 				case R.id.person_detail_dialog_delete:
-
-					//TODO ALLA UNDOS
 					new MaterialDialog.Builder(getActivity())
                             .content(R.string.delete_person_text)
                             .positiveText(R.string.delete)
@@ -100,27 +98,28 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
 
-                                    final int restorePersonIndex = data.people.indexOf(person);
+                                    final int index = data.people.indexOf(person);
 
-									Activity activity = getActivity();
-									if (activity != null) {
-										Snackbar.with(getActivity().getApplicationContext())
-												.text(getString(R.string.deleted_person))
-												.actionLabel(getString(R.string.undo))
-												.actionColor(getResources().getColor(R.color.green))
-												.actionListener(new Snackbar.ActionClickListener() {
-													@Override
-													public void onActionClicked() {
-														//TODO ALLA UNDOS
-														//data.people.add(restorePersonIndex, person);
-														editPersonCallback.onEdit();
-													}
-												})
-												.show(getActivity());
-									}
+									Undo.executeAction(getActivity(), R.string.deleted_person, new Undo.UndoableAction() {
+										@Override
+										public void onDisplay() {
+											data.people.remove(index);
+											editPersonCallback.onEdit();
+										}
 
+										@Override
+										public void onRevert() {
+											data.people.add(index, person);
+											editPersonCallback.onEdit();
+										}
 
-                                    data.delete(person);
+										@Override
+										public void onCommit() {
+											data.delete(person);
+											storage.commit();
+										}
+									});
+
                                     cancel();
 
                                     dialog.dismiss();

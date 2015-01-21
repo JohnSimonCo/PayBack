@@ -169,8 +169,6 @@ public class PeopleManagerActivity extends DataActivity {
 					public void onEdit() {
 						adapter.notifyDataSetChanged();
 						adapter.updateEmptyViewVisibility();
-						storage.commit();
-						Resource.actionComplete(self);
 					}
 				};
 			}

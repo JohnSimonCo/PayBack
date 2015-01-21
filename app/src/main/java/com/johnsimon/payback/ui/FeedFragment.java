@@ -277,7 +277,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 					Undo.executeAction(getActivity(), R.string.deleted_debt, new Undo.UndoableAction() {
 						@Override
 						public void onDisplay() {
-							FeedActivity.feed.remove(debt);
+							FeedActivity.feed.remove(index);
 							adapter.notifyItemRemoved(index);
 							adapter.checkAdapterIsEmpty();
 
