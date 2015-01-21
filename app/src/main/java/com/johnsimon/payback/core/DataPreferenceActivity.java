@@ -14,6 +14,7 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.util.Undo;
 
 public class DataPreferenceActivity extends PreferenceActivity implements DataActivityInterface {
 
@@ -86,6 +87,8 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
 		storage.disconnect();
+
+		Undo.completeActions();
 	}
 
 	@Override
