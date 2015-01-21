@@ -88,6 +88,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		storage.disconnect();
 
+
 		Undo.completeActions();
 	}
 
