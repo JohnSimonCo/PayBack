@@ -33,6 +33,7 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
+import com.johnsimon.payback.core.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
@@ -173,7 +174,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 	@Override
 	protected void onDataReceived() {
-		displayTotalDebt(getResources());
+		displayTotalDebt(getResources(), data.preferences.getCurrency());
 
 		if (data.preferences.getBackground().equals("mountains")) {
 			headerImage.setImageResource(R.drawable.art);
@@ -197,11 +198,11 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 		if (getActivity() != null && getResources() != null) {
 			if (getActivity() != null && getResources() != null) {
-				displayTotalDebt(getResources());
+				displayTotalDebt(getResources(), data.preferences.getCurrency());
 			}
 		}
 	}
-	public void displayTotalDebt(Resources resources) {
+	public static void displayTotalDebt(Resources resources, UserCurrency currency) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -210,7 +211,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
+		totalDebtTextView.setText(Debt.totalString(debt, currency, resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -287,7 +288,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                                         }
 
 										if (getActivity() != null && getResources() != null) {
-											displayTotalDebt(getResources());
+											displayTotalDebt(getResources(), data.preferences.getCurrency());
 										}
                                         adapter.notifyItemInserted(indexFeed);
                                         adapter.checkAdapterIsEmpty();
@@ -302,7 +303,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                         }
 
 						if (getActivity() != null && getResources() != null) {
-							displayTotalDebt(getResources());
+							displayTotalDebt(getResources(), data.preferences.getCurrency());
 						}
                         adapter.notifyItemRemoved(index);
                         adapter.checkAdapterIsEmpty();

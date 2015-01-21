@@ -22,6 +22,12 @@
             android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"    />
+        
+        <View
+            android:visibility="gone"
+            android:id="@+id/currency_info_text_pusher"
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
 
         <TextView
             android:paddingBottom="8dp"

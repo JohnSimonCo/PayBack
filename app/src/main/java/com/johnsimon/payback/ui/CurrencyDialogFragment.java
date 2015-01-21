@@ -30,11 +30,12 @@ import java.util.Set;
 public class CurrencyDialogFragment extends DataDialogFragment {
 
 	public final static String CONTINUE = "CONTINUE";
+	public final static String SHOW_INFO_TEXT = "SHOW_INFO_TEXT";
 
 	private AlertDialog alertDialog;
 
-	private final String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
-	private final String CURRENCY_DISPLAY_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
+	public final static String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
+	public final static String CURRENCY_DISPLAY_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
@@ -58,8 +59,10 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			continueToNfc = getArguments().getBoolean(CONTINUE, false);
-			if (continueToNfc) {
+			if (getArguments().getBoolean(SHOW_INFO_TEXT, false)) {
 				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
+			} else {
+				rootView.findViewById(R.id.currency_info_text_pusher).setVisibility(View.VISIBLE);
 			}
 		}
 
@@ -119,7 +122,6 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			}
 		});
 
-
 		if (savedInstanceState != null) {
 
 			String cc = savedInstanceState.getString(CURRENCY_SAVE_KEY, "FAILED");
@@ -176,9 +178,12 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		updatePreview();
 
+		setCancelable(false);
+
 		builder.setView(rootView);
 
 		alertDialog = builder.create();
+
 		return alertDialog;
 	}
 
@@ -233,6 +238,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			}
 
 			alertDialog.dismiss();
+
+			FeedFragment.displayTotalDebt(getResources(), new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()));
 		}
 	};
 
