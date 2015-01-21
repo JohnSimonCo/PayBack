@@ -53,7 +53,7 @@ public class AppData {
 	}
 
     public ArrayList<Debt> feed(Person person) {
-        if(person == null) return debts;
+        if(person == null) return new ArrayList<>(debts);
 
         ArrayList<Debt> feed = new ArrayList<Debt>();
         for(Debt debt : debts) {

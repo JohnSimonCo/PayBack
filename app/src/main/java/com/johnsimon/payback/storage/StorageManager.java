@@ -10,6 +10,7 @@ public class StorageManager {
             storage = new DriveStorage(context);
         }
 
+		//TODO remove this
         ((DriveStorage) storage).activity = context;
 
         return storage;

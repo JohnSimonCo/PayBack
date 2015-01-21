@@ -268,7 +268,8 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             }
 
 			if (preference.getKey().equals("pref_background")) {
-				data.preferences.set("background", value);
+				data.preferences.background.setValue((String) value);
+				storage.commit();
 				return true;
 			}
 
