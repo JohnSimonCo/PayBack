@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.PoorMansPromise;
 import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -14,12 +15,14 @@ import java.util.Iterator;
  */
 public class Undo {
 	private final static int DURATION = 2500;
+	private final static int DELAY = 550;
 
 	private static ArrayList<QueuedAction> queuedActions = new ArrayList<>();
 
 	public static void executeAction(Activity context, int textId, final UndoableAction action) {
 
-		final QueuedAction queuedAction = new QueuedAction(action);
+		final PoorMansPromise promise = new PoorMansPromise();
+		final QueuedAction queuedAction = new QueuedAction(action, promise);
 		final Handler handler = new Handler();
 		final Runnable runnable = new Runnable() {
 			@Override
@@ -40,7 +43,7 @@ public class Undo {
 				@Override
 				public void onShow(int i) {
 					action.onDisplay();
-					handler.postDelayed(runnable, DURATION);
+					handler.postDelayed(runnable, DURATION + DELAY);
 				}
 
 				@Override
@@ -74,14 +77,16 @@ public class Undo {
 	}
 
 
-	public static class QueuedAction {
+	private static class QueuedAction {
 		public UndoableAction action;
+		public PoorMansPromise promise;
 		public Snackbar snackbar;
 		public Handler handler;
 		public Runnable runnable;
 
-		public QueuedAction(UndoableAction action) {
+		public QueuedAction(UndoableAction action, PoorMansPromise promise) {
 			this.action = action;
+			this.promise = promise;
 		}
 	}
 

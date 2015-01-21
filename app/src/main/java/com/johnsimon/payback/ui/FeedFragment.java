@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -286,6 +287,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 						public void onRevert() {
 							FeedActivity.feed.add(index, debt);
 							adapter.notifyItemInserted(index);
+							adapter.checkAdapterIsEmpty();
 
 							displayTotalDebt(getResources());
 						}
