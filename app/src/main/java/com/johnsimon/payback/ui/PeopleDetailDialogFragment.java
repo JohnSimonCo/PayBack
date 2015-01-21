@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
@@ -103,13 +104,14 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 									Undo.executeAction(getActivity(), R.string.deleted_person, new Undo.UndoableAction() {
 										@Override
 										public void onDisplay() {
-											data.people.remove(index);
-											editPersonCallback.onEdit();
+											PeopleListAdapter.people.remove(index);
+
+											cancel();
 										}
 
 										@Override
 										public void onRevert() {
-											data.people.add(index, person);
+											PeopleListAdapter.people.add(index, person);
 											editPersonCallback.onEdit();
 										}
 
@@ -120,9 +122,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 										}
 									});
 
-                                    cancel();
-
-                                    dialog.dismiss();
+									dialog.dismiss();
                                 }
 
                                 @Override
@@ -146,13 +146,14 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 			Undo.executeAction(getActivity(), R.string.renamed_person, new Undo.UndoableAction() {
 				@Override
 				public void onDisplay() {
-					data.rename(person, name);
-					editPersonCallback.onEdit();
+					person.setName(name);
+
+					cancel();
 				}
 
 				@Override
 				public void onRevert() {
-					data.rename(person, oldName);
+					person.setName(oldName);
 					editPersonCallback.onEdit();
 				}
 
@@ -179,39 +180,27 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 							super.onPositive(dialog);
 
 							final int index = data.people.indexOf(person);
-							final ArrayList<Debt> debts = new ArrayList<Debt>();
-							for (Debt debt : data.debts) {
-								if (debt.getOwner() == person) {
-									debts.add(debt);
+
+							Undo.executeAction(getActivity(), R.string.merged_people, new Undo.UndoableAction() {
+								@Override
+								public void onDisplay() {
+									PeopleListAdapter.people.remove(index);
+
+									cancel();
 								}
-							}
 
-							Snackbar.with(getActivity().getApplicationContext())
-									.text(getString(R.string.merged_people))
-									.actionLabel(getString(R.string.undo))
-									.actionColor(getResources().getColor(R.color.green))
-									.actionListener(new Snackbar.ActionClickListener() {
-										@Override
-										public void onActionClicked() {
-											data.unmerge(person, debts, index);
+								@Override
+								public void onRevert() {
+									PeopleListAdapter.people.add(index, person);
+									editPersonCallback.onEdit();
+								}
 
-											editPersonCallback.onEdit();
-										}
-									})
-									.eventListener(new Snackbar.EventListener() {
-										@Override public void onShow(int i) {}
-
-										@Override
-										public void onDismiss(int i) {
-
-										}
-									})
-									.show(getActivity());
-
-
-							//from, to
-							data.merge(person, other);
-							cancel();
+								@Override
+								public void onCommit() {
+									data.merge(person, other);
+									storage.commit();
+								}
+							});
 
 							dialog.dismiss();
 						}

@@ -132,12 +132,6 @@ public class AppData {
         delete(from);
     }
 
-    public void unmerge(Person restore, ArrayList<Debt> debts, int index) {
-        for(Debt debt : debts) {
-            debt.setOwner(restore);
-        }
-        //people.add(index, restore);
-    }
     public void delete(Person person) {
         deleteDebts(person);
         deleted.add(person.id);
@@ -168,10 +162,6 @@ public class AppData {
 
     public void move(Debt debt, Person person) {
         debt.setOwner(person);
-    }
-
-    public void rename(Person person, String name) {
-        person.setName(name);
     }
 
     public void sync(Person person, DebtSendable[] debts) {
