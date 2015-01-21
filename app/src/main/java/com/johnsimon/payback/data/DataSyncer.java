@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public class DataSyncer {
     public static AppData sync(AppData a, AppData b) {
+        //TODO bara synka det som skiljer sig
         HashSet<UUID> deleted = new HashSet<>();
         deleted.addAll(a.deleted);
         deleted.addAll(b.deleted);

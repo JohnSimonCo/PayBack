@@ -3,12 +3,8 @@ package com.johnsimon.payback.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.UUID;
 
-/**
- * Created by John on 2015-01-20.
- */
 public class PeopleOrder extends ArrayList<UUID> {
 
 	public long touched;
@@ -17,9 +13,11 @@ public class PeopleOrder extends ArrayList<UUID> {
 		this.touched = System.currentTimeMillis();
 	}
 
-	public PeopleOrder(PeopleOrder other) {
-		super(other);
-		this.touched = System.currentTimeMillis();
+	public PeopleOrder(ArrayList<Person> people) {
+        this();
+        for(Person person : people) {
+            add(person.id);
+        }
 	}
 
 	/*protected void touch() {
@@ -36,22 +34,14 @@ public class PeopleOrder extends ArrayList<UUID> {
         return list;
 	}
 
-	private PeopleOrder reorder(Comparator<UUID> comparator) {
-		PeopleOrder copy = new PeopleOrder(this);
+	private SortResult sort(ArrayList<Person> people, Comparator<Person> comparator) {
+        ArrayList<Person> copy = new ArrayList<>();
 		Collections.sort(copy, comparator);
-		return copy;
+		return new SortResult(copy, new PeopleOrder(people));
 	}
 
-    private HashMap<UUID, Person> createMap(ArrayList<Person> people) {
-        HashMap<UUID, Person> map = new HashMap<>(people.size());
-        for(Person person : people) {
-            map.put(person.id, person);
-        }
-        return map;
-    }
-
-	public PeopleOrder reorderAlphabetically(ArrayList<Person> people) {
-		return reorder(new AlphabeticalComparator(createMap(people)));
+	public SortResult sortAlphabetically(ArrayList<Person> people) {
+		return sort(people, new AlphabeticalComparator());
 	}
 
     private PeopleOrder order = this;
@@ -63,16 +53,20 @@ public class PeopleOrder extends ArrayList<UUID> {
         }
     }
 
-	public static class AlphabeticalComparator implements Comparator<UUID> {
-		public HashMap<UUID, Person> peopleMap;
-		public AlphabeticalComparator(HashMap<UUID, Person> peopleMap) {
-			this.peopleMap = peopleMap;
-		}
-
+	public static class AlphabeticalComparator implements Comparator<Person> {
 		@Override
-		public int compare(UUID lhs, UUID rhs) {
-			Person a = peopleMap.get(lhs), b = peopleMap.get(rhs);
+		public int compare(Person a, Person b) {
 			return a.getName().compareToIgnoreCase(b.getName());
 		}
 	}
+
+    public static class SortResult {
+        public ArrayList<Person> people;
+        public PeopleOrder order;
+
+        public SortResult(ArrayList<Person> people, PeopleOrder order) {
+            this.people = people;
+            this.order = order;
+        }
+    }
 }
