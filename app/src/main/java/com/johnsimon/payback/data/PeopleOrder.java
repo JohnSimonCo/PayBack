@@ -1,13 +1,9 @@
 package com.johnsimon.payback.data;
 
-import android.provider.Contacts;
-
-import com.johnsimon.payback.util.Resource;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -35,17 +31,9 @@ public class PeopleOrder extends ArrayList<UUID> {
 	}
 
 	public ArrayList<Person> order(ArrayList<Person> people) {
-		ArrayList<Person> list = new ArrayList<>();
-
-		for(UUID id : this) {
-			for(Person person : people) {
-				if(person.id.equals(id)) {
-					list.add(person);
-					break;
-				}
-			}
-		}
-		return list;
+		ArrayList<Person> list = new ArrayList<>(people);
+        Collections.sort(list, new OrderComparator());
+        return list;
 	}
 
 	private PeopleOrder reorder(Comparator<UUID> comparator) {
@@ -54,28 +42,36 @@ public class PeopleOrder extends ArrayList<UUID> {
 		return copy;
 	}
 
+    private HashMap<UUID, Person> createMap(ArrayList<Person> people) {
+        HashMap<UUID, Person> map = new HashMap<>(people.size());
+        for(Person person : people) {
+            map.put(person.id, person);
+        }
+        return map;
+    }
+
 	public PeopleOrder reorderAlphabetically(ArrayList<Person> people) {
-		return reorder(new AlphabeticalComparator(people));
+		return reorder(new AlphabeticalComparator(createMap(people)));
 	}
 
-	private static Person find(ArrayList<Person> people, UUID id) {
-		for(Person person : people) {
-			if(person.id.equals(id)) {
-				return person;
-			}
-		}
-		return null;
-	}
+    private PeopleOrder order = this;
+
+    public class OrderComparator implements Comparator<Person> {
+        @Override
+        public int compare(Person a, Person b) {
+            return order.indexOf(a.id) - order.indexOf(b.id);
+        }
+    }
 
 	public static class AlphabeticalComparator implements Comparator<UUID> {
-		public ArrayList<Person> people;
-		public AlphabeticalComparator(ArrayList<Person> people) {
-			this.people = people;
+		public HashMap<UUID, Person> peopleMap;
+		public AlphabeticalComparator(HashMap<UUID, Person> peopleMap) {
+			this.peopleMap = peopleMap;
 		}
 
 		@Override
 		public int compare(UUID lhs, UUID rhs) {
-			Person a = find(people, lhs), b = find(people, rhs);
+			Person a = peopleMap.get(lhs), b = peopleMap.get(rhs);
 			return a.getName().compareToIgnoreCase(b.getName());
 		}
 	}

@@ -1,17 +1,15 @@
 package com.johnsimon.payback.data;
 
-import android.provider.Contacts;
-
 import com.google.gson.Gson;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
-import com.johnsimon.payback.preferences.Preference;
 import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -35,8 +33,8 @@ public class AppData {
 		this.preferences = preferences;
     }
 
-    public AppData() {
-        this(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), new PeopleOrder(), Preferences.defaultPreferences());
+    public static AppData defaultAppData() {
+        return new AppData(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), new PeopleOrder(), Preferences.defaultPreferences());
     }
 
     public String save() {
@@ -272,7 +270,7 @@ public class AppData {
 
     public static AppData fromJson(String JSON) {
 		if(JSON == null) {
-			return new AppData();
+			return AppData.defaultAppData();
 		}
 
 		AppData data = new Gson().fromJson(JSON, AppData.class);
