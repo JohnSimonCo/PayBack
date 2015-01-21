@@ -69,6 +69,8 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	protected void onStart() {
 		super.onStart();
 
+		Undo.completeActions();
+
 		storage.subscription.listen(dataLoadedCallback);
 
 		dataLink.listen(dataLinkedCallback);
@@ -87,8 +89,6 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
 		storage.disconnect();
-
-		Undo.completeActions();
 	}
 
 	@Override

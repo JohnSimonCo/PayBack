@@ -424,7 +424,6 @@ public class FeedActivity extends DataActivity implements
 
 		feed = data.feed(person);
 
-		NavigationDrawerFragment.adapter.clearItems();
 		NavigationDrawerFragment.adapter.setItems(data.peopleOrdered());
 		navigationDrawerFragment.setSelectedPerson(person);
 

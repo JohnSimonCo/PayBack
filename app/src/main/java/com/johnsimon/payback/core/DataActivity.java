@@ -70,6 +70,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
     protected void onStart() {
         super.onStart();
 
+		Undo.completeActions();
+
 		storage.subscription.listen(dataLoadedCallback);
 
 		dataLink.listen(dataLinkedCallback);
@@ -89,7 +91,6 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
         storage.disconnect();
 
-		Undo.completeActions();
     }
 
     @Override
