@@ -42,7 +42,6 @@ public class DataSyncer {
         if(!a.preferences.equals(b.preferences)) {
             changed = true;
 
-            preferences = new Preferences();
             for(Map.Entry<String, Preference> entry : a.preferences.entrySet()) {
                 String key = entry.getKey();
                 Preference aValue = entry.getValue(), bValue = b.preferences.get(key);
