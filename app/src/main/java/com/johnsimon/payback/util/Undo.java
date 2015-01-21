@@ -10,19 +10,15 @@ import com.williammora.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created by John on 2015-01-21.
- */
 public class Undo {
 	private final static int DURATION = 2500;
-	private final static int DELAY = 550;
+	private final static int DELAY = 600;
 
 	private static ArrayList<QueuedAction> queuedActions = new ArrayList<>();
 
 	public static void executeAction(Activity context, int textId, final UndoableAction action) {
 
-		final PoorMansPromise promise = new PoorMansPromise();
-		final QueuedAction queuedAction = new QueuedAction(action, promise);
+		final QueuedAction queuedAction = new QueuedAction(action);
 		final Handler handler = new Handler();
 		final Runnable runnable = new Runnable() {
 			@Override
@@ -79,14 +75,12 @@ public class Undo {
 
 	private static class QueuedAction {
 		public UndoableAction action;
-		public PoorMansPromise promise;
 		public Snackbar snackbar;
 		public Handler handler;
 		public Runnable runnable;
 
-		public QueuedAction(UndoableAction action, PoorMansPromise promise) {
+		public QueuedAction(UndoableAction action) {
 			this.action = action;
-			this.promise = promise;
 		}
 	}
 
