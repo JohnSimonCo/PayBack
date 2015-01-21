@@ -3,6 +3,8 @@ package com.johnsimon.payback.core;
 import com.johnsimon.payback.data.Debt;
 
 public class UserCurrency {
+    //TODO tvinga currency och "mini-migrata" alla nuvarande debts till nya currencyn
+
 	public final String id;
 	public final String displayName;
 	public final boolean before;
@@ -34,7 +36,9 @@ public class UserCurrency {
 	}
 
 	public String render(String amount, String currencyId) {
-		return renderCurrency(amount, currencyId.equals(id) && displayName != null ? displayName : currencyId);
+        //TODO efter launch: displaya rätt currency
+        //return renderCurrency(amount, currencyId.equals(id) && displayName != null ? displayName : currencyId);
+        return renderCurrency(amount, getDisplayName());
 	}
 
 	private String renderCurrency(String amount, String symbol) {

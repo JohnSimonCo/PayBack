@@ -15,6 +15,7 @@ public class PeopleOrder extends ArrayList<UUID> {
 
 	public PeopleOrder(ArrayList<Person> people) {
         this();
+
         for(Person person : people) {
             add(person.id);
         }

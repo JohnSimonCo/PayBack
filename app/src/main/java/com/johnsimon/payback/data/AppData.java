@@ -9,7 +9,6 @@ import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -24,6 +23,10 @@ public class AppData {
 	public Preferences preferences;
 
     public transient ArrayList<Contact> contacts;
+
+    public AppData() {
+
+    }
 
     public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted, PeopleOrder peopleOrder, Preferences preferences) {
         this.people = people;

@@ -10,25 +10,53 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DataSyncer {
-    public static AppData sync(AppData a, AppData b) {
-        //TODO bara synka det som skiljer sig
-        HashSet<UUID> deleted = new HashSet<>();
-        deleted.addAll(a.deleted);
-        deleted.addAll(b.deleted);
+    public static boolean sync(AppData a, AppData b, AppData out) {
+        boolean changed = false;
 
-        removeDeleted(a.people, deleted);
-        removeDeleted(b.people, deleted);
-        removeDeleted(a.debts, deleted);
-        removeDeleted(b.debts, deleted);
+        ArrayList<Person> people = a.people;
+        ArrayList<Debt> debts = a.debts;
+        HashSet<UUID> deleted = a.deleted;
+        PeopleOrder peopleOrder = a.peopleOrder;
+        Preferences preferences = a.preferences;
 
-        ArrayList<Person> people = sync(a.people, b.people);
-        ArrayList<Debt> debts = sync(a.debts, b.debts);
+        if(!a.people.equals(b.people) || !a.debts.equals(b.debts) || !a.deleted.equals(b.deleted)) {
+            changed = true;
 
-		PeopleOrder peopleOrder = a.peopleOrder.syncWith(b.peopleOrder);
+            deleted.addAll(b.deleted);
 
-		Preferences preferences = syncPreferences(a.preferences, b.preferences);
+            removeDeleted(a.people, deleted);
+            removeDeleted(b.people, deleted);
+            removeDeleted(a.debts, deleted);
+            removeDeleted(b.debts, deleted);
 
-        return new AppData(people, debts, deleted, peopleOrder, preferences);
+            people = sync(a.people, b.people);
+            debts = sync(a.debts, b.debts);
+        }
+
+        if(!a.peopleOrder.equals(b.peopleOrder)) {
+            changed = true;
+
+            peopleOrder = a.peopleOrder.syncWith(b.peopleOrder);
+        }
+
+        if(!a.preferences.equals(b.preferences)) {
+            changed = true;
+
+            preferences = new Preferences();
+            for(Map.Entry<String, Preference> entry : a.preferences.entrySet()) {
+                String key = entry.getKey();
+                Preference aValue = entry.getValue(), bValue = b.preferences.get(key);
+                preferences.put(key, aValue.equals(bValue) ? aValue : (Preference) aValue.syncWith(bValue));
+            }
+        }
+
+        out.people = people;
+        out.debts = debts;
+        out.deleted = deleted;
+        out.peopleOrder = peopleOrder;
+        out.preferences = preferences;
+
+        return changed;
     }
 
     private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
@@ -65,13 +93,4 @@ public class DataSyncer {
         return array;
     }
 
-	private static Preferences syncPreferences(Preferences a, Preferences b) {
-		Preferences preferences = new Preferences();
-		for(Map.Entry<String, Preference> entry : a.entrySet()) {
-			String key = entry.getKey();
-			Preference aValue = entry.getValue(), bValue = b.get(key);
-			preferences.put(key, aValue.equals(bValue) ? aValue : (Preference) aValue.syncWith(bValue));
-		}
-		return preferences;
-	}
 }
