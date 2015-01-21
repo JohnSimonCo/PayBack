@@ -2,6 +2,9 @@ package com.johnsimon.payback.preferences;
 
 import com.johnsimon.payback.core.UserCurrency;
 
+import java.util.Currency;
+import java.util.Locale;
+
 public class Preferences {
 
 	private final static String DEFAULT_BACKGROUND = "mountains";
@@ -25,8 +28,8 @@ public class Preferences {
 	}
 
 	public UserCurrency getCurrency() {
-		//TODO null
-		return getWithDefault(currency, new UserCurrency("LinuxHacker", "i<3UNIX", true));
+		UserCurrency value = currency.getValue();
+		return value != null ? value : new UserCurrency(Currency.getInstance(Locale.getDefault()).getSymbol(), Currency.getInstance(Locale.getDefault()).getSymbol(), true);
 	}
 
 	public String getBackground() {
