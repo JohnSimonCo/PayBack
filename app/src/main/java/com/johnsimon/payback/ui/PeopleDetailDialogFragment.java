@@ -28,6 +28,8 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 	public EditPersonCallback editPersonCallback = null;
 	private AlertDialog alertDialog;
 
+	private TextView personDetailTitle;
+
 	public static PeopleDetailDialogFragment newInstance(Person person) {
 		PeopleDetailDialogFragment.person = person;
 		return new PeopleDetailDialogFragment();
@@ -40,7 +42,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View rootView = inflater.inflate(R.layout.person_detail_dialog, null);
 
-        TextView personDetailTitle = (TextView) rootView.findViewById(R.id.person_detail_title);
+        personDetailTitle = (TextView) rootView.findViewById(R.id.person_detail_title);
 		personDetailTitle.setText(person.getName());
 
 		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.person_detail_dialog_avatar);
@@ -140,6 +142,8 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback renameCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(final String name) {
+
+			personDetailTitle.setText(name);
 
             final String oldName = person.getName();
 

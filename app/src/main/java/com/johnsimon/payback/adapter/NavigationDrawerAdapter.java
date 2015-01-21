@@ -31,7 +31,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	public void clearItems() {
 		items.clear();
 	}
+
 	public void setItems(ArrayList<Person> people) {
+		clearItems();
 		for(Person person : people) {
 			items.add(new NavigationDrawerItem(person.toString(), person.id, null, person));
 		}
