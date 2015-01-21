@@ -2,46 +2,45 @@ package com.johnsimon.payback.preferences;
 
 import com.johnsimon.payback.core.UserCurrency;
 
-import java.util.HashMap;
+public class Preferences {
 
-public class Preferences extends HashMap<String, Preference> {
+	private final static String DEFAULT_BACKGROUND = "mountains";
 
-	private final static String[] KEYS = {
-		"background", "currency"
-	};
+	public Preference<String> background;
+	public Preference<UserCurrency> currency;
+
 
 	public static Preferences defaultPreferences() {
 		Preferences preferences = new Preferences();
-		for(String key : KEYS) {
-			preferences.put(key, new Preference<>(null));
-		}
+
+		preferences.background = new Preference<>(null);
+		preferences.currency = new Preference<>(null);
+
 		return preferences;
 	}
 
-	private <T> Preference<T> getTyped(String key) {
-		return (Preference<T>) get(key);
-	}
-
-	public <T> void set(String key, T value) {
-		getTyped(key).setValue(value);
-	}
-
-	public <T> T get(String key, T defaultValue) {
-		Preference preference = get(key);
-		if(preference == null) {
-			put(key, new Preference<>(null));
-			return defaultValue;
-		}
-		T value = (T) preference.getValue();
+	private <T> T getWithDefault(Preference<T> preference, T defaultValue) {
+		T value = preference.getValue();
 		return value == null ? defaultValue : value;
 	}
 
 	public UserCurrency getCurrency() {
 		//TODO null
-		return get("currency", new UserCurrency("LinuxHacker", "i<3UNIX", true));
+		return getWithDefault(currency, new UserCurrency("LinuxHacker", "i<3UNIX", true));
 	}
 
 	public String getBackground() {
-		return get("background", "mountains");
+		return getWithDefault(background, DEFAULT_BACKGROUND);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Preferences))return false;
+		Preferences other = (Preferences) o;
+
+		return other.background.equals(background)
+			&& other.currency.equals(currency);
 	}
 }

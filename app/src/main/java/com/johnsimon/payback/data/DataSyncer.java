@@ -42,11 +42,8 @@ public class DataSyncer {
         if(!a.preferences.equals(b.preferences)) {
             changed = true;
 
-            for(Map.Entry<String, Preference> entry : a.preferences.entrySet()) {
-                String key = entry.getKey();
-                Preference aValue = entry.getValue(), bValue = b.preferences.get(key);
-                preferences.put(key, aValue.equals(bValue) ? aValue : (Preference) aValue.syncWith(bValue));
-            }
+			preferences.background = a.preferences.background.syncWith(b.preferences.background);
+			preferences.currency = a.preferences.currency.syncWith(b.preferences.currency);
         }
 
         out.people = people;
