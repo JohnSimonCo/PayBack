@@ -91,13 +91,13 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     }
 
     @Override
-    public void commit() {
+    protected void commit(String JSON) {
         show("commited data to localStorage");
-        localStorage.commit(data);
+        localStorage.commit(JSON);
 
 
         if(file == null) return;
-        write(data.save(), file, new ResultCallback<FileResult>() {
+        write(JSON, file, new ResultCallback<FileResult>() {
             @Override
             public void onResult(FileResult result) {
                 if(!result.getStatus().isSuccess()) {
@@ -116,7 +116,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	private void refresh() {
 		lastRefresh = System.currentTimeMillis();
-		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
+		//Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
 	}
 
 	@Override

@@ -24,11 +24,16 @@ public abstract class Storage {
         subscription.broadcast(data);
     }
 
-    public abstract void commit();
+    protected abstract void commit(String JSON);
 
 	public void wipe() {
-		emit(new AppData());
-		commit();
+		//emit(new AppData());
+		//commit();
+		commit(new AppData());
+	}
+
+	public void commit() {
+		commit(data.save());
 	}
 
     public void commit(AppData data) {

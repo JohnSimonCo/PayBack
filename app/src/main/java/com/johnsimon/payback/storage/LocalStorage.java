@@ -54,8 +54,8 @@ public class LocalStorage extends Storage {
 		}
 	}
 
-    @Override
-    public void commit() {
-        preferences.edit().putString(SAVE_KEY_DATA, data.save()).apply();
-    }
+	@Override
+	protected void commit(String JSON) {
+		preferences.edit().putString(SAVE_KEY_DATA, JSON).apply();
+	}
 }
