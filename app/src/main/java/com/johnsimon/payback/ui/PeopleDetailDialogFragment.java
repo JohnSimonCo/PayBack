@@ -15,6 +15,7 @@ import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.Undo;
 import com.makeramen.RoundedImageView;
 import com.williammora.snackbar.Snackbar;
 
@@ -139,26 +140,28 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
 	public PersonPickerDialogFragment.PersonSelectedCallback renameCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
-		public void onSelected(String name) {
+		public void onSelected(final String name) {
 
             final String oldName = person.getName();
 
-			data.rename(person, name);
+			Undo.executeAction(getActivity(), R.string.renamed_person, new Undo.UndoableAction() {
+				@Override
+				public void onDisplay() {
+					data.rename(person, name);
+					editPersonCallback.onEdit();
+				}
 
-            Snackbar.with(getActivity().getApplicationContext())
-                    .text(getString(R.string.renamed_person))
-                    .actionLabel(getString(R.string.undo))
-                    .actionColor(getResources().getColor(R.color.green))
-                    .actionListener(new Snackbar.ActionClickListener() {
-                        @Override
-                        public void onActionClicked() {
-                            data.rename(person, oldName);
-                            editPersonCallback.onEdit();
-                        }
-                    })
-                    .show(getActivity());
+				@Override
+				public void onRevert() {
+					data.rename(person, oldName);
+					editPersonCallback.onEdit();
+				}
 
-			cancel();
+				@Override
+				public void onCommit() {
+					storage.commit();
+				}
+			});
 		}
 	};
 
