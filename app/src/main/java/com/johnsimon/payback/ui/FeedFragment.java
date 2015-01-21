@@ -210,7 +210,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 			}
 		}
 	}
-	public /*static*/ void displayTotalDebt(Resources resources) {
+	public void displayTotalDebt(Resources resources) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {

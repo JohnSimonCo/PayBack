@@ -29,6 +29,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
     public Callback callback = null;
     public AlertDialog alertDialog;
 
+	private TextView dialog_custom_amount;
+
     public static DebtDetailDialogFragment newInstance(Debt debt) {
         DebtDetailDialogFragment.debt = debt;
         DebtDetailDialogFragment.debtAccessible = debt;
@@ -85,15 +87,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             }
         });
 
-        TextView dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
-        if (debt.getAmount() < 0) {
-            //negative
-            dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
-            dialog_custom_amount.setTextColor(getResources().getColor(debt.getColor()));
-        } else {
-            dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
-            dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
-        }
+        dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
 
         TextView dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
         TextView dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
@@ -187,7 +181,19 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         return alertDialog;
     }
 
-    @Override
+	@Override
+	protected void onDataReceived() {
+		if (debt.getAmount() < 0) {
+			//negative
+			dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
+			dialog_custom_amount.setTextColor(getResources().getColor(debt.getColor()));
+		} else {
+			dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
+			dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
+		}
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		debtAccessible = null;
