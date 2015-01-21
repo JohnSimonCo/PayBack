@@ -34,16 +34,11 @@
         android:orientation="horizontal">
 
         <com.devspark.robototextview.widget.RobotoButton
-            app:fontFamily="roboto"
-            app:textWeight="medium"
-            android:textAllCaps="true"
+            style="@style/FlatButton"
             android:text="@string/cancel"
             android:id="@+id/confirm_delete_cancel"
             android:layout_width="88dp"
-            android:layout_height="36dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:textSize="14sp"
-            android:textColor="@color/green_strong"/>
+            android:layout_height="36dp" />
 
         <com.devspark.robototextview.widget.RobotoButton
             app:fontFamily="roboto"
