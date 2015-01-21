@@ -31,6 +31,8 @@ import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -200,16 +202,11 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 	@Override
 	protected void onDataReceived() {
 		bindPreferenceSummaryToValue(pref_background);
-
 		bindPreferenceSummaryToValue(pref_currency);
+
+		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+
 	}
-
-	@Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-
-    }
 
     /**
      * Shows the simplified settings UI if the device configuration if the
@@ -270,6 +267,9 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 			if (preference.getKey().equals("pref_background")) {
 				data.preferences.background.setValue((String) value);
 				storage.commit();
+
+				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+
 				return true;
 			}
 

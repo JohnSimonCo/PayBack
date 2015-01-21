@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -44,7 +45,6 @@ public class FeedActivity extends DataActivity implements
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
-
 	public static Toolbar toolbar;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
@@ -60,6 +60,8 @@ public class FeedActivity extends DataActivity implements
 	private NfcAdapter nfcAdapter;
 	private Beamer beamer;
 
+	private FeedFragment feedFragment;
+
     private boolean attemptCheckFilterAmount = false;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -71,7 +73,6 @@ public class FeedActivity extends DataActivity implements
         if (sentIntent.getBooleanExtra(ARG_FROM_CREATE, false)) {
             Resource.actionComplete(this);
             sentIntent.removeExtra(ARG_FROM_CREATE);
-            FeedFragment.reloadNext = true;
         }
 
 		super.onCreate(savedInstanceState);
@@ -126,7 +127,7 @@ public class FeedActivity extends DataActivity implements
 		}
 
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
+				.replace(R.id.container, feedFragment = new FeedFragment(), "feed_fragment_tag")
 				.commit();
 	}
 
@@ -190,6 +191,9 @@ public class FeedActivity extends DataActivity implements
 		storage.requestRefresh();
 
         invalidateOptionsMenu();
+
+		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
+
 	}
 
 	@Override

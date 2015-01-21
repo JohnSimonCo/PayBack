@@ -46,14 +46,13 @@ import java.util.ArrayList;
 public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-    public static boolean reloadNext = false;
 	public static FeedListAdapter adapter;
     public static FrameLayout headerView;
 
 	public static TextView totalDebtTextView;
     public static TextView feed_header_balance;
 
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     private View emptyView;
 
 	ImageView headerImage;
@@ -64,8 +63,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        reloadNext = true;
 
 		final View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
@@ -162,16 +159,12 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	Callback<ArrayList<Debt>> onFeedCallback = new Callback<ArrayList<Debt>>() {
 		@Override
 		public void onCalled(ArrayList<Debt> feed) {
-            if (adapter == null || reloadNext) {
-                reloadNext = false;
-                //First time
+            if (recyclerView.getAdapter() == null) {
                 adapter = new FeedListAdapter(feed, (DataActivity) getActivity(), self, emptyView);
                 recyclerView.setAdapter(adapter);
             } else {
                 adapter.updateList(feed);
                 adapter.notifyDataSetChanged();
-
-                recyclerView.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in));
             }
 
 			adapter.checkAdapterIsEmpty();
