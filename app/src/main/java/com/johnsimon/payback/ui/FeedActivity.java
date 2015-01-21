@@ -30,6 +30,7 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
+import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -187,6 +188,8 @@ public class FeedActivity extends DataActivity implements
         sort();
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
+
+		Undo.completeActions();
 
 		storage.requestRefresh();
 

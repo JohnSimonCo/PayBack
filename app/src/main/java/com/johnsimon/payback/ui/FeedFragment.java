@@ -39,6 +39,7 @@ import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.Undo;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
@@ -261,63 +262,66 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	@Override
 	public void onDelete(final Debt debt) {
 
+		final int index = FeedActivity.feed.indexOf(debt);
+
         new MaterialDialog.Builder(getActivity())
-                .content(R.string.delete_entry)
-                .positiveText(R.string.delete)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
+			.content(R.string.delete_entry)
+			.positiveText(R.string.delete)
+			.negativeText(R.string.cancel)
+			.callback(new MaterialDialog.ButtonCallback() {
+				@Override
+				public void onPositive(MaterialDialog dialog) {
+					super.onPositive(dialog);
 
-                        final int index = data.debts.indexOf(debt);
-                        final int indexFeed = FeedActivity.feed.indexOf(debt);
+					Undo.executeAction(getActivity(), R.string.deleted_debt, new Undo.UndoableAction() {
+						@Override
+						public void onDisplay() {
+							FeedActivity.feed.remove(debt);
+							adapter.notifyItemRemoved(index);
+							adapter.checkAdapterIsEmpty();
 
-                        Snackbar.with(getActivity().getApplicationContext())
-                                .text(getString(R.string.deleted_debt))
-                                .actionLabel(getString(R.string.undo))
-                                .actionColor(getResources().getColor(R.color.green))
-                                .actionListener(new Snackbar.ActionClickListener() {
-                                    @Override
-                                    public void onActionClicked() {
-                                        //TODO fixa undos
-                                        //data.add(index, debt);
-                                        storage.commit();
-                                        if(!FeedActivity.isAll()) {
-                                            FeedActivity.feed.add(indexFeed, debt);
-                                        }
-
-										if (getActivity() != null && getResources() != null) {
-											displayTotalDebt(getResources(), data.preferences.getCurrency());
-										}
-                                        adapter.notifyItemInserted(indexFeed);
-                                        adapter.checkAdapterIsEmpty();
-                                    }
-                                })
-                                .show(getActivity());
-
-                        data.delete(debt);
-                        storage.commit();
-                        if(!FeedActivity.isAll()) {
-                            FeedActivity.feed.remove(debt);
-                        }
-
-						if (getActivity() != null && getResources() != null) {
 							displayTotalDebt(getResources(), data.preferences.getCurrency());
 						}
-                        adapter.notifyItemRemoved(index);
-                        adapter.checkAdapterIsEmpty();
 
-                        dialog.cancel();
-                    }
+						@Override
+						public void onRevert() {
+							FeedActivity.feed.add(index, debt);
+							adapter.notifyItemInserted(index);
 
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.cancel();
-                    }
-                })
-                .show();
+							displayTotalDebt(getResources(), data.preferences.getCurrency());
+						}
+
+						@Override
+						public void onCommit() {
+							data.delete(debt);
+							storage.commit();
+						}
+					});
+
+					/*
+					data.delete(debt);
+					storage.commit();
+					if(!FeedActivity.isAll()) {
+						FeedActivity.feed.remove(debt);
+					}
+
+					if (getActivity() != null && getResources() != null) {
+						displayTotalDebt(getResources());
+					}
+					adapter.notifyItemRemoved(index);
+					adapter.checkAdapterIsEmpty();
+					*/
+
+					dialog.cancel();
+				}
+
+				@Override
+				public void onNegative(MaterialDialog dialog) {
+					super.onNegative(dialog);
+					dialog.cancel();
+				}
+			})
+			.show();
 	}
 
 	@Override
