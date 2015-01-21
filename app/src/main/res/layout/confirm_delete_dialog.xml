@@ -35,6 +35,7 @@
 
         <com.devspark.robototextview.widget.RobotoButton
             style="@style/FlatButton"
+            app:typeface="roboto_medium"
             android:text="@string/cancel"
             android:id="@+id/confirm_delete_cancel"
             android:layout_width="88dp"

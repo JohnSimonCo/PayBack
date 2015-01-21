@@ -8,6 +8,7 @@ import android.support.v7.internal.widget.TintCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
@@ -122,13 +123,15 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			displayCurrency = currencyNameList[3];
 		}
 
+		Toast.makeText(getActivity(), "ONCERATEVIEW", Toast.LENGTH_LONG).show();
+
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new MaterialDialog.Builder(getActivity())
 						.title(R.string.select_currency)
 						.items(currencyNameList)
-						.itemsCallbackSingleChoice(3, new MaterialDialog.ListCallback() {
+						.itemsCallbackSingleChoice(currencyList.indexOf(displayCurrency), new MaterialDialog.ListCallback() {
 							@Override
 							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 								selectedCurrency = currencyList.get(which);
@@ -197,6 +200,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (savedInstanceState != null) {
+
+			Toast.makeText(getActivity(), "ONACTIVITYCERATYE", Toast.LENGTH_LONG).show();
 
 			Currency.getInstance(Locale.getDefault()).getCurrencyCode();
 
