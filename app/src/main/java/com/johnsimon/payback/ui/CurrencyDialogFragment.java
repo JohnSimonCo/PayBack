@@ -50,6 +50,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	private boolean continueToNfc = false;
 
+	//TODO WHEN STARTED USE OLD CURRENCY
+
 	@Override
 	public Dialog onCreateDialog(final Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -83,12 +85,6 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		if (!continueToNfc) {
 			welcome_continue.setText(R.string.done);
-		}
-
-		if (continueToNfc) {
-			setCancelable(false);
-		} else {
-			setCancelable(true);
 		}
 
 		welcome_select_currency = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency);
@@ -179,8 +175,6 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		});
 
 		updatePreview();
-
-		setCancelable(false);
 
 		builder.setView(rootView);
 
