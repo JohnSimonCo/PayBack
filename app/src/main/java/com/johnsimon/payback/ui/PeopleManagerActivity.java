@@ -234,9 +234,7 @@ public class PeopleManagerActivity extends DataActivity {
 
 				final PeopleOrder.SortResult result = data.peopleOrder.sortAlphabetically(data.people);
 
-				sort(this, result, list);
-
-				if (Resource.isLOrAbove() && (sortAzX == 0 && sortAzY == 0)) {
+				if (Resource.isLOrAbove() && !(sortAzX == 0 && sortAzY == 0)) {
 					int initialRadius = recyclerView.getWidth();
 
 					Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, initialRadius, 0);
@@ -245,6 +243,8 @@ public class PeopleManagerActivity extends DataActivity {
 						@Override
 						public void onAnimationEnd(Animator animation) {
 							super.onAnimationEnd(animation);
+
+							sort(self, result, list);
 
 							adapter.notifyDataSetChanged();
 							adapter.updateEmptyViewVisibility();
@@ -256,25 +256,6 @@ public class PeopleManagerActivity extends DataActivity {
 							recyclerView.setVisibility(View.VISIBLE);
 							anim.setDuration(300);
 
-							anim.addListener(new Animator.AnimatorListener() {
-								@Override
-								public void onAnimationStart(Animator animation) {
-								}
-
-								@Override
-								public void onAnimationEnd(Animator animation) {
-									sort(self, result, list);
-								}
-
-								@Override
-								public void onAnimationCancel(Animator animation) {
-								}
-
-								@Override
-								public void onAnimationRepeat(Animator animation) {
-								}
-							});
-
 							anim.start();
 
 						}
@@ -282,7 +263,9 @@ public class PeopleManagerActivity extends DataActivity {
 
 					anim.setDuration(300);
 					anim.start();
-                }
+                } else {
+					sort(this, result, list);
+				}
 
 				break;
 
@@ -340,6 +323,7 @@ public class PeopleManagerActivity extends DataActivity {
     }
 
 	public void returnToFeed() {
+		//TODO reorder dat shit (när man drar)
 		Intent intent = new Intent(this, FeedActivity.class);
 		if(!data.people.contains(FeedActivity.person)) {
 			FeedActivity.person = null;

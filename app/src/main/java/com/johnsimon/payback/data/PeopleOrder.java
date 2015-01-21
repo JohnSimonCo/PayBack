@@ -36,9 +36,9 @@ public class PeopleOrder extends ArrayList<UUID> {
 	}
 
 	private SortResult sort(ArrayList<Person> people, Comparator<Person> comparator) {
-        ArrayList<Person> copy = new ArrayList<>();
+        ArrayList<Person> copy = new ArrayList<>(people);
 		Collections.sort(copy, comparator);
-		return new SortResult(copy, new PeopleOrder(people));
+		return new SortResult(copy, new PeopleOrder(copy));
 	}
 
 	public SortResult sortAlphabetically(ArrayList<Person> people) {
