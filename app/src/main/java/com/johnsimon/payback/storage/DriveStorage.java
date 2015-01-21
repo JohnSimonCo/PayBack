@@ -116,7 +116,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	private void refresh() {
 		lastRefresh = System.currentTimeMillis();
-		//Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
+		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		}
 	}
 
-	private final static long MAX_REFRESH_FREQ = 5000;
+	private final static long MAX_REFRESH_FREQ = 20000;
 	private Long lastRefresh;
 	private boolean mayRefresh() {
 		return System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
@@ -134,7 +134,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	public void changeAccount() {
 		client.clearDefaultAccountAndReconnect();
-		emit(new AppData());
+		emit(AppData.defaultAppData());
 		localStorage.commit(data);
 
 		getPreferences().edit()
@@ -163,13 +163,10 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 						MetadataBuffer buffer = result.getMetadataBuffer();
 						int count = buffer.getCount();
 						if (count > 0) {
+							//File exists
 							Metadata data = buffer.get(0);
-							//show("File exists " + count);
-
 							read(data.getDriveId(), fileFoundCallback);
 						} else {
-							//show("File doesn't exists");
-
 							createFile(data.save(), fileCreatedCallback);
 						}
 						buffer.release();
@@ -189,8 +186,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 			setFile(result.getFile());
 
             String JSON = result.getText();
-
-            //show("File says " + JSON);
 
             sync(AppData.fromJson(JSON));
         }

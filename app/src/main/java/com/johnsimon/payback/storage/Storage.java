@@ -29,7 +29,7 @@ public abstract class Storage {
 	public void wipe() {
 		//emit(new AppData());
 		//commit();
-		commit(new AppData());
+		commit(AppData.defaultAppData());
 	}
 
 	public void commit() {

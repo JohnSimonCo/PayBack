@@ -46,11 +46,13 @@ public class DataSyncer {
 			preferences.currency = a.preferences.currency.syncWith(b.preferences.currency);
         }
 
-        out.people = people;
-        out.debts = debts;
-        out.deleted = deleted;
-        out.peopleOrder = peopleOrder;
-        out.preferences = preferences;
+		if(changed) {
+			out.people = people;
+			out.debts = debts;
+			out.deleted = deleted;
+			out.peopleOrder = peopleOrder;
+			out.preferences = preferences;
+		}
 
         return changed;
     }
