@@ -20,7 +20,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 	private View emptyView;
     private AppData data;
     private TextView managerTitle;
-	private ArrayList<Person> people;
+	public ArrayList<Person> people;
 
 	public PeopleListClickListener clickListener = null;
 

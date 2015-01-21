@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -26,9 +27,11 @@ import android.widget.TextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.data.PeopleOrder;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.Undo;
 import com.johnsimon.payback.view.DragSortRecycler;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
@@ -229,105 +232,86 @@ public class PeopleManagerActivity extends DataActivity {
 
 			case R.id.action_sort_az:
 
-                personListBeforeSort = (ArrayList<Person>) data.people.clone();
+				final ArrayList<Person> list = adapter.people;
 
-                //Collections.sort(data.people, new Resource.AlphabeticalComparator());
-                storage.commit();
+				final PeopleOrder.SortResult result = data.peopleOrder.sortAlphabetically(data.people);
 
-				if (!Resource.isLOrAbove() || (sortAzX == 0 && sortAzY == 0)) {
-                    adapter.notifyDataSetChanged();
-					adapter.updateEmptyViewVisibility();
+				sort(this, result, list);
 
-                    Snackbar.with(getApplicationContext())
-                            .text(getString(R.string.sort_list))
-                            .actionLabel(getString(R.string.undo))
-                            .actionColor(getResources().getColor(R.color.green))
-                            .actionListener(new Snackbar.ActionClickListener() {
-                                @Override
-                                public void onActionClicked() {
-                                    data.people = personListBeforeSort;
-                                    storage.commit();
+				if (Resource.isLOrAbove() && (sortAzX == 0 && sortAzY == 0)) {
+					int initialRadius = recyclerView.getWidth();
 
-                                    adapter.clear();
-                                    adapter.addAll(data.people);
-                                    adapter.notifyDataSetChanged();
-									adapter.updateEmptyViewVisibility();
-                                }
-                            })
-                            .show(this);
+					Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, initialRadius, 0);
 
-                    break;
+					anim.addListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							super.onAnimationEnd(animation);
+
+							adapter.notifyDataSetChanged();
+							adapter.updateEmptyViewVisibility();
+
+							int finalRadius = Math.max(recyclerView.getWidth(), recyclerView.getHeight());
+
+							Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, finalRadius);
+
+							recyclerView.setVisibility(View.VISIBLE);
+							anim.setDuration(300);
+
+							anim.addListener(new Animator.AnimatorListener() {
+								@Override
+								public void onAnimationStart(Animator animation) {
+								}
+
+								@Override
+								public void onAnimationEnd(Animator animation) {
+									sort(self, result, list);
+								}
+
+								@Override
+								public void onAnimationCancel(Animator animation) {
+								}
+
+								@Override
+								public void onAnimationRepeat(Animator animation) {
+								}
+							});
+
+							anim.start();
+
+						}
+					});
+
+					anim.setDuration(300);
+					anim.start();
                 }
-
-                int initialRadius = recyclerView.getWidth();
-
-                Animator anim =
-                        ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, initialRadius, 0);
-
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-
-                        adapter.notifyDataSetChanged();
-						adapter.updateEmptyViewVisibility();
-
-                        int finalRadius = Math.max(recyclerView.getWidth(), recyclerView.getHeight());
-
-                        Animator anim =
-                                ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, finalRadius);
-
-						recyclerView.setVisibility(View.VISIBLE);
-                        anim.setDuration(300);
-
-                        anim.addListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                //Show snackbar for listView resort possibility
-                                Snackbar.with(getApplicationContext())
-                                        .text(getString(R.string.sort_list))
-                                        .actionLabel(getString(R.string.undo))
-										.actionColor(getResources().getColor(R.color.green))
-                                        .actionListener(new Snackbar.ActionClickListener() {
-                                            @Override
-                                            public void onActionClicked() {
-                                                data.people = personListBeforeSort;
-                                                storage.commit();
-
-                                                adapter.clear();
-                                                adapter.addAll(data.people);
-                                                adapter.notifyDataSetChanged();
-												adapter.updateEmptyViewVisibility();
-                                            }
-                                        })
-                                        .show(self);
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-                            }
-                        });
-
-                        anim.start();
-
-                    }
-                });
-
-                anim.setDuration(300);
-                anim.start();
 
 				break;
 
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void sort(Activity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
+		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
+			@Override
+			public void onDisplay() {
+				adapter.people = result.people;
+				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onRevert() {
+				adapter.people = list;
+				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onCommit() {
+				data.peopleOrder = result.order;
+				storage.commit();
+			}
+		});
 	}
 
 	@Override
