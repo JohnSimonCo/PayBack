@@ -184,21 +184,21 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:orientation="vertical"
-                android:tag="https://github.com/nostra13/Android-Universal-Image-Loader"
+                android:tag="http://square.github.io/picasso/"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     style="@style/library_title"
-                    android:text="@string/lib_uil"
+                    android:text="@string/lib_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <com.devspark.robototextview.widget.RobotoTextView
                     app:fontFamily="roboto"
                     app:textWeight="medium"
-                    android:text="@string/author_uil"
+                    android:text="@string/author_pic"
                     style="@style/library_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

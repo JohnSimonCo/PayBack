@@ -126,8 +126,8 @@
     <string name="author_fab">Faiz Malkani</string>
     <string name="lib_gson">GSON</string>
     <string name="author_gson">Google</string>
-    <string name="lib_uil">Universal Image Loader</string>
-    <string name="author_uil">Sergey Tarasevich</string>
+    <string name="lib_pic">Picasso</string>
+    <string name="author_pic">Square</string>
     <string name="lib_dsr">DragSortRecycler</string>
     <string name="author_dsr">Emile Belanger</string>
     <string name="lib_qr">QuickReturn</string>
