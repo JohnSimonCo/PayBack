@@ -292,8 +292,7 @@ public class CreateDebtActivity extends DataActivity {
 		Person person;
 		if(editingDebt == null) {
 			person = data.getOrCreatePerson(name, this);
-			//TODO kan bli fel med indexar
-			data.add(new Debt(person, amount, note, data.preferences.getCurrency().id));
+			data.addFirst(new Debt(person, amount, note, data.preferences.getCurrency().id));
 		} else {
 			person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()

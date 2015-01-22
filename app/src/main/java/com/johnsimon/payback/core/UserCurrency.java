@@ -3,8 +3,6 @@ package com.johnsimon.payback.core;
 import com.johnsimon.payback.data.Debt;
 
 public class UserCurrency {
-    //TODO tvinga currency och "mini-migrata" alla nuvarande debts till nya currencyn
-
 	public final String id;
 	public final String displayName;
 	public final boolean before;

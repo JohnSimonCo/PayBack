@@ -42,8 +42,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
-	//TODO behålla ordning till drive
-
 	private PeopleListAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -312,6 +310,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
     @Override
     public void onItemMoved(int from, int to) {
+        //TODO testa
         if (from != to) {
             Person item = adapter.getItem(from);
             adapter.remove(from);
@@ -324,7 +323,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     }
 
 	public void returnToFeed() {
-		//TODO reorder dat shit (när man drar)
 		Intent intent = new Intent(this, FeedActivity.class);
 		if(!data.people.contains(FeedActivity.person)) {
 			FeedActivity.person = null;

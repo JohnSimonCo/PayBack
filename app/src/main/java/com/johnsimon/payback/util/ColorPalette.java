@@ -28,7 +28,6 @@ public class ColorPalette {
 		};
 	}
 
-	//TODO fixa det här
 	public int nextIndex() {
 		SparseIntArray usedIndices = new SparseIntArray(palette.length);
 

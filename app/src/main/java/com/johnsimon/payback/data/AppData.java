@@ -143,9 +143,12 @@ public class AppData {
         debts.remove(debt);
     }
 
-	public void add(Debt debt) {
-		debts.add(debt);
-	}
+    public void add(Debt debt) {
+        debts.add(debt);
+    }
+    public void addFirst(Debt debt) {
+        debts.add(0, debt);
+    }
 
 	public void add(Person person) {
 		people.add(person);
