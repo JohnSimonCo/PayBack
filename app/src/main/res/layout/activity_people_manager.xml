@@ -1,6 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:dslv="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -85,5 +84,12 @@
         android:layout_width="@dimen/fab_size"
         android:layout_gravity="top|right"
         layout="@layout/feed_fab"    />
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/people_manager_white_cover"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"    />
 
 </FrameLayout>

@@ -19,6 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
+import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -221,9 +225,16 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				final PeopleOrder.SortResult result = data.peopleOrder.sortAlphabetically(data.people);
 
 				if (Resource.isLOrAbove() && !(sortAzX == 0 && sortAzY == 0)) {
-					int initialRadius = recyclerView.getWidth();
 
-					Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, initialRadius, 0);
+                    final PathInterpolator pathInterpolator = new PathInterpolator(0.83f, 0.14f, 0.95f, 0.59f);
+
+					int initialRadius = recyclerView.getWidth();
+                    final View cover = findViewById(R.id.people_manager_white_cover);
+                    cover.setVisibility(View.VISIBLE);
+                    cover.bringToFront();
+
+					Animator anim = ViewAnimationUtils.createCircularReveal(cover, sortAzX, sortAzY, 0, initialRadius);
+                    anim.setInterpolator(pathInterpolator);
 
 					anim.addListener(new AnimatorListenerAdapter() {
 						@Override
@@ -235,19 +246,35 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 							adapter.notifyDataSetChanged();
 							adapter.updateEmptyViewVisibility();
 
-							int finalRadius = Math.max(recyclerView.getWidth(), recyclerView.getHeight());
+                            Animation anim = AnimationUtils.loadAnimation(self, R.anim.fade_out);
+                            anim.setInterpolator(pathInterpolator);
+                            cover.startAnimation(anim);
 
-							Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, finalRadius);
+                            anim.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
 
-							recyclerView.setVisibility(View.VISIBLE);
-							anim.setDuration(300);
+                                }
 
-							anim.start();
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    cover.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+
+                            anim.setDuration(500);
+                            anim.setStartOffset(200);
+                            anim.start();
 
 						}
 					});
 
-					anim.setDuration(300);
+					anim.setDuration(500);
 					anim.start();
                 } else {
 					sort(this, result, list);

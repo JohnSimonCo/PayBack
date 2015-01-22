@@ -60,8 +60,8 @@
             app:typeface="roboto_medium"
             android:text="@string/cancel"
             android:id="@+id/from_who_dialog_cancel"
-            android:layout_width="88dp"
-            android:layout_height="36dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <com.devspark.robototextview.widget.RobotoButton
             style="@style/FlatButton"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_height="36dp"    />
+            android:layout_height="wrap_content"    />
     </LinearLayout>
 
 </LinearLayout>
