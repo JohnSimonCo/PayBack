@@ -106,6 +106,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 									Undo.executeAction(getActivity(), R.string.deleted_person, new Undo.UndoableAction() {
 										@Override
 										public void onDisplay() {
+                                            //TODO Crash when removing multiple people in a row
 											PeopleListAdapter.people.remove(index);
 
 											cancel();

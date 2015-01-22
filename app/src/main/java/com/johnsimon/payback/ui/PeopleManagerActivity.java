@@ -184,6 +184,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				public void onSelected(String name) {
 					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
 					data.add(person);
+                    adapter.people.add(person);
 					storage.commit();
 					adapter.notifyDataSetChanged();
 					adapter.updateEmptyViewVisibility();
@@ -226,14 +227,11 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 				if (Resource.isLOrAbove() && !(sortAzX == 0 && sortAzY == 0)) {
 
-                    final PathInterpolator pathInterpolator = new PathInterpolator(0.83f, 0.14f, 0.95f, 0.59f);
+                    final PathInterpolator pathInterpolator = new PathInterpolator(0.16f, 0.83f, 0.55f, 0.90f);
 
-					int initialRadius = recyclerView.getWidth();
-                    final View cover = findViewById(R.id.people_manager_white_cover);
-                    cover.setVisibility(View.VISIBLE);
-                    cover.bringToFront();
+					final int initialRadius = recyclerView.getWidth();
 
-					Animator anim = ViewAnimationUtils.createCircularReveal(cover, sortAzX, sortAzY, 0, initialRadius);
+					Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, initialRadius, 0);
                     anim.setInterpolator(pathInterpolator);
 
 					anim.addListener(new AnimatorListenerAdapter() {
@@ -246,35 +244,16 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 							adapter.notifyDataSetChanged();
 							adapter.updateEmptyViewVisibility();
 
-                            Animation anim = AnimationUtils.loadAnimation(self, R.anim.fade_out);
-                            anim.setInterpolator(pathInterpolator);
-                            cover.startAnimation(anim);
+                            Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, initialRadius);
+                            anim.setInterpolator(new PathInterpolator(0.72f, 0.16f, 0.85f, 0.69f));
 
-                            anim.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    cover.setVisibility(View.GONE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-
-                            anim.setDuration(500);
-                            anim.setStartOffset(200);
+                            anim.setDuration(400);
                             anim.start();
 
 						}
 					});
 
-					anim.setDuration(500);
+					anim.setDuration(400);
 					anim.start();
                 } else {
 					sort(this, result, list);
@@ -290,7 +269,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
-			    PeopleListAdapter.people = result.people;
+                PeopleListAdapter.people = result.people;
 				adapter.notifyDataSetChanged();
 			}
 
@@ -350,15 +329,13 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     }
 
 	public void returnToFeed() {
-		Intent intent = new Intent(this, FeedActivity.class);
+		/*Intent intent = new Intent(this, FeedActivity.class);
 		if(!data.people.contains(FeedActivity.person)) {
 			FeedActivity.person = null;
 		}
 
-        //TODO se om det funkar
-        //storage.commit();
-
 		finishAffinity();
-		startActivity(intent);
+		startActivity(intent);*/
+        finish();
 	}
 }
