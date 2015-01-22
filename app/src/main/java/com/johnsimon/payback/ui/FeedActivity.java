@@ -334,14 +334,12 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	public void sortTime() {
-		Collections.sort(feed, new Resource.TimeComparator());
-        FeedFragment.adapter.updateList(feed);
+		Collections.sort(FeedFragment.adapter.list, new Resource.TimeComparator());
 		FeedFragment.adapter.notifyDataSetChanged();
 	}
 
 	public void sortAmount() {
-		Collections.sort(feed, new Resource.AmountComparator());
-        FeedFragment.adapter.updateList(feed);
+		Collections.sort(FeedFragment.adapter.list, new Resource.AmountComparator());
 		FeedFragment.adapter.notifyDataSetChanged();
 	}
 
