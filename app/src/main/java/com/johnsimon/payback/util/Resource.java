@@ -153,6 +153,7 @@ public class Resource {
 			ThumbnailLoader.getInstance().load(person.link.photoURI, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    //TODO Skicka med view som parameter här istället för att använda "avatar", det funkar inte för de kan blandas ihop av recyclerviewen.
 					avatar.setImageBitmap(loadedImage);
 				}
 			});

@@ -69,6 +69,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
 			} else {
 				rootView.findViewById(R.id.currency_info_text_pusher).setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.welcome_cancel).setVisibility(View.VISIBLE);
 			}
 			setCancelable(args.getBoolean(CANCELABLE));
 		}
@@ -139,6 +140,13 @@ public class CurrencyDialogFragment extends DataDialogFragment {
             usingDefaults = false;
         }
 
+        rootView.findViewById(R.id.welcome_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -205,8 +213,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked());
 		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
 
-		welcome_select_currency.setText(selectedCurrency);
-		welcome_select_currency_display.setText(getString(R.string.change_currency_symbol));
+		welcome_select_currency.setText(getString(R.string.currency) + " (" + selectedCurrency + ")");
+		welcome_select_currency_display.setText(getString(R.string.change_currency_symbol) + " (" + displayCurrency + ")");
 	}
 
 	private static Set<Currency> getAllCurrencies() {

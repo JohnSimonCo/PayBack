@@ -35,6 +35,8 @@ import com.johnsimon.payback.util.Undo;
 import java.util.ArrayList;
 import java.util.Collections;
 
+//TODO INNAN RELEASE: ÄNDRA VERISON TILL 1.2
+
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
         BillingProcessor.IBillingHandler {
@@ -194,6 +196,8 @@ public class FeedActivity extends DataActivity implements
         invalidateOptionsMenu();
 
 		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
+
+        FeedFragment.displayTotalDebt(getResources(), data.preferences.getCurrency());
 
 	}
 
