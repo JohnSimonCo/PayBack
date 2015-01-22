@@ -18,8 +18,8 @@ public class ThumbnailLoader implements ImageLoadingListener {
 	private static ThumbnailLoader instance;
 
 	private ThumbnailLoader() {
-		cache = new HashMap<String, Bitmap>();
-		callbackMap = new HashMap<String, ArrayList<SimpleImageLoadingListener>>();
+		cache = new HashMap<>();
+		callbackMap = new HashMap<>();
 	}
 
 	public static ThumbnailLoader getInstance() {
