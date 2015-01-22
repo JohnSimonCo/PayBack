@@ -94,6 +94,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+                //TODO crash here once
 				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get(position));
 				dialog.show(context.getFragmentManager().beginTransaction(), "dialog");
 				dialog.callback = callback;

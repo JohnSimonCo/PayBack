@@ -109,6 +109,11 @@
     <string name="currency_symbol">Currency symbol</string>
     <string name="change_currency">Change currency</string>
     <string name="change_currency_symbol">Currency symbol</string>
+    <string name="save_fail">Failed to save file</string>
+    <string name="no_file">Failed to find file</string>
+    <string name="read_failed">Failed to read file</string>
+    <string name="save_success">Save successful</string>
+    <string name="restore_success">Restore successful</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

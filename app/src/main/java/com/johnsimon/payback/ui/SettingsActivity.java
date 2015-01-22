@@ -21,16 +21,26 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.williammora.snackbar.Snackbar;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
@@ -89,24 +99,73 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
 
+        final Activity self = this;
+
         Preference pref_export_data = findPreference("pref_export_data");
         pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                try {
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("savedata.txt", Context.MODE_PRIVATE));
+                    outputStreamWriter.write(data.save());
+                    outputStreamWriter.close();
 
+                    Snackbar.with(self)
+                            .text(getString(R.string.save_success))
+                            .show(self);
+                }
+                catch (IOException e) {
+                    Snackbar.with(self)
+                            .text(getString(R.string.save_fail))
+                            .show(self);
+                }
                 return false;
             }
         });
 
+        //TODO NOT FINISHED
         Preference pref_import_data = findPreference("pref_import_data");
         pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
+                try {
+                    InputStream inputStream = openFileInput("savedata.txt");
+
+                    if ( inputStream != null ) {
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String receiveString = "";
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        while ( (receiveString = bufferedReader.readLine()) != null ) {
+                            stringBuilder.append(receiveString);
+                        }
+
+                        inputStream.close();
+
+                        data = AppData.fromJson(stringBuilder.toString());
+                        storage.commit(data);
+
+                        Toast.makeText(self, getString(R.string.restore_success), Toast.LENGTH_LONG).show();
+
+                        System.exit(0);
+                        startActivity(new Intent(self, FeedActivity.class));
+                    }
+                }
+                catch (FileNotFoundException e) {
+                    Snackbar.with(self)
+                            .text(getString(R.string.no_file))
+                            .show(self);
+                } catch (IOException e) {
+                    Snackbar.with(self)
+                            .text(getString(R.string.read_failed))
+                            .show(self);
+                }
+
                 return false;
             }
         });
-
 
         pref_currency = findPreference("pref_currency");
 
@@ -145,8 +204,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
 		}
 
-        final Activity self = this;
-
         pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -180,8 +237,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                 return true;
             }
         });
-
-
 
         pref_background = (ListPreference) findPreference("pref_background");
 
