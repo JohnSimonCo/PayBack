@@ -11,21 +11,15 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.makeramen.RoundedImageView;
-import com.williammora.snackbar.Snackbar;
-
-import java.util.ArrayList;
 
 public class PeopleDetailDialogFragment extends DataDialogFragment {
 	public static Person person;
 
-	public EditPersonCallback editPersonCallback = null;
 	private AlertDialog alertDialog;
 
 	private TextView personDetailTitle;
@@ -107,15 +101,18 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 										@Override
 										public void onDisplay() {
                                             //TODO Crash when removing multiple people in a row
-											PeopleListAdapter.people.remove(index);
+                                            PeopleManagerActivity.adapter.people.remove(index);
+                                            PeopleManagerActivity.adapter.notifyItemRemoved(index);
+                                            PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 
-											cancel();
+											alertDialog.cancel();
 										}
 
 										@Override
 										public void onRevert() {
-											PeopleListAdapter.people.add(index, person);
-											editPersonCallback.onEdit();
+                                            PeopleManagerActivity.adapter.people.add(index, person);
+                                            PeopleManagerActivity.adapter.notifyItemInserted(index);
+                                            PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 										}
 
 										@Override
@@ -153,13 +150,13 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 				public void onDisplay() {
 					person.setName(name);
 
-					cancel();
+					alertDialog.cancel();
 				}
 
 				@Override
 				public void onRevert() {
 					person.setName(oldName);
-					editPersonCallback.onEdit();
+					PeopleManagerActivity.adapter.notifyDataSetChanged();
 				}
 
 				@Override
@@ -189,15 +186,18 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 							Undo.executeAction(getActivity(), R.string.merged_people, new Undo.UndoableAction() {
 								@Override
 								public void onDisplay() {
-									PeopleListAdapter.people.remove(index);
+									PeopleManagerActivity.adapter.people.remove(index);
+                                    PeopleManagerActivity.adapter.notifyItemRemoved(index);
+                                    PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 
-									cancel();
+									alertDialog.cancel();
 								}
 
 								@Override
 								public void onRevert() {
-									PeopleListAdapter.people.add(index, person);
-									editPersonCallback.onEdit();
+									PeopleManagerActivity.adapter.people.add(index, person);
+                                    PeopleManagerActivity.adapter.notifyItemInserted(index);
+                                    PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 								}
 
 								@Override
@@ -220,12 +220,4 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		}
 	};
 
-	private void cancel() {
-		editPersonCallback.onEdit();
-		alertDialog.cancel();
-	}
-
-	public interface EditPersonCallback {
-		public void onEdit();
-	}
 }

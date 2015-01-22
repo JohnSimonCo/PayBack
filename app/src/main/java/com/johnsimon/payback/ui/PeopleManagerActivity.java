@@ -46,7 +46,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
-	private PeopleListAdapter adapter;
+	public static PeopleListAdapter adapter;
     private RecyclerView recyclerView;
 
     private int sortAzX;
@@ -153,14 +153,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				Person person = adapter.getItem(position);
 				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
 				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");
-				peopleDetailDialogFragment.editPersonCallback = new PeopleDetailDialogFragment.EditPersonCallback() {
-
-					@Override
-					public void onEdit() {
-						adapter.notifyDataSetChanged();
-						adapter.updateEmptyViewVisibility();
-					}
-				};
 			}
 		};
 	}
@@ -269,13 +261,13 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
-                PeopleListAdapter.people = result.people;
+                PeopleManagerActivity.adapter.people = result.people;
 				adapter.notifyDataSetChanged();
 			}
 
 			@Override
 			public void onRevert() {
-                PeopleListAdapter.people = list;
+                PeopleManagerActivity.adapter.people = list;
 				adapter.notifyDataSetChanged();
 			}
 

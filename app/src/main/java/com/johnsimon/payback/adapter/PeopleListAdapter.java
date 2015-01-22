@@ -16,10 +16,10 @@ import com.makeramen.RoundedImageView;
 import java.util.ArrayList;
 
 public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.ViewHolder> {
-	private final DataActivity context;
-	private View emptyView;
+	public static DataActivity context;
+	public static View emptyView;
     private AppData data;
-    private TextView managerTitle;
+    public static TextView managerTitle;
 	public static ArrayList<Person> people;
 
 	public PeopleListClickListener clickListener = null;
@@ -83,7 +83,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 		return people.size();
 	}
 
-	public void updateEmptyViewVisibility() {
+	public static void updateEmptyViewVisibility() {
 		if (people.size() == 1) {
 			managerTitle.setText("1 " + context.getString(R.string.person));
 		} else {
