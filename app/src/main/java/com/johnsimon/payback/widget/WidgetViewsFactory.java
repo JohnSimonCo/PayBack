@@ -15,8 +15,6 @@ import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.ThumbnailLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory, Callback<AppData> {
 
@@ -52,12 +50,13 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         Debt debt = data.debts.get(position);
 
         if (debt.getOwner().hasImage()) {
+            /*
             ThumbnailLoader.getInstance().load(debt.getOwner().link.photoURI, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     row.setImageViewBitmap(R.id.list_item_avatar, loadedImage);
                 }
-            });
+            });*/
         } else {
 			//TODO hope this will work...
             //row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.getOwner().color)));

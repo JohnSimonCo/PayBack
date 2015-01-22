@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.StrictMode;
@@ -27,14 +23,10 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.makeramen.RoundedImageView;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Currency;
-import java.util.HashSet;
 
 public class Resource {
     private final static int MAX_ACTIONS = 25;
@@ -69,9 +61,6 @@ public class Resource {
 		if(!neverRate) {
 			actions = preferences.getInt(SAVE_KEY_ACTIONS, 0);
 		}
-
-		//Default configuration
-		ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).build());
 
 		//TODO innan release: Ta bort detta
 		StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
@@ -150,13 +139,9 @@ public class Resource {
 		if(person.hasImage()) {
 			avatarLetter.setVisibility(View.GONE);
 
-			ThumbnailLoader.getInstance().load(person.link.photoURI, new SimpleImageLoadingListener() {
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    //TODO Skicka med view som parameter här istället för att använda "avatar", det funkar inte för de kan blandas ihop av recyclerviewen.
-					avatar.setImageBitmap(loadedImage);
-				}
-			});
+            Picasso.with(dataActivity.getContext())
+                    .load(person.link.photoURI)
+                    .into(avatar);
 		} else {
 			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity, person.paletteIndex));
 			avatarLetter.setVisibility(View.VISIBLE);
