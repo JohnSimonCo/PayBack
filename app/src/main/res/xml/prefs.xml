@@ -15,6 +15,11 @@
             android:entryValues="@array/bg_entries"
             android:defaultValue="mountains"    />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_data"   >
+
         <CheckBoxPreference
             android:key="pref_cloud_sync"
             android:title="@string/cloud_sync"
@@ -30,5 +35,14 @@
             android:key="pref_wipe_data"
             android:title="@string/wipe_data"/>
 
+        <Preference
+            android:key="pref_gdrive_sync"
+            android:title="@string/pref_gdrive_sync" />
+
+        <Preference
+
+            android:key="pref_export_data"  />
+
     </PreferenceCategory>
+
 </PreferenceScreen>
