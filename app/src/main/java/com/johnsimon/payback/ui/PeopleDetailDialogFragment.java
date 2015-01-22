@@ -1,6 +1,5 @@
 package com.johnsimon.payback.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.Resource;
@@ -95,24 +95,24 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
 
-                                    final int index = data.people.indexOf(person);
+                                    final int listIndex = PeopleListAdapter.people.indexOf(person);
 
 									Undo.executeAction(getActivity(), R.string.deleted_person, new Undo.UndoableAction() {
 										@Override
 										public void onDisplay() {
                                             //TODO Crash when removing multiple people in a row
-                                            PeopleManagerActivity.adapter.people.remove(index);
-                                            PeopleManagerActivity.adapter.notifyItemRemoved(index);
-                                            PeopleManagerActivity.adapter.updateEmptyViewVisibility();
+                                            PeopleListAdapter.people.remove(listIndex);
+                                            PeopleManagerActivity.adapter.notifyItemRemoved(listIndex);
+                                            PeopleListAdapter.updateEmptyViewVisibility();
 
 											alertDialog.cancel();
 										}
 
 										@Override
 										public void onRevert() {
-                                            PeopleManagerActivity.adapter.people.add(index, person);
-                                            PeopleManagerActivity.adapter.notifyItemInserted(index);
-                                            PeopleManagerActivity.adapter.updateEmptyViewVisibility();
+                                            PeopleListAdapter.people.add(listIndex, person);
+                                            PeopleManagerActivity.adapter.notifyItemInserted(listIndex);
+                                            PeopleListAdapter.updateEmptyViewVisibility();
 										}
 
 										@Override

@@ -308,7 +308,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
     @Override
     public void onItemMoved(int from, int to) {
-        //TODO testa
         if (from != to) {
             Person item = adapter.getItem(from);
             adapter.remove(from);
