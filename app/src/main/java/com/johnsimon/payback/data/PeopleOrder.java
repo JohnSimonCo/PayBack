@@ -21,9 +21,9 @@ public class PeopleOrder extends ArrayList<UUID> {
         }
 	}
 
-	/*protected void touch() {
+	protected void touch() {
 		touched = System.currentTimeMillis();
-	}*/
+	}
 
 	public PeopleOrder syncWith(PeopleOrder other) {
 		return this.touched > other.touched ? this : other;
@@ -35,6 +35,12 @@ public class PeopleOrder extends ArrayList<UUID> {
         return list;
 	}
 
+    public void reorder(int from, int to) {
+        this.touch();
+        UUID item = get(from);
+        remove(from);
+        add(to, item);
+    }
 	private SortResult sort(ArrayList<Person> people, Comparator<Person> comparator) {
         ArrayList<Person> copy = new ArrayList<>(people);
 		Collections.sort(copy, comparator);

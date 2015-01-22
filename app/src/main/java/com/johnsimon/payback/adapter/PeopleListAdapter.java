@@ -105,8 +105,8 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 		people.addAll(newPeopleList);
 	}
 
-	public void remove(Person person) {
-		people.remove(person);
+	public void remove(int index) {
+		people.remove(index);
 	}
 
 	public Person getItem(int index) {

@@ -35,12 +35,10 @@ import com.johnsimon.payback.util.Undo;
 import com.johnsimon.payback.view.DragSortRecycler;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
-import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class PeopleManagerActivity extends DataActivity {
+public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
@@ -92,17 +90,7 @@ public class PeopleManagerActivity extends DataActivity {
 		dragSortRecycler.setAutoScrollSpeed(0.3f);
 		dragSortRecycler.setAutoScrollWindow(0.1f);
 
-		dragSortRecycler.setOnItemMovedListener(new DragSortRecycler.OnItemMovedListener() {
-			@Override
-			public void onItemMoved(int from, int to) {
-				if (from != to) {
-					Person item = adapter.getItem(from);
-					adapter.remove(item);
-					adapter.insert(item, to);
-					adapter.notifyDataSetChanged();
-				}
-			}
-		});
+		dragSortRecycler.setOnItemMovedListener(this);
 
 		recyclerView.addItemDecoration(dragSortRecycler);
 		recyclerView.addOnItemTouchListener(dragSortRecycler);
@@ -277,13 +265,13 @@ public class PeopleManagerActivity extends DataActivity {
 		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
-				adapter.people = result.people;
+			    PeopleListAdapter.people = result.people;
 				adapter.notifyDataSetChanged();
 			}
 
 			@Override
 			public void onRevert() {
-				adapter.people = list;
+                PeopleListAdapter.people = list;
 				adapter.notifyDataSetChanged();
 			}
 
@@ -322,6 +310,19 @@ public class PeopleManagerActivity extends DataActivity {
 		});
     }
 
+    @Override
+    public void onItemMoved(int from, int to) {
+        if (from != to) {
+            Person item = adapter.getItem(from);
+            adapter.remove(from);
+            adapter.insert(item, to);
+            adapter.notifyDataSetChanged();
+
+            data.peopleOrder.reorder(from, to);
+            storage.commit();
+        }
+    }
+
 	public void returnToFeed() {
 		//TODO reorder dat shit (när man drar)
 		Intent intent = new Intent(this, FeedActivity.class);
@@ -329,7 +330,8 @@ public class PeopleManagerActivity extends DataActivity {
 			FeedActivity.person = null;
 		}
 
-        storage.commit();
+        //TODO se om det funkar
+        //storage.commit();
 
 		finishAffinity();
 		startActivity(intent);
