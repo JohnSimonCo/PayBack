@@ -89,6 +89,25 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
 
+        Preference pref_export_data = findPreference("pref_export_data");
+        pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                return false;
+            }
+        });
+
+        Preference pref_import_data = findPreference("pref_import_data");
+        pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                return false;
+            }
+        });
+
+
         pref_currency = findPreference("pref_currency");
 
         pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

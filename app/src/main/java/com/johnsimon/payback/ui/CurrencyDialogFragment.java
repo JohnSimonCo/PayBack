@@ -37,6 +37,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	public final static String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
 	public final static String CURRENCY_DISPLAY_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
+	public final static String CURRENCY_CHECKBOX = "CURRENCY_CHECKBOX";
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
@@ -45,10 +46,11 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	private TextView welcome_currency_preview;
 
-	private String displayCurrency = "$";
-	private String selectedCurrency = Currency.getInstance(Locale.getDefault()).getSymbol();
+	private String displayCurrency = "";
+	private String selectedCurrency = "";
 
 	private boolean continueToNfc = false;
+    private boolean usingDefaults = true;
 
 	//TODO WHEN STARTED USE OLD CURRENCY
 
@@ -62,6 +64,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			continueToNfc = args.getBoolean(CONTINUE, false);
+
 			if (args.getBoolean(SHOW_INFO_TEXT, false)) {
 				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
 			} else {
@@ -124,13 +127,17 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 			String cc = savedInstanceState.getString(CURRENCY_SAVE_KEY, "FAILED");
 			if (cc.equals("FAILED")) {
-				selectedCurrency = Currency.getInstance(Locale.getDefault()).getSymbol();
+                usingDefaults = false;
 			} else {
 				selectedCurrency = cc;
 			}
 
 			displayCurrency = savedInstanceState.getString(CURRENCY_DISPLAY_SAVE_KEY, "$");
-		}
+
+            custom_currency_check_after.setChecked(savedInstanceState.getBoolean(CURRENCY_CHECKBOX, false));
+		} else {
+            usingDefaults = false;
+        }
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -183,7 +190,18 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		return alertDialog;
 	}
 
-	private void updatePreview() {
+    @Override
+    protected void onDataReceived() {
+        if (!usingDefaults) {
+            selectedCurrency = data.preferences.getCurrency().id;
+            displayCurrency = data.preferences.getCurrency().getDisplayName();
+            custom_currency_check_after.setChecked(!data.preferences.getCurrency().before);
+            updatePreview();
+        }
+        super.onDataReceived();
+    }
+
+    private void updatePreview() {
 		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked());
 		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
 
@@ -210,6 +228,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		super.onSaveInstanceState(outState);
 		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency);
 		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
+        outState.putBoolean(CURRENCY_CHECKBOX, custom_currency_check_after.isChecked());
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {

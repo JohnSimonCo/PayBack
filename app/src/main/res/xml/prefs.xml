@@ -40,8 +40,12 @@
             android:title="@string/pref_gdrive_sync" />
 
         <Preference
-
+            android:title="@string/pref_export_data"
             android:key="pref_export_data"  />
+
+        <Preference
+            android:title="@string/pref_import_data"
+            android:key="pref_import_data"  />
 
     </PreferenceCategory>
 

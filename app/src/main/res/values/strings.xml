@@ -144,6 +144,8 @@
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
     <string name="pref_gdrive_sync">Sync outside Wi-Fi</string>
+    <string name="pref_export_data">Export data to storage</string>
+    <string name="pref_import_data">Import data from storage</string>
 
     <string-array name="currencies">
         <item>$</item>
