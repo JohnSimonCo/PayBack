@@ -69,7 +69,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	protected void onStart() {
 		super.onStart();
 
-		Undo.completeActions();
+		Undo.completeAction();
 
 		storage.subscription.listen(dataLoadedCallback);
 

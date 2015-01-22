@@ -4,27 +4,24 @@ import android.app.Activity;
 import android.os.Handler;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.async.PoorMansPromise;
 import com.williammora.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Undo {
 	private final static int DURATION = 2500;
 	private final static int DELAY = 600;
 
-	private static ArrayList<QueuedAction> queuedActions = new ArrayList<>();
+	private static QueuedAction queuedAction = null;
 
 	public static void executeAction(Activity context, int textId, final UndoableAction action) {
+        completeAction();
+		queuedAction = new QueuedAction(action);
 
-		final QueuedAction queuedAction = new QueuedAction(action);
 		final Handler handler = new Handler();
 		final Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
 				action.onCommit();
-				queuedActions.remove(queuedAction);
+                cancelAction();
 			}
 		};
 		queuedAction.handler = handler;
@@ -51,25 +48,26 @@ public class Undo {
 				public void onActionClicked() {
 					action.onRevert();
 					handler.removeCallbacks(runnable);
-					queuedActions.remove(queuedAction);
+                    cancelAction();
 				}
 			})
 			.show(context);
 
 		queuedAction.snackbar = snackbar;
-
-		queuedActions.add(queuedAction);
 	}
 
-	public static void completeActions() {
-		if(queuedActions.size() > 0) {
-			for(QueuedAction queuedAction : queuedActions) {
-				queuedAction.handler.removeCallbacks(queuedAction.runnable);
-				queuedAction.action.onCommit();
-				queuedAction.snackbar.dismiss();
-			}
-			queuedActions.clear();
-		}
+    private static void cancelAction() {
+        queuedAction = null;
+    }
+
+	public static void completeAction() {
+        if(queuedAction != null) {
+            queuedAction.handler.removeCallbacks(queuedAction.runnable);
+            queuedAction.action.onCommit();
+            queuedAction.snackbar.dismiss();
+
+            queuedAction = null;
+        }
 	}
 
 

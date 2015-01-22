@@ -34,8 +34,6 @@ import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Currency;
-import java.util.Set;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
@@ -173,7 +171,7 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 
-		Undo.completeActions();
+		Undo.completeAction();
 
 		Person oldPerson = person;
 
