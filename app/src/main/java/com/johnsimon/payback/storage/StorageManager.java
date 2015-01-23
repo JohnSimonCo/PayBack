@@ -25,7 +25,9 @@ public class StorageManager {
 					break;
 			}
 		}
-        //((DriveStorage) storage).activity = context;
+		if(storage instanceof DriveStorage) {
+			((DriveStorage) storage).activity = context;
+		}
 
         return storage;
     }

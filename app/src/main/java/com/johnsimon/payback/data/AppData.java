@@ -283,12 +283,17 @@ public class AppData {
 			return AppData.defaultAppData();
 		}
 
-		AppData data = new Gson().fromJson(JSON, AppData.class);
-		for(Debt debt : data.debts) {
-			debt.linkOwner(data.people);
+		try {
+			AppData data = new Gson().fromJson(JSON, AppData.class);
+			for(Debt debt : data.debts) {
+				debt.linkOwner(data.people);
+			}
+			return data;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return AppData.defaultAppData();
 		}
 
-		return data;
     }
 
     public static String toJson(AppData data) {
