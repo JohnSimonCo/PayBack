@@ -72,7 +72,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				alertDialog.cancel();
+				alertDialog.dismiss();
 			}
 		});
 

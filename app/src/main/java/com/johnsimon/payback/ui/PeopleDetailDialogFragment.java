@@ -104,7 +104,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                             PeopleManagerActivity.adapter.notifyDataSetChanged();
                                             PeopleListAdapter.updateEmptyViewVisibility();
 
-											alertDialog.cancel();
+											alertDialog.dismiss();
 										}
 
 										@Override
@@ -149,7 +149,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 				public void onDisplay() {
 					person.setName(name);
 
-					alertDialog.cancel();
+					alertDialog.dismiss();
 				}
 
 				@Override
@@ -189,7 +189,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                     PeopleManagerActivity.adapter.notifyItemRemoved(index);
                                     PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 
-									alertDialog.cancel();
+									alertDialog.dismiss();
 								}
 
 								@Override

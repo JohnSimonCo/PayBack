@@ -314,13 +314,13 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 					adapter.checkAdapterIsEmpty();
 					*/
 
-					dialog.cancel();
+					dialog.dismiss();
 				}
 
 				@Override
 				public void onNegative(MaterialDialog dialog) {
 					super.onNegative(dialog);
-					dialog.cancel();
+					dialog.dismiss();
 				}
 			})
 			.show();
