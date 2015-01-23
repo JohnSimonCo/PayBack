@@ -58,7 +58,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
                 }
             });*/
         } else {
-			//TODO hope this will work...
             //row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.getOwner().color)));
             row.setViewVisibility(R.id.list_item_avatar_letter, View.VISIBLE);
             row.setTextViewText(R.id.list_item_avatar_letter, debt.getOwner().getAvatarLetter());
@@ -67,7 +66,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         row.setTextViewText(R.id.list_item_person, debt.getOwner().getName());
         row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? ctx.getResources().getString(R.string.cash) : debt.getNote());
         row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
-		//TODO hope this will work...
 		//row.setTextViewText(R.id.list_item_amount, debt.amountString(data.preferences));
         row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
 

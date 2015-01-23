@@ -149,6 +149,7 @@ public class Resource {
 		}
 	}
 
+	//TODO fördela
 	public static void actionComplete(final Activity activity) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;

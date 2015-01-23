@@ -49,14 +49,15 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	public Subscription<String> loginSubscription = new Subscription<>();
 
-    public DriveStorage(Activity context) {
+    public DriveStorage(Activity context, LocalStorage localStorage) {
         super(context);
 		//TODO migrate between
 
-        activity = context;
+        this.activity = context;
 
-        localStorage = new LocalStorage(context);
-        localStorage.subscription.listen(new Callback<AppData>() {
+        this.localStorage = localStorage;
+
+		localStorage.subscription.listen(new Callback<AppData>() {
 			@Override
 			public void onCalled(AppData data) {
 				show("emit localStorage data");
