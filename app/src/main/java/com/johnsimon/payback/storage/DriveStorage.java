@@ -48,6 +48,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     private DriveFile file = null;
 
 	public Subscription<String> loginSubscription = new Subscription<>();
+	public Subscription<String> loginCancelledSubscription = new Subscription<>();
 
     public DriveStorage(Activity context, LocalStorage localStorage) {
         super(context);
