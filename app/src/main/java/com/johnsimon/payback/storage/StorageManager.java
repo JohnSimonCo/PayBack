@@ -24,7 +24,6 @@ public class StorageManager {
 					storage = new DriveStorage(context, localStorage);
 					break;
 			}
-
 		}
         //((DriveStorage) storage).activity = context;
 
@@ -32,10 +31,12 @@ public class StorageManager {
     }
 	public static void migrateToDrive(Activity context) {
 		storage = new DriveStorage(context, localStorage);
+		storage.connect();
+		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).apply();
 	}
-
 	public static void migrateToLocal(Activity context) {
 		storage.disconnect();
 		storage = localStorage;
+		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL).apply();
 	}
 }

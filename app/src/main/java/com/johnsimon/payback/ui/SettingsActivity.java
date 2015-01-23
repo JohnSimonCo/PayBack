@@ -31,6 +31,7 @@ import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveStorage;
+import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.williammora.snackbar.Snackbar;
@@ -200,15 +201,14 @@ public class SettingsActivity extends MaterialPreferenceActivity {
         if (!Resource.isFull) {
             pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
             pref_cloud_sync.setEnabled(false);
-        } else {
-
-		}
+        }
 
         pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
                     Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, false).apply();
+					StorageManager.migrateToLocal(self);
                 } else {
 
                     new MaterialDialog.Builder(self)
@@ -222,6 +222,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
                                     Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+									StorageManager.migrateToDrive(self);
 
                                     dialog.dismiss();
                                 }
