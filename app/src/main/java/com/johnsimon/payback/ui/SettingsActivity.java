@@ -149,7 +149,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
                         Toast.makeText(self, getString(R.string.restore_success), Toast.LENGTH_LONG).show();
 
-                        System.exit(0);
+                        finishAffinity();
                         startActivity(new Intent(self, FeedActivity.class));
                     }
                 }

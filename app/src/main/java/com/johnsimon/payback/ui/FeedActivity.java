@@ -158,8 +158,6 @@ public class FeedActivity extends DataActivity implements
 	public void onResume() {
 		super.onResume();
 
-		startActivity(new Intent(this, PeopleManagerActivity.class));
-
 		// Check to see that the Activity started due to an Android Beam
 		Intent intent = getIntent();
 		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {

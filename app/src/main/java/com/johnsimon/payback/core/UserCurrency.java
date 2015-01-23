@@ -17,6 +17,14 @@ public class UserCurrency {
 		return displayName == null ? id : displayName;
 	}
 
+	public String render() {
+		String output = this.id;
+		if(displayName != null) {
+			output += " (" + displayName + ")";
+		}
+		return output;
+	}
+
 	public String render(float amount) {
 		return render(Float.toString(Math.abs(amount)).replaceAll("\\.0$", ""));
 	}

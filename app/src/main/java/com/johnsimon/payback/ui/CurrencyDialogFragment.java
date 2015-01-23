@@ -255,7 +255,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 			NavigationDrawerFragment.updateBalance(data);
 			if (SettingsActivity.pref_currency != null) {
-				SettingsActivity.pref_currency.setSummary(displayCurrency);
+				SettingsActivity.pref_currency.setSummary(selectedCurrency);
 			}
 
 			alertDialog.dismiss();
