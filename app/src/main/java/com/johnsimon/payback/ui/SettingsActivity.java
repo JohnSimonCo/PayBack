@@ -280,6 +280,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 		bindPreferenceSummaryToValue(pref_background);
 		bindPreferenceSummaryToValue(pref_currency);
 
+		pref_currency.setSummary(data.getPreferences().getCurrency().id);
 		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
 
 	}
@@ -336,15 +337,15 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             String stringValue = value.toString();
 
             if (preference.getKey().equals("pref_currency")) {
-                preference.setSummary(data.preferences.getCurrency().id);
+                preference.setSummary(data.getPreferences().getCurrency().id);
                 return true;
             }
 
 			if (preference.getKey().equals("pref_background")) {
-				data.preferences.background.setValue((String) value);
+				data.getPreferences().background.setValue((String) value);
 				storage.commit();
 
-				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.getPreferences().getBackground())]);
 
 				return true;
 			}
@@ -403,13 +404,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     private void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override

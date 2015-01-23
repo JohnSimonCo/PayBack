@@ -48,8 +48,22 @@ public class AppData {
         return contacts != null;
     }
 
+	public Preferences getPreferences() {
+		if(preferences == null) {
+			preferences = Preferences.defaultPreferences();
+		}
+		return preferences;
+	}
+
+	public PeopleOrder getPeopleOrder() {
+		if(peopleOrder == null) {
+			peopleOrder = new PeopleOrder(people);
+		}
+		return peopleOrder;
+	}
+
 	public ArrayList<Person> peopleOrdered() {
-		return peopleOrder.order(people);
+		return getPeopleOrder().order(people);
 	}
 
     public ArrayList<Debt> feed(Person person) {
@@ -135,7 +149,7 @@ public class AppData {
     public void delete(Person person) {
         deleteDebts(person);
         deleted.add(person.id);
-		peopleOrder.remove(person.id);
+		getPeopleOrder().remove(person.id);
         people.remove(person);
     }
     public void delete(Debt debt) {
@@ -152,7 +166,7 @@ public class AppData {
 
 	public void add(Person person) {
 		people.add(person);
-		peopleOrder.add(person.id);
+		getPeopleOrder().add(person.id);
 	}
 
     private void deleteDebts(Person person) {
@@ -280,18 +294,4 @@ public class AppData {
     public static String toJson(AppData data) {
         return new Gson().toJson(data, AppData.class);
     }
-
-	@Override
-	public boolean equals(Object o){
-		if (o == null) return false;
-		if (o == this) return true;
-		if (!(o instanceof AppData))return false;
-		AppData other = (AppData) o;
-
-		return people.equals(other.people)
-			&& debts.equals(other.debts)
-			&& deleted.equals(other.deleted)
-			&& peopleOrder.equals(other.peopleOrder)
-			&& preferences.equals(other.preferences);
-	}
 }

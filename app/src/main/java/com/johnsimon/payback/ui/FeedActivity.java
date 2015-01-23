@@ -197,7 +197,7 @@ public class FeedActivity extends DataActivity implements
 
 		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
 
-        FeedFragment.displayTotalDebt(getResources(), data.preferences.getCurrency());
+        FeedFragment.displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 
 	}
 

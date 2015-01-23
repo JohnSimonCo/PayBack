@@ -248,7 +248,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			data.preferences.currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()));
+			data.getPreferences().currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()));
 			storage.commit();
 
 			FeedFragment.adapter.notifyDataSetChanged();

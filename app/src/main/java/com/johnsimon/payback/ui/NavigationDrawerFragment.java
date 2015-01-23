@@ -316,8 +316,8 @@ public class NavigationDrawerFragment extends DataFragment {
     }
 
 	public static void updateBalance(AppData data) {
-		headerPlus.setText("+ " + data.preferences.getCurrency().render(data.totalPlus()));
-		headerMinus.setText("- " + data.preferences.getCurrency().render(data.totalMinus()));
+		headerPlus.setText("+ " + data.getPreferences().getCurrency().render(data.totalPlus()));
+		headerMinus.setText("- " + data.getPreferences().getCurrency().render(data.totalMinus()));
 	}
 
 	private void updateName() {

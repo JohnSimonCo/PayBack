@@ -176,9 +176,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 	@Override
 	protected void onDataReceived() {
-		displayTotalDebt(getResources(), data.preferences.getCurrency());
+		displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 
-		if (data.preferences.getBackground().equals("mountains")) {
+		if (data.getPreferences().getBackground().equals("mountains")) {
 			headerImage.setImageResource(R.drawable.art);
 		} else {
 			headerImage.setImageResource(R.drawable.art_old);
@@ -199,8 +199,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		adapter.notifyDataSetChanged();
 
 		if (getActivity() != null && getResources() != null) {
-			if (getActivity() != null && getResources() != null) {
-				displayTotalDebt(getResources(), data.preferences.getCurrency());
+			if (getResources() != null) {
+				displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 			}
 		}
 	}
@@ -281,7 +281,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 							adapter.notifyItemRemoved(index);
 							adapter.checkAdapterIsEmpty();
 
-							displayTotalDebt(getResources(), data.preferences.getCurrency());
+							displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 						}
 
 						@Override
@@ -290,7 +290,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 							adapter.notifyItemInserted(index);
 							adapter.checkAdapterIsEmpty();
 
-							displayTotalDebt(getResources(), data.preferences.getCurrency());
+							displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 						}
 
 						@Override
