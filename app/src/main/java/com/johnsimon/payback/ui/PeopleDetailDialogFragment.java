@@ -100,9 +100,8 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 									Undo.executeAction(getActivity(), R.string.deleted_person, new Undo.UndoableAction() {
 										@Override
 										public void onDisplay() {
-                                            //TODO Crash when removing multiple people in a row
                                             PeopleListAdapter.people.remove(listIndex);
-                                            PeopleManagerActivity.adapter.notifyItemRemoved(listIndex);
+                                            PeopleManagerActivity.adapter.notifyDataSetChanged();
                                             PeopleListAdapter.updateEmptyViewVisibility();
 
 											alertDialog.cancel();
@@ -111,7 +110,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 										@Override
 										public void onRevert() {
                                             PeopleListAdapter.people.add(listIndex, person);
-                                            PeopleManagerActivity.adapter.notifyItemInserted(listIndex);
+                                            PeopleManagerActivity.adapter.notifyDataSetChanged();
                                             PeopleListAdapter.updateEmptyViewVisibility();
 										}
 

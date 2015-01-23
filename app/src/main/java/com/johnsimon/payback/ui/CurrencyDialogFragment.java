@@ -52,8 +52,6 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	private boolean continueToNfc = false;
     private boolean usingDefaults = true;
 
-	//TODO WHEN STARTED USE OLD CURRENCY
-
 	@Override
 	public Dialog onCreateDialog(final Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

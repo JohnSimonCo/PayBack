@@ -135,7 +135,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                     if ( inputStream != null ) {
                         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        String receiveString = "";
+                        String receiveString;
                         StringBuilder stringBuilder = new StringBuilder();
 
                         while ( (receiveString = bufferedReader.readLine()) != null ) {
@@ -145,7 +145,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                         inputStream.close();
 
                         data = AppData.fromJson(stringBuilder.toString());
-                        storage.commit(data);
+						storage.commit(data);
 
                         Toast.makeText(self, getString(R.string.restore_success), Toast.LENGTH_LONG).show();
 
