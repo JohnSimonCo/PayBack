@@ -16,6 +16,7 @@ import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.core.UserCurrency;
+import com.johnsimon.payback.util.CurrencyUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +99,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		final List<String> order = Arrays.asList("$", "€", "£", "₪", "₫", "₩", "¥", "฿");
 
-		Set<Currency> currencySet = getAllCurrencies();
+		Set<Currency> currencySet = CurrencyUtils.getAllCurrencies();
 
 		final ArrayList<String> currencyNames = new ArrayList<>(currencySet.size());
 		for(Currency currency : currencySet) {
@@ -213,20 +214,6 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		welcome_select_currency.setText(getString(R.string.currency) + " (" + selectedCurrency + ")");
 		welcome_select_currency_display.setText(getString(R.string.change_currency_symbol) + " (" + displayCurrency + ")");
-	}
-
-	private static Set<Currency> getAllCurrencies() {
-		Set<Currency> toret = new HashSet<>();
-		Locale[] locs = Locale.getAvailableLocales();
-
-		for(Locale loc : locs) {
-			try {
-				toret.add( Currency.getInstance( loc ) );
-			} catch(Exception exc){
-			}
-		}
-
-		return toret;
 	}
 
 	@Override
