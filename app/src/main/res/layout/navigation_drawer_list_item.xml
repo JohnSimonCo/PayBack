@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_gravity="center_vertical"
             android:layout_marginRight="16dp"
             android:layout_width="40dp"
@@ -46,14 +46,14 @@
             <TextView
                 android:visibility="gone"
                 android:id="@+id/navigation_drawer_list_item_avatar_letter"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:textSize="22dp"
                 android:textColor="@android:color/white"
                 android:fontFamily="sans-serif-light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-        </RelativeLayout>
+        </FrameLayout>
 
         <com.devspark.robototextview.widget.RobotoTextView
             app:fontFamily="roboto"

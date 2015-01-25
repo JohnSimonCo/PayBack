@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    >
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_marginTop="20dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -39,14 +39,14 @@
             <TextView
                 android:visibility="gone"
                 android:id="@+id/list_item_avatar_letter"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:textSize="@dimen/feed_avatar_text_size"
                 android:textColor="@android:color/white"
                 android:fontFamily="sans-serif-light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-        </RelativeLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_marginTop="16dp"

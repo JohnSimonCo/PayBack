@@ -43,7 +43,8 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		if(person == null) {
 			return 0;
 		}
-		for(int i = 0, l = items.size(); i < l; i++) {
+
+		for (int i = 0, l = items.size(); i < l; i++) {
 			NavigationDrawerItem item = items.get(i);
 			if(item.personId == person.id) {
 				return i + 1;

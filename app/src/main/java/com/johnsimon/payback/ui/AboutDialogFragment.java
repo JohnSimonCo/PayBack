@@ -39,7 +39,7 @@ public class AboutDialogFragment extends DialogFragment {
 		CharSequence[] a = new CharSequence[]{"hej"};
 
 		LinearLayout about_dialog_list_parent = (LinearLayout) rootView.findViewById(R.id.about_dialog_list_parent);
-		for (int i = 0; i < about_dialog_list_parent.getChildCount(); i++) {
+		for (int i = 0, l = about_dialog_list_parent.getChildCount(); i < l; i++) {
 			View childView = about_dialog_list_parent.getChildAt(i);
 
 			childView.setOnClickListener(new View.OnClickListener() {

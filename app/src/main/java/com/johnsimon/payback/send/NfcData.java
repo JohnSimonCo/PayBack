@@ -10,7 +10,7 @@ public class NfcData {
 
 	public NfcData(Debt[] debts, User sender, boolean fullSync) {
 		this.debts = new DebtSendable[debts.length];
-		for(int i = 0; i < this.debts.length; i++) {
+		for(int i = 0, l = this.debts.length; i < l; i++) {
 			this.debts[i] = new DebtSendable(debts[i]);
 		}
 		this.sender = sender;

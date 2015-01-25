@@ -23,6 +23,7 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.makeramen.RoundedImageView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Comparator;
@@ -135,14 +136,15 @@ public class Resource {
 					DateUtils.FORMAT_ABBREV_ALL);
     }
 
-	public static void createProfileImage(DataActivityInterface dataActivity, Person person, final RoundedImageView avatar, TextView avatarLetter) {
-		if(person.hasImage()) {
+	public static void createProfileImage(DataActivityInterface dataActivity, Person person, RoundedImageView avatar, TextView avatarLetter) {
+		if (person.hasImage()) {
 			avatarLetter.setVisibility(View.GONE);
 
             Picasso.with(dataActivity.getContext())
                     .load(person.link.photoURI)
                     .into(avatar);
 		} else {
+            avatar.setImageBitmap(null);
 			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity, person.paletteIndex));
 			avatarLetter.setVisibility(View.VISIBLE);
 			avatarLetter.setText(person.getAvatarLetter());

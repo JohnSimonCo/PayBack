@@ -62,14 +62,14 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
 	@Override
 	public FeedListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_list_item, parent, false));
-	}
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_list_item, parent, false));
+    }
 
 	@Override
-	public void onBindViewHolder(final ViewHolder holder, final int position) {
-		final Debt debt = list.get(position);
-		final Person owner = debt.getOwner();
-		final Resources resources = context.getResources();
+	public void onBindViewHolder(final ViewHolder holder, int position) {
+		Debt debt = list.get(position);
+		Person owner = debt.getOwner();
+		Resources resources = context.getResources();
 
 		holder.person.setText(owner.getName());
 		holder.amount.setText(context.data.getPreferences().getCurrency().render(debt));
@@ -91,10 +91,11 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			holder.avatar.setAlpha(1f);
 		}
 
+        holder.itemView.setTag(position);
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get(position));
+				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get((int) v.getTag()));
 				dialog.show(context.getFragmentManager().beginTransaction(), "dialog");
 				dialog.callback = callback;
 			}
