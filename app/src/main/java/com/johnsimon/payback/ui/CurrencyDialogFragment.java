@@ -53,6 +53,21 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	private boolean continueToNfc = false;
     private boolean usingDefaults = true;
 
+    /*TODO
+        Vi borde ha med USD och alla de valutorna och fortfarande ha
+        dollartecken och eurotecken i början. Det känns fel att
+        USD och EUR helt saknas i listan. De möjliga scenariorna är:
+
+        1.  Person använder dollar, hittar det i början <- Påverkas inte
+
+        2.  Person använder dollar, scrollar ned och
+            hittar det för han letar alltid efter USD   <- Påverkas positivt
+
+        3.  Person använder inte dollar, använder dock
+            USD och liknande för att orientera sig för
+            hans valuta kanske börjar på U också.       <- Påverkas positivt
+     */
+
 	@Override
 	public Dialog onCreateDialog(final Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -227,8 +242,6 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			//Button was disabled when no currencyId so we're free
-			//to continue since the user was able to press the button
 
 			if (continueToNfc) {
 				WelcomeNfcDialogFragment welcomeNfcDialogFragment = new WelcomeNfcDialogFragment();
