@@ -137,6 +137,9 @@ public class Resource {
     }
 
 	public static void createProfileImage(DataActivityInterface dataActivity, Person person, RoundedImageView avatar, TextView avatarLetter) {
+
+        Picasso.with(dataActivity.getContext()).cancelRequest(avatar);
+
 		if (person.hasImage()) {
 			avatarLetter.setVisibility(View.GONE);
 
