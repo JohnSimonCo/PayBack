@@ -67,7 +67,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
-		Debt debt = list.get(position);
+		final Debt debt = list.get(position);
 		Person owner = debt.getOwner();
 		Resources resources = context.getResources();
 
@@ -91,11 +91,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			holder.avatar.setAlpha(1f);
 		}
 
-        holder.itemView.setTag(position);
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(FeedActivity.feed.get((int) v.getTag()));
+				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(debt);
 				dialog.show(context.getFragmentManager().beginTransaction(), "dialog");
 				dialog.callback = callback;
 			}
