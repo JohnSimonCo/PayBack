@@ -25,6 +25,7 @@ import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataSyncer;
@@ -136,12 +137,15 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
 	public void changeAccount() {
 		client.clearDefaultAccountAndReconnect();
-		emit(AppData.defaultAppData());
-		localStorage.commit(data);
 
-		getPreferences().edit()
-			.remove(PREFERENCE_ACCOUNT_NAME)
-			.apply();
+		loginCancelledNotification.listen(new NotificationCallback() {
+			@Override
+			public void onNotify() {
+				StorageManager.migrateToLocal(context);
+
+				loginCancelledNotification.unregister(this);
+			}
+		});
 	}
 
 	private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
@@ -150,6 +154,8 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
             if(!status.isSuccess()) {
                 show("Sync error");
             }
+
+			if(!client.isConnected()) return;
 
 			//TODO innan release: använda app folder
 			Drive.DriveApi.getRootFolder(client)
@@ -358,7 +364,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 						.apply();
                 } else if(resultCode == Activity.RESULT_CANCELED) {
 					loginCancelledNotification.broadcast();
-					StorageManager.migrateToLocal(activity);
 				}
                 return true;
         }

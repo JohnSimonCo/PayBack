@@ -45,6 +45,11 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	}
 
 	@Override
+	public void setStorage(Storage storage) {
+		this.storage = storage;
+	}
+
+	@Override
 	public AppData getData() {
 		return data;
 	}
@@ -77,8 +82,6 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader.userLoaded.then(userLoadedCallback);
 
-		StorageManager.storageChangedSubscription.listen(storageChangedCallback);
-
 		storage.connect();
 	}
 
@@ -89,8 +92,6 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 		storage.subscription.unregister(dataLoadedCallback);
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
-
-		StorageManager.storageChangedSubscription.unregister(storageChangedCallback);
 
 		storage.disconnect();
 	}
@@ -131,13 +132,6 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 			self.user = user;
 
 			onUserLoaded();
-		}
-	};
-
-	private Callback<Storage> storageChangedCallback = new Callback<Storage>() {
-		@Override
-		public void onCalled(Storage _storage) {
-			storage = _storage;
 		}
 	};
 

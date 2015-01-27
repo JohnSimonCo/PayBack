@@ -20,4 +20,6 @@ public interface DataActivityInterface {
 	Storage getStorage();
 	ContactLoader getContactLoader();
 	Notification getDataLink();
+
+	void setStorage(Storage storage);
 }

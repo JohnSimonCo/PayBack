@@ -1,12 +1,14 @@
 package com.johnsimon.payback.async;
 
-import com.johnsimon.payback.async.Callback;
-
 import java.util.ArrayList;
 
 public class Subscription<D> {
     private ArrayList<Callback<D>> callbacks = new ArrayList<>();
     private D data = null;
+
+	public Subscription() {
+
+	}
 
     public void listen(Callback<D> callback) {
         callbacks.add(callback);

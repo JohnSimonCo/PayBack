@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.Subscription;
+import com.johnsimon.payback.core.DataActivityInterface;
 
 public class StorageManager {
 	public final static String PREFERENCE_STORAGE_TYPE = "STORAGE_TYPE";
@@ -13,8 +16,6 @@ public class StorageManager {
 
 	private static LocalStorage localStorage = null;
 	private static Storage storage = null;
-
-	public static Subscription<Storage> storageChangedSubscription = new Subscription<>();
 
 	public static LocalStorage getLocalStorage(Context context) {
 		if(localStorage == null) {
@@ -46,20 +47,33 @@ public class StorageManager {
 
         return storage;
     }
-	public static void migrateToDrive(Activity context) {
-		storage = new DriveStorage(context, localStorage);
-		storage.connect();
-		storageChangedSubscription.broadcast(storage);
-		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).apply();
+	public static void migrateToDrive(final DataActivityInterface dataActivity) {
+		final DriveStorage driveStorage = new DriveStorage(dataActivity.getContext(), localStorage);
+		dataActivity.setStorage(driveStorage);
+		driveStorage.connect();
+		driveStorage.loginSubscription.listen(new Callback<String>() {
+			@Override
+			public void onCalled(String data) {
+				localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).apply();
+				driveStorage.loginSubscription.unregister(this);
+				restart(dataActivity.getContext());
+			}
+		});
+
+		driveStorage.loginCancelledNotification.listen(new NotificationCallback() {
+			@Override
+			public void onNotify() {
+				dataActivity.setStorage(storage);
+			}
+		});
 	}
 	public static void migrateToLocal(Context context) {
-		storage.disconnect();
-		storage = localStorage;
-		storageChangedSubscription.broadcast(storage);
+		localStorage.wipe();
 		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL).apply();
+		restart(context);
 	}
 
-	private static void restart(Activity context) {
+	private static void restart(Context context) {
 		System.exit(0);
 		//context.finishAffinity();
 		//context.startActivity(new Intent(context, FeedActivity.class));

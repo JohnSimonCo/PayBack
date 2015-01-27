@@ -193,7 +193,10 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				((DriveStorage) storage).changeAccount();
+				if(storage.isDriveStorage()) {
+					DriveStorage driveStorage = storage.asDriveStorage();
+					driveStorage.changeAccount();
+				}
 				return false;
 			}
 		});
@@ -207,7 +210,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
-                    storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, false).apply();
 					StorageManager.migrateToLocal(self);
                 } else {
 
@@ -222,7 +224,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
 									storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
-									StorageManager.migrateToDrive(self);
+									StorageManager.migrateToDrive(SettingsActivity.this);
 
                                     dialog.dismiss();
                                 }
@@ -275,6 +277,11 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 			loginSubscription = storage.asDriveStorage().loginSubscription;
 		}
     }
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
 	@Override
 	protected void onDataReceived() {

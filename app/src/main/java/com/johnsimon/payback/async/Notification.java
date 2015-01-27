@@ -2,9 +2,6 @@ package com.johnsimon.payback.async;
 
 import java.util.ArrayList;
 
-/**
- * Created by John on 2015-01-16.
- */
 public class Notification {
 	private ArrayList<NotificationCallback> callbacks = new ArrayList<>();
 	boolean notified = false;

@@ -46,8 +46,6 @@ public abstract class DataDialogFragment extends DialogFragment {
 
         dataLink.listen(dataLinkedCallback);
 
-		StorageManager.storageChangedSubscription.listen(storageChangedCallback);
-
 		contactLoader.userLoaded.then(userLoadedCallback);
     }
 
@@ -58,8 +56,6 @@ public abstract class DataDialogFragment extends DialogFragment {
         storage.subscription.unregister(dataLoadedCallback);
 
         dataLink.unregister(dataLinkedCallback);
-
-		StorageManager.storageChangedSubscription.unregister(storageChangedCallback);
 
         contactLoader.userLoaded.unregister(userLoadedCallback);
     }
@@ -92,13 +88,6 @@ public abstract class DataDialogFragment extends DialogFragment {
             onUserLoaded();
         }
     };
-
-	private Callback<Storage> storageChangedCallback = new Callback<Storage>() {
-		@Override
-		public void onCalled(Storage _storage) {
-			storage = _storage;
-		}
-	};
 
     protected void onDataReceived() {
     }
