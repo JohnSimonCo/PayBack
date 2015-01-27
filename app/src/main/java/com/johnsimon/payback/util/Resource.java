@@ -145,6 +145,7 @@ public class Resource {
 
             Picasso.with(dataActivity.getContext())
                     .load(person.link.photoURI)
+                    .placeholder(R.drawable.ic_person_placeholder)
                     .into(avatar);
 		} else {
             avatar.setImageBitmap(null);
