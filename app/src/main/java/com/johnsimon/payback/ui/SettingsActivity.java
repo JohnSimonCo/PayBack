@@ -204,7 +204,9 @@ public class SettingsActivity extends MaterialPreferenceActivity {
         if (!Resource.isFull) {
             pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
             pref_cloud_sync.setEnabled(false);
-        }
+        } else {
+			pref_cloud_sync.setChecked(StorageManager.isDrive(this));
+		}
 
         pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

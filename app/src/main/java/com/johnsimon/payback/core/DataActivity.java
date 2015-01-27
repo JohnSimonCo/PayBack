@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
@@ -68,7 +69,7 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		contactLoader = ContactLoader.getLoader(this);
 
 		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
-    }
+	}
 
 	@Override
     protected void onStart() {

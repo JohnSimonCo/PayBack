@@ -47,6 +47,11 @@ public class StorageManager {
 
         return storage;
     }
+
+	public static boolean isDrive(Activity context) {
+		return getStorage(context).isDriveStorage();
+	}
+
 	public static void migrateToDrive(final DataActivityInterface dataActivity) {
 		final DriveStorage driveStorage = new DriveStorage(dataActivity.getContext(), localStorage);
 		dataActivity.setStorage(driveStorage);
@@ -54,7 +59,7 @@ public class StorageManager {
 		driveStorage.loginSubscription.listen(new Callback<String>() {
 			@Override
 			public void onCalled(String data) {
-				localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).apply();
+				localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).commit();
 				restart(dataActivity.getContext());
 			}
 		});
@@ -68,7 +73,7 @@ public class StorageManager {
 	}
 	public static void migrateToLocal(Context context) {
 		localStorage.wipe();
-		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL).apply();
+		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL).commit();
 		restart(context);
 	}
 
