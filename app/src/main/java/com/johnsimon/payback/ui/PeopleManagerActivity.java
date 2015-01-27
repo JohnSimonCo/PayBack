@@ -19,9 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -41,6 +38,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener {
 
@@ -51,8 +49,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
     private int sortAzX;
     private int sortAzY;
-
-    private ArrayList<Person> personListBeforeSort;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -143,9 +139,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title), data.peopleOrdered());
 		recyclerView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		adapter.updateEmptyViewVisibility();
-
-		final PeopleManagerActivity self = this;
+		PeopleListAdapter.updateEmptyViewVisibility();
 
 		adapter.clickListener = new PeopleListAdapter.PeopleListClickListener() {
 			@Override
@@ -176,10 +170,10 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				public void onSelected(String name) {
 					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
 					data.add(person);
-                    adapter.people.add(person);
+                    PeopleListAdapter.people.add(person);
 					storage.commit();
 					adapter.notifyDataSetChanged();
-					adapter.updateEmptyViewVisibility();
+                    PeopleListAdapter.updateEmptyViewVisibility();
 				}
 			};
 
@@ -213,7 +207,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 			case R.id.action_sort_az:
 
-				final ArrayList<Person> list = adapter.people;
+				final ArrayList<Person> list = PeopleListAdapter.people;
 
 				final PeopleOrder.SortResult result = data.peopleOrder.sortAlphabetically(data.people);
 
@@ -234,7 +228,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 							sort(self, result, list);
 
 							adapter.notifyDataSetChanged();
-							adapter.updateEmptyViewVisibility();
+                            PeopleListAdapter.updateEmptyViewVisibility();
 
                             Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, initialRadius);
                             anim.setInterpolator(new PathInterpolator(0.72f, 0.16f, 0.85f, 0.69f));
@@ -261,13 +255,13 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
-                PeopleManagerActivity.adapter.people = result.people;
+                PeopleListAdapter.people = result.people;
 				adapter.notifyDataSetChanged();
 			}
 
 			@Override
 			public void onRevert() {
-                PeopleManagerActivity.adapter.people = list;
+                PeopleListAdapter.people = list;
 				adapter.notifyDataSetChanged();
 			}
 
@@ -309,12 +303,22 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     @Override
     public void onItemMoved(int from, int to) {
         if (from != to) {
+            //TODO TEST THIS MORE
             Person item = adapter.getItem(from);
             adapter.remove(from);
-            adapter.insert(item, to);
+
+            boolean toLast;
+
+            if (to == PeopleListAdapter.people.size()) {
+                PeopleListAdapter.people.add(item);
+                toLast = true;
+            } else {
+                adapter.insert(item, to);
+                toLast = false;
+            }
             adapter.notifyDataSetChanged();
 
-            data.peopleOrder.reorder(from, to);
+            data.peopleOrder.reorder(from, to, toLast);
             storage.commit();
         }
     }

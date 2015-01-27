@@ -1,5 +1,7 @@
 package com.johnsimon.payback.data;
 
+import com.johnsimon.payback.adapter.PeopleListAdapter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,11 +37,15 @@ public class PeopleOrder extends ArrayList<UUID> {
         return list;
 	}
 
-    public void reorder(int from, int to) {
+    public void reorder(int from, int to, boolean toLast) {
         this.touch();
         UUID item = get(from);
         remove(from);
-        add(to, item);
+        if (toLast) {
+            add(item);
+        } else {
+            add(to, item);
+        }
     }
 	private SortResult sort(ArrayList<Person> people, Comparator<Person> comparator) {
         ArrayList<Person> copy = new ArrayList<>(people);
