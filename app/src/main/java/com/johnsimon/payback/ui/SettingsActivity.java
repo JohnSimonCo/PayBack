@@ -101,7 +101,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
         }
 
         final Activity self = this;
-
+        /*
         Preference pref_export_data = findPreference("pref_export_data");
         pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -166,7 +166,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
                 return false;
             }
-        });
+        });*/
 
         pref_currency = findPreference("pref_currency");
 
