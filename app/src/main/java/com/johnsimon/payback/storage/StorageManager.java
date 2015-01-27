@@ -2,6 +2,7 @@ package com.johnsimon.payback.storage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.johnsimon.payback.async.Subscription;
 
@@ -20,6 +21,10 @@ public class StorageManager {
 			localStorage = new LocalStorage(context);
 		}
 		return localStorage;
+	}
+
+	public static SharedPreferences getPreferences(Context context) {
+		return getLocalStorage(context).getPreferences();
 	}
 
     public static Storage getStorage(Activity context) {

@@ -22,6 +22,7 @@ import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.storage.StorageManager;
 import com.makeramen.RoundedImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -42,8 +43,6 @@ public class Resource {
     private final static String PACKAGE_NAME = "com.johnsimon.payback";
     private final static String ARG_PREFIX = PACKAGE_NAME + ".ARG_";
 
-    public static SharedPreferences preferences;
-
 	private static int actions;
 	private static boolean neverRate;
 
@@ -56,7 +55,7 @@ public class Resource {
 
         isInitialized = true;
 
-        Resource.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences preferences = StorageManager.getPreferences(context);
 
 		neverRate = preferences.getBoolean(SAVE_KEY_NEVER_RATE, false);
 		if(!neverRate) {
@@ -74,7 +73,7 @@ public class Resource {
     /*  Method to detect if it's the first time the user uses the app.
         Will return true if a preference with the key "FIRST_TIME"
         already exists.  */
-    public static boolean isFirstRun() {
+    public static boolean isFirstRun(SharedPreferences preferences) {
         if (preferences.getBoolean(SAVE_KEY_FIRST_RUN, true)) {
             preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
             return true;
@@ -160,6 +159,8 @@ public class Resource {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
 
+		final SharedPreferences preferences = StorageManager.getPreferences(activity);
+
 		//Increment actions and compare to MAX_ACTIONS
 		if(++actions >= MAX_ACTIONS) {
 			actions = 0;
@@ -184,7 +185,7 @@ public class Resource {
                             }
 
                             neverRate = true;
-                            preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
+							preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
                             dialog.dismiss();
                         }
 
@@ -192,7 +193,7 @@ public class Resource {
                         public void onNegative(MaterialDialog dialog) {
                             super.onNegative(dialog);
                             neverRate = true;
-                            preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
+							preferences.edit().putBoolean(SAVE_KEY_NEVER_RATE, true).apply();
                         }
 
                         @Override

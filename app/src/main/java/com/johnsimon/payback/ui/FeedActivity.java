@@ -89,7 +89,7 @@ public class FeedActivity extends DataActivity implements
         }
 
 		Resource.init(this);
-		if (Resource.isFirstRun()) {
+		if (Resource.isFirstRun(storage.getPreferences())) {
 			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
 			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
 		}
@@ -468,7 +468,7 @@ public class FeedActivity extends DataActivity implements
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+                        storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
                         dialog.dismiss();
                     }
 

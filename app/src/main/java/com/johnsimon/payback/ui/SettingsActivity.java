@@ -207,7 +207,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
-                    Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, false).apply();
+                    storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, false).apply();
 					StorageManager.migrateToLocal(self);
                 } else {
 
@@ -221,7 +221,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-                                    Resource.preferences.edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
+									storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
 									StorageManager.migrateToDrive(self);
 
                                     dialog.dismiss();
