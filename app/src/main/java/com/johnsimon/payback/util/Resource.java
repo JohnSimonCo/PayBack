@@ -35,10 +35,8 @@ public class Resource {
     private final static int MAX_FREE_DEBTS = 5;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
-	private final static String SAVE_KEY_CURRENCY = "CURRENCY_SAVE_KEY";
 	private final static String SAVE_KEY_ACTIONS = "SAVE_KEY_ACTIONS";
 	private final static String SAVE_KEY_NEVER_RATE = "SAVE_KEY_NEVER_RATE";
-    public final static String SAVE_KEY_USE_CLOUD_SYNC = "SAVE_KEY_USE_CLOUD_SYNC";
 
     private final static String PACKAGE_NAME = "com.johnsimon.payback";
     private final static String ARG_PREFIX = PACKAGE_NAME + ".ARG_";

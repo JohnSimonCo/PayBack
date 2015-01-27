@@ -55,7 +55,6 @@ public class StorageManager {
 			@Override
 			public void onCalled(String data) {
 				localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).apply();
-				driveStorage.loginSubscription.unregister(this);
 				restart(dataActivity.getContext());
 			}
 		});

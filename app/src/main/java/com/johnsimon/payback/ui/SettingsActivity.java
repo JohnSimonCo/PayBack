@@ -124,7 +124,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             }
         });
 
-        //TODO NOT FINISHED
+        //TODO finish import/export
         Preference pref_import_data = findPreference("pref_import_data");
         pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -212,7 +212,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                 if (pref_cloud_sync.isChecked()) {
 					StorageManager.migrateToLocal(self);
                 } else {
-
                     new MaterialDialog.Builder(self)
                             .cancelable(false)
                             .title(R.string.cloud_sync)
@@ -223,7 +222,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-									storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
 									StorageManager.migrateToDrive(SettingsActivity.this);
 
                                     dialog.dismiss();
@@ -277,11 +275,6 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 			loginSubscription = storage.asDriveStorage().loginSubscription;
 		}
     }
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-	}
 
 	@Override
 	protected void onDataReceived() {

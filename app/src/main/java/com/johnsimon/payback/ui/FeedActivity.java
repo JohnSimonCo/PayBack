@@ -468,7 +468,6 @@ public class FeedActivity extends DataActivity implements
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        storage.getPreferences().edit().putBoolean(Resource.SAVE_KEY_USE_CLOUD_SYNC, true).apply();
                         dialog.dismiss();
                     }
 
