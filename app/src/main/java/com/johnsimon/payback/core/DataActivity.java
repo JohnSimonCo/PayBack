@@ -77,6 +77,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		contactLoader.userLoaded.then(userLoadedCallback);
 
+		StorageManager.storageChangedSubscription.listen(storageChangedCallback);
+
 		storage.connect();
     }
 
@@ -87,6 +89,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		storage.subscription.unregister(dataLoadedCallback);
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
+
+		StorageManager.storageChangedSubscription.unregister(storageChangedCallback);
 
         storage.disconnect();
 
@@ -129,6 +133,13 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 			self.user = user;
 
 			onUserLoaded();
+		}
+	};
+
+	private Callback<Storage> storageChangedCallback = new Callback<Storage>() {
+		@Override
+		public void onCalled(Storage _storage) {
+			storage = _storage;
 		}
 	};
 

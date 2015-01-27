@@ -24,6 +24,7 @@ import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataSyncer;
@@ -48,7 +49,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
     private DriveFile file = null;
 
 	public Subscription<String> loginSubscription = new Subscription<>();
-	public Subscription<String> loginCancelledSubscription = new Subscription<>();
+	public Notification loginCancelledNotification = new Notification();
 
     public DriveStorage(Activity context, LocalStorage localStorage) {
         super(context);
@@ -355,7 +356,10 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 					getPreferences().edit()
 						.putString(PREFERENCE_ACCOUNT_NAME, accountName)
 						.apply();
-                }
+                } else if(resultCode == Activity.RESULT_CANCELED) {
+					loginCancelledNotification.broadcast();
+					StorageManager.migrateToLocal(activity);
+				}
                 return true;
         }
         return super.handleActivityResult(requestCode, resultCode, intent);

@@ -10,6 +10,7 @@ import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.storage.StorageManager;
 
 public abstract class DataFragment extends Fragment {
     protected Storage storage;
@@ -45,6 +46,8 @@ public abstract class DataFragment extends Fragment {
 
         dataLink.listen(dataLinkedCallback);
 
+		StorageManager.storageChangedSubscription.listen(storageChangedCallback);
+
 		contactLoader.userLoaded.then(userLoadedCallback);
 	}
 
@@ -55,6 +58,8 @@ public abstract class DataFragment extends Fragment {
 		storage.subscription.unregister(dataLoadedCallback);
 
         dataLink.unregister(dataLinkedCallback);
+
+		StorageManager.storageChangedSubscription.unregister(storageChangedCallback);
 
         contactLoader.userLoaded.unregister(userLoadedCallback);
 	}
@@ -87,6 +92,13 @@ public abstract class DataFragment extends Fragment {
             onUserLoaded();
         }
     };
+
+	private Callback<Storage> storageChangedCallback = new Callback<Storage>() {
+		@Override
+		public void onCalled(Storage _storage) {
+			storage = _storage;
+		}
+	};
 
 	protected void onDataReceived() {
 	}
