@@ -294,7 +294,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 					if (viewTreeObserver.isAlive()) {
 						viewTreeObserver.removeGlobalOnLayoutListener(this);
 					}
-
 				}
 			}
 		});
@@ -303,7 +302,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     @Override
     public void onItemMoved(int from, int to) {
         if (from != to) {
-            //TODO TEST THIS MORE
             Person item = adapter.getItem(from);
             adapter.remove(from);
 
