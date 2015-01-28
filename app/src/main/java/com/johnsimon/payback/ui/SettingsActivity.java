@@ -28,6 +28,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveStorage;
@@ -69,11 +71,15 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     public static Preference pref_currency;
 
     private ListPreference pref_background;
-    private String backgroundPrefValue;
 
 	public Subscription<String> loginSubscription = null;
 
 	private Preference pref_cloud_sync_account;
+    private CheckBoxPreference pref_cloud_sync;
+
+    private Notification loginCancelNotification;
+    private NotificationCallback loginCancelNotificationCallback;
+
 
 	@Override
 	protected int getPreferencesXmlId() {
@@ -186,7 +192,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             }
         });
 
-        final CheckBoxPreference pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
+        pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
 
 		pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
 		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveStorage.PREFERENCE_ACCOUNT_NAME, null));
@@ -412,8 +418,18 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        backgroundPrefValue = pref_background.getValue();
 
+        if (storage.isDriveStorage()) {
+            loginCancelNotification = storage.asDriveStorage().loginCancelledNotification;
+            loginCancelNotificationCallback = new NotificationCallback() {
+                @Override
+                public void onNotify() {
+                    pref_cloud_sync.setChecked(false);
+                }
+            };
+
+            loginCancelNotification.listen(loginCancelNotificationCallback);
+        }
 		if(loginSubscription != null) {
 			loginSubscription.listen(onLoginCallback);
 		}
@@ -422,6 +438,10 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
+        if (loginCancelNotification != null) {
+            loginCancelNotification.unregister(loginCancelNotificationCallback);
+        }
 
 		if(loginSubscription != null) {
 			loginSubscription.unregister(onLoginCallback);
