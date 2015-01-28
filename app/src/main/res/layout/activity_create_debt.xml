@@ -9,6 +9,7 @@
     tools:context="se.jrp.deptapp.CreateDebtActivity"   >
 
     <RelativeLayout
+        android:id="@+id/create_master"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

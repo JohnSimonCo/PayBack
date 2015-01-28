@@ -16,16 +16,21 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.Window;
+import android.view.animation.PathInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.johnsimon.payback.R;
@@ -66,6 +71,8 @@ public class CreateDebtActivity extends DataActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_create_debt);
+
         if (Resource.isLOrAbove()) {
             setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
                     R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
@@ -78,8 +85,6 @@ public class CreateDebtActivity extends DataActivity {
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
-
-        setContentView(R.layout.activity_create_debt);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_toolbar);
         setSupportActionBar(toolbar);
@@ -318,6 +323,7 @@ public class CreateDebtActivity extends DataActivity {
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -326,9 +332,10 @@ public class CreateDebtActivity extends DataActivity {
             return true;
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
-
-                finish();
-                if (!Resource.isLOrAbove()) {
+                if (Resource.isLOrAbove()) {
+                    finishAfterTransition();
+                } else {
+                    finish();
                     overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
                 }
             } else {
@@ -347,10 +354,13 @@ public class CreateDebtActivity extends DataActivity {
         return super.onOptionsItemSelected(item);
     }
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public void onBackPressed() {
-		finish();
-        if (!Resource.isLOrAbove()) {
+        if (Resource.isLOrAbove()) {
+            finishAfterTransition();
+        } else {
+            finish();
             overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
         }
 	}
