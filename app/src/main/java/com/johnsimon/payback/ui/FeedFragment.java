@@ -11,13 +11,24 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.AutoTransition;
+import android.transition.ChangeImageTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.animation.AnimationUtils;
+import android.view.animation.PathInterpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -42,7 +53,6 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.shamanland.fab.FloatingActionButton;
-import com.williammora.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -217,7 +227,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
-		@Override
+		@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
 		public void onClick(View v) {
 
             if (Resource.canHold(data.debts.size(), 1)) {
@@ -228,7 +239,11 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                     intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, FeedActivity.person.getName());
                 }
                 if (Resource.isLOrAbove()) {
-                    startActivity(intent);
+
+                    ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            Pair.create(v, "fab"));
+
+                    startActivity(intent, transitionActivityOptions.toBundle());
                 } else {
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
                 }

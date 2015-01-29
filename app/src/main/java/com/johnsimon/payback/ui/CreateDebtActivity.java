@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Outline;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,16 +19,23 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.Window;
+import android.view.animation.PathInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.johnsimon.payback.R;
@@ -54,6 +64,7 @@ public class CreateDebtActivity extends DataActivity {
 	private TintEditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
 	private FloatLabelLayout floatLabelLayout;
+    private ImageButton create_fab_l;
 
 	private RadioGroup radioGroup;
 
@@ -61,10 +72,14 @@ public class CreateDebtActivity extends DataActivity {
 
 	private Debt editingDebt = null;
 
+    private TransitionDrawable transitionDrawable;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_create_debt);
 
         if (Resource.isLOrAbove()) {
             setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
@@ -73,13 +88,16 @@ public class CreateDebtActivity extends DataActivity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setTintColor(getResources().getColor(R.color.primary_color));
+
+            Drawable[] drawables = new Drawable[2];
+            drawables[0] = new ColorDrawable(getResources().getColor(R.color.accent_color));
+            drawables[1] = new ColorDrawable(getResources().getColor(android.R.color.white));
+            transitionDrawable = new TransitionDrawable(drawables);
         } else {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
-
-        setContentView(R.layout.activity_create_debt);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_toolbar);
         setSupportActionBar(toolbar);
@@ -95,6 +113,10 @@ public class CreateDebtActivity extends DataActivity {
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
+
+        if (savedInstanceState == null) {
+            ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
+        }
 
 		Resources res = getResources();
 
@@ -153,16 +175,18 @@ public class CreateDebtActivity extends DataActivity {
 		});
 
         if (Resource.isLOrAbove()) {
-            final ImageButton create_fab = (ImageButton) findViewById(R.id.create_fab_l);
+            create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
+            create_fab_l.setBackground(transitionDrawable);
+            transitionDrawable.startTransition(200);
 
-            create_fab.setOutlineProvider(new ViewOutlineProvider() {
+            create_fab_l.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, create_fab.getWidth(), create_fab.getHeight());
+                    outline.setOval(0, 0, create_fab_l.getWidth(), create_fab_l.getHeight());
                 }
             });
 
-            create_fab.setClipToOutline(true);
+            create_fab_l.setClipToOutline(true);
 
             validator = new RequiredValidator(new EditText[] {
                     floatLabelNameAutoCompleteTextView,
@@ -171,18 +195,18 @@ public class CreateDebtActivity extends DataActivity {
                 @Override
                 public void onValid() {
                     if (floatLabelAmountEditText.getText().equals("0")) return;
-                    create_fab.setActivated(true);
-                    create_fab.setAlpha(1f);
+                    create_fab_l.setActivated(true);
+                    create_fab_l.setAlpha(1f);
                 }
 
                 @Override
                 public void onInvalid() {
-                    create_fab.setActivated(false);
-                    create_fab.setAlpha(0.6f);
+                    create_fab_l.setActivated(false);
+                    create_fab_l.setAlpha(0.6f);
                 }
             });
 
-            create_fab.setOnClickListener(fabClickListener);
+            create_fab_l.setOnClickListener(fabClickListener);
         } else {
             final FloatingActionButton create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 
@@ -318,6 +342,7 @@ public class CreateDebtActivity extends DataActivity {
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -326,9 +351,16 @@ public class CreateDebtActivity extends DataActivity {
             return true;
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
+                if (Resource.isLOrAbove()) {
+                    transitionDrawable.reverseTransition(400);
+                    create_fab_l.animate()
+                            .alpha(1f)
+                            .setDuration(400)
+                            .start();
 
-                finish();
-                if (!Resource.isLOrAbove()) {
+                    finishAfterTransition();
+                } else {
+                    finish();
                     overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
                 }
             } else {
@@ -347,10 +379,15 @@ public class CreateDebtActivity extends DataActivity {
         return super.onOptionsItemSelected(item);
     }
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public void onBackPressed() {
-		finish();
-        if (!Resource.isLOrAbove()) {
+        if (Resource.isLOrAbove()) {
+            transitionDrawable.reverseTransition(800);
+            create_fab_l.setAlpha(1f);
+            finishAfterTransition();
+        } else {
+            finish();
             overridePendingTransition(R.anim.activity_out_reverse, R.anim.activity_in_reverse);
         }
 	}

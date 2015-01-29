@@ -9,6 +9,7 @@
     tools:context="se.jrp.deptapp.CreateDebtActivity"   >
 
     <RelativeLayout
+        android:id="@+id/create_master"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -46,6 +47,7 @@
                         <com.johnsimon.payback.view.FloatLabelLayout
                             app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel.DarkBackground"
                             app:floatLabelHint="@string/person_hint"
+                            android:id="@+id/float_label_layout_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 

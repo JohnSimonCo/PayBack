@@ -6,5 +6,6 @@
     android:elevation="4dp"
     android:background="@drawable/fab_main_drawable"
     android:stateListAnimator="@anim/fab_state_list_animator"
+    android:transitionName="fab"
     android:layout_width="56dp"
     android:layout_height="56dp" />
