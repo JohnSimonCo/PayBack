@@ -115,6 +115,9 @@ public class NavigationDrawerFragment extends DataFragment {
 	        }
         });
 
+        adapter = new NavigationDrawerAdapter((DataActivity) getActivity());
+        mDrawerListView.setAdapter(adapter);
+
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
         Button footerUpgrade = (Button) footerView.findViewById(R.id.navigation_drawer_footer_upgrade);
@@ -155,8 +158,8 @@ public class NavigationDrawerFragment extends DataFragment {
 
     @Override
     protected void onDataReceived() {
-        adapter = new NavigationDrawerAdapter((DataActivity) getActivity(), data.peopleOrdered());
-        mDrawerListView.setAdapter(adapter);
+        adapter.setItems(data.people);
+        adapter.notifyDataSetChanged();
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         setSelectedPerson(FeedActivity.person);

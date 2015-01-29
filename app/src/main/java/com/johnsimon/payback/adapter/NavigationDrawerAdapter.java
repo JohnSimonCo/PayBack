@@ -18,14 +18,12 @@ import java.util.ArrayList;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
 	private final static NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
-	private final ArrayList<NavigationDrawerItem> items = new ArrayList<>();
+	public ArrayList<NavigationDrawerItem> items = new ArrayList<>();
 
 	private final DataActivity context;
 
-	public NavigationDrawerAdapter(DataActivity context, ArrayList<Person> people) {
+	public NavigationDrawerAdapter(DataActivity context) {
 		this.context = context;
-
-		setItems(people);
 	}
 
 	public void clearItems() {
