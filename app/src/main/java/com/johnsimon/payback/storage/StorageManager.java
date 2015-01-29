@@ -2,12 +2,14 @@ package com.johnsimon.payback.storage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.core.DataActivityInterface;
+import com.johnsimon.payback.ui.SettingsActivity;
 
 public class StorageManager {
 	public final static String PREFERENCE_STORAGE_TYPE = "STORAGE_TYPE";
@@ -79,7 +81,6 @@ public class StorageManager {
 
 	private static void restart(Context context) {
 		System.exit(0);
-		//context.finishAffinity();
-		//context.startActivity(new Intent(context, FeedActivity.class));
+	    context.startActivity(new Intent(context, SettingsActivity.class));
 	}
 }

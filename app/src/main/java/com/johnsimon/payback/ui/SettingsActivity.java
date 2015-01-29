@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
@@ -48,24 +50,8 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- * <p>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
- * Android Design: Settings</a> for design guidelines and the <a
- * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
- * API Guide</a> for more information on developing a Settings UI.
- */
-public class SettingsActivity extends MaterialPreferenceActivity {
-    /**
-     * Determines whether to always show the simplified settings UI, where
-     * settings are presented in a single list. When false, settings are shown
-     * as a master/detail two-pane view on tablets. When true, a single pane is
-     * shown on tablets.
-     */
+public class SettingsActivity extends MaterialPreferenceActivity implements BillingProcessor.IBillingHandler {
+
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
     public static Preference pref_currency;
@@ -80,6 +66,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
     private Notification loginCancelNotification;
     private NotificationCallback loginCancelNotificationCallback;
 
+    private BillingProcessor bp;
 
 	@Override
 	protected int getPreferencesXmlId() {
@@ -207,6 +194,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 			}
 		});
 
+        Resource.checkFull(bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", null));
         if (!Resource.isFull) {
             pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
             pref_cloud_sync.setEnabled(false);
@@ -219,6 +207,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
 					StorageManager.migrateToLocal(self);
+                    pref_cloud_sync_account.setSummary("");
                 } else {
                     new MaterialDialog.Builder(self)
                             .cancelable(false)
@@ -238,6 +227,7 @@ public class SettingsActivity extends MaterialPreferenceActivity {
                                 @Override
                                 public void onNegative(MaterialDialog dialog) {
 									pref_cloud_sync.setChecked(false);
+                                    pref_cloud_sync_account.setSummary("");
 									super.onNegative(dialog);
                                 }
                             })
@@ -468,4 +458,49 @@ public class SettingsActivity extends MaterialPreferenceActivity {
 
 		return true;
     }
+
+    @Override
+    public void onProductPurchased(String s, TransactionDetails transactionDetails) {
+        Resource.checkFull(bp);
+
+        if (!Resource.isFull) {
+            return;
+        }
+
+        new MaterialDialog.Builder(this)
+                .title(R.string.cloud_sync)
+                .content(R.string.cloud_sync_description_first)
+                .positiveText(R.string.activate)
+                .negativeText(R.string.not_now)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
 }
