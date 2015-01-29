@@ -16,11 +16,11 @@ package com.johnsimon.payback.view;
  * limitations under the License.
  */
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -91,8 +91,8 @@ public class FloatLabelLayout extends LinearLayout {
         mLabel.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
         mLabel.setVisibility(INVISIBLE);
         mLabel.setText(mHint);
-        ViewCompat.setPivotX(mLabel, 0f);
-        ViewCompat.setPivotY(mLabel, 0f);
+        mLabel.setPivotX(0f);
+        mLabel.setPivotY(0f);
 
         mLabel.setTextAppearance(context,
                 a.getResourceId(R.styleable.FloatLabelLayout_floatLabelTextAppearance,
@@ -200,16 +200,16 @@ public class FloatLabelLayout extends LinearLayout {
     /**
      * Show the label
      */
-    private void showLabel(boolean animate) {
+    public void showLabel(boolean animate) {
         if (animate) {
             mLabel.setVisibility(View.VISIBLE);
-            ViewCompat.setTranslationY(mLabel, mLabel.getHeight());
+            mLabel.setTranslationY(mLabel.getHeight());
 
             float scale = mEditText.getTextSize() / mLabel.getTextSize();
-            ViewCompat.setScaleX(mLabel, scale);
-            ViewCompat.setScaleY(mLabel, scale);
+            mLabel.setScaleX(scale);
+            mLabel.setScaleY(scale);
 
-            ViewCompat.animate(mLabel)
+            mLabel.animate()
                     .translationY(0f)
                     .scaleY(1f)
                     .scaleX(1f)
@@ -226,23 +226,38 @@ public class FloatLabelLayout extends LinearLayout {
     /**
      * Hide the label
      */
-    private void hideLabel(boolean animate) {
+    public void hideLabel(boolean animate) {
         if (animate) {
             float scale = mEditText.getTextSize() / mLabel.getTextSize();
-            ViewCompat.setScaleX(mLabel, 1f);
-            ViewCompat.setScaleY(mLabel, 1f);
-            ViewCompat.setTranslationY(mLabel, 0f);
+            mLabel.setScaleX(1f);
+            mLabel.setScaleY(1f);
+            mLabel.setTranslationY(0f);
 
-            ViewCompat.animate(mLabel)
+            mLabel.animate()
                     .translationY(mLabel.getHeight())
                     .setDuration(ANIMATION_DURATION)
                     .scaleX(scale)
                     .scaleY(scale)
-                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                    .setListener(new Animator.AnimatorListener() {
                         @Override
-                        public void onAnimationEnd(View view) {
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
                             mLabel.setVisibility(INVISIBLE);
                             mEditText.setHint(mHint);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
                         }
                     })
                     .setInterpolator(mInterpolator).start();

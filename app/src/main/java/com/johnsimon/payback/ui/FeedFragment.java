@@ -11,9 +11,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.AutoTransition;
+import android.transition.ChangeImageTransform;
+import android.transition.Explode;
 import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,14 +239,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                     intent.putExtra(CreateDebtActivity.ARG_FROM_PERSON_NAME, FeedActivity.person.getName());
                 }
                 if (Resource.isLOrAbove()) {
-
-                    Window w = getActivity().getWindow();
-
-                    Fade ex = new Fade();
-                    ex.setInterpolator(new PathInterpolator(0.4f, 0, 1, 1));
-                    ex.setDuration(500);
-                    w.setExitTransition(ex);
-                    w.setEnterTransition(ex);
 
                     ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
                             Pair.create(v, "fab"));
