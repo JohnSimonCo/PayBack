@@ -1,15 +1,11 @@
 package com.johnsimon.payback.storage;
 
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
@@ -26,6 +22,8 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.async.NullCallback;
+import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataSyncer;
@@ -35,11 +33,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class DriveStorage extends Storage implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private final static int REQUEST_CODE_RESOLUTION = 14795;
+public class DriveStorage extends Storage {
     private final static String FILE_NAME = "data.json";
-
-	public final static String PREFERENCE_ACCOUNT_NAME = "ACCOUNT_NAME";
 
     public Activity activity;
 
@@ -49,14 +44,11 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 
     private DriveFile file = null;
 
-	public Subscription<String> loginSubscription = new Subscription<>();
-	public Notification loginCancelledNotification = new Notification();
-
-    public DriveStorage(Activity context, LocalStorage localStorage) {
-        super(context);
+    public DriveStorage(Activity activity, GoogleApiClient client, LocalStorage localStorage) {
+        super(activity);
 		//TODO migrate between
 
-        this.activity = context;
+        this.activity = activity;
 
         this.localStorage = localStorage;
 
@@ -68,14 +60,16 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 			}
 		});
 
-        client = new GoogleApiClient.Builder(context)
-           .addApi(Drive.API)
-		//TODO innan release: använda app folder
-           .addScope(Drive.SCOPE_FILE)
-           .addConnectionCallbacks(this)
-           .addOnConnectionFailedListener(this)
-           .build();
+		this.client = client;
+	}
 
+	public void listen(NullPromise connected) {
+		connected.then(new NullCallback() {
+			@Override
+			public void onCalled() {
+				refresh();
+			}
+		});
 	}
 
 	@Override
@@ -83,7 +77,11 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 		return localStorage.getPreferences();
 	}
 
-    public void sync(AppData driveData) {
+	public GoogleApiClient getClient() {
+		return client;
+	}
+
+	public void sync(AppData driveData) {
 		show("checking for changes from drive");
         AppData data = new AppData();
         if(DataSyncer.sync(driveData, localStorage.data, data)) {
@@ -112,12 +110,7 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
         });
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-		refresh();
-    }
-
-	private void refresh() {
+	public void refresh() {
 		lastRefresh = System.currentTimeMillis();
 		Drive.DriveApi.requestSync(client).setResultCallback(requestSyncCallback);
 	}
@@ -130,22 +123,9 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 	}
 
 	private final static long MAX_REFRESH_FREQ = 20000;
-	private Long lastRefresh;
+	private long lastRefresh;
 	private boolean mayRefresh() {
 		return System.currentTimeMillis() - lastRefresh > MAX_REFRESH_FREQ;
-	}
-
-	public void changeAccount() {
-		client.clearDefaultAccountAndReconnect();
-
-		loginCancelledNotification.listen(new NotificationCallback() {
-			@Override
-			public void onNotify() {
-				StorageManager.migrateToLocal(context);
-
-				loginCancelledNotification.unregister(this);
-			}
-		});
 	}
 
 	private ResultCallback<Status> requestSyncCallback = new ResultCallback<Status>() {
@@ -325,49 +305,6 @@ public class DriveStorage extends Storage implements GoogleApiClient.ConnectionC
 			client.disconnect();
 		}
 		keepAlive = false;
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (activity.isFinishing())
-            return;
-
-		if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(activity, REQUEST_CODE_RESOLUTION);
-            } catch (IntentSender.SendIntentException e) {
-                // Unable to resolve, message user appropriately
-                show("Shit fuckd up");
-                //client.connect();
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
-        }
-    }
-
-    @Override
-    public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent intent) {
-        switch (requestCode) {
-            case REQUEST_CODE_RESOLUTION:
-                if (resultCode == Activity.RESULT_OK) {
-                    client.connect();
-
-					//A bit of a hack, but it works :)
-					String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-					loginSubscription.broadcast(accountName);
-					getPreferences().edit()
-						.putString(PREFERENCE_ACCOUNT_NAME, accountName)
-						.apply();
-                } else if(resultCode == Activity.RESULT_CANCELED) {
-					loginCancelledNotification.broadcast();
-				}
-                return true;
-        }
-        return super.handleActivityResult(requestCode, resultCode, intent);
     }
 
     @Override

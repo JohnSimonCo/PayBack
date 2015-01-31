@@ -34,6 +34,7 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Resource;
@@ -62,9 +63,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
 	private Preference pref_cloud_sync_account;
     private CheckBoxPreference pref_cloud_sync;
-
-    private Notification loginCancelNotification;
-    private NotificationCallback loginCancelNotificationCallback;
 
     private BillingProcessor bp;
 
@@ -182,14 +180,11 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
 
 		pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
-		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveStorage.PREFERENCE_ACCOUNT_NAME, null));
+		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, null));
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				if(storage.isDriveStorage()) {
-					DriveStorage driveStorage = storage.asDriveStorage();
-					driveStorage.changeAccount();
-				}
+				StorageManager.changeDriveAccount(SettingsActivity.this);
 				return false;
 			}
 		});
@@ -268,11 +263,14 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 				return false;
 			}
 		});
-
-		if(storage.isDriveStorage()) {
-			loginSubscription = storage.asDriveStorage().loginSubscription;
-		}
     }
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(StorageManager.loginManager != null) {
+			StorageManager.loginManager.handleActivityResult(requestCode, resultCode, data);
+		}
+	}
 
 	@Override
 	protected void onDataReceived() {
@@ -410,18 +408,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         super.onStart();
 
         if (storage.isDriveStorage()) {
-            loginCancelNotification = storage.asDriveStorage().loginCancelledNotification;
-            loginCancelNotificationCallback = new NotificationCallback() {
-                @Override
-                public void onNotify() {
-                    pref_cloud_sync.setChecked(false);
-                }
-            };
 
-            loginCancelNotification.listen(loginCancelNotificationCallback);
         }
 		if(loginSubscription != null) {
-			loginSubscription.listen(onLoginCallback);
 		}
     }
 
@@ -429,12 +418,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
     protected void onStop() {
         super.onStop();
 
-        if (loginCancelNotification != null) {
-            loginCancelNotification.unregister(loginCancelNotificationCallback);
-        }
-
 		if(loginSubscription != null) {
-			loginSubscription.unregister(onLoginCallback);
 		}
     }
 

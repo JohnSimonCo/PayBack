@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
 
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.core.DataActivityInterface;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.SettingsActivity;
 
 public class StorageManager {
@@ -18,6 +20,8 @@ public class StorageManager {
 
 	private static LocalStorage localStorage = null;
 	private static Storage storage = null;
+
+	public static DriveLoginManager loginManager = null;
 
 	public static LocalStorage getLocalStorage(Context context) {
 		if(localStorage == null) {
@@ -38,13 +42,18 @@ public class StorageManager {
 					storage = localStorage;
 					break;
 				case STORAGE_TYPE_DRIVE:
-					storage = new DriveStorage(context, localStorage);
+					DriveConnector connector = new DriveConnector(context);
+
+					DriveStorage driveStorage = new DriveStorage(context, connector.client, localStorage);
+					driveStorage.listen(connector.connectedPromise);
+
+					storage = driveStorage;
 					break;
 			}
 		}
 		//TODO innan release: ta bort
-		if(storage instanceof DriveStorage) {
-			((DriveStorage) storage).activity = context;
+		if(storage.isDriveStorage()) {
+			storage.asDriveStorage().activity = context;
 		}
 
         return storage;
@@ -54,33 +63,76 @@ public class StorageManager {
 		return getStorage(context).isDriveStorage();
 	}
 
-	public static void migrateToDrive(final DataActivityInterface dataActivity) {
-		final DriveStorage driveStorage = new DriveStorage(dataActivity.getContext(), localStorage);
-		dataActivity.setStorage(driveStorage);
-		driveStorage.connect();
-		driveStorage.loginSubscription.listen(new Callback<String>() {
+	public static void migrateToDrive(final Activity context) {
+		final DriveLoginManager loginManager = new DriveLoginManager(context);
+		setLoginManager(loginManager);
+
+		loginManager.loginResult.then(new Callback<Boolean>() {
 			@Override
-			public void onCalled(String data) {
-				localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).commit();
-				restart(dataActivity.getContext());
+			public void onCalled(Boolean success) {
+				if(success){
+					DriveStorage driveStorage = new DriveStorage(context, loginManager.getClient(), localStorage);
+					driveStorage.listen(loginManager.connectedPromise);
+					localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_DRIVE).apply();
+
+					setStorage(driveStorage);
+					restart(context);
+				} else {
+					loginManager.disconnect();
+
+				}
+				setLoginManager(null);
 			}
 		});
 
-		driveStorage.loginCancelledNotification.listen(new NotificationCallback() {
-			@Override
-			public void onNotify() {
-				dataActivity.setStorage(storage);
-			}
-		});
+		loginManager.go();
 	}
-	public static void migrateToLocal(Context context) {
+
+	public static void changeDriveAccount(Activity context) {
+		if(storage.isDriveStorage()) {
+			final DriveStorage driveStorage = storage.asDriveStorage();
+
+			final DriveLoginManager loginManager = new DriveLoginManager(context);
+			setLoginManager(loginManager);
+
+			loginManager.loginResult.then(new Callback<Boolean>() {
+				@Override
+				public void onCalled(Boolean success) {
+					if(success) {
+						localStorage.wipe();
+						driveStorage.listen(loginManager.connectedPromise);
+					} else {
+
+					}
+					setLoginManager(null);
+				}
+			});
+
+			loginManager.go(driveStorage.getClient());
+		}
+	}
+
+	public static void migrateToLocal(Activity context) {
+		storage.asDriveStorage().disconnect();
+
 		localStorage.wipe();
-		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL).commit();
+		localStorage.getPreferences().edit().putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL).apply();
+
+		setStorage(localStorage);
 		restart(context);
 	}
 
-	private static void restart(Context context) {
-		System.exit(0);
-	    context.startActivity(new Intent(context, SettingsActivity.class));
+	private static void setStorage(Storage storage) {
+		StorageManager.storage = storage;
+	}
+
+	private static void setLoginManager(DriveLoginManager loginManager) {
+		StorageManager.loginManager = loginManager;
+	}
+
+	private static void restart(Activity context) {
+		context.finishAffinity();
+		//context.startActivity(new Intent(context, context.getClass()));
+		context.startActivity(new Intent(context, FeedActivity.class));
 	}
 }
