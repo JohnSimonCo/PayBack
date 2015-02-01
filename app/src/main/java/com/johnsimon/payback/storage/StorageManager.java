@@ -104,6 +104,7 @@ public class StorageManager {
 			public void onCalled(DriveLoginManager.LoginResult result) {
 				if(result.success) {
 					localStorage.wipe();
+					driveStorage.emit(localStorage.data);
 					driveStorage.listen(loginManager.connectedPromise);
 
 					localStorage.getPreferences().edit().putString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, result.accountName).apply();
@@ -142,7 +143,8 @@ public class StorageManager {
 
 	private static void restart(Activity context) {
 		context.finishAffinity();
-		//context.startActivity(new Intent(context, context.getClass()));
+		FeedActivity.person = null;
 		context.startActivity(new Intent(context, FeedActivity.class));
+		//context.startActivity(new Intent(context, context.getClass()));
 	}
 }

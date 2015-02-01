@@ -44,7 +44,7 @@ public class DriveStorage extends Storage {
 
     private DriveFile file = null;
 
-    public DriveStorage(Activity activity, GoogleApiClient client, LocalStorage localStorage) {
+    public DriveStorage(Activity activity, GoogleApiClient client, final LocalStorage localStorage) {
         super(activity);
 
         this.activity = activity;
@@ -54,6 +54,7 @@ public class DriveStorage extends Storage {
 		localStorage.subscription.listen(new Callback<AppData>() {
 			@Override
 			public void onCalled(AppData data) {
+				localStorage.subscription.unregister(this);
 				show("emit localStorage data");
 				emit(data);
 			}
@@ -91,7 +92,14 @@ public class DriveStorage extends Storage {
         }
     }
 
-    @Override
+	//TODO loading toast
+	@Override
+	protected void emit(AppData data) {
+		super.emit(data);
+		localStorage.emit(data);
+	}
+
+	@Override
     protected void commit(String JSON) {
         show("commited data to localStorage");
         localStorage.commit(JSON);
