@@ -18,7 +18,7 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
     private int mHeaderDiffTotal = 0;
     private int mFooterDiffTotal = 0;
     private int mHeaderMaxHeight = 0;
-    private View mHeader;
+    public View mHeader;
     private View mHeaderImage;
     private View mFooter;
     private QuickReturnType mQuickReturnType;

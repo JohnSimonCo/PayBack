@@ -8,27 +8,13 @@ import android.content.res.Resources;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.AutoTransition;
-import android.transition.ChangeImageTransform;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.Transition;
-import android.transition.TransitionSet;
-import android.util.Log;
-import android.util.Pair;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.animation.AnimationUtils;
-import android.view.animation.PathInterpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -67,6 +53,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
     public RecyclerView recyclerView;
     private View emptyView;
+	private QuickReturnListViewOnScrollListener scrollListener;
 
 	ImageView headerImage;
 
@@ -138,7 +125,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         headerImage = (ImageView) rootView.findViewById(R.id.feed_list_image);
 
         int headerHeight = headerView.getLayoutParams().height;
-        QuickReturnListViewOnScrollListener scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
+        scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
                 headerView, -headerHeight, null, 0, headerImage);
         scrollListener.setCanSlideInIdleScrollState(false);
         recyclerView.setOnScrollListener(scrollListener);
@@ -179,6 +166,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 adapter.updateList(feed);
                 adapter.notifyDataSetChanged();
             }
+
+			scrollListener.mHeader.setTranslationY(0f);
 
 			adapter.checkAdapterIsEmpty();
 		}
