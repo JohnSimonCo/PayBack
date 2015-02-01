@@ -3,6 +3,7 @@ package com.johnsimon.payback.storage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
@@ -21,15 +22,18 @@ public abstract class Storage {
 
     protected void emit(AppData data) {
         this.data = data;
-        subscription.broadcast(data);
+		emit();
     }
+
+	protected void emit() {
+		subscription.broadcast(data);
+	}
 
     protected abstract void commit(String JSON);
 
 	public void wipe() {
-		//emit(new AppData());
-		//commit();
 		commit(AppData.defaultAppData());
+		emit();
 	}
 
 	public void commit() {
@@ -38,7 +42,7 @@ public abstract class Storage {
 
     public void commit(AppData data) {
         this.data = data;
-        commit();
+		commit();
     }
 
 	public boolean isDriveStorage() {

@@ -3,6 +3,7 @@ package com.johnsimon.payback.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
@@ -35,6 +36,7 @@ public class LocalStorage extends Storage {
 		return preferences;
 	}
 
+	//TODO testa
 	public void test() {
 		Random r = new Random();
 

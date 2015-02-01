@@ -213,7 +213,8 @@ public class DriveStorage extends Storage {
                         .build();
 
 
-                    Drive.DriveApi.getRootFolder(client)
+					//TODO innan release: använda app folder
+					Drive.DriveApi.getRootFolder(client)
                         .createFile(client, changeSet, result.getDriveContents())
                         .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
                             @Override
@@ -308,9 +309,10 @@ public class DriveStorage extends Storage {
 
     @Override
     protected void show(String text) {
+		/*
         Snackbar.with(activity.getApplicationContext())
                 .text(text)
-                .show(activity);
+                .show(activity);*/
     }
 
 	protected void error(String title, Status status) {
