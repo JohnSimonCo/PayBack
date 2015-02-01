@@ -448,7 +448,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         if (storage.isDriveStorage()) {
 
         }
+
 		if(loginSubscription != null) {
+
 		}
     }
 

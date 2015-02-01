@@ -142,6 +142,7 @@ public class FeedActivity extends DataActivity implements
         }
         sort();
 		feedSubscription.broadcast(feed);
+		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
     }
 
     @Override
@@ -174,7 +175,6 @@ public class FeedActivity extends DataActivity implements
 
 	@Override
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
-
 		Undo.completeAction();
 
 		Person oldPerson = person;
@@ -192,6 +192,8 @@ public class FeedActivity extends DataActivity implements
         sort();
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
+
+		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
 
 		storage.requestRefresh();
 
