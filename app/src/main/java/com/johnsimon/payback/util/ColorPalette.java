@@ -29,24 +29,20 @@ public class ColorPalette {
 	}
 
 	public int nextIndex() {
-		SparseIntArray usedIndices = new SparseIntArray(palette.length);
-
-		for (int i = 0; i < palette.length; i++) {
-			usedIndices.put(i, 0);
-		}
+		int[] usedIndices = new int[palette.length];
 
 		for (Person person : dataAcitivity.getData().people) {
-			usedIndices.put(person.paletteIndex, usedIndices.get(person.paletteIndex) + 1);
+			usedIndices[person.paletteIndex]++;
 		}
 
 		//Start at 0
-		int index = usedIndices.keyAt(0), smallest = usedIndices.valueAt(0);
+		int index = 0, smallest = usedIndices[0];
 		//Proceed at 1
-		for(int i = 1, length = usedIndices.size(); i < length; i++) {
-			int value = usedIndices.valueAt(i);
+		for(int i = 1, length = usedIndices.length; i < length; i++) {
+			int value = usedIndices[i];
 			if(value < smallest) {
 				smallest = value;
-				index = usedIndices.keyAt(i);
+				index = i;
 			}
 		}
 
