@@ -224,7 +224,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 									StorageManager.migrateToDrive(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
 										@Override
 										public void onCalled(DriveLoginManager.LoginResult result) {
-											if(result.success) {
+											if (result.success) {
 												pref_cloud_sync.setChecked(true);
 												pref_cloud_sync_account.setSummary(result.accountName);
 											} else {
