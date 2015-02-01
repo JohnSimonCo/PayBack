@@ -229,7 +229,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 									pref_cloud_sync_account.setSummary("");
 									dialog.dismiss();
 								}
-							});
+							})
+					.show();
                 } else {
                     new MaterialDialog.Builder(self)
                             .cancelable(false)
