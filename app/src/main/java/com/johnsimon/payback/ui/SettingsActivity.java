@@ -215,10 +215,12 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 							.content(R.string.disable_cloud_sync_content)
 							.positiveText(R.string.disable_cloud_sync_affirmative)
 							.negativeText(R.string.cancel)
+							.cancelable(false)
 							.callback(new MaterialDialog.ButtonCallback() {
 								@Override
 								public void onNegative(MaterialDialog dialog) {
 									super.onNegative(dialog);
+									pref_cloud_sync.setChecked(true);
 									dialog.dismiss();
 								}
 

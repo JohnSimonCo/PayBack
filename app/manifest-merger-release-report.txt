@@ -57,11 +57,11 @@ MERGED from com.mcxiaoke.volley:library:1.0.10:11:5
 	android:theme
 		ADDED from AndroidManifest.xml:14:9
 meta-data#com.google.android.apps.drive.APP_ID
-ADDED from AndroidManifest.xml:16:9
+ADDED from AndroidManifest.xml:27:9
 	android:value
-		ADDED from AndroidManifest.xml:18:13
+		ADDED from AndroidManifest.xml:29:13
 	android:name
-		ADDED from AndroidManifest.xml:17:13
+		ADDED from AndroidManifest.xml:28:13
 activity#com.johnsimon.payback.ui.FeedActivity
 ADDED from AndroidManifest.xml:32:9
 	android:label
