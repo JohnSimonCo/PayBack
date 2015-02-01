@@ -124,7 +124,6 @@ public class StorageManager {
 	public static void migrateToLocal(Activity context) {
 		storage.asDriveStorage().disconnect();
 
-		localStorage.wipe();
 		localStorage.getPreferences().edit()
 			.putInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL)
 			.remove(DriveLoginManager.PREFERENCE_ACCOUNT_NAME).apply();

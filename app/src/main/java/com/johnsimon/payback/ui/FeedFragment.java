@@ -293,7 +293,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 						@Override
 						public void onDisplay() {
 							FeedActivity.feed.remove(index);
-                            adapter.list.remove(index);
 							adapter.notifyItemRemoved(index);
 							adapter.checkAdapterIsEmpty();
 
@@ -303,7 +302,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 						@Override
 						public void onRevert() {
 							FeedActivity.feed.add(index, debt);
-                            adapter.list.add(index, debt);
 							adapter.notifyItemInserted(index);
 							adapter.checkAdapterIsEmpty();
 
@@ -349,10 +347,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		storage.commit();
 
 		if (!FeedActivity.isAll()) {
-            int index = adapter.list.indexOf(debt);
+            int index = FeedActivity.feed.indexOf(debt);
 
-			FeedActivity.feed.remove(debt);
-            adapter.list.remove(debt);
+			FeedActivity.feed.remove(index);
             adapter.notifyItemRemoved(index);
 		}
 
