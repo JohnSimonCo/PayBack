@@ -352,11 +352,12 @@ public class CreateDebtActivity extends DataActivity {
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
                 if (Resource.isLOrAbove()) {
-                    transitionDrawable.reverseTransition(400);
+                    transitionDrawable.reverseTransition(600);
                     create_fab_l.animate()
                             .alpha(1f)
-                            .setDuration(400)
+                            .setDuration(600)
                             .start();
+					create_fab_l.setImageResource(R.drawable.ic_action_content_new);
 
                     finishAfterTransition();
                 } else {
@@ -383,8 +384,12 @@ public class CreateDebtActivity extends DataActivity {
     @Override
 	public void onBackPressed() {
         if (Resource.isLOrAbove()) {
-            transitionDrawable.reverseTransition(800);
-            create_fab_l.setAlpha(1f);
+            transitionDrawable.reverseTransition(600);
+			create_fab_l.animate()
+					.alpha(1f)
+					.setDuration(600)
+					.start();
+			create_fab_l.setImageResource(R.drawable.ic_action_content_new);
             finishAfterTransition();
         } else {
             finish();

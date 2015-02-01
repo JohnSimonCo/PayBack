@@ -489,7 +489,13 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 .show();
     }
 
-    @Override
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		bp.release();
+	}
+
+	@Override
     public void onPurchaseHistoryRestored() {
 
     }

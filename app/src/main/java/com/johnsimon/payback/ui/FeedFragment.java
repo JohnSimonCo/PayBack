@@ -241,7 +241,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 if (Resource.isLOrAbove()) {
 
                     ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                            Pair.create(v, "fab"));
+                            v, "fab");
 
                     startActivity(intent, transitionActivityOptions.toBundle());
                 } else {
