@@ -197,11 +197,11 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         storage.commit();
 		adapter.notifyDataSetChanged();
 
-		if (getActivity() != null && getResources() != null) {
-			if (getResources() != null) {
-				displayTotalDebt(getResources(), data.getPreferences().getCurrency());
-			}
+		if (getResources() != null) {
+			displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 		}
+
+		Resource.actionComplete(getActivity());
 	}
 	public static void displayTotalDebt(Resources resources, UserCurrency currency) {
 		float debt = AppData.total(FeedActivity.feed);
