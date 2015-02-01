@@ -209,8 +209,27 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
-					StorageManager.migrateToLocal(self);
-                    pref_cloud_sync_account.setSummary("");
+
+					new MaterialDialog.Builder(self)
+							.title(R.string.disable_cloud_sync_title)
+							.content(R.string.disable_cloud_sync_content)
+							.positiveText(R.string.disable_cloud_sync_affirmative)
+							.negativeText(R.string.cancel)
+							.callback(new MaterialDialog.ButtonCallback() {
+								@Override
+								public void onNegative(MaterialDialog dialog) {
+									super.onNegative(dialog);
+									dialog.dismiss();
+								}
+
+								@Override
+								public void onPositive(MaterialDialog dialog) {
+									super.onPositive(dialog);
+									StorageManager.migrateToLocal(self);
+									pref_cloud_sync_account.setSummary("");
+									dialog.dismiss();
+								}
+							});
                 } else {
                     new MaterialDialog.Builder(self)
                             .cancelable(false)

@@ -114,6 +114,9 @@
     <string name="read_failed">Failed to read file</string>
     <string name="save_success">Save successful</string>
     <string name="restore_success">Restore successful</string>
+    <string name="disable_cloud_sync_title">Disable cloud sync</string>
+    <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
+    <string name="disable_cloud_sync_affirmative">Disable</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
