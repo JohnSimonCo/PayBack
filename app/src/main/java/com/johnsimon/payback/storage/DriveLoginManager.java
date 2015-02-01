@@ -23,7 +23,7 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 
 	private boolean hasLoggedIn = false;
 
-	public Promise<Boolean> loginResult = new Promise<>();
+	public Promise<LoginResult> loginResult = new Promise<>();
 	public NullPromise connectedPromise = new NullPromise();
 
 	public DriveLoginManager(Activity activity) {
@@ -39,6 +39,8 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 			.addApi(Drive.API)
 					//TODO innan release: använda app folder
 			.addScope(Drive.SCOPE_FILE)
+			.addConnectionCallbacks(this)
+			.addOnConnectionFailedListener(this)
 			.build();
 
 		client.connect();
@@ -74,7 +76,6 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 
 	@Override
 	public void onConnectionSuspended(int i) {
-
 	}
 
 	@Override
@@ -101,17 +102,29 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 					hasLoggedIn = true;
 					client.connect();
 
-					//A bit of a hack, but it works :)
 					String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
-					StorageManager.getPreferences(activity).edit().putString(PREFERENCE_ACCOUNT_NAME, accountName).apply();
-
-					loginResult.fire(true);
+					loginResult.fire(new LoginResult(accountName));
 				} else if(resultCode == Activity.RESULT_CANCELED) {
-					loginResult.fire(false);
+					loginResult.fire(new LoginResult());
 				}
 				return true;
 		}
 		return false;
+	}
+
+	public static class LoginResult {
+		public boolean success = false;
+		public String accountName = null;
+
+		//Cancelled
+		public LoginResult() {
+		}
+
+		//Success
+		public LoginResult(String accountName) {
+			success = true;
+			this.accountName = accountName;
+		}
 	}
 }

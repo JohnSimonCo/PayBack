@@ -184,7 +184,14 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				StorageManager.changeDriveAccount(SettingsActivity.this);
+				if(storage.isDriveStorage()) {
+					StorageManager.changeDriveAccount(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
+						@Override
+						public void onCalled(DriveLoginManager.LoginResult result) {
+							pref_cloud_sync_account.setSummary(result.accountName);
+						}
+					});
+				}
 				return false;
 			}
 		});
@@ -214,7 +221,17 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-									StorageManager.migrateToDrive(SettingsActivity.this);
+									StorageManager.migrateToDrive(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
+										@Override
+										public void onCalled(DriveLoginManager.LoginResult result) {
+											if(result.success) {
+												pref_cloud_sync.setChecked(true);
+												pref_cloud_sync_account.setSummary(result.accountName);
+											} else {
+												pref_cloud_sync.setChecked(false);
+											}
+										}
+									});
 
                                     dialog.dismiss();
                                 }
