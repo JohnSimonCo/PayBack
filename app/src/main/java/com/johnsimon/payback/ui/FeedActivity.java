@@ -65,6 +65,8 @@ public class FeedActivity extends DataActivity implements
 
     private boolean attemptCheckFilterAmount = false;
 
+	//TODO ibland är gammalt data kvar efter migrateToLocal
+
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

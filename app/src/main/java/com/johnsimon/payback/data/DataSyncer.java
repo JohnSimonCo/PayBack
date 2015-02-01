@@ -53,9 +53,8 @@ public class DataSyncer {
 			out.peopleOrder = peopleOrder;
 			out.preferences = preferences;
 		}
-
         return changed;
-    }
+	}
 
     private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
         for(Iterator<T> iterator = array.iterator(); iterator.hasNext();) {

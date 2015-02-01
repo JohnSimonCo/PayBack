@@ -64,9 +64,7 @@ public class CurrencyUtils {
                     throw new IOException(statusLine.getReasonPhrase());
                 }
             } catch (ClientProtocolException e) {
-                //TODO Handle problems..
             } catch (IOException e) {
-                //TODO Handle problems..
             }
             return responseString;
         }

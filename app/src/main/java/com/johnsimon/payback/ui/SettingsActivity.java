@@ -184,6 +184,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
+				//TODO göra en dialog när man stänger av drive
 				if(storage.isDriveStorage()) {
 					StorageManager.changeDriveAccount(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
 						@Override

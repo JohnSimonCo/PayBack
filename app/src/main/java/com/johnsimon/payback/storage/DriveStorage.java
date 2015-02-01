@@ -46,7 +46,6 @@ public class DriveStorage extends Storage {
 
     public DriveStorage(Activity activity, GoogleApiClient client, LocalStorage localStorage) {
         super(activity);
-		//TODO migrate between
 
         this.activity = activity;
 
