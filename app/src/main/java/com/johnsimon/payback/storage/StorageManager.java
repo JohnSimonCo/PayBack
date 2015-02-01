@@ -107,6 +107,8 @@ public class StorageManager {
 					driveStorage.listen(loginManager.connectedPromise);
 
 					localStorage.getPreferences().edit().putString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, result.accountName).apply();
+
+					restart(context);
 				} else {
 					migrateToLocal(context);
 				}

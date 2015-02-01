@@ -100,11 +100,12 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean handled = storage.handleActivityResult(requestCode, resultCode, data);
-
-        if(!handled) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+		if(StorageManager.loginManager != null) {
+			if(StorageManager.loginManager.handleActivityResult(requestCode, resultCode, data)) {
+				return;
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
     }
 
     private DataActivity self = this;
