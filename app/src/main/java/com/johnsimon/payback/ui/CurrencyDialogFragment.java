@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
+import com.johnsimon.payback.currency.CurrencyFormat;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
 
@@ -41,11 +42,10 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	public final static String CURRENCY_DECIMAL_SEPARATOR = "CURRENCY_DECIMAL_SEPARATOR";
 	public final static String CURRENCY_THOUSAND_SPINNER = "CURRENCY_THOUSAND_SPINNER";
 
-
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
 	private TintCheckBox custom_currency_check_after;
-    //private TintCheckBox custom_currency_decimal_separator;
+    private TintCheckBox custom_currency_decimal_separator;
     private TintSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
@@ -156,7 +156,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
             custom_currency_check_after.setChecked(savedInstanceState.getBoolean(CURRENCY_CHECKBOX, false));
             custom_currency_decimal_separator.setChecked(savedInstanceState.getBoolean(CURRENCY_DECIMAL_SEPARATOR, false));
 
-			currency_thousand_separator.setSelection(savedInstanceState.getInt(CURRENCY_THOUSAND_SPINNER, 0));
+			currency_thousand_separator.setSelection(savedInstanceState.getInt(CURRENCY_THOUSAND_SPINNER, CurrencyFormat.THOUSAND_SEPARATOR_NONE));
 		} else {
             usingDefaults = false;
         }
@@ -244,7 +244,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
             selectedCurrency = data.preferences.getCurrency().id;
             displayCurrency = data.preferences.getCurrency().getDisplayName();
             custom_currency_check_after.setChecked(!data.preferences.getCurrency().before);
-            custom_currency_decimal_separator.setChecked(data.preferences.getCurrency().decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
+            custom_currency_decimal_separator.setChecked(data.preferences.getCurrency().decimalSeparator == CurrencyFormat.DECIMAL_SEPARATOR_COMMA);
 			currency_thousand_separator.setSelection(data.preferences.getCurrency().thousandSeparator);
             updatePreview();
         }
@@ -252,7 +252,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
     }
 
     private void updatePreview() {
-		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT);
+		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? CurrencyFormat.DECIMAL_SEPARATOR_COMMA : CurrencyFormat.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
 		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
 
 		welcome_select_currency.setText(getString(R.string.currency) + " (" + selectedCurrency + ")");
@@ -266,6 +266,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
         outState.putBoolean(CURRENCY_CHECKBOX, custom_currency_check_after.isChecked());
         outState.putBoolean(CURRENCY_DECIMAL_SEPARATOR, custom_currency_decimal_separator.isChecked());
+		outState.putInt(CURRENCY_THOUSAND_SPINNER, currency_thousand_separator.getSelectedItemPosition());
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -277,7 +278,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			data.getPreferences().currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT);
+			data.getPreferences().currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? CurrencyFormat.DECIMAL_SEPARATOR_COMMA : CurrencyFormat.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition()));
 			storage.commit();
 
 			FeedFragment.adapter.notifyDataSetChanged();
@@ -289,7 +290,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 			alertDialog.dismiss();
 
-			FeedFragment.displayTotalDebt(getResources(), new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT);
+			FeedFragment.displayTotalDebt(getResources(), new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? CurrencyFormat.DECIMAL_SEPARATOR_COMMA : CurrencyFormat.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition()));
 		}
 	};
 

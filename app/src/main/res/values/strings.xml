@@ -108,7 +108,7 @@
     <string name="select">Select</string>
     <string name="change_currency">Change currency</string>
     <string name="currency_symbol">Currency symbol</string>
-    <string name="currency_symbol_after_checkbox">Currency symbol</string>
+    <string name="currency_symbol_after_checkbox">Symbol after amount</string>
     <string name="currency_decimal_separator_checkbox">Comma decimal separator</string>
     <string name="save_fail">Failed to save file</string>
     <string name="no_file">Failed to find file</string>
@@ -156,13 +156,11 @@
     <string name="pref_export_data">Export data to storage</string>
     <string name="pref_import_data">Import data from storage</string>
 
-    <string-array name="currencies">
-        <item>$</item>
-        <item>€</item>
-        <item>£</item>
-        <item>¥</item>
-        <item>Kr</item>
-        <item>Custom</item>
+    <string-array name="thousand_seperator_list">
+        <item>None</item>
+        <item>Dot</item>
+        <item>Comma</item>
+        <item>Space</item>
     </string-array>
 
     <string-array name="bg_display">

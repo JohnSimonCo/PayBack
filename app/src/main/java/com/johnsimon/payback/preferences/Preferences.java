@@ -1,5 +1,6 @@
 package com.johnsimon.payback.preferences;
 
+import com.johnsimon.payback.currency.CurrencyFormat;
 import com.johnsimon.payback.currency.UserCurrency;
 
 import java.util.Currency;
@@ -29,7 +30,7 @@ public class Preferences {
 
 	public UserCurrency getCurrency() {
 		UserCurrency value = currency.getValue();
-		return value != null ? value : new UserCurrency(Currency.getInstance(Locale.getDefault()).getSymbol(), Currency.getInstance(Locale.getDefault()).getSymbol(), true, UserCurrency.DECIMAL_SEPARATOR_DOT, UserCurrency.THOUSAND_SEPARATOR_NONE);
+		return value != null ? value : new UserCurrency(Currency.getInstance(Locale.getDefault()).getSymbol(), Currency.getInstance(Locale.getDefault()).getSymbol(), true, CurrencyFormat.DECIMAL_SEPARATOR_DOT, CurrencyFormat.THOUSAND_SEPARATOR_NONE);
 	}
 
 	public String getBackground() {
