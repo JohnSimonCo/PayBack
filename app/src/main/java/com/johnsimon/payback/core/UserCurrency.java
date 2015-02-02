@@ -9,16 +9,27 @@ public class UserCurrency {
     public final static int DECIMAL_SEPARATOR_DOT = 0;
     public final static int DECIMAL_SEPARATOR_COMMA = 1;
 
+    public final static int THOUSAND_SEPARATOR_NONE = 0;
+    public final static int THOUSAND_SEPARATOR_DOT = 1;
+    public final static int THOUSAND_SEPARATOR_COMMA = 2;
+    public final static int THOUSAND_SEPARATOR_SPACE = 3;
+
 	public final String id;
 	public final String displayName;
 	public final boolean before;
-    public final int decimalSeparator = DECIMAL_SEPARATOR_DOT;
+    public final int decimalSeparator;
+    public final int thousandSeparator;
 
-	public UserCurrency(String id, String displayName, boolean before, boolean useComma) {
+    private final DecimalFormat format;
+
+	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator) {
 		this.id = id;
 		this.displayName = displayName;
 		this.before = before;
-        this.decimalSeparator = useComma ? DECIMAL_SEPARATOR_COMMA : DECIMAL_SEPARATOR_DOT;
+        this.decimalSeparator = decimalSeparator;
+        this.thousandSeparator = thousandSeparator;
+
+        format = new DecimalFormat("###");
 	}
 
 	public String getDisplayName() {
@@ -26,6 +37,8 @@ public class UserCurrency {
 	}
 
 	public String render() {
+        DecimalFormat format = new DecimalFormat("###");
+
 		String output = this.id;
 		if(displayName != null) {
 			output += " (" + displayName + ")";
@@ -58,4 +71,18 @@ public class UserCurrency {
 	private String renderCurrency(String amount, String symbol) {
 		return before ? symbol + " " + amount : amount + " " + symbol;
 	}
+
+    private String decimalSeperator() {
+        switch(decimalSeparator) {
+            case DECIMAL_SEPARATOR_DOT: return ".";
+            case DECIMAL_SEPARATOR_COMMA: return ",";
+            default: return ",";
+        }
+    }
+
+    private String thousandSeperator() {
+        switch(thousandSeparator) {
+            case THOUSAND_SEPARATOR_NONE: return ".";
+        }
+    }
 }
