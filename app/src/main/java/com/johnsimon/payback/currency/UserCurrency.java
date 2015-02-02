@@ -5,22 +5,13 @@ import com.johnsimon.payback.data.Debt;
 import java.text.DecimalFormat;
 
 public class UserCurrency {
-
-    public final static int DECIMAL_SEPARATOR_DOT = 0;
-    public final static int DECIMAL_SEPARATOR_COMMA = 1;
-
-    public final static int THOUSAND_SEPARATOR_NONE = 0;
-    public final static int THOUSAND_SEPARATOR_DOT = 1;
-    public final static int THOUSAND_SEPARATOR_COMMA = 2;
-    public final static int THOUSAND_SEPARATOR_SPACE = 3;
-
 	public final String id;
 	public final String displayName;
 	public final boolean before;
     public final int decimalSeparator;
     public final int thousandSeparator;
 
-    private final DecimalFormat format;
+    private final transient CurrencyFormat format;
 
 	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator) {
 		this.id = id;
@@ -29,7 +20,7 @@ public class UserCurrency {
         this.decimalSeparator = decimalSeparator;
         this.thousandSeparator = thousandSeparator;
 
-        format = new DecimalFormat("###" + thousandSeparator() + "###" + decimalSeparator() + "###");
+        format = new CurrencyFormat(decimalSeparator, thousandSeparator);
 	}
 
 	public String getDisplayName() {
@@ -70,19 +61,4 @@ public class UserCurrency {
 		return before ? symbol + " " + amount : amount + " " + symbol;
 	}
 
-    private String decimalSeparator() {
-        switch(decimalSeparator) {
-            case DECIMAL_SEPARATOR_COMMA: return ",";
-            default: return ",";
-        }
-    }
-
-    private String thousandSeparator() {
-        switch(thousandSeparator) {
-			case THOUSAND_SEPARATOR_DOT: return ".";
-			case THOUSAND_SEPARATOR_COMMA: return ",";
-			case THOUSAND_SEPARATOR_SPACE : return " ";
-			default: return "";
-		}
-    }
 }
