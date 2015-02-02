@@ -95,9 +95,10 @@ public class DriveStorage extends Storage {
     }
 
 	//TODO loading toast
+
 	@Override
-	protected void emit(AppData data) {
-		super.emit(data);
+	public void emit() {
+		super.emit();
 		localStorage.emit(data);
 	}
 
@@ -286,6 +287,7 @@ public class DriveStorage extends Storage {
                     while ((line = reader.readLine()) != null) {
                         builder.append(line);
                     }
+					//TODO close?
 					//reader.close();
 				} catch (IOException e) {
                     e.printStackTrace();

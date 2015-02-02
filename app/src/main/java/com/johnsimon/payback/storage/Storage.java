@@ -25,7 +25,7 @@ public abstract class Storage {
 		emit();
     }
 
-	protected void emit() {
+	public void emit() {
 		subscription.broadcast(data);
 	}
 

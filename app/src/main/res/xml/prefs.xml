@@ -35,20 +35,13 @@
             android:key="pref_wipe_data"
             android:title="@string/wipe_data"/>
 
-    <!-- Tar det här efter att vi har testat
-        <Preference
-            android:key="pref_gdrive_sync"
-            android:title="@string/pref_gdrive_sync" />-->
-
-        <!--
-
         <Preference
             android:title="@string/pref_export_data"
             android:key="pref_export_data"  />
 
         <Preference
             android:title="@string/pref_import_data"
-            android:key="pref_import_data"  />-->
+            android:key="pref_import_data"  />
 
     </PreferenceCategory>
 

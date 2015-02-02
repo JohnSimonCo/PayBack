@@ -37,6 +37,7 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.williammora.snackbar.Snackbar;
@@ -92,6 +93,29 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         }
 
         final Activity self = this;
+		Preference pref_export_data = findPreference("pref_export_data");
+		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				FileManager.write(SettingsActivity.this, data.save());
+				return true;
+			}
+		});
+
+		Preference pref_import_data = findPreference("pref_import_data");
+		pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				String JSON = FileManager.read(SettingsActivity.this);
+
+				if(JSON != null) {
+					storage.commit(AppData.fromJson(JSON));
+					storage.emit();
+				}
+
+				return true;
+			}
+		});
         /*
         Preference pref_export_data = findPreference("pref_export_data");
         pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
