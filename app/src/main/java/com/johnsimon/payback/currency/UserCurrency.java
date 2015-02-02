@@ -41,18 +41,7 @@ public class UserCurrency {
 	}
 
 	public String render(float amount) {
-		return render(format.format(Math.abs(amount)), id);
-	}
-
-	public String render(String amount, String currencyId) {
-        //TODO efter launch: displaya rätt currency
-        //return renderCurrency(amount, currencyId.equals(id) && displayName != null ? displayName : currencyId);
-		//return renderCurrency(amount, getDisplayName());
-		return format.format(amount);
-	}
-
-	private String renderCurrency(String amount, String symbol) {
-		return before ? symbol + " " + amount : amount + " " + symbol;
+		return format.format(Math.abs(amount));
 	}
 
 	private DecimalFormat createFormat() {
@@ -62,20 +51,19 @@ public class UserCurrency {
 
 		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.##" : "###,###.##";
 
-		formatString = before ? "$ " + formatString : formatString + " $";
+		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
 		if(thousandSeparator != THOUSAND_SEPARATOR_NONE) {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		DecimalFormat format = new DecimalFormat(formatString, symbols);
-
-		return format;
+		return new DecimalFormat(formatString, symbols);
 	}
 
 	private char decimalSeparator() {
 		switch(decimalSeparator) {
 			case DECIMAL_SEPARATOR_COMMA: return ',';
+			case DECIMAL_SEPARATOR_DOT:
 			default: return '.';
 		}
 	}
@@ -84,8 +72,8 @@ public class UserCurrency {
 		switch(thousandSeparator) {
 			case THOUSAND_SEPARATOR_DOT: return '.';
 			case THOUSAND_SEPARATOR_COMMA: return ',';
-			case THOUSAND_SEPARATOR_SPACE : return ' ';
-			default: return '&';
+			case THOUSAND_SEPARATOR_SPACE:
+			default: return ' ';
 		}
 	}
 
