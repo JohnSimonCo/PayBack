@@ -152,8 +152,6 @@ public class NavigationDrawerFragment extends DataFragment {
         adapter = new NavigationDrawerAdapter((DataActivity) getActivity());
         mDrawerListView.setAdapter(adapter);
 
-        setAppropriateNavDrawerWidth();
-
         super.onCreateView(inflater, container, savedInstanceState);
 
         return mDrawerListView;
@@ -188,21 +186,22 @@ public class NavigationDrawerFragment extends DataFragment {
           of the nav drawer is 5 times the standard
           increment (56dp on mobile and 64dp on tablet). "
      */
-    private void setAppropriateNavDrawerWidth() {
-        int screenWidth = Resource.getScreenWidth(getActivity());
-        int toolbarHeight;
+    private void setAppropriateNavDrawerWidth(View view) {
+		int screenWidth = Resource.getScreenWidth(getActivity());
+		int toolbarHeight;
 
-        TypedValue tv = new TypedValue();
-        if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            toolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-        } else {
-            return;
-        }
+		TypedValue tv = new TypedValue();
+		if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+			toolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+		} else {
+			return;
+		}
 
-        ListView.LayoutParams params = new ListView.LayoutParams(Math.min(screenWidth - toolbarHeight, toolbarHeight * 5), ViewGroup.LayoutParams.MATCH_PARENT);
+		DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) view.getLayoutParams();
+		params.width = Math.min(screenWidth - toolbarHeight, toolbarHeight * 6);
 
-        mDrawerListView.setLayoutParams(params);
-        mDrawerListView.requestLayout();
+		view.setLayoutParams(params);
+		view.requestLayout();
     }
 
     private void toggleHeaderVisibility() {
@@ -376,6 +375,8 @@ public class NavigationDrawerFragment extends DataFragment {
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+
+		setAppropriateNavDrawerWidth(mFragmentContainerView);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),

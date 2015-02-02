@@ -20,7 +20,7 @@ public class UserCurrency {
     public final int decimalSeparator;
     public final int thousandSeparator;
 
-    private final transient DecimalFormat format;
+    private transient DecimalFormat format;
 
 	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator) {
 		this.id = id;
@@ -29,7 +29,7 @@ public class UserCurrency {
         this.decimalSeparator = decimalSeparator;
         this.thousandSeparator = thousandSeparator;
 
-        format = createFormat();
+		format = createFormat();
 	}
 
 	public String getDisplayName() {
@@ -41,6 +41,8 @@ public class UserCurrency {
 	}
 
 	public String render(float amount) {
+		if(format == null) format = createFormat();
+
 		return format.format(Math.abs(amount));
 	}
 
