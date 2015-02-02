@@ -36,6 +36,14 @@ public class UserCurrency {
 		return displayName == null ? id : displayName;
 	}
 
+	public String render() {
+		String output = this.id;
+		if(displayName != null) {
+			output += " (" + displayName + ")";
+		}
+		return output;
+	}
+
 	public String render(Debt debt) {
 		return render(debt.getAmount());
 	}

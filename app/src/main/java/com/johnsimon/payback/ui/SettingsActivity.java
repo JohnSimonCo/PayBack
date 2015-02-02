@@ -340,7 +340,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		bindPreferenceSummaryToValue(pref_background);
 		bindPreferenceSummaryToValue(pref_currency);
 
-		pref_currency.setSummary(data.getPreferences().getCurrency().id);
+		pref_currency.setSummary(data.getPreferences().getCurrency().render());
 		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
 
 	}

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Notification;
@@ -33,6 +34,7 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
@@ -467,6 +469,8 @@ public class FeedActivity extends DataActivity implements
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
         Resource.checkFull(bp);
 
+		navigationDrawerFragment.footerUpgrade.setVisibility(View.GONE);
+
         if (!Resource.isFull) {
             return;
         }
@@ -480,6 +484,7 @@ public class FeedActivity extends DataActivity implements
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
+						StorageManager.migrateToDrive(FeedActivity.this);
                         dialog.dismiss();
                     }
 

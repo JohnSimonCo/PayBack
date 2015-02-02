@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.NavigationDrawerAdapter;
 import com.johnsimon.payback.core.DataActivity;
@@ -67,6 +68,7 @@ public class NavigationDrawerFragment extends DataFragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+	public RobotoButton footerUpgrade;
 
     private ImageButton headerArrow;
     private LinearLayout headerTextContainer;
@@ -118,7 +120,7 @@ public class NavigationDrawerFragment extends DataFragment {
 
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
-        Button footerUpgrade = (Button) footerView.findViewById(R.id.navigation_drawer_footer_upgrade);
+        footerUpgrade = (RobotoButton) footerView.findViewById(R.id.navigation_drawer_footer_upgrade);
 
         if (Resource.isFull) {
             footerUpgrade.setVisibility(View.GONE);
