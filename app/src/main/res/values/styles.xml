@@ -9,10 +9,16 @@
         <item name="colorPrimaryDark">@color/primary_color_darker</item>
 
         <item name="colorAccent">@color/accent_color</item>
+
+        <item name="android:dialogTheme">@style/DialogStyle</item>
+        <item name="android:alertDialogTheme">@style/DialogStyle</item>
     </style>
 
-
-
+    <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_darker</item>
+        <item name="colorAccent">@color/button_color</item>
+    </style>
 
     <style name="paid_back_anim" >
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
@@ -81,9 +87,12 @@
 
     <!-- Material API 21 Compability styles -->
     <style name="FlatButton">
-        <item name="android:background">@drawable/md_btn_selector_ripple</item>
+        <item name="android:background">@drawable/md_btn_selector</item>
+        <item name="android:minWidth">@dimen/md_button_min_width</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/button_color</item>
     </style>
 

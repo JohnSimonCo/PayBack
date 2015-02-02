@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -115,9 +116,6 @@ public class NavigationDrawerFragment extends DataFragment {
 	        }
         });
 
-        adapter = new NavigationDrawerAdapter((DataActivity) getActivity());
-        mDrawerListView.setAdapter(adapter);
-
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
         Button footerUpgrade = (Button) footerView.findViewById(R.id.navigation_drawer_footer_upgrade);
@@ -151,6 +149,11 @@ public class NavigationDrawerFragment extends DataFragment {
 
 		mDrawerListView.addHeaderView(headerView);
 
+        adapter = new NavigationDrawerAdapter((DataActivity) getActivity());
+        mDrawerListView.setAdapter(adapter);
+
+        setAppropriateNavDrawerWidth();
+
         super.onCreateView(inflater, container, savedInstanceState);
 
         return mDrawerListView;
@@ -173,7 +176,40 @@ public class NavigationDrawerFragment extends DataFragment {
         updateName();
     }
 
-    public void toggleHeaderVisibility() {
+    /*
+    Sets correct navigation drawer height using documentation found here:
+
+        http://www.google.com/design/spec/patterns/navigation-drawer.html
+
+        " The width of the side nav is equal to the
+          width of the screen minus the height of the
+          action bar, or in this case 56dp from the
+          right edge of the screen. The maximum width
+          of the nav drawer is 5 times the standard
+          increment (56dp on mobile and 64dp on tablet). "
+     */
+    private void setAppropriateNavDrawerWidth() {
+        int screenWidth = Resource.getScreenWidth(getActivity());
+        int toolbarHeight;
+
+        TypedValue tv = new TypedValue();
+        if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            toolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        } else {
+            return;
+        }
+
+        ListView.LayoutParams params = new ListView.LayoutParams(Math.min(screenWidth - toolbarHeight, toolbarHeight * 5), ViewGroup.LayoutParams.MATCH_PARENT);
+
+        mDrawerListView.setLayoutParams(params);
+        mDrawerListView.requestLayout();
+    }
+
+    private void toggleHeaderVisibility() {
+        toggleHeaderVisibilityCompat();
+    }
+
+    public void toggleHeaderVisibilityCompat() {
         if (inHeaderDetailScreen) {
             //Spin to down arrow
 

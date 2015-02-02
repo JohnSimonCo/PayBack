@@ -116,18 +116,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	}
 
 	private int measureTextWidthTextView(TextView textView) {
-		int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(getScreenWidth(), View.MeasureSpec.AT_MOST);
+		int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(Resource.getScreenWidth(context), View.MeasureSpec.AT_MOST);
 		int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
 		textView.measure(widthMeasureSpec, heightMeasureSpec);
 		return textView.getMeasuredWidth();
-	}
-
-	private int getScreenWidth() {
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return size.x;
 	}
 
 	public void checkAdapterIsEmpty () {
