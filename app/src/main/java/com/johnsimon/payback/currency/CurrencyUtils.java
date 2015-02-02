@@ -1,4 +1,4 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.currency;
 
 import android.os.AsyncTask;
 

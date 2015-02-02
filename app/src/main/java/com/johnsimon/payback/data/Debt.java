@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.UserCurrency;
+import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;

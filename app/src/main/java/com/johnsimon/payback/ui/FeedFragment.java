@@ -31,7 +31,7 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
-import com.johnsimon.payback.core.UserCurrency;
+import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;

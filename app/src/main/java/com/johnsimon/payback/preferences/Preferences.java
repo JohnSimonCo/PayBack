@@ -1,6 +1,6 @@
 package com.johnsimon.payback.preferences;
 
-import com.johnsimon.payback.core.UserCurrency;
+import com.johnsimon.payback.currency.UserCurrency;
 
 import java.util.Currency;
 import java.util.Locale;

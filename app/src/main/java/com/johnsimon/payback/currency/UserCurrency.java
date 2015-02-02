@@ -1,4 +1,4 @@
-package com.johnsimon.payback.core;
+package com.johnsimon.payback.currency;
 
 import com.johnsimon.payback.data.Debt;
 

@@ -15,17 +15,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.core.UserCurrency;
-import com.johnsimon.payback.util.CurrencyUtils;
+import com.johnsimon.payback.currency.UserCurrency;
+import com.johnsimon.payback.currency.CurrencyUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 public class CurrencyDialogFragment extends DataDialogFragment {
@@ -158,11 +156,11 @@ public class CurrencyDialogFragment extends DataDialogFragment {
         }
 
         rootView.findViewById(R.id.welcome_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				alertDialog.dismiss();
+			}
+		});
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
