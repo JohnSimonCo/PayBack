@@ -29,7 +29,7 @@ public class UserCurrency {
         this.decimalSeparator = decimalSeparator;
         this.thousandSeparator = thousandSeparator;
 
-        format = new DecimalFormat("###");
+        format = new DecimalFormat("###" + thousandSeparator() + "###" + decimalSeparator() + "###");
 	}
 
 	public String getDisplayName() {
@@ -37,8 +37,6 @@ public class UserCurrency {
 	}
 
 	public String render() {
-        DecimalFormat format = new DecimalFormat("###");
-
 		String output = this.id;
 		if(displayName != null) {
 			output += " (" + displayName + ")";
@@ -72,17 +70,19 @@ public class UserCurrency {
 		return before ? symbol + " " + amount : amount + " " + symbol;
 	}
 
-    private String decimalSeperator() {
+    private String decimalSeparator() {
         switch(decimalSeparator) {
-            case DECIMAL_SEPARATOR_DOT: return ".";
             case DECIMAL_SEPARATOR_COMMA: return ",";
             default: return ",";
         }
     }
 
-    private String thousandSeperator() {
+    private String thousandSeparator() {
         switch(thousandSeparator) {
-            case THOUSAND_SEPARATOR_NONE: return ".";
-        }
+			case THOUSAND_SEPARATOR_DOT: return ".";
+			case THOUSAND_SEPARATOR_COMMA: return ",";
+			case THOUSAND_SEPARATOR_SPACE : return " ";
+			default: return "";
+		}
     }
 }
