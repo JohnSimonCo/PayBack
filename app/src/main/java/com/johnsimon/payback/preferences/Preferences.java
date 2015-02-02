@@ -32,8 +32,7 @@ public class Preferences {
 
 		if(value == null) {
 			String symbol = Currency.getInstance(Locale.getDefault()).getSymbol();
-			//return new UserCurrency(symbol, symbol, true, CurrencyFormat.DECIMAL_SEPARATOR_DOT, CurrencyFormat.THOUSAND_SEPARATOR_NONE);
-			return new UserCurrency(symbol, symbol, true, CurrencyFormat.DECIMAL_SEPARATOR_COMMA, CurrencyFormat.THOUSAND_SEPARATOR_SPACE);
+			return new UserCurrency(symbol, symbol, true, UserCurrency.DECIMAL_SEPARATOR_COMMA, UserCurrency.THOUSAND_SEPARATOR_SPACE);
 		}
 
 		return value;
