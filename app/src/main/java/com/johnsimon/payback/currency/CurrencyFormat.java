@@ -1,6 +1,7 @@
 package com.johnsimon.payback.currency;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 public class CurrencyFormat {
 
@@ -15,52 +16,49 @@ public class CurrencyFormat {
 	public final int decimalSeparator;
 	public final int thousandSeparator;
 
-	public final DecimalFormat format;
+	private final DecimalFormat format;
 
 	public CurrencyFormat(int decimalSeparator, int thousandSeparator) {
 		this.decimalSeparator = decimalSeparator;
 		this.thousandSeparator = thousandSeparator;
 
 		format = createFormat();
-
-		test();
 	}
 
-	void test() {
-		String s1 = format.format(1000000.123123213);
-		String s2 = format.format(12312.3);
-		String s3 = format.format(1.0);
+	public String format(float amount) {
+		return format.format(amount);
+	}
 
-		int i = 0;
+	public String format(String amount) {
+		return format.format(amount);
 	}
 
 	private DecimalFormat createFormat() {
-		String formatString = "###";
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+		symbols.setDecimalSeparator(decimalSeparator());
+
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.##" : "###,###.##";
 
 		if(thousandSeparator != THOUSAND_SEPARATOR_NONE) {
-			formatString += thousandSeparator() + "###";
+			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		formatString += decimalSeparator();
-
-		formatString += ".##";
-
-		return new DecimalFormat(formatString);
+		return new DecimalFormat(formatString, symbols);
 	}
 
-	private String decimalSeparator() {
+	private char decimalSeparator() {
 		switch(decimalSeparator) {
-			case DECIMAL_SEPARATOR_COMMA: return ",";
-			default: return ",";
+			case DECIMAL_SEPARATOR_COMMA: return ',';
+			default: return '.';
 		}
 	}
 
-	private String thousandSeparator() {
+	private char thousandSeparator() {
 		switch(thousandSeparator) {
-			case THOUSAND_SEPARATOR_DOT: return ".";
-			case THOUSAND_SEPARATOR_COMMA: return ",";
-			case THOUSAND_SEPARATOR_SPACE : return " ";
-			default: return "";
+			case THOUSAND_SEPARATOR_DOT: return '.';
+			case THOUSAND_SEPARATOR_COMMA: return ',';
+			case THOUSAND_SEPARATOR_SPACE : return ' ';
+			default: return '&';
 		}
 	}
 }

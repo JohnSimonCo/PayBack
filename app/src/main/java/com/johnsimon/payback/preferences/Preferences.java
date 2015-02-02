@@ -30,7 +30,14 @@ public class Preferences {
 
 	public UserCurrency getCurrency() {
 		UserCurrency value = currency.getValue();
-		return value != null ? value : new UserCurrency(Currency.getInstance(Locale.getDefault()).getSymbol(), Currency.getInstance(Locale.getDefault()).getSymbol(), true, CurrencyFormat.DECIMAL_SEPARATOR_DOT, CurrencyFormat.THOUSAND_SEPARATOR_NONE);
+
+		if(value == null) {
+			String symbol = Currency.getInstance(Locale.getDefault()).getSymbol();
+			//return new UserCurrency(symbol, symbol, true, CurrencyFormat.DECIMAL_SEPARATOR_DOT, CurrencyFormat.THOUSAND_SEPARATOR_NONE);
+			return new UserCurrency(symbol, symbol, true, CurrencyFormat.DECIMAL_SEPARATOR_COMMA, CurrencyFormat.THOUSAND_SEPARATOR_SPACE);
+		}
+
+		return value;
 	}
 
 	public String getBackground() {

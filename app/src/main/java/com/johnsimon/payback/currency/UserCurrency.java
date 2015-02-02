@@ -27,28 +27,12 @@ public class UserCurrency {
 		return displayName == null ? id : displayName;
 	}
 
-	public String render() {
-		String output = this.id;
-		if(displayName != null) {
-			output += " (" + displayName + ")";
-		}
-		return output;
+	public String render(Debt debt) {
+		return render(debt.getAmount());
 	}
 
 	public String render(float amount) {
-		return render(Float.toString(Math.abs(amount)).replaceAll("\\.0$", ""));
-	}
-
-	public String render(String amount) {
-		return renderCurrency(amount, getDisplayName());
-	}
-
-	public String render(Debt debt) {
-		return render(debt.getAmount(), debt.currencyId);
-	}
-
-	public String render(float amount, String currencyId) {
-		return render(Float.toString(Math.abs(amount)).replaceAll("\\.0$", ""), currencyId);
+		return render(format.format(Math.abs(amount)), id);
 	}
 
 	public String render(String amount, String currencyId) {
