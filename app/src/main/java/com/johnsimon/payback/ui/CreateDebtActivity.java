@@ -52,6 +52,8 @@ import com.williammora.snackbar.Snackbar;
 
 import java.util.UUID;
 
+//TODO EDITAR HÖGA TAL SÅ KOMMER MAN HIT MED JÄVLA E12
+
 public class CreateDebtActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
