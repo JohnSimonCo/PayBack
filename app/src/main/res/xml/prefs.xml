@@ -18,7 +18,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_data"   >
+        android:title="@string/pref_sync"   >
 
         <CheckBoxPreference
             android:key="pref_cloud_sync"
@@ -30,6 +30,11 @@
             android:dependency="pref_cloud_sync"
             android:key="pref_cloud_sync_account"
             android:title="@string/cloud_sync_account"  />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_data"   >
 
         <Preference
             android:key="pref_wipe_data"

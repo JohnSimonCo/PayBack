@@ -150,6 +150,7 @@
     <string name="pref_settings">Settings</string>
     <string name="pref_general">General</string>
     <string name="pref_data">Data</string>
+    <string name="pref_sync">Sync</string>
     <string name="currency">Currency</string>
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
