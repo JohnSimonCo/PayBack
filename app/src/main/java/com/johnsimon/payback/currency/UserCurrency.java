@@ -49,7 +49,7 @@ public class UserCurrency {
 		symbols.setDecimalSeparator(decimalSeparator());
 		symbols.setCurrencySymbol(getDisplayName());
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.##" : "###,###.##";
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.##" : "###,###.###";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
