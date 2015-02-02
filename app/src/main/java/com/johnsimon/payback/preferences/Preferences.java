@@ -29,7 +29,7 @@ public class Preferences {
 
 	public UserCurrency getCurrency() {
 		UserCurrency value = currency.getValue();
-		return value != null ? value : new UserCurrency(Currency.getInstance(Locale.getDefault()).getSymbol(), Currency.getInstance(Locale.getDefault()).getSymbol(), true);
+		return value != null ? value : new UserCurrency(Currency.getInstance(Locale.getDefault()).getSymbol(), Currency.getInstance(Locale.getDefault()).getSymbol(), true, UserCurrency.DECIMAL_SEPARATOR_DOT, UserCurrency.THOUSAND_SEPARATOR_NONE);
 	}
 
 	public String getBackground() {

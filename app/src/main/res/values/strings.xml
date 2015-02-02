@@ -107,6 +107,7 @@
     <string name="select_currency">Select currency</string>
     <string name="select">Select</string>
     <string name="change_currency">Change currency</string>
+    <string name="currency_symbol">Currency symbol</string>
     <string name="currency_symbol_after_checkbox">Currency symbol</string>
     <string name="currency_decimal_separator_checkbox">Comma decimal separator</string>
     <string name="save_fail">Failed to save file</string>
