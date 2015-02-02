@@ -39,13 +39,13 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	public final static String CURRENCY_SAVE_KEY = "CURRENCY_SAVE_KEY";
 	public final static String CURRENCY_DISPLAY_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
 	public final static String CURRENCY_CHECKBOX = "CURRENCY_CHECKBOX";
+	public final static String CURRENCY_DECIMAL_SEPARATOR = "CURRENCY_DECIMAL_SEPARATOR";
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
-
-	//private TintCheckBox custom_currency_check_after;
+	private TintCheckBox custom_currency_check_after;
     private TintCheckBox custom_currency_decimal_separator;
-
+    private TintSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
 	private String displayCurrency = "";
@@ -152,7 +152,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			displayCurrency = savedInstanceState.getString(CURRENCY_DISPLAY_SAVE_KEY, "$");
 
             custom_currency_check_after.setChecked(savedInstanceState.getBoolean(CURRENCY_CHECKBOX, false));
-            custom_currency_decimal_separator.setChecked(savedInstanceState.getBoolean(DECIMAL_SEPARATOR_CHECKBOX), true);
+            custom_currency_decimal_separator.setChecked(savedInstanceState.getBoolean(CURRENCY_DECIMAL_SEPARATOR, false));
 		} else {
             usingDefaults = false;
         }
@@ -248,6 +248,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency);
 		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
         outState.putBoolean(CURRENCY_CHECKBOX, custom_currency_check_after.isChecked());
+        outState.putBoolean(CURRENCY_DECIMAL_SEPARATOR, custom_currency_decimal_separator.isChecked());
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -259,7 +260,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			data.getPreferences().currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()));
+			data.getPreferences().currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT);
 			storage.commit();
 
 			FeedFragment.adapter.notifyDataSetChanged();
@@ -271,7 +272,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 			alertDialog.dismiss();
 
-			FeedFragment.displayTotalDebt(getResources(), new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()));
+			FeedFragment.displayTotalDebt(getResources(), new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked()), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT);
 		}
 	};
 
