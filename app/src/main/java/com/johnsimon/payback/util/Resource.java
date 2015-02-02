@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.data.Debt;
@@ -58,12 +59,14 @@ public class Resource {
 			actions = preferences.getInt(SAVE_KEY_ACTIONS, 0);
 		}
 
-		//TODO innan release: Ta bort detta
-		StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
-				.detectAll()
-				.penaltyLog()
-				.build();
-		StrictMode.setVmPolicy(policy);
+        if(BuildConfig.DEBUG) {
+            StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build();
+            StrictMode.setVmPolicy(policy);
+        }
+
     }
 
     /*  Method to detect if it's the first time the user uses the app.
@@ -246,8 +249,9 @@ public class Resource {
     public static void checkFull(BillingProcessor bp) {
         isFull =  bp.isPurchased("full_version");
 
-		//TODO innan release: Ta bort detta
-		isFull = true;
+		if(BuildConfig.DEBUG) {
+            isFull = true;
+        }
     }
 
     public static boolean canHold(int debts, int addition) {

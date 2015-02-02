@@ -14,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.core.DataActivity;
@@ -36,7 +38,7 @@ import com.johnsimon.payback.util.Undo;
 import java.util.ArrayList;
 import java.util.Collections;
 
-//TODO INNAN RELEASE: ÄNDRA VERISON TILL 1.2
+//TODO INNAN RELEASE: ÄNDRA VERISON
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
@@ -131,6 +133,10 @@ public class FeedActivity extends DataActivity implements
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, feedFragment = new FeedFragment(), "feed_fragment_tag")
 				.commit();
+
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(this, "DEBUG", Toast.LENGTH_SHORT).show();
+        }
 	}
 
     @Override

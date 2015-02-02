@@ -10,6 +10,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.async.Promise;
 
@@ -36,12 +37,11 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 
 	public void go() {
 		this.client = new GoogleApiClient.Builder(activity)
-			.addApi(Drive.API)
-					//TODO innan release: använda app folder
-			.addScope(Drive.SCOPE_FILE)
-			.addConnectionCallbacks(this)
-			.addOnConnectionFailedListener(this)
-			.build();
+            .addApi(Drive.API)
+            .addScope(Drive.SCOPE_APPFOLDER)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .build();
 
 		client.connect();
 	}

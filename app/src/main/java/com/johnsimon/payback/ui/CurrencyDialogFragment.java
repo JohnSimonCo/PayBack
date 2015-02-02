@@ -53,7 +53,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	private boolean continueToNfc = false;
     private boolean usingDefaults = true;
 
-    /*TODO
+    /*TODO simmes feautre
         Vi borde ha med USD och alla de valutorna och fortfarande ha
         dollartecken och eurotecken i början. Det känns fel att
         USD och EUR helt saknas i listan. De möjliga scenariorna är:

@@ -52,7 +52,7 @@ public class StorageManager {
 					break;
 			}
 		}
-		//TODO innan release: ta bort
+		//TODO kanske ska tas bort
 		if(storage.isDriveStorage()) {
 			storage.asDriveStorage().activity = context;
 		}

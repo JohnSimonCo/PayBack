@@ -19,6 +19,7 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
@@ -27,6 +28,7 @@ import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataSyncer;
+import com.johnsimon.payback.util.Resource;
 import com.williammora.snackbar.Snackbar;
 
 import java.io.BufferedReader;
@@ -144,8 +146,7 @@ public class DriveStorage extends Storage {
 
 			if(!client.isConnected()) return;
 
-			//TODO innan release: använda app folder
-			Drive.DriveApi.getRootFolder(client)
+            Drive.DriveApi.getAppFolder(client)
 				.listChildren(client)
 				.setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
 					@Override
@@ -221,8 +222,7 @@ public class DriveStorage extends Storage {
                         .build();
 
 
-					//TODO innan release: använda app folder
-					Drive.DriveApi.getRootFolder(client)
+                    Drive.DriveApi.getAppFolder(client)
                         .createFile(client, changeSet, result.getDriveContents())
                         .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
                             @Override
@@ -245,27 +245,27 @@ public class DriveStorage extends Storage {
 
     private void write(final String text, final DriveFile file, final ResultCallback<FileResult> callback) {
         file.open(client, DriveFile.MODE_WRITE_ONLY, null).setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
-			@Override
-			public void onResult(DriveApi.DriveContentsResult result) {
-				if (!result.getStatus().isSuccess()) {
-					callback.onResult(new FileResult(result.getStatus()));
-					return;
-				}
+            @Override
+            public void onResult(DriveApi.DriveContentsResult result) {
+                if (!result.getStatus().isSuccess()) {
+                    callback.onResult(new FileResult(result.getStatus()));
+                    return;
+                }
 
-				DriveContents contents = result.getDriveContents();
-				try {
-					contents.getOutputStream().write(text.getBytes());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				contents.commit(client, null).setResultCallback(new ResultCallback<Status>() {
-					@Override
-					public void onResult(Status status) {
-						callback.onResult(new FileResult(file, text, status));
-					}
-				});
-			}
-		});
+                DriveContents contents = result.getDriveContents();
+                try {
+                    contents.getOutputStream().write(text.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                contents.commit(client, null).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        callback.onResult(new FileResult(file, text, status));
+                    }
+                });
+            }
+        });
 
     }
 

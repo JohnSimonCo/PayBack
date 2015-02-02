@@ -5,7 +5,9 @@ import android.os.Bundle;
 
 	import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.async.NullPromise;
+import com.johnsimon.payback.util.Resource;
 
 public class DriveConnector implements GoogleApiClient.ConnectionCallbacks {
 
@@ -13,12 +15,11 @@ public class DriveConnector implements GoogleApiClient.ConnectionCallbacks {
 	public final NullPromise connectedPromise = new NullPromise();
 
 	public DriveConnector(Context context) {
-		client = new GoogleApiClient.Builder(context)
-			.addApi(Drive.API)
-					//TODO innan release: använda app folder
-			.addScope(Drive.SCOPE_FILE)
-			.addConnectionCallbacks(this)
-			.build();
+        client = new GoogleApiClient.Builder(context)
+            .addApi(Drive.API)
+            .addScope(Drive.SCOPE_APPFOLDER)
+            .addConnectionCallbacks(this)
+            .build();
 
 		client.connect();
 	}
