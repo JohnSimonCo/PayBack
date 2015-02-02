@@ -6,11 +6,11 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 public class UserCurrency {
-	public final static int DECIMAL_SEPARATOR_DOT =    0;
-	public final static int DECIMAL_SEPARATOR_COMMA =  1;
+	public final static int DECIMAL_SEPARATOR_DOT    = 0;
+	public final static int DECIMAL_SEPARATOR_COMMA  = 1;
 
-	public final static int THOUSAND_SEPARATOR_NONE =  0;
-	public final static int THOUSAND_SEPARATOR_DOT =   1;
+	public final static int THOUSAND_SEPARATOR_NONE  = 0;
+	public final static int THOUSAND_SEPARATOR_DOT   = 1;
 	public final static int THOUSAND_SEPARATOR_COMMA = 2;
 	public final static int THOUSAND_SEPARATOR_SPACE = 3;
 
