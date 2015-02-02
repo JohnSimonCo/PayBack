@@ -1,8 +1,7 @@
 package com.johnsimon.payback.currency;
 
-/**
- * Created by John on 2015-02-02.
- */
+import java.text.DecimalFormat;
+
 public class CurrencyFormat {
 
 	public final static int DECIMAL_SEPARATOR_DOT = 0;
@@ -16,9 +15,37 @@ public class CurrencyFormat {
 	public final int decimalSeparator;
 	public final int thousandSeparator;
 
+	public final DecimalFormat format;
+
 	public CurrencyFormat(int decimalSeparator, int thousandSeparator) {
 		this.decimalSeparator = decimalSeparator;
 		this.thousandSeparator = thousandSeparator;
+
+		format = createFormat();
+
+		test();
+	}
+
+	void test() {
+		String s1 = format.format(1000000.123123213);
+		String s2 = format.format(12312.3);
+		String s3 = format.format(1.0);
+
+		int i = 0;
+	}
+
+	private DecimalFormat createFormat() {
+		String formatString = "###";
+
+		if(thousandSeparator != THOUSAND_SEPARATOR_NONE) {
+			formatString += thousandSeparator() + "###";
+		}
+
+		formatString += decimalSeparator();
+
+		formatString += ".##";
+
+		return new DecimalFormat(formatString);
 	}
 
 	private String decimalSeparator() {
