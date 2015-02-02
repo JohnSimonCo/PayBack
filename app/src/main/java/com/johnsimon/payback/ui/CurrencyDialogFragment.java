@@ -16,7 +16,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.currency.CurrencyFormat;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
 
