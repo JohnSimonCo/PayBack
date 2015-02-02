@@ -245,7 +245,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
             displayCurrency = data.preferences.getCurrency().getDisplayName();
             custom_currency_check_after.setChecked(!data.preferences.getCurrency().before);
             custom_currency_decimal_separator.setChecked(data.preferences.getCurrency().decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
-			currency_thousand_separator.setSelected(data.preferences.getCurrency());
+			currency_thousand_separator.setSelection(data.preferences.getCurrency().thousandSeparator);
             updatePreview();
         }
         super.onDataReceived();
