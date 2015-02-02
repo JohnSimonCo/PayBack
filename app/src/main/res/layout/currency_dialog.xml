@@ -1,150 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/Elevation2DP"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@android:color/white"
+                android:background="#009688"
+                android:id="@+id/welcome_currency_preview"
+                android:textSize="36sp"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"    />
+
+            <View
+                android:visibility="gone"
+                android:id="@+id/currency_info_text_pusher"
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <TextView
+                android:paddingBottom="8dp"
+                android:paddingLeft="48dp"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="16dp"
+                android:textColor="@color/gray_text_light"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:id="@+id/currency_info_text"
+                android:text="@string/currency_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.devspark.robototextview.widget.RobotoButton
+                app:fontFamily="roboto"
+                app:textWeight="medium"
+                style="@style/Elevation2DP"
+                android:drawableRight="@drawable/ic_action_arrow_drop_down"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/currency"
+                android:id="@+id/welcome_select_currency"
+                android:textAllCaps="true"
+                android:textColor="@color/gray_text_normal"
+                android:gravity="left|center_vertical"
+                android:textSize="16sp"
+                android:paddingLeft="48dp"
+                android:paddingRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.devspark.robototextview.widget.RobotoButton
+                app:fontFamily="roboto"
+                app:textWeight="medium"
+                style="@style/Elevation2DP"
+                android:drawableRight="@drawable/ic_action_arrow_drop_down"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/currency_symbol"
+                android:id="@+id/welcome_select_currency_display"
+                android:textAllCaps="true"
+                android:textColor="@color/gray_text_normal"
+                android:gravity="left|center_vertical"
+                android:textSize="16sp"
+                android:paddingLeft="48dp"
+                android:paddingRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.internal.widget.TintCheckBox
+                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/custom_currency_check_after"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="12dp"
+                android:paddingLeft="4dp"
+                android:text="@string/currency_symbol_after_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.internal.widget.TintCheckBox
+                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:id="@+id/custom_currency_decimal_separator"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="12dp"
+                android:paddingLeft="4dp"
+                android:text="@string/currency_decimal_separator_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="#E9000000"
+                    android:text="@string/thousand_separator"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <android.support.v7.internal.widget.TintSpinner
+                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                    android:textSize="16sp"
+                    android:entries="@array/thousand_seperator_list"
+                    android:id="@+id/currency_thousand_separator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <LinearLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
-            style="@style/Elevation2DP"
-            android:gravity="center_horizontal"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@android:color/white"
-            android:background="#009688"
-            android:id="@+id/welcome_currency_preview"
-            android:textSize="36sp"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"    />
-        
-        <View
+        <com.devspark.robototextview.widget.RobotoButton
+            app:fontFamily="roboto"
+            app:textWeight="medium"
+            style="@style/FlatButton"
+            android:text="@string/cancel"
+            android:id="@+id/welcome_cancel"
             android:visibility="gone"
-            android:id="@+id/currency_info_text_pusher"
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
-        <TextView
-            android:paddingBottom="8dp"
-            android:paddingLeft="48dp"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="16dp"
-            android:textColor="@color/gray_text_light"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:id="@+id/currency_info_text"
-            android:text="@string/currency_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="false"/>
 
         <com.devspark.robototextview.widget.RobotoButton
             app:fontFamily="roboto"
             app:textWeight="medium"
-            style="@style/Elevation2DP"
-            android:drawableRight="@drawable/ic_action_arrow_drop_down"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/currency"
-            android:id="@+id/welcome_select_currency"
-            android:textAllCaps="true"
-            android:textColor="@color/gray_text_normal"
-            android:gravity="left|center_vertical"
-            android:textSize="16sp"
-            android:paddingLeft="48dp"
-            android:paddingRight="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.devspark.robototextview.widget.RobotoButton
-            app:fontFamily="roboto"
-            app:textWeight="medium"
-            style="@style/Elevation2DP"
-            android:drawableRight="@drawable/ic_action_arrow_drop_down"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/currency_symbol"
-            android:id="@+id/welcome_select_currency_display"
-            android:textAllCaps="true"
-            android:textColor="@color/gray_text_normal"
-            android:gravity="left|center_vertical"
-            android:textSize="16sp"
-            android:paddingLeft="48dp"
-            android:paddingRight="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.internal.widget.TintCheckBox
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:id="@+id/custom_currency_check_after"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:text="@string/currency_symbol_after_checkbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.internal.widget.TintCheckBox
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:id="@+id/custom_currency_decimal_separator"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:text="@string/currency_decimal_separator_checkbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-
-        </LinearLayout>
-
-        <android.support.v7.internal.widget.TintSpinner
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:entries="@array/thousand_seperator_list"
-            android:id="@+id/currency_thousand_separator"
+            style="@style/FlatButton"
+            android:text="@string/welcome_continue"
+            android:id="@+id/welcome_continue"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:orientation="horizontal"
-            android:layout_gravity="right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <com.devspark.robototextview.widget.RobotoButton
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                style="@style/FlatButton"
-                android:text="@string/cancel"
-                android:id="@+id/welcome_cancel"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"/>
-
-            <com.devspark.robototextview.widget.RobotoButton
-                app:fontFamily="roboto"
-                app:textWeight="medium"
-                style="@style/FlatButton"
-                android:text="@string/welcome_continue"
-                android:id="@+id/welcome_continue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"/>
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:clickable="false"/>
 
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>

@@ -253,7 +253,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
     private void updatePreview() {
 		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? CurrencyFormat.DECIMAL_SEPARATOR_COMMA : CurrencyFormat.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
-		welcome_currency_preview.setText(cur.render(20) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
+		welcome_currency_preview.setText(cur.render(2400.5f) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
 
 		welcome_select_currency.setText(getString(R.string.currency) + " (" + selectedCurrency + ")");
 		welcome_select_currency_display.setText(getString(R.string.currency_symbol) + " (" + displayCurrency + ")");

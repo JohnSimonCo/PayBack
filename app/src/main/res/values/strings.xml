@@ -110,6 +110,7 @@
     <string name="currency_symbol">Currency symbol</string>
     <string name="currency_symbol_after_checkbox">Symbol after amount</string>
     <string name="currency_decimal_separator_checkbox">Comma decimal separator</string>
+    <string name="thousand_separator">Thousand separator</string>
     <string name="save_fail">Failed to save file</string>
     <string name="no_file">Failed to find file</string>
     <string name="read_failed">Failed to read file</string>
