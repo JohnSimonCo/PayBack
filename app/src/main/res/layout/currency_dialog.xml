@@ -102,6 +102,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="12dp"
                 android:paddingLeft="4dp"
+                android:checked="false"
                 android:text="@string/currency_decimal_separator_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -27,6 +27,7 @@ import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.data.Person;

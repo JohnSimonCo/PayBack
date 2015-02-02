@@ -2,6 +2,7 @@ package com.johnsimon.payback.currency;
 
 import com.johnsimon.payback.data.Debt;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
@@ -38,7 +39,7 @@ public class UserCurrency {
 
 	public String render() {
 		String output = this.id;
-		if(displayName != null) {
+		if(displayName != null && !displayName.equals(id)) {
 			output += " (" + displayName + ")";
 		}
 		return output;
@@ -51,7 +52,18 @@ public class UserCurrency {
 	public String render(float amount) {
 		if(format == null) format = createFormat();
 
-		return format.format(Math.abs(amount));
+		//TODO this is dirty
+
+		String formatted = format.format(Math.abs(amount));
+
+		String output = formatted;
+
+		if(decimalSeparator == DECIMAL_SEPARATOR_COMMA && Math.floor(amount) != amount) {
+			int index = formatted.lastIndexOf('.');
+			output = formatted.substring(0, index) + ',' + formatted.substring(index + 1, formatted.length());
+		}
+
+		return output;
 	}
 
 	private DecimalFormat createFormat() {
@@ -59,7 +71,7 @@ public class UserCurrency {
 		symbols.setDecimalSeparator(decimalSeparator());
 		symbols.setCurrencySymbol(getDisplayName());
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.##" : "###,###.###";
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
@@ -67,7 +79,10 @@ public class UserCurrency {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		return new DecimalFormat(formatString, symbols);
+		DecimalFormat format = new DecimalFormat(formatString, symbols);
+		format.setRoundingMode(RoundingMode.HALF_UP);
+
+		return format;
 	}
 
 	private char decimalSeparator() {

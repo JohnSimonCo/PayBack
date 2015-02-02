@@ -143,8 +143,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		if (savedInstanceState != null) {
 
-			String cc = savedInstanceState.getString(CURRENCY_SAVE_KEY, "FAILED");
-			if (cc.equals("FAILED")) {
+			String cc = savedInstanceState.getString(CURRENCY_SAVE_KEY, null);
+			if (cc == null) {
                 usingDefaults = false;
 			} else {
 				selectedCurrency = cc;
@@ -277,14 +277,16 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			data.getPreferences().currency.setValue(new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition()));
+			UserCurrency userCurrency = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
+
+			data.getPreferences().currency.setValue(userCurrency);
 			storage.commit();
 
 			FeedFragment.adapter.notifyDataSetChanged();
 
 			NavigationDrawerFragment.updateBalance(data);
 			if (SettingsActivity.pref_currency != null) {
-				SettingsActivity.pref_currency.setSummary(selectedCurrency);
+				SettingsActivity.pref_currency.setSummary(userCurrency.render());
 			}
 
 			alertDialog.dismiss();
