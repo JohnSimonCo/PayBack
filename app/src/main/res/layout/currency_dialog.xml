@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:focusable="true"
@@ -13,9 +13,10 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/Elevation2DP"
             android:gravity="center_horizontal"
             android:fontFamily="sans-serif-light"
-            android:textColor="#ffffff"
+            android:textColor="@android:color/white"
             android:background="#009688"
             android:id="@+id/welcome_currency_preview"
             android:textSize="36sp"
@@ -82,7 +83,17 @@
             android:textSize="16sp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="16dp"
-            android:text="@string/currency_checkbox"
+            android:text="@string/currency_symbol_after_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.internal.widget.TintCheckBox
+            app:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:id="@+id/custom_currency_decimal_separator"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:text="@string/currency_decimal_separator_checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

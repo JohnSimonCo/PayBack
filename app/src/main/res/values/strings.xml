@@ -106,9 +106,9 @@
     <string name="currency_checkbox">Symbol after amount</string>
     <string name="select_currency">Select currency</string>
     <string name="select">Select</string>
-    <string name="currency_symbol">Currency symbol</string>
     <string name="change_currency">Change currency</string>
-    <string name="change_currency_symbol">Currency symbol</string>
+    <string name="currency_symbol_after_checkbox">Currency symbol</string>
+    <string name="currency_decimal_separator_checkbox">Comma decimal separator</string>
     <string name="save_fail">Failed to save file</string>
     <string name="no_file">Failed to find file</string>
     <string name="read_failed">Failed to read file</string>
