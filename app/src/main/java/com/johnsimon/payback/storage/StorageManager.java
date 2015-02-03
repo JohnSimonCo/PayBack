@@ -143,7 +143,7 @@ public class StorageManager {
 
 	private static void restart(Activity context) {
 		context.finishAffinity();
-		FeedActivity.person = null;
+		FeedActivity.gotoAll();
 		context.startActivity(new Intent(context, FeedActivity.class));
 		//context.startActivity(new Intent(context, context.getClass()));
 	}

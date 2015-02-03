@@ -37,10 +37,12 @@ import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Beamer;
+import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -163,8 +165,11 @@ public class FeedActivity extends DataActivity implements
 		feedLinkedNotification.broadcast();
     }
 
-    public static boolean isAll() {
+	public static boolean isAll() {
 		return person == null;
+	}
+	public static void gotoAll() {
+		person = null;
 	}
 
     @Override

@@ -109,6 +109,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 							public void onPositive(MaterialDialog dialog) {
 								super.onPositive(dialog);
 
+								FeedActivity.gotoAll();
 								storage.commit(AppData.fromJson(JSON));
 								storage.emit();
 
@@ -288,7 +289,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         // decide what to show in the action bar.
         getMenuInflater().inflate(R.menu.settings_menu, menu);
 
-        if (!FileManager.hasFile()) {
+        if (!FileManager.hasFile(this)) {
             MenuItem removeBackup = menu.findItem(R.id.menu_settings_remove_backup);
             removeBackup.setVisible(false);
         }
@@ -302,7 +303,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
         switch (item.getItemId()) {
             case R.id.menu_settings_remove_backup:
-                if (FileManager.removeFile()) {
+                if (FileManager.removeFile(this)) {
                     Snackbar.with(this)
                             .text(getString(R.string.backup_removed_success))
                             .show(this);

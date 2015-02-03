@@ -31,11 +31,16 @@ public class FileManager {
 		}*/
 
 		try {
-			File dir = getDir();
-			File file = new File(dir, fileName);
+			File dir = getDir(activity), file = new File(dir, fileName);
+
+			if(!dir.exists()) {
+				if(!dir.mkdirs()) {
+					throw new UnknownError("dir.mkdirs() failed");
+				}
+			}
 			if(!file.exists()) {
-				if(!dir.mkdirs() || !file.createNewFile()) {
-					throw new UnknownError("Unknown error");
+				if(!file.createNewFile()) {
+					throw new UnknownError("file.createNewFile() failed");
 				}
 			}
 
@@ -58,7 +63,7 @@ public class FileManager {
 
 		StringBuilder builder = new StringBuilder();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(getFile()));
+			BufferedReader reader = new BufferedReader(new FileReader(getFile(activity)));
 			String line;
 			while ((line = reader.readLine()) != null) {
 				builder.append(line);
@@ -73,21 +78,21 @@ public class FileManager {
 		return builder.toString();
 	}
 
-	public static boolean hasFile() {
-		return getFile().exists();
+	public static boolean hasFile(Context context) {
+		return getFile(context).exists();
 	}
 
-	public static boolean removeFile() {
-		File file = getFile();
+	public static boolean removeFile(Context context) {
+		File file = getFile(context);
 		return file.exists() && file.delete();
 	}
 
-	private static File getDir() {
-		return new File(parentDir, dirName);
+	private static File getDir(Context context) {
+		return new File(context.getExternalFilesDir(parentDir), dirName);
 	}
 
-	private static File getFile() {
-		return new File(getDir(), fileName);
+	private static File getFile(Context context) {
+		return new File(getDir(context), fileName);
 	}
 
 	/* Checks if external storage is available for read and write
