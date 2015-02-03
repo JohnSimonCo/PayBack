@@ -1,22 +1,22 @@
 package com.johnsimon.payback.util;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.util.SparseIntArray;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivityInterface;
+import com.johnsimon.payback.core.DataContextInterface;
 import com.johnsimon.payback.data.Person;
 
 public class ColorPalette {
 	private static ColorPalette instance = null;
 
-    private DataActivityInterface dataAcitivity;
+    private DataContextInterface dataContext;
 
 	private int[] palette;
-	public ColorPalette(DataActivityInterface dataAcitivity) {
-        this.dataAcitivity = dataAcitivity;
-
-        Resources resources = dataAcitivity.getContext().getResources();
+	public ColorPalette(Context context) {
+        Resources resources = context.getResources();
         palette = new int[] {
 			resources.getColor(R.color.color1),
 			resources.getColor(R.color.color2),
@@ -31,7 +31,7 @@ public class ColorPalette {
 	public int nextIndex() {
 		int[] usedIndices = new int[palette.length];
 
-		for (Person person : dataAcitivity.getData().people) {
+		for (Person person : dataContext.getData().people) {
 			usedIndices[person.paletteIndex]++;
 		}
 
@@ -53,12 +53,12 @@ public class ColorPalette {
 		return palette[index];
 	}
 
-	public static ColorPalette getInstance(DataActivityInterface dataAcitivity) {
+	public static ColorPalette getInstance(DataContextInterface dataContext) {
 		if(instance == null) {
-			instance = new ColorPalette(dataAcitivity);
+			instance = new ColorPalette(dataContext.getContext());
 		}
 
-		instance.dataAcitivity = dataAcitivity;
+		instance.dataContext = dataContext;
 
 		return instance;
 	}

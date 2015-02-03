@@ -11,8 +11,7 @@ import com.johnsimon.payback.data.AppData;
 /**
  * Created by John on 2015-01-15.
  */
-public interface DataActivityInterface {
-	AppData getData();
+public interface DataActivityInterface extends DataContextInterface {
 	User getUser();
 
 	Activity getContext();
