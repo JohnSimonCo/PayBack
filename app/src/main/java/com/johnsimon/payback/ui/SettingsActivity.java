@@ -315,13 +315,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         return result;
     }
 
-    @Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(StorageManager.loginManager != null) {
-			StorageManager.loginManager.handleActivityResult(requestCode, resultCode, data);
-		}
-	}
-
 	@Override
 	protected void onDataReceived() {
 		bindPreferenceSummaryToValue(pref_background);
