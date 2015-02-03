@@ -16,7 +16,8 @@ public class DataSyncer {
         ArrayList<Person> people = a.people;
         ArrayList<Debt> debts = a.debts;
         HashSet<UUID> deleted = a.deleted;
-        PeopleOrder peopleOrder = a.peopleOrder;
+		PeopleOrder peopleOrder = a.peopleOrder;
+		long peopleOrderTouched = a.peopleOrderTouched;
         Preferences preferences = a.preferences;
 
         if(!a.people.equals(b.people) || !a.debts.equals(b.debts) || !a.deleted.equals(b.deleted)) {
@@ -36,7 +37,7 @@ public class DataSyncer {
         if(!a.peopleOrder.equals(b.peopleOrder)) {
             changed = true;
 
-            peopleOrder = a.peopleOrder.syncWith(b.peopleOrder);
+			peopleOrder = a.peopleOrderTouched > b.peopleOrderTouched ? a.peopleOrder : b.peopleOrder;
         }
 
         if(!a.preferences.equals(b.preferences)) {
@@ -51,6 +52,7 @@ public class DataSyncer {
 			out.debts = debts;
 			out.deleted = deleted;
 			out.peopleOrder = peopleOrder;
+			out.peopleOrderTouched = peopleOrderTouched;
 			out.preferences = preferences;
 		}
         return changed;

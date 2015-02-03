@@ -268,6 +268,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 			@Override
 			public void onCommit() {
 				data.peopleOrder = result.order;
+				data.touchPeopleOrder();
 				storage.commit();
 			}
 		});
@@ -319,6 +320,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
             adapter.notifyDataSetChanged();
 
             data.peopleOrder.reorder(from, to, toLast);
+			data.touchPeopleOrder();
             storage.commit();
         }
     }

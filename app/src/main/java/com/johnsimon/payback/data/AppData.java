@@ -20,6 +20,7 @@ public class AppData {
     public HashSet<UUID> deleted;
 
 	public PeopleOrder peopleOrder;
+	public long peopleOrderTouched;
 
 	public Preferences preferences;
 
@@ -28,16 +29,22 @@ public class AppData {
     public AppData() {
     }
 
-    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted, PeopleOrder peopleOrder, Preferences preferences) {
+    public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted, PeopleOrder peopleOrder, long peopleOrderTouched, Preferences preferences) {
         this.people = people;
         this.debts = debts;
         this.deleted = deleted;
 		this.peopleOrder = peopleOrder;
+		this.peopleOrderTouched = peopleOrderTouched;
 		this.preferences = preferences;
     }
 
     public static AppData defaultAppData() {
-        return new AppData(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), PeopleOrder.defaultPeopleOrder(), Preferences.defaultPreferences());
+        return new AppData(new ArrayList<Person>(),
+						   new ArrayList<Debt>(),
+				 		   new HashSet<UUID>(),
+						   PeopleOrder.defaultPeopleOrder(),
+						   System.currentTimeMillis(),
+						   Preferences.defaultPreferences());
     }
 
     public String save() {
@@ -57,6 +64,7 @@ public class AppData {
 
 	public PeopleOrder getPeopleOrder() {
 		if(peopleOrder == null) {
+			//Don't touch peopleOrder here
 			peopleOrder = new PeopleOrder(people);
 		}
 		return peopleOrder;
@@ -150,7 +158,8 @@ public class AppData {
         deleteDebts(person);
         deleted.add(person.id);
 		getPeopleOrder().remove(person.id);
-        people.remove(person);
+		touchPeopleOrder();
+		people.remove(person);
     }
     public void delete(Debt debt) {
         deleted.add(debt.id);
@@ -167,6 +176,7 @@ public class AppData {
 	public void add(Person person) {
 		people.add(person);
 		getPeopleOrder().add(person.id);
+		touchPeopleOrder();
 	}
 
     private void deleteDebts(Person person) {
@@ -278,6 +288,10 @@ public class AppData {
         return sender.name;
     }
 
+	public void touchPeopleOrder() {
+		peopleOrderTouched = System.currentTimeMillis();
+	}
+
     public static AppData fromJson(String JSON) {
 		if(JSON == null) {
 			return AppData.defaultAppData();
@@ -289,14 +303,14 @@ public class AppData {
 		}
 
 		if(BuildConfig.DEBUG) {
-			testData(data);
+			findCorruptData(data);
 		}
 
 		return data;
 
     }
 
-	public static void testData(AppData data) {
+	public static void findCorruptData(AppData data) {
 		for(Debt debt : data.debts) {
 			if(debt == null) {
 				throw new RuntimeException("Null debt");
@@ -312,7 +326,7 @@ public class AppData {
 			}
 		}
 
-		if(data.peopleOrder.size() != data.people.size()) {
+		if(data.getPeopleOrder().size() != data.people.size()) {
 			throw new RuntimeException("peopleOrder size not equal to people size");
 		}
 	}

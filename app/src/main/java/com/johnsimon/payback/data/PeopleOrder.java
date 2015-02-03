@@ -7,33 +7,17 @@ import java.util.UUID;
 
 public class PeopleOrder extends ArrayList<UUID> {
 
-	//TODO verkar inte synka som den ska
-
-	public long touched;
-
 	private PeopleOrder() {
 	}
 
 	public PeopleOrder(ArrayList<Person> people) {
-		this.touched = System.currentTimeMillis();
-
         for(Person person : people) {
             add(person.id);
         }
 	}
 
 	public static PeopleOrder defaultPeopleOrder() {
-		PeopleOrder peopleOrder = new PeopleOrder();
-		peopleOrder.touched = System.currentTimeMillis();
-		return peopleOrder;
-	}
-
-	protected void touch() {
-		touched = System.currentTimeMillis();
-	}
-
-	public PeopleOrder syncWith(PeopleOrder other) {
-		return this.touched > other.touched ? this : other;
+		return new PeopleOrder();
 	}
 
 	public ArrayList<Person> order(ArrayList<Person> people) {
@@ -43,7 +27,6 @@ public class PeopleOrder extends ArrayList<UUID> {
 	}
 
     public void reorder(int from, int to, boolean toLast) {
-        this.touch();
         UUID item = get(from);
         remove(from);
         if (toLast) {
