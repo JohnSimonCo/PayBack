@@ -286,7 +286,6 @@ public class AppData {
 
 		//TODO remove when shitty period ends
 
-
 		//AppData data = new Gson().fromJson(JSON, AppData.class);
 
 		AppData data = ShittyAppData.fromJson(JSON);

@@ -24,14 +24,14 @@ public class ShittyAppData {
 		try {
 			AppData data = new Gson().fromJson(JSON, AppData.class);
 
-			for(Debt debt : data.debts) {
-				if(debt.ownerId == null) {
+			if(data.debts.size() > 0) {
+				if(data.debts.get(0).ownerId == null) {
 					throw new Exception("Data is shitty!");
 				}
 			}
 
-			for(Person person : data.people) {
-				if(person.name == null) {
+			if(data.people.size() > 0) {
+				if(data.people.get(0).name == null) {
 					throw new Exception("Data is shitty!");
 				}
 			}
