@@ -37,9 +37,10 @@ import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.williammora.snackbar.Snackbar;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
+//TODO SET BACKGROUND PREF VALUE ONDATARECIEVED TO AVOID BACKUP/RESTORE FUCKUP
 
 public class SettingsActivity extends MaterialPreferenceActivity implements BillingProcessor.IBillingHandler {
 
