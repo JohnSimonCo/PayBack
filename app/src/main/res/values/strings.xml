@@ -122,6 +122,8 @@
     <string name="restore_single">Restore</string>
     <string name="remove_backup">Remove backup</string>
     <string name="backup_removed_success">Backup removed successfully</string>
+    <string name="disabled_in_free">Disabled in free version</string>
+    <string name="no_backup_available">No backup available</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

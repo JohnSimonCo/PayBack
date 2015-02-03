@@ -17,8 +17,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -51,6 +51,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 	public Subscription<String> loginSubscription = null;
 
 	private Preference pref_cloud_sync_account;
+    private Preference pref_import_data;
     private CheckBoxPreference pref_cloud_sync;
 
     private BillingProcessor bp;
@@ -86,12 +87,12 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				FileManager.write(SettingsActivity.this, data.save());
-                invalidateOptionsMenu();
+                updateBackupStatus(true);
 				return true;
 			}
 		});
 
-		Preference pref_import_data = findPreference("pref_import_data");
+		pref_import_data = findPreference("pref_import_data");
 		pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -129,6 +130,18 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 return true;
             }
         });
+
+        if (!Resource.isFull) {
+            pref_export_data.setEnabled(false);
+            pref_import_data.setEnabled(false);
+            pref_export_data.setSummary(R.string.disabled_in_free);
+            pref_import_data.setSummary(R.string.disabled_in_free);
+        } else {
+            pref_export_data.setEnabled(true);
+            pref_import_data.setEnabled(true);
+            pref_export_data.setSummary(null);
+            pref_import_data.setSummary(null);
+        }
 
         pref_currency = findPreference("pref_currency");
 
@@ -280,39 +293,52 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 				return false;
 			}
 		});
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Only show items in the action bar relevant to this screen
-        // if the drawer is not showing. Otherwise, let the drawer
-        // decide what to show in the action bar.
-        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        _toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
 
-        if (!FileManager.hasFile()) {
-            MenuItem removeBackup = menu.findItem(R.id.menu_settings_remove_backup);
-            removeBackup.setVisible(false);
-        }
+                switch (item.getItemId()) {
+                    case R.id.menu_settings_remove_backup:
 
-        return true;
-    }
+                        if (FileManager.removeFile()) {
+                            Snackbar.with(SettingsActivity.this)
+                                    .text(getString(R.string.backup_removed_success))
+                                    .show(SettingsActivity.this);
+                        }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = super.onOptionsItemSelected(item);
+                        updateBackupStatus(true);
 
-        switch (item.getItemId()) {
-            case R.id.menu_settings_remove_backup:
-                if (FileManager.removeFile()) {
-                    Snackbar.with(this)
-                            .text(getString(R.string.backup_removed_success))
-                            .show(this);
+                        break;
                 }
-                invalidateOptionsMenu();
-                break;
+
+                return true;
+            }
+        });
+
+        updateBackupStatus(false);
+
+    }
+
+    private void updateBackupStatus(boolean clearFirst) {
+
+        if (clearFirst) {
+            _toolbar.getMenu().clear();
         }
 
-        return result;
+        _toolbar.inflateMenu(R.menu.settings_menu);
+
+        if (Resource.isFull) {
+            if (!FileManager.hasFile()) {
+                MenuItem removeBackup = _toolbar.getMenu().findItem(R.id.menu_settings_remove_backup);
+                removeBackup.setVisible(false);
+                pref_import_data.setEnabled(false);
+                pref_import_data.setSummary(R.string.no_backup_available);
+            } else {
+                pref_import_data.setEnabled(true);
+                pref_import_data.setSummary(null);
+            }
+        }
     }
 
 	@Override

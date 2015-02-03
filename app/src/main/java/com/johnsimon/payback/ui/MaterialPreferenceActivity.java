@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.johnsimon.payback.R;
@@ -23,7 +24,7 @@ public abstract class MaterialPreferenceActivity extends DataPreferenceActivity
 		activity.getTheme().resolveAttribute(attr,typedvalueattr,true);
 		return typedvalueattr.resourceId;
 	}
-	private Toolbar _toolbar;
+	protected Toolbar _toolbar;
 
 	private View    _shadowView;
 
@@ -36,12 +37,11 @@ public abstract class MaterialPreferenceActivity extends DataPreferenceActivity
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void onCreate(final Bundle savedInstanceState)
-	{
+	protected void onCreate(final Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.msl__activity_preference);
 		addPreferencesFromResource(getPreferencesXmlId());
-		_toolbar=(Toolbar)findViewById(R.id.msl__toolbar);
+		_toolbar = (Toolbar)findViewById(R.id.msl__toolbar);
 		_toolbar.setClickable(true);
 		_toolbar.setTitle(getTitle());
 		_toolbar.setNavigationIcon(getResIdFromAttribute(this,R.attr.homeAsUpIndicator));
