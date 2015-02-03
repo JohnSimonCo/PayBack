@@ -53,6 +53,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 //TODO EDITAR HÖGA TAL SÅ KOMMER MAN HIT MED JÄVLA E12
@@ -256,7 +257,7 @@ public class CreateDebtActivity extends DataActivity {
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.getOwner().getName());
 
-			floatLabelAmountEditText.setText(Float.toString(Math.abs(editingDebt.getAmount())).replaceAll("\\.0*$", ""));
+            floatLabelAmountEditText.setText(new DecimalFormat("###.###").format(editingDebt.getAmount()));
 
 			floatLabelNoteEditText.setText(editingDebt.getNote());
 			//Assume that the user wants to change the note
