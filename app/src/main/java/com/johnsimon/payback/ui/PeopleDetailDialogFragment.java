@@ -191,9 +191,9 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		@Override
 		public void onSelected(String name) {
 			Person other = data.findPersonByName(name);
-			int index = data.people.indexOf(person);
+			int index = PeopleListAdapter.people.indexOf(person);
 
-			PeopleManagerActivity.adapter.people.remove(index);
+			PeopleListAdapter.people.remove(index);
 			PeopleManagerActivity.adapter.notifyItemRemoved(index);
 			PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 
