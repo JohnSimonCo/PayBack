@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
+import com.johnsimon.payback.currency.UserCurrency;
 
 public class WelcomeDialogFragment extends DataDialogFragment {
 
@@ -42,6 +43,8 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 			args.putBoolean(CurrencyDialogFragment.CONTINUE, true);
 			args.putBoolean(CurrencyDialogFragment.SHOW_INFO_TEXT, true);
 			args.putBoolean(CurrencyDialogFragment.CANCELABLE, false);
+
+            fragment.currencySelectedCallback = (FeedActivity) getActivity();
 
 			fragment.setArguments(args);
 			fragment.show(getFragmentManager(), "currenct_shit");

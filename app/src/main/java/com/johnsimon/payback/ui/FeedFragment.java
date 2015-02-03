@@ -45,11 +45,11 @@ import java.util.ArrayList;
 public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
-	public static FeedListAdapter adapter;
-    public static FrameLayout headerView;
+	public FeedListAdapter adapter;
+    public FrameLayout headerView;
 
-	public static TextView totalDebtTextView;
-    public static TextView feed_header_balance;
+	public TextView totalDebtTextView;
+    public TextView feed_header_balance;
 
     public RecyclerView recyclerView;
     private View emptyView;
@@ -203,7 +203,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 		Resource.actionComplete(getActivity());
 	}
-	public static void displayTotalDebt(Resources resources, UserCurrency currency) {
+	public void displayTotalDebt(Resources resources, UserCurrency currency) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -249,7 +249,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
-                                FeedActivity.bp.purchase(self, "full_version");
+                                ((FeedActivity) getActivity()).bp.purchase(self, "full_version");
                                 dialog.dismiss();
                             }
 

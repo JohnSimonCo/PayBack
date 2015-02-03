@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
@@ -16,39 +15,24 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
-
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
-import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.Subscription;
+import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
-import com.johnsimon.payback.storage.DriveStorage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.williammora.snackbar.Snackbar;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,7 +40,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-    public static Preference pref_currency;
+    public Preference pref_currency;
 
     private ListPreference pref_background;
 
@@ -194,6 +178,13 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 				args.putBoolean(CurrencyDialogFragment.CONTINUE, false);
 				args.putBoolean(CurrencyDialogFragment.SHOW_INFO_TEXT, false);
 				args.putBoolean(CurrencyDialogFragment.CANCELABLE, true);
+
+                currencyDialogFragment.currencySelectedCallback = new CurrencyDialogFragment.CurrencySelectedCallback() {
+                    @Override
+                    public void onCurrencySelected(UserCurrency userCurrency) {
+                        pref_currency.setSummary(userCurrency.render());
+                    }
+                };
 
 				currencyDialogFragment.setArguments(args);
 				currencyDialogFragment.show(getFragmentManager(), "settings_currency");

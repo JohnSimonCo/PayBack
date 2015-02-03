@@ -51,24 +51,13 @@ public class UserCurrency {
 
 	public String render(float amount) {
 		if(format == null) format = createFormat();
-
-		//TODO this is dirty
-
-		String formatted = format.format(Math.abs(amount));
-
-		String output = formatted;
-
-		if(decimalSeparator == DECIMAL_SEPARATOR_COMMA && Math.floor(amount) != amount) {
-			int index = formatted.lastIndexOf('.');
-			output = formatted.substring(0, index) + ',' + formatted.substring(index + 1, formatted.length());
-		}
-
-		return output;
+        return format.format(Math.abs(amount));
 	}
 
 	private DecimalFormat createFormat() {
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 		symbols.setDecimalSeparator(decimalSeparator());
+        symbols.setMonetaryDecimalSeparator(decimalSeparator());
 		symbols.setCurrencySymbol(getDisplayName());
 
 		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";

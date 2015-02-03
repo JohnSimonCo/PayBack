@@ -48,14 +48,14 @@ import java.util.Collections;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
-        BillingProcessor.IBillingHandler {
+        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback {
 
-    public static BillingProcessor bp;
+    public BillingProcessor bp;
 
 	private static String ARG_PREFIX = Resource.prefix("FEED");
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
-	public static Toolbar toolbar;
+	public Toolbar toolbar;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
@@ -77,6 +77,7 @@ public class FeedActivity extends DataActivity implements
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         Intent sentIntent = getIntent();
 
@@ -84,8 +85,6 @@ public class FeedActivity extends DataActivity implements
             Resource.actionComplete(this);
             sentIntent.removeExtra(ARG_FROM_CREATE);
         }
-
-		super.onCreate(savedInstanceState);
 
         bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
 
@@ -213,7 +212,7 @@ public class FeedActivity extends DataActivity implements
 
 		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
 
-        FeedFragment.displayTotalDebt(getResources(), data.getPreferences().getCurrency());
+        feedFragment.displayTotalDebt(getResources(), data.getPreferences().getCurrency());
 
 	}
 
@@ -354,13 +353,13 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	public void sortTime() {
-		Collections.sort(FeedFragment.adapter.list, new Resource.TimeComparator());
-		FeedFragment.adapter.notifyDataSetChanged();
+		Collections.sort(feedFragment.adapter.list, new Resource.TimeComparator());
+        feedFragment.adapter.notifyDataSetChanged();
 	}
 
 	public void sortAmount() {
-		Collections.sort(FeedFragment.adapter.list, new Resource.AmountComparator());
-		FeedFragment.adapter.notifyDataSetChanged();
+		Collections.sort(feedFragment.adapter.list, new Resource.AmountComparator());
+        feedFragment.adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -500,16 +499,21 @@ public class FeedActivity extends DataActivity implements
 
     @Override
     public void onPurchaseHistoryRestored() {
-
     }
 
     @Override
     public void onBillingError(int i, Throwable throwable) {
-
     }
 
     @Override
     public void onBillingInitialized() {
+    }
 
+    @Override
+    public void onCurrencySelected(UserCurrency userCurrency) {
+        feedFragment.adapter.notifyDataSetChanged();
+        navigationDrawerFragment.updateBalance(data);
+
+        feedFragment.displayTotalDebt(getResources(), userCurrency);
     }
 }

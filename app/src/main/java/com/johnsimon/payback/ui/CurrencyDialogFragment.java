@@ -18,6 +18,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
+import com.johnsimon.payback.data.Debt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +54,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	private boolean continueToNfc = false;
     private boolean usingDefaults = true;
+
+    public CurrencySelectedCallback currencySelectedCallback;
 
     /*TODO simmes feautre
         Vi borde ha med USD och alla de valutorna och fortfarande ha
@@ -282,17 +285,14 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			data.getPreferences().currency.setValue(userCurrency);
 			storage.commit();
 
-			FeedFragment.adapter.notifyDataSetChanged();
-
-			NavigationDrawerFragment.updateBalance(data);
-			if (SettingsActivity.pref_currency != null) {
-				SettingsActivity.pref_currency.setSummary(userCurrency.render());
-			}
+            currencySelectedCallback.onCurrencySelected(userCurrency);
 
 			alertDialog.dismiss();
-
-			FeedFragment.displayTotalDebt(getResources(), new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition()));
 		}
 	};
+
+    public interface CurrencySelectedCallback {
+        public void onCurrencySelected(UserCurrency userCurrency);
+    }
 
 }
