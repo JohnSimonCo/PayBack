@@ -119,7 +119,9 @@
     <string name="disable_cloud_sync_title">Disable cloud sync</string>
     <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
     <string name="disable_cloud_sync_affirmative">Disable</string>
-    <string name="import_single">Import</string>
+    <string name="restore_single">Restore</string>
+    <string name="remove_backup">Remove backup</string>
+    <string name="backup_removed_success">Backup removed successfully</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -156,9 +158,9 @@
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
     <string name="pref_gdrive_sync">Sync outside Wi-Fi</string>
-    <string name="pref_export_data">Backup data to storage</string>
-    <string name="pref_import_data">Restore data from storage</string>
-    <string name="pref_import_data_description">Are you sure you want to restore from storage? This will overwrite all current data.</string>
+    <string name="pref_backup_data">Backup data to storage</string>
+    <string name="pref_restore_data">Restore data from storage</string>
+    <string name="pref_restore_data_description">Are you sure you want to restore from storage? This will overwrite all current data.</string>
 
     <string-array name="thousand_seperator_list">
         <item>None</item>

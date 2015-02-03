@@ -18,6 +18,8 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -31,6 +33,7 @@ import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.SwishLauncher;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.williammora.snackbar.Snackbar;
 
@@ -83,6 +86,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				FileManager.write(SettingsActivity.this, data.save());
+                invalidateOptionsMenu();
 				return true;
 			}
 		});
@@ -126,72 +130,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 return true;
             }
         });
-        /*
-        Preference pref_export_data = findPreference("pref_export_data");
-        pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                try {
-                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("savedata.txt", Context.MODE_PRIVATE));
-                    outputStreamWriter.write(data.save());
-                    outputStreamWriter.close();
-
-                    Snackbar.with(self)
-                            .text(getString(R.string.save_success))
-                            .show(self);
-                }
-                catch (IOException e) {
-                    Snackbar.with(self)
-                            .text(getString(R.string.save_fail))
-                            .show(self);
-                }
-                return false;
-            }
-        });
-
-        //TODO finish import/export
-        Preference pref_import_data = findPreference("pref_import_data");
-        pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-
-                try {
-                    InputStream inputStream = openFileInput("savedata.txt");
-
-                    if ( inputStream != null ) {
-                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        String receiveString;
-                        StringBuilder stringBuilder = new StringBuilder();
-
-                        while ( (receiveString = bufferedReader.readLine()) != null ) {
-                            stringBuilder.append(receiveString);
-                        }
-
-                        inputStream.close();
-
-                        data = AppData.fromJson(stringBuilder.toString());
-						storage.commit(data);
-
-                        Toast.makeText(self, getString(R.string.restore_success), Toast.LENGTH_LONG).show();
-
-                        finishAffinity();
-                        startActivity(new Intent(self, FeedActivity.class));
-                    }
-                }
-                catch (FileNotFoundException e) {
-                    Snackbar.with(self)
-                            .text(getString(R.string.no_file))
-                            .show(self);
-                } catch (IOException e) {
-                    Snackbar.with(self)
-                            .text(getString(R.string.read_failed))
-                            .show(self);
-                }
-
-                return false;
-            }
-        });*/
 
         pref_currency = findPreference("pref_currency");
 
@@ -345,7 +283,40 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		});
     }
 
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Only show items in the action bar relevant to this screen
+        // if the drawer is not showing. Otherwise, let the drawer
+        // decide what to show in the action bar.
+        getMenuInflater().inflate(R.menu.settings_menu, menu);
+
+        if (!FileManager.hasFile()) {
+            MenuItem removeBackup = menu.findItem(R.id.menu_settings_remove_backup);
+            removeBackup.setVisible(false);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result = super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.menu_settings_remove_backup:
+                if (FileManager.removeFile()) {
+                    Snackbar.with(this)
+                            .text(R.string.file_removed_success)
+                            .show(this);
+                }
+                invalidateOptionsMenu();
+                break;
+        }
+
+        return result;
+    }
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(StorageManager.loginManager != null) {
 			StorageManager.loginManager.handleActivityResult(requestCode, resultCode, data);
