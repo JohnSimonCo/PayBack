@@ -206,6 +206,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 							Undo.executeAction(getActivity(), R.string.merged_people, new Undo.UndoableAction() {
 								@Override
 								public void onDisplay() {
+									//TODO antalet debts uppdateras inte
 									PeopleManagerActivity.adapter.people.remove(index);
                                     PeopleManagerActivity.adapter.notifyItemRemoved(index);
                                     PeopleManagerActivity.adapter.updateEmptyViewVisibility();
