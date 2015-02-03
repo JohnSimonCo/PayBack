@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,16 +18,30 @@ import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.makeramen.RoundedImageView;
 
+import java.util.Random;
+import java.util.UUID;
+
 public class PeopleDetailDialogFragment extends DataDialogFragment {
-	public static Person person;
+	public Person person;
 
 	private AlertDialog alertDialog;
 
 	private TextView personDetailTitle;
 
+	private RoundedImageView avatar;
+
+	private TextView avatarLetter;
+
+	private final static String ARG_PERSON_ID = "PERSON_ID";
+
 	public static PeopleDetailDialogFragment newInstance(Person person) {
-		PeopleDetailDialogFragment.person = person;
-		return new PeopleDetailDialogFragment();
+		PeopleDetailDialogFragment instance = new PeopleDetailDialogFragment();
+
+		Bundle bundle = new Bundle();
+		bundle.putString(ARG_PERSON_ID, person.id.toString());
+		instance.setArguments(bundle);
+
+		return instance;
 	}
 
 	@Override
@@ -37,12 +52,9 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		View rootView = inflater.inflate(R.layout.person_detail_dialog, null);
 
         personDetailTitle = (TextView) rootView.findViewById(R.id.person_detail_title);
-		personDetailTitle.setText(person.getName());
 
-		RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.person_detail_dialog_avatar);
-		TextView avatarLetter = (TextView) rootView.findViewById(R.id.person_detail_dialog_avatar_letter);
-
-		Resource.createProfileImage(getDataActivity(), person, avatar, avatarLetter);
+		avatar = (RoundedImageView) rootView.findViewById(R.id.person_detail_dialog_avatar);
+		avatarLetter = (TextView) rootView.findViewById(R.id.person_detail_dialog_avatar_letter);
 
 		Button personRename = (Button) rootView.findViewById(R.id.person_detail_dialog_rename);
 		Button personMerge = (Button) rootView.findViewById(R.id.person_detail_dialog_merge);
@@ -57,6 +69,15 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 		alertDialog = builder.create();
 
 		return alertDialog;
+	}
+
+	@Override
+	protected void onDataReceived() {
+		person = data.findPerson(UUID.fromString(getArguments().getString(ARG_PERSON_ID)));
+
+		personDetailTitle.setText(person.getName());
+
+		Resource.createProfileImage(getDataActivity(), person, avatar, avatarLetter);
 	}
 
 	private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -109,7 +130,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
 										@Override
 										public void onRevert() {
-                                            PeopleListAdapter.people.add(listIndex, person);
+											PeopleListAdapter.people.add(listIndex, person);
                                             PeopleManagerActivity.adapter.notifyDataSetChanged();
                                             PeopleListAdapter.updateEmptyViewVisibility();
 										}
