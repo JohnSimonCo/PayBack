@@ -114,7 +114,7 @@
     <string name="save_fail">Failed to save file</string>
     <string name="no_file">No backup found</string>
     <string name="read_failed">Failed to read file</string>
-    <string name="save_success">Save successful</string>
+    <string name="save_success_start">File saved in \"%1$s\"</string>
     <string name="restore_success">Restore successful</string>
     <string name="disable_cloud_sync_title">Disable cloud sync</string>
     <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
@@ -159,10 +159,12 @@
     <string name="currency">Currency</string>
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
-    <string name="pref_gdrive_sync">Sync outside Wi-Fi</string>
     <string name="pref_backup_data">Backup data to storage</string>
     <string name="pref_restore_data">Restore data from storage</string>
     <string name="pref_restore_data_description">Are you sure you want to restore from storage? This will overwrite all current data.</string>
+    <string name="pref_backup_confirm">Overwrite backup</string>
+    <string name="pref_backup_confirm_text">Are you sure you want to overwrite previously saved data? This cannot be undone.</string>
+    <string name="pref_backup_confirm_single">Backup</string>
 
     <string-array name="thousand_seperator_list">
         <item>None</item>

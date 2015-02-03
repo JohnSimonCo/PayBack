@@ -37,6 +37,7 @@ import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.williammora.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,8 +87,35 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				FileManager.write(SettingsActivity.this, data.save());
-                updateBackupStatus(true);
+
+                if (FileManager.hasFile()) {
+                    new MaterialDialog.Builder(SettingsActivity.this)
+                            .title(R.string.pref_backup_confirm)
+                            .content(R.string.pref_backup_confirm_text)
+                            .positiveText(R.string.pref_backup_confirm_single)
+                            .negativeText(R.string.cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
+                                    FileManager.write(SettingsActivity.this, data.save());
+                                    updateBackupStatus(true);
+
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                } else {
+                    FileManager.write(SettingsActivity.this, data.save());
+                    updateBackupStatus(true);
+                }
+
 				return true;
 			}
 		});
@@ -101,31 +129,31 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
                 if (!TextUtils.isEmpty(JSON)) {
                     new MaterialDialog.Builder(SettingsActivity.this)
-						.title(R.string.pref_restore_data)
-						.content(R.string.pref_restore_data_description)
-						.positiveText(R.string.restore_single)
-						.negativeText(R.string.cancel)
-						.callback(new MaterialDialog.ButtonCallback() {
-							@Override
-							public void onPositive(MaterialDialog dialog) {
-								super.onPositive(dialog);
+                            .title(R.string.pref_restore_data)
+                            .content(R.string.pref_restore_data_description)
+                            .positiveText(R.string.restore_single)
+                            .negativeText(R.string.cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
 
-								FeedActivity.gotoAll();
-								storage.commit(AppData.fromJson(JSON));
-								storage.emit();
+                                    FeedActivity.gotoAll();
+                                    storage.commit(AppData.fromJson(JSON));
+                                    storage.emit();
 
-								Snackbar.with(self).text(self.getString(R.string.restore_success)).show(self);
+                                    Snackbar.with(self).text(self.getString(R.string.restore_success)).show(self);
 
-								dialog.dismiss();
-							}
+                                    dialog.dismiss();
+                                }
 
-							@Override
-							public void onNegative(MaterialDialog dialog) {
-								super.onNegative(dialog);
-								dialog.dismiss();
-							}
-						})
-						.show();
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
                 }
                 return true;
             }

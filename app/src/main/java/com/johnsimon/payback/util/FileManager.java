@@ -48,7 +48,7 @@ public class FileManager {
 			writer.write(JSON);
 			writer.close();
 
-			show(activity, R.string.save_success);
+			show(activity, String.format(activity.getString(R.string.save_success_start), parentDir + "/" + dirName));
 		} catch (Exception e) {
 			e.printStackTrace();
 			show(activity, R.string.save_fail);
@@ -115,8 +115,12 @@ public class FileManager {
 	}*/
 
 	private static void show(Activity activity, int messageId) {
-		Snackbar.with(activity)
-				.text(activity.getString(messageId))
-				.show(activity);
+        show(activity, activity.getString(messageId));
 	}
+
+    private static void show(Activity activity, String show) {
+        Snackbar.with(activity)
+                .text(show)
+                .show(activity);
+    }
 }
