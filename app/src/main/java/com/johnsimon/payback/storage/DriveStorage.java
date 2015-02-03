@@ -290,8 +290,7 @@ public class DriveStorage extends Storage {
                     while ((line = reader.readLine()) != null) {
                         builder.append(line);
                     }
-					//TODO close?
-					//reader.close();
+					reader.close();
 				} catch (IOException e) {
                     e.printStackTrace();
                 }

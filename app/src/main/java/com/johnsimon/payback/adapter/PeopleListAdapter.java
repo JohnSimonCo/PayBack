@@ -16,6 +16,9 @@ import com.makeramen.RoundedImageView;
 import java.util.ArrayList;
 
 public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.ViewHolder> {
+
+    //TODO Bli av med mer static grejer
+
 	public static DataActivity context;
 	public static View emptyView;
     private AppData data;
