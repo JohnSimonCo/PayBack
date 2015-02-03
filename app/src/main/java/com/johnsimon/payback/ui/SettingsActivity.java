@@ -32,6 +32,7 @@ import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.williammora.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,16 +91,41 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				String JSON = FileManager.read(SettingsActivity.this);
 
-				if(JSON != null) {
-					storage.commit(AppData.fromJson(JSON));
-					storage.emit();
-				}
+                final String JSON = FileManager.read(SettingsActivity.this);
 
-				return true;
-			}
-		});
+                if (!TextUtils.isEmpty(JSON)) {
+                    new MaterialDialog.Builder(SettingsActivity.this)
+                            .title(R.string.pref_import_data)
+                            .content(R.string.pref_import_data_description)
+                            .positiveText(R.string.import_single)
+                            .negativeText(R.string.cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    super.onPositive(dialog);
+
+                                    storage.commit(AppData.fromJson(JSON));
+                                    storage.emit();
+
+                                    Snackbar.with(self)
+                                            .text(self.getString(R.string.restore_success))
+                                            .show(self);
+
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    super.onNegative(dialog);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
+                return true;
+            }
+        });
         /*
         Preference pref_export_data = findPreference("pref_export_data");
         pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

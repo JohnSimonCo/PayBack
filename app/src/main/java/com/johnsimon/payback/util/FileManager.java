@@ -42,8 +42,6 @@ public class FileManager {
 				builder.append(line);
 			}
 			reader.close();
-
-			show(activity, R.string.restore_success);
 		} catch(FileNotFoundException e) {
 			show(activity, R.string.no_file);
 		} catch(Exception e) {
