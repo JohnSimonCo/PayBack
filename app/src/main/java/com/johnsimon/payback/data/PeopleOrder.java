@@ -5,11 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.UUID;
 
-public class PeopleOrder extends ArrayList<UUID> {
+public class PeopleOrder {
 
 	//TODO verkar inte synka som den ska
 
-	public long touched;
+	private ArrayList<UUID> order;
+	private long touched;
 
 	private PeopleOrder() {
 	}
@@ -18,18 +19,31 @@ public class PeopleOrder extends ArrayList<UUID> {
 		this.touched = System.currentTimeMillis();
 
         for(Person person : people) {
-            add(person.id);
+            order.add(person.id);
         }
 	}
 
 	public static PeopleOrder defaultPeopleOrder() {
 		PeopleOrder peopleOrder = new PeopleOrder();
+		peopleOrder.order = new ArrayList<>();
 		peopleOrder.touched = System.currentTimeMillis();
 		return peopleOrder;
 	}
 
 	protected void touch() {
 		touched = System.currentTimeMillis();
+	}
+
+	public void remove(UUID id) {
+		order.remove(id);
+	}
+
+	public void add(UUID id) {
+		order.add(id);
+	}
+
+	public int size() {
+		return order.size();
 	}
 
 	public PeopleOrder syncWith(PeopleOrder other) {
@@ -43,13 +57,14 @@ public class PeopleOrder extends ArrayList<UUID> {
 	}
 
     public void reorder(int from, int to, boolean toLast) {
-        this.touch();
-        UUID item = get(from);
-        remove(from);
+        touch();
+
+		UUID item = order.get(from);
+        order.remove(from);
         if (toLast) {
-            add(item);
+			order.add(item);
         } else {
-            add(to, item);
+			order.add(to, item);
         }
     }
 	private SortResult sort(ArrayList<Person> people, Comparator<Person> comparator) {
@@ -61,8 +76,6 @@ public class PeopleOrder extends ArrayList<UUID> {
 	public SortResult sortAlphabetically(ArrayList<Person> people) {
 		return sort(people, new AlphabeticalComparator());
 	}
-
-    private PeopleOrder order = this;
 
     public class OrderComparator implements Comparator<Person> {
         @Override
