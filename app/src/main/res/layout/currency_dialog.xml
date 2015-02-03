@@ -86,22 +86,22 @@
 
             <android.support.v7.internal.widget.TintCheckBox
                 app:theme="@style/ThemeOverlay.AppCompat.Light"
+                app:paddingStart="4dp"
                 android:id="@+id/custom_currency_check_after"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="12dp"
-                android:paddingLeft="4dp"
                 android:text="@string/currency_symbol_after_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <android.support.v7.internal.widget.TintCheckBox
                 app:theme="@style/ThemeOverlay.AppCompat.Light"
+                app:paddingStart="4dp"
                 android:id="@+id/custom_currency_decimal_separator"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="12dp"
-                android:paddingLeft="4dp"
                 android:checked="false"
                 android:text="@string/currency_decimal_separator_checkbox"
                 android:layout_width="match_parent"
