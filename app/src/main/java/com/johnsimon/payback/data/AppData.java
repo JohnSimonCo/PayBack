@@ -145,8 +145,6 @@ public class AppData {
 		peopleOrder.remove(person.id);
 		touchPeopleOrder();
 		people.remove(person);
-
-		testPeopleOrder();
     }
     public void delete(Debt debt) {
         deleted.add(debt.id);
@@ -164,8 +162,6 @@ public class AppData {
 		peopleOrder.add(person.id);
 		people.add(person);
 		touchPeopleOrder();
-
-		testPeopleOrder();
 	}
 
     private void deleteDebts(Person person) {
@@ -300,14 +296,14 @@ public class AppData {
 		}
 
 		if(BuildConfig.DEBUG) {
-			findCorruptData(data);
+			analyzeData(data);
 		}
 
 		return data;
 
     }
 
-	public static void findCorruptData(AppData data) {
+	public static void analyzeData(AppData data) {
 		for(Debt debt : data.debts) {
 			if(debt == null) {
 				throw new RuntimeException("Null debt in debts");
@@ -325,15 +321,6 @@ public class AppData {
 
 		if(data.peopleOrder.size() != data.people.size()) {
 			throw new RuntimeException("peopleOrder size not equal to people size. peopleOrder.size = " + data.peopleOrder.size() + ", people.size = " + data.people.size());
-		}
-	}
-
-	public void testPeopleOrder() {
-		testPeopleOrder(peopleOrder, people);
-	}
-	public static void testPeopleOrder(PeopleOrder peopleOrder, ArrayList<Person> people) {
-		if(peopleOrder.size() != people.size()) {
-			throw new RuntimeException("peopleOrder size not equal to people size. peopleOrder.size = " + peopleOrder.size() + ", people.size = " + people.size());
 		}
 	}
 

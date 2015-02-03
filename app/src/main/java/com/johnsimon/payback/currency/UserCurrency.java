@@ -62,13 +62,13 @@ public class UserCurrency {
         symbols.setMonetaryDecimalSeparator(decimalSeparator());
 		symbols.setCurrencySymbol(getDisplayName());
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
-
-		formatString = before ? "¤ " + formatString : formatString + " ¤";
-
 		if(thousandSeparator != THOUSAND_SEPARATOR_NONE) {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
+
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
+
+		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
 		DecimalFormat format = new DecimalFormat(formatString, symbols);
 		format.setRoundingMode(RoundingMode.HALF_UP);

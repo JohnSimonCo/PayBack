@@ -57,8 +57,6 @@ public class DataSyncer {
 			out.peopleOrderTouched = peopleOrderTouched;
 			out.preferences = preferences;
 		}
-
-		AppData.testPeopleOrder(peopleOrder, people);
 		return changed;
 	}
 
