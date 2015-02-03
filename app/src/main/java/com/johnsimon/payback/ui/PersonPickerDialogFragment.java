@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -126,11 +125,12 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		}
 
 		if (!TextUtils.isEmpty(blacklist)) {
-			for (int i = 0, l = people.size(); i < l; i++) {
-				if (people.get(i).equals(blacklist)) {
-					people.remove(i);
-				}
-			}
+
+            for(Iterator<String> iterator = people.iterator(); iterator.hasNext();) {
+                if (iterator.next().equals(blacklist)) {
+                    iterator.remove();
+                }
+            }
 		}
 
 		ArrayList<String> dataPeopleNames = new ArrayList<>();
