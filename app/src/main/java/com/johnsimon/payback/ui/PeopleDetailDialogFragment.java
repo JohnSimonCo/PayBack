@@ -190,53 +190,17 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback mergeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			final Person other = data.findPersonByName(name);
+			Person other = data.findPersonByName(name);
+			int index = data.people.indexOf(person);
 
-            new MaterialDialog.Builder(getActivity())
-                    .content(String.format(getString(R.string.merge_confirm_text_format), person.getName(), other.getName()))
-                    .positiveText(R.string.merge)
-                    .negativeText(R.string.cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-						@Override
-						public void onPositive(MaterialDialog dialog) {
-							super.onPositive(dialog);
+			PeopleManagerActivity.adapter.people.remove(index);
+			PeopleManagerActivity.adapter.notifyItemRemoved(index);
+			PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 
-							final int index = data.people.indexOf(person);
+			alertDialog.dismiss();
 
-							Undo.executeAction(getActivity(), R.string.merged_people, new Undo.UndoableAction() {
-								@Override
-								public void onDisplay() {
-									//TODO antalet debts uppdateras inte
-									PeopleManagerActivity.adapter.people.remove(index);
-                                    PeopleManagerActivity.adapter.notifyItemRemoved(index);
-                                    PeopleManagerActivity.adapter.updateEmptyViewVisibility();
-
-									alertDialog.dismiss();
-								}
-
-								@Override
-								public void onRevert() {
-									PeopleManagerActivity.adapter.people.add(index, person);
-                                    PeopleManagerActivity.adapter.notifyItemInserted(index);
-                                    PeopleManagerActivity.adapter.updateEmptyViewVisibility();
-								}
-
-								@Override
-								public void onCommit() {
-									data.merge(person, other);
-									storage.commit();
-								}
-							});
-
-							dialog.dismiss();
-						}
-
-						@Override
-						public void onNegative(MaterialDialog dialog) {
-							super.onNegative(dialog);
-						}
-					})
-                    .show();
+			data.merge(person, other);
+			storage.commit();
 
 		}
 	};
