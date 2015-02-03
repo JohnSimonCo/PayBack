@@ -1,6 +1,7 @@
 package com.johnsimon.payback.storage;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import java.io.InputStreamReader;
 public class DriveStorage extends Storage {
     private final static String FILE_NAME = "data.json";
 
+	public Context context;
+
     public Activity activity;
 
     private GoogleApiClient client;
@@ -46,10 +49,10 @@ public class DriveStorage extends Storage {
 
     private DriveFile file = null;
 
-    public DriveStorage(Activity activity, GoogleApiClient client, final LocalStorage localStorage) {
-        super(activity);
+    public DriveStorage(Context context, GoogleApiClient client, final LocalStorage localStorage) {
+        super(context);
 
-        this.activity = activity;
+        this.context = context;
 
         this.localStorage = localStorage;
 
@@ -326,10 +329,12 @@ public class DriveStorage extends Storage {
     }
 
 	protected void error(String title, Status status) {
-		new MaterialDialog.Builder(activity)
-				.title(title)
-				.content(status.getStatus() + ": " + status.getStatusMessage())
-				.show();
+		if(BuildConfig.DEBUG) {
+			new MaterialDialog.Builder(activity)
+					.title(title)
+					.content(status.getStatus() + ": " + status.getStatusMessage())
+					.show();
+		}
 	}
 
     private static class FileResult implements Result {

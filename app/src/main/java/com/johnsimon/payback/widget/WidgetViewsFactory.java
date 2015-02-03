@@ -14,17 +14,19 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Resource;
 
 public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory, Callback<AppData> {
 
     private Context ctx = null;
+
     private AppData data;
     private Storage storage;
 
     public WidgetViewsFactory(Context ctx, Intent intent) {
         this.ctx = ctx;
-        storage = new LocalStorage(ctx);
+        storage = StorageManager.getStorage(ctx);
         storage.subscription.listen(this);
     }
 

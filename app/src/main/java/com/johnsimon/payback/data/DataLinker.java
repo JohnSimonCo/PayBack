@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 public class DataLinker {
 
-    private AppData data;
+	//TODO can probably be optimized by reusing old links
+	private AppData data;
     private Notification output = new Notification();
 
 	public Notification link(Subscription<AppData> dataSubscription, final Promise<ArrayList<Contact>> contactsPromise) {

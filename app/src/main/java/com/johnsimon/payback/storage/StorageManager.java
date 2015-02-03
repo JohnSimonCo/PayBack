@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.NullCallback;
@@ -35,7 +36,7 @@ public class StorageManager {
 		return getLocalStorage(context).getPreferences();
 	}
 
-    public static Storage getStorage(Activity context) {
+    public static Storage getStorage(Context context) {
 		if(storage == null) {
 			LocalStorage localStorage = getLocalStorage(context);
 			switch (localStorage.getPreferences().getInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL)) {
@@ -52,9 +53,8 @@ public class StorageManager {
 					break;
 			}
 		}
-		//TODO kanske ska tas bort
-		if(storage.isDriveStorage()) {
-			storage.asDriveStorage().activity = context;
+		if(BuildConfig.DEBUG && storage.isDriveStorage() && context instanceof Activity) {
+			storage.asDriveStorage().activity = (Activity) context;
 		}
 
         return storage;
