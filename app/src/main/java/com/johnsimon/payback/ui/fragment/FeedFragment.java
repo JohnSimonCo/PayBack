@@ -207,6 +207,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		Resource.actionComplete(getActivity());
 	}
 	public void displayTotalDebt(Resources resources, UserCurrency currency) {
+		//TODO uppdateras inte i navigationbaren
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
