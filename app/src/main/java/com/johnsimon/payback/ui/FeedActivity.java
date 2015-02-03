@@ -45,8 +45,6 @@ import com.johnsimon.payback.util.Undo;
 import java.util.ArrayList;
 import java.util.Collections;
 
-//TODO INNAN RELEASE: ÄNDRA VERISON
-
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
         BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback {

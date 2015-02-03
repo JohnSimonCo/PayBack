@@ -38,6 +38,7 @@ public class FileManager {
 					throw new UnknownError("dir.mkdirs() failed");
 				}
 			}
+
 			if(!file.exists()) {
 				if(!file.createNewFile()) {
 					throw new UnknownError("file.createNewFile() failed");

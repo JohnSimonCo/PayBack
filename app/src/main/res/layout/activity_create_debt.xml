@@ -156,7 +156,8 @@
                 <android.support.v7.internal.widget.TintEditText
                     app:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:imeOptions="flagNoExtractUi"
-                    android:inputType="textCapSentences"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="3"
                     android:id="@+id/create_edittext_note"
                     android:textColorHint="@color/gray_text_very_light"
                     android:textColor="@color/gray_text_light"
