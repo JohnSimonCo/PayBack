@@ -194,7 +194,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 			int index = PeopleListAdapter.people.indexOf(person);
 
 			PeopleListAdapter.people.remove(index);
-			PeopleManagerActivity.adapter.notifyItemRemoved(index);
+			PeopleManagerActivity.adapter.notifyDataSetChanged();
 			PeopleManagerActivity.adapter.updateEmptyViewVisibility();
 
 			alertDialog.dismiss();
