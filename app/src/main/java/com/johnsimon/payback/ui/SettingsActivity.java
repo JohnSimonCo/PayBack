@@ -289,7 +289,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         // decide what to show in the action bar.
         getMenuInflater().inflate(R.menu.settings_menu, menu);
 
-        if (!FileManager.hasFile(this)) {
+        if (!FileManager.hasFile()) {
             MenuItem removeBackup = menu.findItem(R.id.menu_settings_remove_backup);
             removeBackup.setVisible(false);
         }
@@ -303,7 +303,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
         switch (item.getItemId()) {
             case R.id.menu_settings_remove_backup:
-                if (FileManager.removeFile(this)) {
+                if (FileManager.removeFile()) {
                     Snackbar.with(this)
                             .text(getString(R.string.backup_removed_success))
                             .show(this);
