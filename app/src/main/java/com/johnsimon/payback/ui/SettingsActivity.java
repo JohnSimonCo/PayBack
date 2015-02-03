@@ -304,7 +304,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             case R.id.menu_settings_remove_backup:
                 if (FileManager.removeFile()) {
                     Snackbar.with(this)
-                            .text(R.string.file_removed_success)
+                            .text(getString(R.string.backup_removed_success))
                             .show(this);
                 }
                 invalidateOptionsMenu();
