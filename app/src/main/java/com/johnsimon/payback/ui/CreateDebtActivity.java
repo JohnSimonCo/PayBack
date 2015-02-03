@@ -1,5 +1,7 @@
 package com.johnsimon.payback.ui;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
@@ -29,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -175,6 +178,8 @@ public class CreateDebtActivity extends DataActivity {
 				}
 			}
 		});
+
+        animateIn(toolbar);
 
         if (Resource.isLOrAbove()) {
             create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
@@ -330,6 +335,56 @@ public class CreateDebtActivity extends DataActivity {
 		storage.commit();
 		return person;
 	}
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void animateIn(final View view) {
+        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        view.setAlpha(0f);
+        view.setTranslationY(Resource.getPx(-100, getResources()));
+
+        ObjectAnimator animY = ObjectAnimator.ofFloat(view, "translationY", 0);
+        animY.setStartDelay(260);
+        animY.setDuration(450);
+
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(view, "alpha", 1f);
+        animAlpha.setStartDelay(260);
+        animAlpha.setDuration(450);
+
+        if (Resource.isLOrAbove()) {
+            PathInterpolator interpolator = new PathInterpolator(0.5f, 1f, 0.75f, 1f);
+
+            animY.setInterpolator(interpolator);
+            animAlpha.setInterpolator(interpolator);
+        } else {
+            animY.setInterpolator(new DecelerateInterpolator());
+            animAlpha.setInterpolator(new DecelerateInterpolator());
+        }
+
+        animY.start();
+        animAlpha.start();
+
+        animAlpha.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setLayerType(View.LAYER_TYPE_NONE, null);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
 
 	@Override
 	public void onResume() {
