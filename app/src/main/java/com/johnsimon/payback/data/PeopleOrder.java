@@ -1,7 +1,5 @@
 package com.johnsimon.payback.data;
 
-import com.johnsimon.payback.adapter.PeopleListAdapter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,18 +7,25 @@ import java.util.UUID;
 
 public class PeopleOrder extends ArrayList<UUID> {
 
+	//TODO verkar inte synka som den ska
+
 	public long touched;
 
-	public PeopleOrder() {
-		this.touched = System.currentTimeMillis();
+	private PeopleOrder() {
 	}
 
 	public PeopleOrder(ArrayList<Person> people) {
-        this();
+		this.touched = System.currentTimeMillis();
 
         for(Person person : people) {
             add(person.id);
         }
+	}
+
+	public static PeopleOrder defaultPeopleOrder() {
+		PeopleOrder peopleOrder = new PeopleOrder();
+		peopleOrder.touched = System.currentTimeMillis();
+		return peopleOrder;
 	}
 
 	protected void touch() {

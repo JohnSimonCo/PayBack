@@ -1,6 +1,7 @@
 package com.johnsimon.payback.data;
 
 import com.google.gson.Gson;
+import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.preferences.Preferences;
@@ -25,7 +26,6 @@ public class AppData {
     public transient ArrayList<Contact> contacts;
 
     public AppData() {
-
     }
 
     public AppData(ArrayList<Person> people, ArrayList<Debt> debts, HashSet<UUID> deleted, PeopleOrder peopleOrder, Preferences preferences) {
@@ -37,7 +37,7 @@ public class AppData {
     }
 
     public static AppData defaultAppData() {
-        return new AppData(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), new PeopleOrder(), Preferences.defaultPreferences());
+        return new AppData(new ArrayList<Person>(), new ArrayList<Debt>(), new HashSet<UUID>(), PeopleOrder.defaultPeopleOrder(), Preferences.defaultPreferences());
     }
 
     public String save() {
@@ -283,18 +283,39 @@ public class AppData {
 			return AppData.defaultAppData();
 		}
 
-		try {
-			AppData data = new Gson().fromJson(JSON, AppData.class);
-			for(Debt debt : data.debts) {
-				debt.linkOwner(data.people);
-			}
-			return data;
-		} catch(Exception e) {
-			e.printStackTrace();
-			return AppData.defaultAppData();
+		AppData data = new Gson().fromJson(JSON, AppData.class);
+		for(Debt debt : data.debts) {
+			debt.linkOwner(data.people);
 		}
 
+		if(BuildConfig.DEBUG) {
+			testData(data);
+		}
+
+		return data;
+
     }
+
+	public static void testData(AppData data) {
+		for(Debt debt : data.debts) {
+			if(debt == null) {
+				throw new RuntimeException("Null debt");
+			}
+			if(debt.getOwner() == null){
+				throw new RuntimeException("Null owner");
+			}
+		}
+
+		for(Person person : data.people) {
+			if(person == null) {
+				throw new RuntimeException("Null person");
+			}
+		}
+
+		if(data.peopleOrder.size() != data.people.size()) {
+			throw new RuntimeException("peopleOrder size not equal to people size");
+		}
+	}
 
     public static String toJson(AppData data) {
         return new Gson().toJson(data, AppData.class);
