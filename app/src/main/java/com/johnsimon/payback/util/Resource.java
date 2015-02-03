@@ -33,7 +33,7 @@ import java.util.Comparator;
 import java.util.Currency;
 
 public class Resource {
-    private final static int MAX_ACTIONS = 25;
+    private final static int MAX_ACTIONS = 20;
     private final static int MAX_FREE_DEBTS = 5;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
