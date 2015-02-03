@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public class Person extends SyncedData<Person> implements Identifiable {
     public final UUID id;
-    private String name;
+	public String name;
 	public final int paletteIndex;
     public transient Contact link = null;
 
-	private Person(String name, UUID id, int paletteIndex, long touched) {
+	public Person(String name, UUID id, int paletteIndex, long touched) {
 		super(touched);
 
         this.id = id;

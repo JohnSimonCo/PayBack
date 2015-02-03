@@ -19,14 +19,26 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 
 
     public final UUID id;
-    private transient Person owner;
+	public transient Person owner;
 	//Used for (de)serialization
-	private UUID ownerId;
-	private float amount;
-	private String note;
+	public UUID ownerId;
+	public float amount;
+	public String note;
 	public final long timestamp;
-	private boolean paidBack;
+	public boolean paidBack;
 	public String currencyId;
+
+	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
+		super(touched);
+
+		this.id = id;
+		this.ownerId = ownerId;
+		this.amount = amount;
+		this.note = note;
+		this.timestamp = timestamp;
+		this.paidBack = paidBack;
+		this.currencyId = currency;
+	}
 
     public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
 		super(touched);

@@ -24,6 +24,8 @@ public class AppData {
 
 	public Preferences preferences;
 
+	public int version;
+
     public transient ArrayList<Contact> contacts;
 
     public AppData() {
@@ -282,7 +284,13 @@ public class AppData {
 			return AppData.defaultAppData();
 		}
 
-		AppData data = new Gson().fromJson(JSON, AppData.class);
+		//TODO remove when shitty period ends
+
+
+		//AppData data = new Gson().fromJson(JSON, AppData.class);
+
+		AppData data = ShittyAppData.fromJson(JSON);
+
 		for(Debt debt : data.debts) {
 			debt.linkOwner(data.people);
 		}

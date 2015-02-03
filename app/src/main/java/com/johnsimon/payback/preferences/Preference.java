@@ -5,7 +5,7 @@ import com.johnsimon.payback.util.Resource;
 
 public class Preference<T> extends SyncedData<Preference<T>> {
 
-    private T value;
+	public T value;
 
 	public Preference() {
 		super(0);
