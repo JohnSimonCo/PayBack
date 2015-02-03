@@ -89,7 +89,7 @@ public class DriveStorage extends Storage {
 	public void sync(AppData driveData) {
 		show("checking for changes from drive");
         AppData data = new AppData();
-        if(DataSyncer.sync(driveData, localStorage.data, data)) {
+        if(DataSyncer.sync(localStorage.data, driveData, data)) {
             show("found changes and synced");
 
             commit(data);
@@ -251,7 +251,7 @@ public class DriveStorage extends Storage {
         file.open(client, DriveFile.MODE_WRITE_ONLY, null).setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
             @Override
             public void onResult(DriveApi.DriveContentsResult result) {
-                if (!result.getStatus().isSuccess()) {
+        		if (!result.getStatus().isSuccess()) {
                     callback.onResult(new FileResult(result.getStatus()));
                     return;
                 }
