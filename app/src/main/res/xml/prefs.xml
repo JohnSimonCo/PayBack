@@ -41,11 +41,11 @@
             android:title="@string/wipe_data"/>
 
         <Preference
-            android:title="@string/pref_export_data"
+            android:title="@string/pref_backup_data"
             android:key="pref_export_data"  />
 
         <Preference
-            android:title="@string/pref_import_data"
+            android:title="@string/pref_restore_data"
             android:key="pref_import_data"  />
 
     </PreferenceCategory>
