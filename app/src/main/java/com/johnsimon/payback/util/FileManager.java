@@ -88,7 +88,7 @@ public class FileManager {
 	}
 
 	private static File getDir(Context context) {
-		return new File(context.getExternalFilesDir(parentDir), dirName);
+		return new File(Environment.getExternalStoragePublicDirectory(parentDir), dirName);
 	}
 
 	private static File getFile(Context context) {
