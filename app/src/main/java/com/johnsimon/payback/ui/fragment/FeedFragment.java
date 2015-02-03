@@ -353,6 +353,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	public void onEdit(Debt debt) {
 		Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
 				.putExtra(CreateDebtActivity.ARG_FROM_FEED, true)
+                .putExtra(CreateDebtActivity.ARG_ANIMATE_TOOLBAR, false)
 				.putExtra(CreateDebtActivity.ARG_ID, debt.id);
 
 		startActivity(intent);

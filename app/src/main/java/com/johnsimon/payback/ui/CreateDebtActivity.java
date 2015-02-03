@@ -62,6 +62,7 @@ public class CreateDebtActivity extends DataActivity {
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 	public static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
+    public static String ARG_ANIMATE_TOOLBAR = Resource.arg(ARG_PREFIX, "ANIMATE_TOOLBAR");
 	public static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
 	public static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
 
@@ -123,7 +124,10 @@ public class CreateDebtActivity extends DataActivity {
 
         if (savedInstanceState == null) {
             ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
-            animateIn(toolbar);
+
+            if (getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
+                animateIn(toolbar);
+            }
         }
 
 		Resources res = getResources();
