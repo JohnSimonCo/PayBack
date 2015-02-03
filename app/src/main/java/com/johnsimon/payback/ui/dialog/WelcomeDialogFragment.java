@@ -1,4 +1,4 @@
-package com.johnsimon.payback.ui;
+package com.johnsimon.payback.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
-import com.johnsimon.payback.currency.UserCurrency;
+import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 
 public class WelcomeDialogFragment extends DataDialogFragment {
 

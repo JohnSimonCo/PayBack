@@ -1,15 +1,11 @@
 package com.johnsimon.payback.adapter;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,8 +13,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.ui.DebtDetailDialogFragment;
-import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 

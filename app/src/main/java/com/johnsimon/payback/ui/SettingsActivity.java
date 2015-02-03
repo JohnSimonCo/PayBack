@@ -31,9 +31,9 @@ import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
-import com.johnsimon.payback.util.SwishLauncher;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.williammora.snackbar.Snackbar;
 

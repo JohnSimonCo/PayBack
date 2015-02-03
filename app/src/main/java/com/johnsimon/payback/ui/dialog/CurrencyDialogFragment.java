@@ -1,4 +1,4 @@
-package com.johnsimon.payback.ui;
+package com.johnsimon.payback.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,7 +18,6 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
-import com.johnsimon.payback.data.Debt;
 
 import java.util.ArrayList;
 import java.util.Arrays;

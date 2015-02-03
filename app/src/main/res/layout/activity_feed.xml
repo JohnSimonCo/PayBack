@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:name="com.johnsimon.payback.ui.NavigationDrawerFragment"
+        android:name="com.johnsimon.payback.ui.fragment.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
 

@@ -10,7 +10,7 @@ import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.ui.NavigationDrawerFragment;
+import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 

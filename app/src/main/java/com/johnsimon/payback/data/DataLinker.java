@@ -33,10 +33,14 @@ public class DataLinker {
         data.contacts = contacts;
 
 		for(Person person : data.people) {
-			for(Contact contact : contacts) {
-				if(contact.matchTo(person)) {
-					person.linkTo(contact);
-				}
+			link(person, contacts);
+		}
+	}
+
+	public static void link(Person person, ArrayList<Contact> contacts) {
+		for(Contact contact : contacts) {
+			if(contact.matchTo(person)) {
+				person.linkTo(contact);
 			}
 		}
 	}

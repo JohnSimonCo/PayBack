@@ -1,4 +1,4 @@
-package com.johnsimon.payback.ui;
+package com.johnsimon.payback.ui.fragment;
 
 
 import android.animation.Animator;
@@ -33,6 +33,7 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Resource;
 
 /**

@@ -1,4 +1,4 @@
-package com.johnsimon.payback.ui;
+package com.johnsimon.payback.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -36,6 +36,9 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.ui.CreateDebtActivity;
+import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.shamanland.fab.FloatingActionButton;

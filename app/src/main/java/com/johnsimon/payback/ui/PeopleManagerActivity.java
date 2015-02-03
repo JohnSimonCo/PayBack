@@ -30,6 +30,8 @@ import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.PeopleOrder;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.dialog.PeopleDetailDialogFragment;
+import com.johnsimon.payback.ui.dialog.PersonPickerDialogFragment;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
@@ -38,7 +40,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener {
 

@@ -1,9 +1,8 @@
-package com.johnsimon.payback.ui;
+package com.johnsimon.payback.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,12 +12,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataDialogFragment;
+import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.ui.PeopleManagerActivity;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.makeramen.RoundedImageView;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class PeopleDetailDialogFragment extends DataDialogFragment {
@@ -169,6 +170,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 				@Override
 				public void onDisplay() {
 					person.setName(name);
+					PeopleManagerActivity.adapter.notifyDataSetChanged();
 
 					alertDialog.dismiss();
 				}
@@ -181,6 +183,9 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
 				@Override
 				public void onCommit() {
+					DataLinker.link(person, data.contacts);
+					PeopleManagerActivity.adapter.notifyDataSetChanged();
+
 					storage.commit();
 				}
 			});

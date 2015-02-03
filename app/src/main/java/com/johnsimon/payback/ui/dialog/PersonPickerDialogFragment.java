@@ -1,4 +1,4 @@
-package com.johnsimon.payback.ui;
+package com.johnsimon.payback.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

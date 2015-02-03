@@ -12,7 +12,7 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.send.NfcData;
-import com.johnsimon.payback.ui.DebtDetailDialogFragment;
+import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.FeedActivity;
 
 import static android.nfc.NdefRecord.createMime;
