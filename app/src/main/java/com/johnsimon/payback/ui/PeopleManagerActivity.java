@@ -144,7 +144,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		adapter.clickListener = new PeopleListAdapter.PeopleListClickListener() {
 			@Override
 			public void onListItemClick(int position) {
-				//TODO kan krascha här
 				Person person = adapter.getItem(position);
 				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
 				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");

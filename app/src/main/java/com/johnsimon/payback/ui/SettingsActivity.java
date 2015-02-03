@@ -100,32 +100,30 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
                 if (!TextUtils.isEmpty(JSON)) {
                     new MaterialDialog.Builder(SettingsActivity.this)
-                            .title(R.string.pref_import_data)
-                            .content(R.string.pref_import_data_description)
-                            .positiveText(R.string.import_single)
-                            .negativeText(R.string.cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    super.onPositive(dialog);
+						.title(R.string.pref_import_data)
+						.content(R.string.pref_import_data_description)
+						.positiveText(R.string.import_single)
+						.negativeText(R.string.cancel)
+						.callback(new MaterialDialog.ButtonCallback() {
+							@Override
+							public void onPositive(MaterialDialog dialog) {
+								super.onPositive(dialog);
 
-                                    storage.commit(AppData.fromJson(JSON));
-                                    storage.emit();
+								storage.commit(AppData.fromJson(JSON));
+								storage.emit();
 
-                                    Snackbar.with(self)
-                                            .text(self.getString(R.string.restore_success))
-                                            .show(self);
+								Snackbar.with(self).text(self.getString(R.string.restore_success)).show(self);
 
-                                    dialog.dismiss();
-                                }
+								dialog.dismiss();
+							}
 
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    super.onNegative(dialog);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
+							@Override
+							public void onNegative(MaterialDialog dialog) {
+								super.onNegative(dialog);
+								dialog.dismiss();
+							}
+						})
+						.show();
                 }
                 return true;
             }
