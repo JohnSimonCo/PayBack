@@ -1,10 +1,12 @@
 package com.johnsimon.payback.preferences;
 
+import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.data.SyncedData;
 import com.johnsimon.payback.util.Resource;
 
 public class Preference<T> extends SyncedData<Preference<T>> {
 
+	@SerializedName("value")
 	public T value;
 
 	public Preference() {

@@ -1,5 +1,6 @@
 package com.johnsimon.payback.preferences;
 
+import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.currency.UserCurrency;
 
 import java.util.Currency;
@@ -9,7 +10,10 @@ public class Preferences {
 
 	private final static String DEFAULT_BACKGROUND = "mountains";
 
+	@SerializedName("background")
 	public Preference<String> background;
+
+	@SerializedName("currency")
 	public Preference<UserCurrency> currency;
 
 

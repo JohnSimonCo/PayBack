@@ -55,10 +55,11 @@ public class ShittyAppData {
 			debts.add(new Debt(shittyDebt.ownerId, shittyDebt.amount, shittyDebt.note, shittyDebt.id, shittyDebt.timestamp, shittyDebt.touched, shittyDebt.paidback, shittyDebt.currencyId));
 		}
 
+
 		Preferences preferences = new Preferences();
 
-		preferences.background = new Preference<>(this.preferences.background.value);
-		preferences.currency = new Preference<>(this.preferences.currency.value);
+		preferences.background = new Preference<>(this.preferences.background == null ? null : this.preferences.background.value);
+		preferences.currency = new Preference<>(this.preferences.currency == null ? null : this.preferences.currency.value);
 
 		return new AppData(people, debts, deleted, peopleOrder, 0, preferences);
 	}
@@ -67,8 +68,13 @@ public class ShittyAppData {
 		@SerializedName("a")
 		public String name;
 
+		@SerializedName("id")
 		public UUID id;
+
+		@SerializedName("palletteIndex")
 		public int paletteIndex;
+
+		@SerializedName("touched")
 		public long touched;
 	}
 
@@ -85,14 +91,24 @@ public class ShittyAppData {
 		@SerializedName("e")
 		public boolean paidback;
 
+		@SerializedName("id")
 		public UUID id;
+
+		@SerializedName("currencyId")
 		public String currencyId;
+
+		@SerializedName("timestamp")
 		public long timestamp;
+
+		@SerializedName("touched")
 		public long touched;
 	}
 
 	private static class ShittyPreferences {
+		@SerializedName("background")
 		ShittyPreference<String> background;
+
+		@SerializedName("currency")
 		ShittyPreference<UserCurrency> currency;
 	}
 
@@ -100,6 +116,7 @@ public class ShittyAppData {
 		@SerializedName("a")
 		public T value;
 
+		@SerializedName("touched")
 		public long touched;
 	}
 }

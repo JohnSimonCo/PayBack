@@ -1,16 +1,23 @@
 package com.johnsimon.payback.send;
 
+import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 
 import java.util.UUID;
 
 public class DebtSendable {
-    public UUID id;
+	@SerializedName("id")
+	public UUID id;
+	@SerializedName("amount")
 	public float amount;
+	@SerializedName("note")
 	public String note;
+	@SerializedName("timestamp")
 	public long timestamp;
+	@SerializedName("isPaidBack")
 	public boolean isPaidBack;
+	@SerializedName("currency")
 	public String currency;
 
 	public DebtSendable(Debt debt) {

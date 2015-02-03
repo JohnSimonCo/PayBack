@@ -1,15 +1,23 @@
 package com.johnsimon.payback.data;
 
+import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.UUID;
 
 public class Person extends SyncedData<Person> implements Identifiable {
-    public final UUID id;
+
+	@SerializedName("id")
+	public final UUID id;
+
+	@SerializedName("name")
 	public String name;
+
+	@SerializedName("paletteIndex")
 	public final int paletteIndex;
-    public transient Contact link = null;
+
+	public transient Contact link = null;
 
 	public Person(String name, UUID id, int paletteIndex, long touched) {
 		super(touched);

@@ -1,6 +1,9 @@
 package com.johnsimon.payback.data;
 
+import com.google.gson.annotations.SerializedName;
+
 public abstract class SyncedData<T extends SyncedData> {
+	@SerializedName("touched")
 	public long touched;
 
 	public SyncedData(long touched) {

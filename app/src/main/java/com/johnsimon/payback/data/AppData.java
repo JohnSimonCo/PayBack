@@ -1,6 +1,7 @@
 package com.johnsimon.payback.data;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
@@ -14,16 +15,27 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class AppData {
-    public ArrayList<Person> people;
+	@SerializedName("people")
+	public ArrayList<Person> people;
+
+	@SerializedName("debts")
     public ArrayList<Debt> debts;
 
+	@SerializedName("deleted")
     public HashSet<UUID> deleted;
 
+
+	@SerializedName("peopleOrder")
 	public PeopleOrder peopleOrder;
+
+	@SerializedName("peopleOrderTouched")
 	public long peopleOrderTouched;
 
+
+	@SerializedName("preferences")
 	public Preferences preferences;
 
+	@SerializedName("version")
 	public int version;
 
     public transient ArrayList<Contact> contacts;

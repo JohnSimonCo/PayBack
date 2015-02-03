@@ -3,6 +3,7 @@ package com.johnsimon.payback.data;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.util.Resource;
@@ -17,16 +18,30 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	private final static int POSITIVE_COLOR_DISABLED = R.color.green_disabled;
 	private final static int NEGATIVE_COLOR_DISABLED = R.color.red_disabled;
 
+	@SerializedName("id")
+	public final UUID id;
 
-    public final UUID id;
-	public transient Person owner;
 	//Used for (de)serialization
+	@SerializedName("ownerId")
 	public UUID ownerId;
+
+	@SerializedName("amount")
 	public float amount;
+
+	@SerializedName("note")
 	public String note;
+
+	@SerializedName("timestamp")
 	public final long timestamp;
+
+	@SerializedName("paidBack")
 	public boolean paidBack;
+
+	@SerializedName("currencyId")
 	public String currencyId;
+
+	public transient Person owner;
+
 
 	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
 		super(touched);
