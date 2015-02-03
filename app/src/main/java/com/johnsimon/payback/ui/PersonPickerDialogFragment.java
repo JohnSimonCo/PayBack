@@ -22,6 +22,8 @@ import java.util.Iterator;
 
 public class PersonPickerDialogFragment extends DataDialogFragment {
 
+    //TODO show keyboard on show
+
 	public PersonSelectedCallback completeCallback = null;
 	private AlertDialog alertDialog;
 	private String title;

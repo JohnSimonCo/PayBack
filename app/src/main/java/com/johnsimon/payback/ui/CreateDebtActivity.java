@@ -121,6 +121,7 @@ public class CreateDebtActivity extends DataActivity {
 
         if (savedInstanceState == null) {
             ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
+            animateIn(toolbar);
         }
 
 		Resources res = getResources();
@@ -178,8 +179,6 @@ public class CreateDebtActivity extends DataActivity {
 				}
 			}
 		});
-
-        animateIn(toolbar);
 
         if (Resource.isLOrAbove()) {
             create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);

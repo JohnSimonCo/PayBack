@@ -161,7 +161,7 @@ public class NavigationDrawerFragment extends DataFragment {
 
     @Override
     protected void onDataReceived() {
-        adapter.setItems(data.people);
+        adapter.setItems(data.peopleOrdered());
         adapter.notifyDataSetChanged();
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
@@ -209,6 +209,8 @@ public class NavigationDrawerFragment extends DataFragment {
     private void toggleHeaderVisibility() {
         toggleHeaderVisibilityCompat();
     }
+
+    //TODO fix alignment here
 
     public void toggleHeaderVisibilityCompat() {
         if (inHeaderDetailScreen) {
