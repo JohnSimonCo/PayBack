@@ -78,7 +78,8 @@ public class FileManager {
 	}
 
 	public static boolean removeFile() {
-		return getFile().delete();
+		File file = getFile();
+		return file.exists() && file.delete();
 	}
 
 	private static File getDir() {
