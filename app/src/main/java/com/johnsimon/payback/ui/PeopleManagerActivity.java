@@ -271,6 +271,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				data.peopleOrder = result.order;
 				data.touchPeopleOrder();
 				storage.commit();
+
+				data.testPeopleOrder();
 			}
 		});
 	}
@@ -323,6 +325,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
             data.peopleOrder.reorder(from, to, toLast);
 			data.touchPeopleOrder();
             storage.commit();
+
+			data.testPeopleOrder();
         }
     }
 

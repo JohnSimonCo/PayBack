@@ -2,6 +2,7 @@ package com.johnsimon.payback.data;
 
 import com.johnsimon.payback.preferences.Preference;
 import com.johnsimon.payback.preferences.Preferences;
+import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,9 +33,10 @@ public class DataSyncer {
 
             people = sync(a.people, b.people);
             debts = sync(a.debts, b.debts);
-        }
 
-        if(!a.peopleOrder.equals(b.peopleOrder)) {
+			peopleOrder = mergePeopleOrder(a, b);
+
+        } else if(!a.peopleOrder.equals(b.peopleOrder)) {
             changed = true;
 
 			peopleOrder = a.peopleOrderTouched > b.peopleOrderTouched ? a.peopleOrder : b.peopleOrder;
@@ -55,7 +57,9 @@ public class DataSyncer {
 			out.peopleOrderTouched = peopleOrderTouched;
 			out.preferences = preferences;
 		}
-        return changed;
+
+		AppData.testPeopleOrder(peopleOrder, people);
+		return changed;
 	}
 
     private static <T extends Identifiable> void removeDeleted(ArrayList<T> array, HashSet<UUID> deleted) {
@@ -92,4 +96,25 @@ public class DataSyncer {
         return array;
     }
 
+	private static PeopleOrder mergePeopleOrder(AppData a, AppData b) {
+		//lord has priority over peasant
+		PeopleOrder lord, peasant;
+
+		//lord is the the most recently changed
+		if(a.peopleOrderTouched > b.peopleOrderTouched) {
+			lord = a.peopleOrder;
+			peasant = b.peopleOrder;
+		} else {
+			lord = b.peopleOrder;
+			peasant = a.peopleOrder;
+		}
+
+		for(UUID id : peasant) {
+			if(!lord.contains(id)) {
+				lord.add(id);
+			}
+		}
+
+		return lord;
+	}
 }

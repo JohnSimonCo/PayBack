@@ -5,6 +5,8 @@ import com.johnsimon.payback.data.Debt;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Currency;
+import java.util.Locale;
 
 public class UserCurrency {
 	public final static int DECIMAL_SEPARATOR_DOT    = 0;

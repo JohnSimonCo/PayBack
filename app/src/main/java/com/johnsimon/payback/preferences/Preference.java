@@ -7,11 +7,16 @@ public class Preference<T> extends SyncedData<Preference<T>> {
 
     private T value;
 
+	public Preference() {
+		super(0);
+	}
+
     public Preference(T value) {
         super(System.currentTimeMillis());
 
         this.value = value;
     }
+
 
     public T getValue() {
         return value;

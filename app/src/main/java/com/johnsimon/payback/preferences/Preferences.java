@@ -16,8 +16,8 @@ public class Preferences {
 	public static Preferences defaultPreferences() {
 		Preferences preferences = new Preferences();
 
-		preferences.background = new Preference<>(null);
-		preferences.currency = new Preference<>(null);
+		preferences.background = new Preference<>();
+		preferences.currency = new Preference<>();
 
 		return preferences;
 	}

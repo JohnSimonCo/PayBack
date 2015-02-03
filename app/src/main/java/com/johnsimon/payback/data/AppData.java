@@ -42,8 +42,8 @@ public class AppData {
         return new AppData(new ArrayList<Person>(),
 						   new ArrayList<Debt>(),
 				 		   new HashSet<UUID>(),
-						   PeopleOrder.defaultPeopleOrder(),
-						   System.currentTimeMillis(),
+						   //set peopleOrderTouched to 0 in order to penalize during syncing
+						   PeopleOrder.defaultPeopleOrder(), 0,
 						   Preferences.defaultPreferences());
     }
 
@@ -145,6 +145,8 @@ public class AppData {
 		peopleOrder.remove(person.id);
 		touchPeopleOrder();
 		people.remove(person);
+
+		testPeopleOrder();
     }
     public void delete(Debt debt) {
         deleted.add(debt.id);
@@ -162,6 +164,8 @@ public class AppData {
 		peopleOrder.add(person.id);
 		people.add(person);
 		touchPeopleOrder();
+
+		testPeopleOrder();
 	}
 
     private void deleteDebts(Person person) {
@@ -306,21 +310,30 @@ public class AppData {
 	public static void findCorruptData(AppData data) {
 		for(Debt debt : data.debts) {
 			if(debt == null) {
-				throw new RuntimeException("Null debt");
+				throw new RuntimeException("Null debt in debts");
 			}
 			if(debt.getOwner() == null){
-				throw new RuntimeException("Null owner");
+				throw new RuntimeException("Null owner in debts");
 			}
 		}
 
 		for(Person person : data.people) {
 			if(person == null) {
-				throw new RuntimeException("Null person");
+				throw new RuntimeException("Null person in people");
 			}
 		}
 
 		if(data.peopleOrder.size() != data.people.size()) {
 			throw new RuntimeException("peopleOrder size not equal to people size. peopleOrder.size = " + data.peopleOrder.size() + ", people.size = " + data.people.size());
+		}
+	}
+
+	public void testPeopleOrder() {
+		testPeopleOrder(peopleOrder, people);
+	}
+	public static void testPeopleOrder(PeopleOrder peopleOrder, ArrayList<Person> people) {
+		if(peopleOrder.size() != people.size()) {
+			throw new RuntimeException("peopleOrder size not equal to people size. peopleOrder.size = " + peopleOrder.size() + ", people.size = " + people.size());
 		}
 	}
 

@@ -79,6 +79,8 @@ public class CreateDebtActivity extends DataActivity {
 
     private TransitionDrawable transitionDrawable;
 
+	//TODO göra note multiline
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
