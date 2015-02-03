@@ -281,7 +281,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 			UserCurrency userCurrency = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
 
-			data.getPreferences().currency.setValue(userCurrency);
+			data.preferences.currency.setValue(userCurrency);
 			storage.commit();
 
             currencySelectedCallback.onCurrencySelected(userCurrency);

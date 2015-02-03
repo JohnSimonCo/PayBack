@@ -320,7 +320,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		bindPreferenceSummaryToValue(pref_background);
 		bindPreferenceSummaryToValue(pref_currency);
 
-		pref_currency.setSummary(data.getPreferences().getCurrency().render());
+		pref_currency.setSummary(data.preferences.getCurrency().render());
 		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
 
 	}
@@ -377,15 +377,15 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             String stringValue = value.toString();
 
             if (preference.getKey().equals("pref_currency")) {
-                preference.setSummary(data.getPreferences().getCurrency().id);
+                preference.setSummary(data.preferences.getCurrency().id);
                 return true;
             }
 
 			if (preference.getKey().equals("pref_background")) {
-				data.getPreferences().background.setValue((String) value);
+				data.preferences.background.setValue((String) value);
 				storage.commit();
 
-				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.getPreferences().getBackground())]);
+				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
 
 				return true;
 			}

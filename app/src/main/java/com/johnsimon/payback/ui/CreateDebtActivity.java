@@ -243,7 +243,7 @@ public class CreateDebtActivity extends DataActivity {
 	protected void onDataReceived() {
 		Intent intent = getIntent();
 
-		String currencyText = getResources().getString(R.string.amount) + " (" + data.getPreferences().getCurrency().getDisplayName() + ")";
+		String currencyText = getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency().getDisplayName() + ")";
 		floatLabelLayout.setHint(currencyText);
 		floatLabelAmountEditText.setHint(currencyText);
 
@@ -322,7 +322,7 @@ public class CreateDebtActivity extends DataActivity {
 		Person person;
 		if(editingDebt == null) {
 			person = data.getOrCreatePerson(name, this);
-			data.addFirst(new Debt(person, amount, note, data.getPreferences().getCurrency().id));
+			data.addFirst(new Debt(person, amount, note, data.preferences.getCurrency().id));
 		} else {
 			person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()

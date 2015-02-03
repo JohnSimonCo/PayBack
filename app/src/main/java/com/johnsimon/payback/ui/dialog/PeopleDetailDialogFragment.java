@@ -170,6 +170,7 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 				@Override
 				public void onDisplay() {
 					person.setName(name);
+					DataLinker.link(person, data.contacts);
 					PeopleManagerActivity.adapter.notifyDataSetChanged();
 
 					alertDialog.dismiss();
@@ -178,12 +179,12 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 				@Override
 				public void onRevert() {
 					person.setName(oldName);
+					DataLinker.link(person, data.contacts);
 					PeopleManagerActivity.adapter.notifyDataSetChanged();
 				}
 
 				@Override
 				public void onCommit() {
-					DataLinker.link(person, data.contacts);
 					PeopleManagerActivity.adapter.notifyDataSetChanged();
 
 					storage.commit();

@@ -23,6 +23,7 @@ import java.util.Iterator;
 public class PersonPickerDialogFragment extends DataDialogFragment {
 
     //TODO show keyboard on show
+	//TODO göra så att man kan merga till någon med samma namn (vågar inte röra alla flaggor :D)
 
 	public PersonSelectedCallback completeCallback = null;
 	private AlertDialog alertDialog;

@@ -55,23 +55,8 @@ public class AppData {
         return contacts != null;
     }
 
-	public Preferences getPreferences() {
-		if(preferences == null) {
-			preferences = Preferences.defaultPreferences();
-		}
-		return preferences;
-	}
-
-	public PeopleOrder getPeopleOrder() {
-		if(peopleOrder == null) {
-			//Don't touch peopleOrder here
-			peopleOrder = new PeopleOrder(people);
-		}
-		return peopleOrder;
-	}
-
 	public ArrayList<Person> peopleOrdered() {
-		return getPeopleOrder().order(people);
+		return peopleOrder.order(people);
 	}
 
     public ArrayList<Debt> feed(Person person) {
@@ -99,7 +84,7 @@ public class AppData {
     public float totalPlus() {
         float sum = 0;
         for (Debt debt : debts) {
-            if (debt.getAmount() > 0) {
+            if (!debt.isPaidBack() && debt.getAmount() > 0) {
                 sum += debt.getAmount();
             }
         }
@@ -109,7 +94,7 @@ public class AppData {
     public float totalMinus() {
         float sum = 0;
         for (Debt debt : debts) {
-            if (debt.getAmount() < 0) {
+            if (!debt.isPaidBack() && debt.getAmount() < 0) {
                 sum += debt.getAmount();
             }
         }
@@ -157,7 +142,7 @@ public class AppData {
     public void delete(Person person) {
         deleteDebts(person);
         deleted.add(person.id);
-		getPeopleOrder().remove(person.id);
+		peopleOrder.remove(person.id);
 		touchPeopleOrder();
 		people.remove(person);
     }
@@ -174,8 +159,8 @@ public class AppData {
     }
 
 	public void add(Person person) {
+		peopleOrder.add(person.id);
 		people.add(person);
-		getPeopleOrder().add(person.id);
 		touchPeopleOrder();
 	}
 
@@ -302,6 +287,14 @@ public class AppData {
 			debt.linkOwner(data.people);
 		}
 
+		if(data.preferences == null) {
+			data.preferences = Preferences.defaultPreferences();
+		}
+
+		if(data.peopleOrder == null) {
+			data.peopleOrder = new PeopleOrder(data.people);
+		}
+
 		if(BuildConfig.DEBUG) {
 			findCorruptData(data);
 		}
@@ -326,8 +319,8 @@ public class AppData {
 			}
 		}
 
-		if(data.getPeopleOrder().size() != data.people.size()) {
-			throw new RuntimeException("peopleOrder size not equal to people size");
+		if(data.peopleOrder.size() != data.people.size()) {
+			throw new RuntimeException("peopleOrder size not equal to people size. peopleOrder.size = " + data.peopleOrder.size() + ", people.size = " + data.people.size());
 		}
 	}
 
