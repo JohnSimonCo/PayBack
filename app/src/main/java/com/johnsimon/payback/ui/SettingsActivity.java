@@ -100,9 +100,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
                 if (!TextUtils.isEmpty(JSON)) {
                     new MaterialDialog.Builder(SettingsActivity.this)
-						.title(R.string.pref_import_data)
-						.content(R.string.pref_import_data_description)
-						.positiveText(R.string.import_single)
+						.title(R.string.pref_restore_data)
+						.content(R.string.pref_restore_data_description)
+						.positiveText(R.string.restore_single)
 						.negativeText(R.string.cancel)
 						.callback(new MaterialDialog.ButtonCallback() {
 							@Override
