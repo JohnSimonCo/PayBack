@@ -258,11 +258,11 @@ public class Resource {
 	}
 
     public static void checkFull(BillingProcessor bp) {
-        //isFull =  bp.isPurchased("full_version");
+        isFull =  bp.isPurchased("full_version");
 
-		//if(BuildConfig.DEBUG) {
+		if(BuildConfig.DEBUG) {
             isFull = true;
-        //}
+        }
     }
 
     public static boolean canHold(int debts, int addition) {
