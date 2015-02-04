@@ -1,5 +1,7 @@
 package com.johnsimon.payback.data;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.currency.UserCurrency;
