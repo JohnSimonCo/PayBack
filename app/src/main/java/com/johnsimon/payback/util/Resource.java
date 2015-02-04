@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.StrictMode;
@@ -150,7 +154,7 @@ public class Resource {
                     .into(avatar);
 		} else {
             avatar.setImageBitmap(null);
-			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity, person.paletteIndex));
+			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity.getContext().getResources(), dataActivity.getData(), person.paletteIndex));
 			avatarLetter.setVisibility(View.VISIBLE);
 			avatarLetter.setText(person.getAvatarLetter());
 		}
@@ -227,6 +231,19 @@ public class Resource {
         if (view != null) {
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     public static class AmountComparator implements Comparator<Debt> {

@@ -197,7 +197,7 @@ public class AppData {
         }
     }
 
-    public Person getOrCreatePerson(String name, DataActivity context) {
+    public Person getOrCreatePerson(String name, DataActivity activity) {
         //Try to find existing person
         Person person = findPersonByName(name);
         if(person != null) {
@@ -214,7 +214,7 @@ public class AppData {
             }
         }
         //Create person and add to people
-        person = new Person(name, ColorPalette.getInstance(context));
+        person = new Person(name, ColorPalette.getInstance(activity.getResources(), activity.getData()));
         person.link = link;
 
         add(person);

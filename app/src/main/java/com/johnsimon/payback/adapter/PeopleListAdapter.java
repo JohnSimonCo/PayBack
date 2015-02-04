@@ -19,7 +19,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 
     //TODO Bli av med mer static grejer
 
-	public static DataActivity context;
+	public static DataActivity activity;
 	public static View emptyView;
     private AppData data;
     public static TextView managerTitle;
@@ -47,8 +47,8 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 		}
 	}
 
-	public PeopleListAdapter(DataActivity context, View emptyView, AppData data, TextView managerTitle, ArrayList<Person> _people) {
-		this.context = context;
+	public PeopleListAdapter(DataActivity _activity, View emptyView, AppData data, TextView managerTitle, ArrayList<Person> _people) {
+		this.activity = _activity;
 		this.emptyView = emptyView;
         this.data = data;
         this.managerTitle = managerTitle;
@@ -74,11 +74,11 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 		holder.name.setText(person.getName());
 		int debts = data.feed(person).size();
 		if (debts == 1) {
-			holder.debtsCount.setText(debts +  " " + context.getString(R.string.debt_single));
+			holder.debtsCount.setText(debts +  " " + activity.getString(R.string.debt_single));
 		} else {
-			holder.debtsCount.setText(debts +  " " + context.getString(R.string.debt_plural));
+			holder.debtsCount.setText(debts +  " " + activity.getString(R.string.debt_plural));
 		}
-		Resource.createProfileImage(context, person, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(activity, person, holder.avatar, holder.avatarLetter);
 	}
 
 	@Override
@@ -88,9 +88,9 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 
 	public static void updateEmptyViewVisibility() {
 		if (people.size() == 1) {
-			managerTitle.setText("1 " + context.getString(R.string.person));
+			managerTitle.setText("1 " + activity.getString(R.string.person));
 		} else {
-			managerTitle.setText(people.size() + " " + context.getString(R.string.people));
+			managerTitle.setText(people.size() + " " + activity.getString(R.string.people));
 		}
 
 		if (people.size() == 0) {

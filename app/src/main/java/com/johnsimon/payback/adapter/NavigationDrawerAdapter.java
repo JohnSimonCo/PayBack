@@ -20,10 +20,10 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	private final static NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
 	public ArrayList<NavigationDrawerItem> items = new ArrayList<>();
 
-	private final DataActivity context;
+	private final DataActivity activity;
 
-	public NavigationDrawerAdapter(DataActivity context) {
-		this.context = context;
+	public NavigationDrawerAdapter(DataActivity _activity) {
+		this.activity = _activity;
 	}
 
 	public void clearItems() {
@@ -75,7 +75,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		boolean isSelected = (position == NavigationDrawerFragment.mCurrentSelectedPosition);
 
 		if (convertView == null) {
-			convertView = context.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
+			convertView = activity.getLayoutInflater().inflate(R.layout.navigation_drawer_list_item, null);
 
 			holder = new ViewHolder(
 				(TextView) convertView.findViewById(R.id.navigation_drawer_list_item_text),
@@ -96,19 +96,19 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			NavigationDrawerItem item = items.get(--position);
 			Person owner = item.owner;
 
-			Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
+			Resource.createProfileImage(activity, owner, holder.avatar, holder.avatarLetter);
 
 			holder.title.setText(item.title);
 		}
 
 		if (isSelected) {
 			holder.title.setTypeface(null, Typeface.BOLD);
-            holder.title.setTextColor(context.getResources().getColor(R.color.green));
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray_oncolor_very_light));
+            holder.title.setTextColor(activity.getResources().getColor(R.color.green));
+            holder.itemView.setBackgroundColor(activity.getResources().getColor(R.color.gray_oncolor_very_light));
 		} else {
 			holder.title.setTypeface(null, Typeface.NORMAL);
-            holder.title.setTextColor(context.getResources().getColor(R.color.gray_text_light));
-            holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+            holder.title.setTextColor(activity.getResources().getColor(R.color.gray_text_light));
+            holder.itemView.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
 		}
 
 		return convertView;

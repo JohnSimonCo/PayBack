@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
 	public ArrayList<Debt> list;
-	private final DataActivity context;
+	private final DataActivity activity;
 	private final View emptyView;
 	private DebtDetailDialogFragment.Callback callback;
 
@@ -48,9 +48,9 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		}
 	}
 
-	public FeedListAdapter(ArrayList<Debt> debts, DataActivity ctx, DebtDetailDialogFragment.Callback _callback, View _emptyView) {
+	public FeedListAdapter(ArrayList<Debt> debts, DataActivity _activity, DebtDetailDialogFragment.Callback _callback, View _emptyView) {
 		list = debts;
-		context = ctx;
+		activity = _activity;
 		callback = _callback;
 		emptyView = _emptyView;
 	}
@@ -64,25 +64,24 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	public void onBindViewHolder(final ViewHolder holder, int position) {
 		final Debt debt = list.get(position);
 		Person owner = debt.getOwner();
-		Resources resources = context.getResources();
+		Resources resources = activity.getResources();
 
 		holder.person.setText(owner.getName());
-		holder.amount.setText(context.data.preferences.getCurrency().render(debt));
-		holder.amount.setTextColor(resources.getColor(debt.getColor()));
+		holder.amount.setText(activity.data.preferences.getCurrency().render(debt));
 
-		holder.date.setText(" - " + Resource.getRelativeTimeString(context, debt.timestamp));
+		holder.date.setText(" - " + Resource.getRelativeTimeString(activity, debt.timestamp));
 
-		Resource.createProfileImage(context, owner, holder.avatar, holder.avatarLetter);
+		Resource.createProfileImage(activity, owner, holder.avatar, holder.avatarLetter);
 
 		if (debt.isPaidBack()) {
-			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_very_light));
-			holder.note.setTextColor(context.getResources().getColor(R.color.gray_oncolor_light));
-			holder.amount.setTextColor(context.getResources().getColor(debt.getDisabledColor()));
+			holder.person.setTextColor(activity.getResources().getColor(R.color.gray_text_very_light));
+			holder.note.setTextColor(activity.getResources().getColor(R.color.gray_oncolor_light));
+			holder.amount.setTextColor(activity.getResources().getColor(debt.getDisabledColor()));
 			holder.avatar.setAlpha(0.5f);
 		} else {
-			holder.person.setTextColor(context.getResources().getColor(R.color.gray_text_normal));
-			holder.note.setTextColor(context.getResources().getColor(R.color.gray_text_light));
-			holder.amount.setTextColor(context.getResources().getColor(debt.getColor()));
+			holder.person.setTextColor(activity.getResources().getColor(R.color.gray_text_normal));
+			holder.note.setTextColor(activity.getResources().getColor(R.color.gray_text_light));
+			holder.amount.setTextColor(activity.getResources().getColor(debt.getColor()));
 			holder.avatar.setAlpha(1f);
 		}
 
@@ -90,7 +89,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			@Override
 			public void onClick(View v) {
 				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(debt);
-				dialog.show(context.getFragmentManager().beginTransaction(), "dialog");
+				dialog.show(activity.getFragmentManager().beginTransaction(), "dialog");
 				dialog.callback = callback;
 			}
 		});
@@ -111,7 +110,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	}
 
 	private int measureTextWidthTextView(TextView textView) {
-		int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(Resource.getScreenWidth(context), View.MeasureSpec.AT_MOST);
+		int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(Resource.getScreenWidth(activity), View.MeasureSpec.AT_MOST);
 		int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
 		textView.measure(widthMeasureSpec, heightMeasureSpec);
 		return textView.getMeasuredWidth();

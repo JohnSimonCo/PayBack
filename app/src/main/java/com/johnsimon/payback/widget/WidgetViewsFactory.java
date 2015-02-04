@@ -2,13 +2,17 @@ package com.johnsimon.payback.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.util.Resource;
+import com.squareup.picasso.Picasso;
 
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
@@ -48,15 +52,9 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         Debt debt = data.debts.get(position);
 
         if (debt.getOwner().hasImage()) {
-            /*
-            ThumbnailLoader.getInstance().load(debt.getOwner().link.photoURI, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    row.setImageViewBitmap(R.id.list_item_avatar, loadedImage);
-                }
-            });*/
+            row.setImageViewUri(R.id.list_item_avatar, Uri.parse(debt.getOwner().link.photoURI));
         } else {
-            //row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(debt.getOwner().color)));
+            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ctx.getResources(), data, debt.getOwner().paletteIndex)));
             row.setViewVisibility(R.id.list_item_avatar_letter, View.VISIBLE);
             row.setTextViewText(R.id.list_item_avatar_letter, debt.getOwner().getAvatarLetter());
         }
@@ -64,8 +62,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         row.setTextViewText(R.id.list_item_person, debt.getOwner().getName());
         row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? ctx.getResources().getString(R.string.cash) : debt.getNote());
         row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
-		//row.setTextViewText(R.id.list_item_amount, debt.amountString(data.preferences));
-        row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
+		row.setTextViewText(R.id.list_item_amount, data.preferences.getCurrency().render(debt));
 
         if (debt.isPaidBack()) {
             row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_very_light));
