@@ -44,7 +44,7 @@ public class LocalStorage extends Storage {
 
 		dataActivity.data = data;
 
-		ColorPalette colorPalette = ColorPalette.getInstance(dataActivity);
+		ColorPalette colorPalette = ColorPalette.getInstance(context.getResources(), data);
 
 		for(int i = 0; i < 25; i++) {
 
