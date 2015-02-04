@@ -4,7 +4,6 @@
     <string name="app_name">Pay Back</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="total">TOTAL DEBT</string>
     <string name="all">All</string>
     <string name="balance">Balance:</string>
     <string name="title_activity_setup">Pay Back</string>
