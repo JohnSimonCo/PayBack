@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.PeopleListAdapter;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.PeopleOrder;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.ui.dialog.PeopleDetailDialogFragment;
@@ -170,7 +171,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				@Override
 				public void onSelected(String name) {
 					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
-					data.add(person);
+                    data.add(person);
+                    DataLinker.link(person, data.contacts);
                     PeopleListAdapter.people.add(person);
 					storage.commit();
 					adapter.notifyDataSetChanged();

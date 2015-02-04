@@ -2,32 +2,28 @@ package com.johnsimon.payback.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.RemoteViewsService;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.data.Debt;
-import com.johnsimon.payback.storage.LocalStorage;
-import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Resource;
 
-public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory, Callback<AppData> {
-
-    private Context ctx = null;
-
-    private AppData data;
-    private Storage storage;
+public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     public WidgetViewsFactory(Context ctx, Intent intent) {
-        this.ctx = ctx;
-        storage = StorageManager.getStorage(ctx);
-        storage.subscription.listen(this);
+        super(ctx);
+    }
+
+    @Override
+    protected void onDataReceived() {
+
+    }
+
+    @Override
+    protected void onDataLinked() {
+
     }
 
     @Override
@@ -114,10 +110,5 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged() {
 
-    }
-
-    @Override
-    public void onCalled(AppData data) {
-        this.data = data;
     }
 }
