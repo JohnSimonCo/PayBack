@@ -42,11 +42,11 @@ import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener {
+public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener, PeopleDetailDialogFragment.PeopleDetailCallbacks {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
-	public static PeopleListAdapter adapter;
+	private PeopleListAdapter adapter;
     private RecyclerView recyclerView;
 
     private int sortAzX;
@@ -141,13 +141,14 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		adapter = new PeopleListAdapter(this, findViewById(R.id.people_manager_empty), data, (TextView) findViewById(R.id.people_manager_title), data.peopleOrdered());
 		recyclerView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		PeopleListAdapter.updateEmptyViewVisibility();
+		adapter.updateEmptyViewVisibility();
 
 		adapter.clickListener = new PeopleListAdapter.PeopleListClickListener() {
 			@Override
 			public void onListItemClick(int position) {
 				Person person = adapter.getItem(position);
 				PeopleDetailDialogFragment peopleDetailDialogFragment = PeopleDetailDialogFragment.newInstance(person);
+                peopleDetailDialogFragment.callbacks = PeopleManagerActivity.this;
 				peopleDetailDialogFragment.show(getFragmentManager(), "people_detail_dialog");
 			}
 		};
@@ -173,10 +174,10 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
                     data.add(person);
                     DataLinker.link(person, data.contacts);
-                    PeopleListAdapter.people.add(person);
+                    adapter.people.add(person);
 					storage.commit();
 					adapter.notifyDataSetChanged();
-                    PeopleListAdapter.updateEmptyViewVisibility();
+                    adapter.updateEmptyViewVisibility();
 				}
 			};
 
@@ -200,9 +201,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         final PeopleManagerActivity self = this;
 
         switch (item.getItemId()) {
-			case android.R.id.home:
-				returnToFeed();
-				break;
 
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -210,7 +208,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 			case R.id.action_sort_az:
 
-				final ArrayList<Person> list = PeopleListAdapter.people;
+				final ArrayList<Person> list = adapter.people;
 
 				final PeopleOrder.SortResult result = data.peopleOrder.sortAlphabetically(data.people);
 
@@ -231,7 +229,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 							sort(self, result, list);
 
 							adapter.notifyDataSetChanged();
-                            PeopleListAdapter.updateEmptyViewVisibility();
+                            adapter.updateEmptyViewVisibility();
 
                             Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, sortAzX, sortAzY, 0, initialRadius);
                             anim.setInterpolator(new PathInterpolator(0.72f, 0.16f, 0.85f, 0.69f));
@@ -258,13 +256,13 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
-                PeopleListAdapter.people = result.people;
+                adapter.people = result.people;
 				adapter.notifyDataSetChanged();
 			}
 
 			@Override
 			public void onRevert() {
-                PeopleListAdapter.people = list;
+                adapter.people = list;
 				adapter.notifyDataSetChanged();
 			}
 
@@ -275,11 +273,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 				storage.commit();
 			}
 		});
-	}
-
-	@Override
-	public void onBackPressed() {
-		returnToFeed();
 	}
 
     private void setupTreeObserver() {
@@ -313,8 +306,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             boolean toLast;
 
-            if (to == PeopleListAdapter.people.size()) {
-                PeopleListAdapter.people.add(item);
+            if (to == adapter.people.size()) {
+                adapter.people.add(item);
                 toLast = true;
             } else {
                 adapter.insert(item, to);
@@ -328,14 +321,71 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         }
     }
 
-	public void returnToFeed() {
-		/*Intent intent = new Intent(this, FeedActivity.class);
-		if(!data.people.contains(FeedActivity.person)) {
-			FeedActivity.person = null;
-		}
+    @Override
+    public void onDelete(final Person person) {
+        final int listIndex = adapter.people.indexOf(person);
 
-		finishAffinity();
-		startActivity(intent);*/
-        finish();
-	}
+        Undo.executeAction(PeopleManagerActivity.this, R.string.deleted_person, new Undo.UndoableAction() {
+            @Override
+            public void onDisplay() {
+                adapter.people.remove(listIndex);
+                adapter.notifyDataSetChanged();
+                adapter.updateEmptyViewVisibility();
+            }
+
+            @Override
+            public void onRevert() {
+                adapter.people.add(listIndex, person);
+                adapter.notifyDataSetChanged();
+                adapter.updateEmptyViewVisibility();
+            }
+
+            @Override
+            public void onCommit() {
+                data.delete(person);
+                storage.commit();
+            }
+        });
+    }
+
+    @Override
+    public void onRename(final Person person, final String name) {
+        final String oldName = person.getName();
+
+        Undo.executeAction(PeopleManagerActivity.this, R.string.renamed_person, new Undo.UndoableAction() {
+            @Override
+            public void onDisplay() {
+                person.setName(name);
+                DataLinker.link(person, data.contacts);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onRevert() {
+                person.setName(oldName);
+                DataLinker.link(person, data.contacts);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCommit() {
+                adapter.notifyDataSetChanged();
+
+                storage.commit();
+            }
+        });
+    }
+
+    @Override
+    public void onMerge(Person person, String name) {
+        Person other = data.findPersonByName(name);
+        int index = adapter.people.indexOf(person);
+
+        adapter.people.remove(index);
+        adapter.notifyDataSetChanged();
+        adapter.updateEmptyViewVisibility();
+
+        data.merge(person, other);
+        storage.commit();
+    }
 }

@@ -54,7 +54,7 @@ public class Resource {
 
     private static boolean isInitialized = false;
 
-    public static void init(Activity context) {
+    public static void init(Context context) {
         if (isInitialized) return;
 
         isInitialized = true;
@@ -150,6 +150,7 @@ public class Resource {
 
             Picasso.with(dataActivity.getContext())
                     .load(person.link.photoURI)
+                    .fit()
                     .placeholder(R.drawable.ic_person_placeholder)
                     .into(avatar);
 		} else {
@@ -161,11 +162,11 @@ public class Resource {
 	}
 
 	//TODO fördela
-	public static void actionComplete(final Activity activity) {
+	public static void actionComplete(final Context context) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
 
-		final SharedPreferences preferences = StorageManager.getPreferences(activity);
+		final SharedPreferences preferences = StorageManager.getPreferences(context);
 
 		//Increment actions and compare to MAX_ACTIONS
 		if(++actions >= MAX_ACTIONS) {
@@ -173,7 +174,7 @@ public class Resource {
 
 			//Open the request rate dialog
 
-            new MaterialDialog.Builder(activity)
+            new MaterialDialog.Builder(context)
                     .title(R.string.rate_title)
                     .content(R.string.rate_text)
                     .positiveText(R.string.rate_now)
@@ -183,11 +184,11 @@ public class Resource {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            final String appPackageName = activity.getPackageName();
+                            final String appPackageName = context.getPackageName();
                             try {
-                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                             } catch (android.content.ActivityNotFoundException anfe) {
-                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
                             }
 
                             neverRate = true;

@@ -58,10 +58,12 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
     private View emptyView;
 	private QuickReturnListViewOnScrollListener scrollListener;
 
-	ImageView headerImage;
+	private ImageView headerImage;
 
 	private Subscription<ArrayList<Debt>> feedSubscription;
 	private Notification feedLinkedNotification;
+
+    public OnUpdateAmountCallback callback;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -207,7 +209,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		Resource.actionComplete(getActivity());
 	}
 	public void displayTotalDebt(Resources resources, UserCurrency currency) {
-		//TODO uppdateras inte i navigationbaren
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -217,6 +218,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         }
 
 		totalDebtTextView.setText(Debt.totalString(debt, currency, resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
+
+        callback.onUpdateAmount();
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -308,20 +311,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 						}
 					});
 
-					/*
-					data.delete(debt);
-					storage.commit();
-					if(!FeedActivity.isAll()) {
-						FeedActivity.feed.remove(debt);
-					}
-
-					if (getActivity() != null && getResources() != null) {
-						displayTotalDebt(getResources());
-					}
-					adapter.notifyItemRemoved(index);
-					adapter.checkAdapterIsEmpty();
-					*/
-
 					dialog.dismiss();
 				}
 
@@ -359,4 +348,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 		startActivity(intent);
 	}
+
+    public interface OnUpdateAmountCallback {
+        public void onUpdateAmount();
+    }
+
 }

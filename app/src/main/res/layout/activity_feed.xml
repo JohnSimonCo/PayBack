@@ -36,5 +36,4 @@
         android:name="com.johnsimon.payback.ui.fragment.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
-
 </android.support.v4.widget.DrawerLayout>

@@ -64,9 +64,9 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        storage = StorageManager.getStorage(this);
+        storage = StorageManager.getStorage(getApplicationContext());
 
-		contactLoader = ContactLoader.getLoader(this);
+		contactLoader = ContactLoader.getLoader(getApplicationContext());
 
 		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
 	}

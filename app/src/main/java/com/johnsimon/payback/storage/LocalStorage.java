@@ -26,8 +26,6 @@ public class LocalStorage extends Storage {
         String JSON = preferences.getString(SAVE_KEY_DATA, null);
 
         emit(AppData.fromJson(JSON));
-
-		//test();
     }
 
 	@Override
@@ -36,22 +34,18 @@ public class LocalStorage extends Storage {
 	}
 
 	//TODO testa
-	public void test() {
+	public static void test(DataActivity dataActivity, AppData appData) {
 		Random r = new Random();
-
-		DataActivity dataActivity = (DataActivity) context;
-
-		dataActivity.data = data;
 
 		ColorPalette colorPalette = ColorPalette.getInstance(dataActivity);
 
 		for(int i = 0; i < 25; i++) {
 
-			data.add(new Person(Integer.toHexString(r.nextInt()), colorPalette));
+            appData.add(new Person(Integer.toHexString(r.nextInt()), colorPalette));
 		}
 
 		for(int i = 0; i < 100; i++) {
-			data.add(new Debt(data.people.get(r.nextInt(data.people.size())), r.nextFloat() * 200, null, data.preferences.getCurrency().id));
+            appData.add(new Debt(appData.people.get(r.nextInt(appData.people.size())), r.nextFloat() * 200, null, appData.preferences.getCurrency().id));
 		}
 	}
 

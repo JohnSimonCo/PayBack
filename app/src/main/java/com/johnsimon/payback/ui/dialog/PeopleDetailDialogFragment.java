@@ -35,6 +35,8 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 
 	private final static String ARG_PERSON_ID = "PERSON_ID";
 
+    public PeopleDetailCallbacks callbacks;
+
 	public static PeopleDetailDialogFragment newInstance(Person person) {
 		PeopleDetailDialogFragment instance = new PeopleDetailDialogFragment();
 
@@ -117,33 +119,9 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
 
-                                    final int listIndex = PeopleListAdapter.people.indexOf(person);
-
-									Undo.executeAction(getActivity(), R.string.deleted_person, new Undo.UndoableAction() {
-										@Override
-										public void onDisplay() {
-                                            PeopleListAdapter.people.remove(listIndex);
-                                            PeopleManagerActivity.adapter.notifyDataSetChanged();
-                                            PeopleListAdapter.updateEmptyViewVisibility();
-
-											alertDialog.dismiss();
-										}
-
-										@Override
-										public void onRevert() {
-											PeopleListAdapter.people.add(listIndex, person);
-                                            PeopleManagerActivity.adapter.notifyDataSetChanged();
-                                            PeopleListAdapter.updateEmptyViewVisibility();
-										}
-
-										@Override
-										public void onCommit() {
-											data.delete(person);
-											storage.commit();
-										}
-									});
-
+                                    callbacks.onDelete(person);
 									dialog.dismiss();
+                                    alertDialog.dismiss();
                                 }
 
                                 @Override
@@ -161,54 +139,23 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 	public PersonPickerDialogFragment.PersonSelectedCallback renameCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(final String name) {
-
-			personDetailTitle.setText(name);
-
-            final String oldName = person.getName();
-
-			Undo.executeAction(getActivity(), R.string.renamed_person, new Undo.UndoableAction() {
-				@Override
-				public void onDisplay() {
-					person.setName(name);
-					DataLinker.link(person, data.contacts);
-					PeopleManagerActivity.adapter.notifyDataSetChanged();
-
-					alertDialog.dismiss();
-				}
-
-				@Override
-				public void onRevert() {
-					person.setName(oldName);
-					DataLinker.link(person, data.contacts);
-					PeopleManagerActivity.adapter.notifyDataSetChanged();
-				}
-
-				@Override
-				public void onCommit() {
-					PeopleManagerActivity.adapter.notifyDataSetChanged();
-
-					storage.commit();
-				}
-			});
+            callbacks.onRename(person, name);
+            alertDialog.dismiss();
 		}
 	};
 
 	public PersonPickerDialogFragment.PersonSelectedCallback mergeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 		@Override
 		public void onSelected(String name) {
-			Person other = data.findPersonByName(name);
-			int index = PeopleListAdapter.people.indexOf(person);
-
-			PeopleListAdapter.people.remove(index);
-			PeopleManagerActivity.adapter.notifyDataSetChanged();
-			PeopleManagerActivity.adapter.updateEmptyViewVisibility();
-
-			alertDialog.dismiss();
-
-			data.merge(person, other);
-			storage.commit();
-
+			callbacks.onMerge(person, name);
+            alertDialog.dismiss();
 		}
 	};
+
+    public interface PeopleDetailCallbacks {
+        public void onDelete(Person person);
+        public void onRename(Person person, String name);
+        public void onMerge(Person person, String name);
+    }
 
 }

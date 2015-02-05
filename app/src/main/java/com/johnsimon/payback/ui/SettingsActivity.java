@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -139,7 +140,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
 
-                                    FeedActivity.gotoAll();
+                                    FeedActivity.goToAll();
                                     storage.commit(AppData.fromJson(JSON));
                                     storage.emit();
 
@@ -388,15 +389,15 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
     /** {@inheritDoc} */
     @Override
     public boolean onIsMultiPane() {
-        return isXLargeTablet(this) && !isSimplePreferences(this);
+        return isXLargeTablet(getResources()) && !isSimplePreferences(getResources());
     }
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
      * example, 10" tablets are extra-large.
      */
-    private static boolean isXLargeTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
+    private static boolean isXLargeTablet(Resources resources) {
+        return (resources.getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
@@ -407,17 +408,17 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
      * doesn't have an extra-large screen. In these cases, a single-pane
      * "simplified" settings UI should be shown.
      */
-    private static boolean isSimplePreferences(Context context) {
+    private static boolean isSimplePreferences(Resources resources) {
         return ALWAYS_SIMPLE_PREFS
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-                || !isXLargeTablet(context);
+                || !isXLargeTablet(resources);
     }
 
     /** {@inheritDoc} */
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        if (!isSimplePreferences(this)) {
+        if (!isSimplePreferences(getResources())) {
             //loadHeadersFromResource(R.xml.pref_headers, target);
         }
     }

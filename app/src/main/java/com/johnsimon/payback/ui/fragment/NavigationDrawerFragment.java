@@ -64,7 +64,7 @@ public class NavigationDrawerFragment extends DataFragment {
      */
     public ActionBarDrawerToggle mDrawerToggle;
 
-	public static NavigationDrawerAdapter adapter;
+	public NavigationDrawerAdapter adapter;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -74,8 +74,8 @@ public class NavigationDrawerFragment extends DataFragment {
     private ImageButton headerArrow;
     private LinearLayout headerTextContainer;
     private TextView headerName;
-    private static TextView headerPlus;
-    private static TextView headerMinus;
+    private TextView headerPlus;
+    private TextView headerMinus;
 
     public static int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;

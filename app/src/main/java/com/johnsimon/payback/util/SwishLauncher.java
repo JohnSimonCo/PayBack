@@ -74,11 +74,11 @@ public class SwishLauncher {
         return Float.toString(Math.abs(amount)).replaceAll("\\.0*$", "");
     }
 
-	public static boolean hasService(Context ctx) {
+	public static boolean hasService(PackageManager pkm) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setComponent(ComponentName.unflattenFromString("se.bankgirot.swish/.ui.PaymentActivity"));
 
-		List<ResolveInfo> list = ctx.getPackageManager().queryIntentActivities(intent,
+		List<ResolveInfo> list = pkm.queryIntentActivities(intent,
 				PackageManager.MATCH_DEFAULT_ONLY);
 
 		return list.size() > 0;

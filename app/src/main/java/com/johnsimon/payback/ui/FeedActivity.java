@@ -30,6 +30,7 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
@@ -48,7 +49,7 @@ import java.util.Collections;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
-        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback {
+        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback, FeedFragment.OnUpdateAmountCallback {
 
     public BillingProcessor bp;
 
@@ -63,7 +64,6 @@ public class FeedActivity extends DataActivity implements
 	public Notification feedLinkedNotification = new Notification();
 
 	private MenuItem filterAmount;
-	public static MenuItem detailMenuPay;
 
 	private NavigationDrawerFragment navigationDrawerFragment;
 
@@ -82,7 +82,7 @@ public class FeedActivity extends DataActivity implements
         Intent sentIntent = getIntent();
 
         if (sentIntent.getBooleanExtra(ARG_FROM_CREATE, false)) {
-            Resource.actionComplete(this);
+            Resource.actionComplete(getApplicationContext());
             sentIntent.removeExtra(ARG_FROM_CREATE);
         }
 
@@ -96,7 +96,7 @@ public class FeedActivity extends DataActivity implements
 
         }
 
-		Resource.init(this);
+		Resource.init(getApplicationContext());
 		if (Resource.isFirstRun(storage.getPreferences())) {
 			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
 			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
@@ -135,8 +135,11 @@ public class FeedActivity extends DataActivity implements
 			feed_activity_status_bar_pusher.setVisibility(View.GONE);
 		}
 
+        feedFragment = new FeedFragment();
+        feedFragment.callback = this;
+
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, feedFragment = new FeedFragment(), "feed_fragment_tag")
+				.replace(R.id.container, feedFragment, "feed_fragment_tag")
 				.commit();
 
         if (BuildConfig.DEBUG) {
@@ -154,11 +157,14 @@ public class FeedActivity extends DataActivity implements
         sort();
 		feedSubscription.broadcast(feed);
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
+
+        //TODO REMOVE
+        LocalStorage.test(this, data);
     }
 
     @Override
     protected void onDataLinked() {
-        NavigationDrawerFragment.adapter.notifyDataSetChanged();
+        navigationDrawerFragment.adapter.notifyDataSetChanged();
 
 		feedLinkedNotification.broadcast();
     }
@@ -166,7 +172,7 @@ public class FeedActivity extends DataActivity implements
 	public static boolean isAll() {
 		return person == null;
 	}
-	public static void gotoAll() {
+	public static void goToAll() {
 		person = null;
 	}
 
@@ -241,7 +247,7 @@ public class FeedActivity extends DataActivity implements
 		if (isAll()) {
 			fulllMenuPay.setVisible(false);
 		} else {
-            if (!SwishLauncher.hasService(this) || AppData.total(feed) >= 0) {
+            if (!SwishLauncher.hasService(getPackageManager()) || AppData.total(feed) >= 0) {
                 fulllMenuPay.setEnabled(false);
             } else {
                 fulllMenuPay.setEnabled(true);
@@ -307,7 +313,7 @@ public class FeedActivity extends DataActivity implements
 
                 final FeedActivity self = this;
 
-                new MaterialDialog.Builder(this)
+                new MaterialDialog.Builder(getApplicationContext())
                         .title(getString(R.string.upgrade_title))
                         .content(getString(R.string.upgrade_text))
                         .positiveText(R.string.upgrade_confirm_text)
@@ -442,7 +448,7 @@ public class FeedActivity extends DataActivity implements
 
 		feed = data.feed(person);
 
-		NavigationDrawerFragment.adapter.setItems(data.peopleOrdered());
+		navigationDrawerFragment.adapter.setItems(data.peopleOrdered());
 		navigationDrawerFragment.setSelectedPerson(person);
 
 		getFragmentManager().beginTransaction()
@@ -478,7 +484,7 @@ public class FeedActivity extends DataActivity implements
             return;
         }
 
-        new MaterialDialog.Builder(this)
+        new MaterialDialog.Builder(getApplicationContext())
                 .title(R.string.cloud_sync)
                 .content(R.string.cloud_sync_description_first)
                 .positiveText(R.string.activate)
@@ -518,5 +524,10 @@ public class FeedActivity extends DataActivity implements
         navigationDrawerFragment.updateBalance(data);
 
         feedFragment.displayTotalDebt(getResources(), userCurrency);
+    }
+
+    @Override
+    public void onUpdateAmount() {
+        navigationDrawerFragment.updateBalance(data);
     }
 }

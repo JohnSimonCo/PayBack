@@ -46,7 +46,7 @@ public class StorageManager {
 				case STORAGE_TYPE_DRIVE:
 					DriveConnector connector = new DriveConnector(context);
 
-					DriveStorage driveStorage = new DriveStorage(context, connector.client, localStorage);
+					DriveStorage driveStorage = new DriveStorage(context.getApplicationContext(), connector.client, localStorage);
 					driveStorage.listen(connector.connectedPromise);
 
 					storage = driveStorage;
@@ -72,7 +72,7 @@ public class StorageManager {
 			@Override
 			public void onCalled(DriveLoginManager.LoginResult result) {
 				if(result.success){
-					DriveStorage driveStorage = new DriveStorage(context, loginManager.getClient(), localStorage);
+					DriveStorage driveStorage = new DriveStorage(context.getApplicationContext(), loginManager.getClient(), localStorage);
 					driveStorage.listen(loginManager.connectedPromise);
 
 					localStorage.getPreferences().edit()
@@ -143,7 +143,7 @@ public class StorageManager {
 
 	private static void restart(Activity context) {
 		context.finishAffinity();
-		FeedActivity.gotoAll();
+		FeedActivity.goToAll();
 		context.startActivity(new Intent(context, FeedActivity.class));
 		//context.startActivity(new Intent(context, context.getClass()));
 	}

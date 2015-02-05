@@ -29,6 +29,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 
     public Callback callback = null;
     public AlertDialog alertDialog;
+    public MenuItem detailMenuPay;
 
 	private TextView dialog_custom_amount;
 
@@ -108,16 +109,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
-                FeedActivity.detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
+                detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
 
                 if (debt.getAmount() < 0) {
-                    if (SwishLauncher.hasService(getActivity())) {
-                        FeedActivity.detailMenuPay.setEnabled(true);
+                    if (SwishLauncher.hasService(getActivity().getPackageManager())) {
+                        detailMenuPay.setEnabled(true);
                     } else {
-                        FeedActivity.detailMenuPay.setEnabled(false);
+                        detailMenuPay.setEnabled(false);
                     }
                 } else {
-                    FeedActivity.detailMenuPay.setVisible(false);
+                    detailMenuPay.setVisible(false);
                 }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

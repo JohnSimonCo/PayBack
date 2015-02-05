@@ -17,13 +17,11 @@ import java.util.ArrayList;
 
 public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.ViewHolder> {
 
-    //TODO Bli av med mer static grejer
-
-	public static DataActivity activity;
-	public static View emptyView;
+	private DataActivity activity;
+	private View emptyView;
     private AppData data;
-    public static TextView managerTitle;
-	public static ArrayList<Person> people;
+    private TextView managerTitle;
+    public ArrayList<Person> people;
 
 	public PeopleListClickListener clickListener = null;
 
@@ -86,7 +84,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 		return people.size();
 	}
 
-	public static void updateEmptyViewVisibility() {
+	public void updateEmptyViewVisibility() {
 		if (people.size() == 1) {
 			managerTitle.setText("1 " + activity.getString(R.string.person));
 		} else {
