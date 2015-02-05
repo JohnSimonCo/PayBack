@@ -1,8 +1,10 @@
 package com.johnsimon.payback.util;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.core.DataContextInterface;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Person;
 
@@ -12,7 +14,8 @@ public class ColorPalette {
     private AppData data;
 
 	private int[] palette;
-	public ColorPalette(Resources resources) {
+	public ColorPalette(Context context) {
+        Resources resources = context.getResources();
         palette = new int[] {
 			resources.getColor(R.color.color1),
 			resources.getColor(R.color.color2),
@@ -49,12 +52,12 @@ public class ColorPalette {
 		return palette[index];
 	}
 
-	public static ColorPalette getInstance(Resources resources, AppData appData) {
+	public static ColorPalette getInstance(DataContextInterface dataContext) {
 		if(instance == null) {
-			instance = new ColorPalette(resources);
+			instance = new ColorPalette(dataContext.getContext());
 		}
 
-		instance.data = appData;
+		instance.data = dataContext.getData();
 
 		return instance;
 	}

@@ -7,13 +7,14 @@ import android.widget.RemoteViewsService;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.core.DataContextInterface;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.loader.ContactsLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 
-public abstract class DataWidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+public abstract class DataWidgetViewsFactory implements DataContextInterface, RemoteViewsService.RemoteViewsFactory {
 
     protected AppData data;
     protected Storage storage;
@@ -29,6 +30,16 @@ public abstract class DataWidgetViewsFactory implements RemoteViewsService.Remot
         contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ctx.getContentResolver());
 
         dataLink = new DataLinker().link(storage.subscription, contactsLoader.promise);
+    }
+
+    @Override
+    public Context getContext() {
+        return ctx;
+    }
+
+    @Override
+    public AppData getData() {
+        return data;
     }
 
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {

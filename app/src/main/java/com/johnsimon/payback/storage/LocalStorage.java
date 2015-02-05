@@ -3,12 +3,11 @@ package com.johnsimon.payback.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.Random;
@@ -44,7 +43,7 @@ public class LocalStorage extends Storage {
 
 		dataActivity.data = data;
 
-		ColorPalette colorPalette = ColorPalette.getInstance(context.getResources(), data);
+		ColorPalette colorPalette = ColorPalette.getInstance(dataActivity);
 
 		for(int i = 0; i < 25; i++) {
 

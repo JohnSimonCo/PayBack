@@ -154,7 +154,7 @@ public class Resource {
                     .into(avatar);
 		} else {
             avatar.setImageBitmap(null);
-			avatar.setImageDrawable(new AvatarPlaceholderDrawable(dataActivity.getContext().getResources(), dataActivity.getData(), person.paletteIndex));
+			avatar.setImageDrawable(new AvatarPlaceholderDrawable(ColorPalette.getInstance(dataActivity), person.paletteIndex));
 			avatarLetter.setVisibility(View.VISIBLE);
 			avatarLetter.setText(person.getAvatarLetter());
 		}

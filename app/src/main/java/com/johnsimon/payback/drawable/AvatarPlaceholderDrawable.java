@@ -1,18 +1,15 @@
 package com.johnsimon.payback.drawable;
 
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 
-import com.johnsimon.payback.core.DataActivityInterface;
-import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.ColorPalette;
 
 public class AvatarPlaceholderDrawable extends Drawable {
 	private int color;
-	public AvatarPlaceholderDrawable(Resources resources, AppData appData, int paletteIndex) {
-		this.color = ColorPalette.getInstance(resources, appData).getColor(paletteIndex);
+	public AvatarPlaceholderDrawable(ColorPalette colorPalette, int paletteIndex) {
+		this.color = colorPalette.getColor(paletteIndex);
 	}
 	@Override
 	public void draw(Canvas canvas) {

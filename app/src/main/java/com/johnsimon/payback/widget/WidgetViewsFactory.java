@@ -8,11 +8,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
-import com.squareup.picasso.Picasso;
 
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
@@ -54,7 +53,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         if (debt.getOwner().hasImage()) {
             row.setImageViewUri(R.id.list_item_avatar, Uri.parse(debt.getOwner().link.photoURI));
         } else {
-            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ctx.getResources(), data, debt.getOwner().paletteIndex)));
+            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ColorPalette.getInstance(this), debt.getOwner().paletteIndex)));
             row.setViewVisibility(R.id.list_item_avatar_letter, View.VISIBLE);
             row.setTextViewText(R.id.list_item_avatar_letter, debt.getOwner().getAvatarLetter());
         }
@@ -77,6 +76,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         Intent intent = new Intent();
         Bundle extras = new Bundle();
 
+        //TODO nämen, här ståre bajs!
         extras.putString(ListWidgetService.EXTRA_SEND, "bajs");
         intent.putExtras(extras);
         row.setOnClickFillInIntent(R.id.feed_list_item_master, intent);

@@ -170,7 +170,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 			fragment.completeCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
 				@Override
 				public void onSelected(String name) {
-					Person person = new Person(name, ColorPalette.getInstance(getResources(), data));
+					Person person = new Person(name, ColorPalette.getInstance(PeopleManagerActivity.this));
                     data.add(person);
                     DataLinker.link(person, data.contacts);
                     PeopleListAdapter.people.add(person);

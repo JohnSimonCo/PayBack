@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.core.Contact;
-import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.ui.FeedActivity;
@@ -197,7 +196,7 @@ public class AppData {
         }
     }
 
-    public Person getOrCreatePerson(String name, DataActivity activity) {
+    public Person getOrCreatePerson(String name, ColorPalette colorPalette) {
         //Try to find existing person
         Person person = findPersonByName(name);
         if(person != null) {
@@ -214,7 +213,7 @@ public class AppData {
             }
         }
         //Create person and add to people
-        person = new Person(name, ColorPalette.getInstance(activity.getResources(), activity.getData()));
+        person = new Person(name, colorPalette);
         person.link = link;
 
         add(person);

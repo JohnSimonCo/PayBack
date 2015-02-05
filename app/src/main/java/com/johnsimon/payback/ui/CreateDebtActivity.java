@@ -45,6 +45,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
@@ -326,12 +327,12 @@ public class CreateDebtActivity extends DataActivity {
 
 		Person person;
 		if(editingDebt == null) {
-			person = data.getOrCreatePerson(name, this);
+			person = data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 			data.addFirst(new Debt(person, amount, note, data.preferences.getCurrency().id));
 		} else {
 			person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()
-				: data.getOrCreatePerson(name, this);
+				: data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 
 			editingDebt.edit(person, amount, note);
 		}

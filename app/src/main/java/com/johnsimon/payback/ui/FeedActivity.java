@@ -38,6 +38,7 @@ import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Beamer;
+import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
@@ -405,7 +406,7 @@ public class FeedActivity extends DataActivity implements
 		fragment.completeCallback = new FromWhoDialogFragment.FromWhoSelected() {
 			@Override
 			public void onSelected(String name) {
-				person = data.getOrCreatePerson(name, self);
+				person = data.getOrCreatePerson(name, ColorPalette.getInstance(FeedActivity.this));
 
 				if(fullSync) {
 
