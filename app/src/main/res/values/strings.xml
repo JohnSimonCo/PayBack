@@ -8,7 +8,7 @@
     <string name="balance">Balance:</string>
     <string name="title_activity_setup">Pay Back</string>
     <string name="welcome">Welcome to Pay Back!</string>
-    <string name="list_empty_text">Once you add an entry,\nyou\'ll see it listed here</string>
+    <string name="list_empty_text">Once you add an entry, you\'ll see it listed here</string>
     <string name="even">We\'re even!</string>
     <string name="person_hint">Who?</string>
     <string name="they_owe">They owe</string>
@@ -60,7 +60,7 @@
     <string name="cancel">Cancel</string>
     <string name="you">You</string>
     <string name="rate_title">Rate Pay Back!</string>
-    <string name="rate_text">If you like our app, please take a moment to rate it on Google Play!</string>
+    <string name="rate_text">If you like our app, please take a moment to rate it on the Play Store!</string>
     <string name="ok">OK</string>
     <string name="rate_now">Rate now</string>
     <string name="rate_later">Maybe later</string>
