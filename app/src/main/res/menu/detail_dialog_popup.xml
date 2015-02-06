@@ -15,6 +15,10 @@
         android:title="@string/change_person"    />
 
     <item
+        android:id="@+id/detail_dialog_remind"
+        android:title="@string/set_reminder"    />
+
+    <item
         android:id="@+id/detail_dialog_pay_back"
         android:title="@string/pay_with_swish"    />
 

@@ -123,6 +123,7 @@
     <string name="backup_removed_success">Backup removed successfully</string>
     <string name="disabled_in_free">Disabled in free version</string>
     <string name="no_backup_available">No backup available</string>
+    <string name="set_reminder">Set reminder</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -149,6 +150,8 @@
     <string name="author_rbm">Evgeny Shishkin</string>
     <string name="lib_iab">Android In-App Billing</string>
     <string name="author_iab">AnjLab</string>
+    <string name="lib_bp">Betterpickers</string>
+    <string name="author_bp">Derek Brameyer</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>

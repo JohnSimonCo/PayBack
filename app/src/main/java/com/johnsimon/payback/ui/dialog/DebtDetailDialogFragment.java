@@ -158,6 +158,13 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 alertDialog.dismiss();
                                 return true;
 
+                            case R.id.detail_dialog_remind:
+                                if (!Resource.isFull) {
+                                    //TODO UX discussion about this
+                                } else {
+
+                                }
+                                return true;
 							case R.id.detail_dialog_pay_back:
                                 SwishLauncher.startSwish(getActivity(), debt.getAmount(), debt.getOwner());
 								return true;

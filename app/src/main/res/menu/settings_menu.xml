@@ -7,4 +7,9 @@
         android:title="@string/remove_backup"
         app:showAsAction="never"    />
 
+    <item
+        android:id="@+id/menu_settings_rate"
+        android:title="@string/rate_title"
+        app:showAsAction="never"    />
+
 </menu>

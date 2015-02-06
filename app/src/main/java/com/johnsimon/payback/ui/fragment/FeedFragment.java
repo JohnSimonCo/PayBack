@@ -172,7 +172,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 adapter.notifyDataSetChanged();
             }
 
-			scrollListener.mHeader.setTranslationY(0f);
+			scrollListener.forceUpdateTranslationY();
 
 			adapter.checkAdapterIsEmpty();
 		}

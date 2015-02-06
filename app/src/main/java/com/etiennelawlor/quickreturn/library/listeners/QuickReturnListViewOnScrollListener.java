@@ -171,6 +171,10 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
 		}
 	}
 
+    public void forceUpdateTranslationY() {
+        mHeader.setTranslationY(Math.min(Math.max(mHeaderDiffTotal, mMinHeaderTranslation), 0));
+    }
+
     public void setCanSlideInIdleScrollState(boolean canSlideInIdleScrollState){
         mCanSlideInIdleScrollState = canSlideInIdleScrollState;
     }
