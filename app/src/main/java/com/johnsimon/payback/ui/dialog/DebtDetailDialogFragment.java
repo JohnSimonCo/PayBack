@@ -52,7 +52,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         Button dialog_custom_confirm = (Button) rootView.findViewById(R.id.dialog_custom_confirm);
         Button dialog_custom_cancel = (Button) rootView.findViewById(R.id.dialog_custom_cancel);
 
-
         if (debt.isPaidBack()) {
             dialog_custom_confirm.setText(R.string.undo_pay_back);
             dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
@@ -158,13 +157,13 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 alertDialog.dismiss();
                                 return true;
 
-                      //TODO CONT      case R.id.detail_dialog_remind:
-                      //          if (!Resource.isFull) {
+                                case R.id.detail_dialog_remind:
+                                if (!Resource.isFull) {
                                     //TODO UX discussion about this
-                      //          } else {
+                                } else {
 
-                      //          }
-                      //          return true;
+                                }
+                                return true;
 							case R.id.detail_dialog_pay_back:
                                 SwishLauncher.startSwish(getActivity(), debt.getAmount(), debt.getOwner());
 								return true;

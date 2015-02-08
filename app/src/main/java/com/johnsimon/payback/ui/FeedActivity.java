@@ -570,17 +570,20 @@ public class FeedActivity extends DataActivity implements
 
 			private void notifyDataSetChanged() {
 				feedFragment.adapter.notifyDataSetChanged();
-				navigationDrawerFragment.updateBalance();
-
-				feedFragment.displayTotalDebt(getResources());
+				feedFragment.feedChangeCallback.onFeedChange();
 			}
 		});
-
 	}
 
     @Override
     public void onFeedChange() {
         navigationDrawerFragment.updateBalance();
-        //TODO more refresh
+        if (data.isEven(feed)) {
+            menu_even_out.setVisible(false);
+        } else {
+            menu_even_out.setVisible(true);
+        }
+
+        feedFragment.displayTotalDebt(getResources());
     }
 }

@@ -358,7 +358,6 @@ public class NavigationDrawerFragment extends DataFragment {
         }
     }
 
-	//TODO varför behöver den data?
 	public void updateBalance() {
 		headerPlus.setText("+ " + data.preferences.getCurrency().render(data.totalPlus()));
 		headerMinus.setText("- " + data.preferences.getCurrency().render(data.totalMinus()));

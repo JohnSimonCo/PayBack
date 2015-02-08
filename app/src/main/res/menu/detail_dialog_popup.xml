@@ -13,10 +13,10 @@
     <item
         android:id="@+id/detail_dialog_change"
         android:title="@string/change_person"    />
-<!--
+
     <item
         android:id="@+id/detail_dialog_remind"
-        android:title="@string/set_reminder"    />-->
+        android:title="@string/set_reminder"    />
 
     <item
         android:id="@+id/detail_dialog_pay_back"

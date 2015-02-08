@@ -201,15 +201,12 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		debt.setPaidBack(!debt.isPaidBack());
         storage.commit();
 		adapter.notifyDataSetChanged();
-
-		if (getResources() != null) {
-			displayTotalDebt(getResources());
-		}
+        feedChangeCallback.onFeedChange();
 
 		Resource.actionComplete(getActivity());
 	}
 
-	public void displayTotalDebt(Resources resources) {
+    public void displayTotalDebt(Resources resources) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -219,8 +216,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         }
 
 		totalDebtTextView.setText(Debt.totalString(debt, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
-
-        feedChangeCallback.onFeedChange();
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -292,8 +287,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 							FeedActivity.feed.remove(index);
 							adapter.notifyItemRemoved(index);
 							adapter.checkAdapterIsEmpty();
-
-							displayTotalDebt(getResources());
+                            feedChangeCallback.onFeedChange();
 						}
 
 						@Override
@@ -301,8 +295,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 							FeedActivity.feed.add(index, debt);
 							adapter.notifyItemInserted(index);
 							adapter.checkAdapterIsEmpty();
-
-							displayTotalDebt(getResources());
+                            feedChangeCallback.onFeedChange();
 						}
 
 						@Override
@@ -334,10 +327,12 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 			FeedActivity.feed.remove(index);
             adapter.notifyItemRemoved(index);
+            feedChangeCallback.onFeedChange();
 		}
 
 		Resource.actionComplete(getActivity());
 		adapter.notifyDataSetChanged();
+        feedChangeCallback.onFeedChange();
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
@@ -95,7 +96,6 @@ public class PaidBackDialogFragment extends DialogFragment {
 				alertDialog.dismiss();
 			}
 		}, 1000);
-
 
 		return alertDialog;
 	}
