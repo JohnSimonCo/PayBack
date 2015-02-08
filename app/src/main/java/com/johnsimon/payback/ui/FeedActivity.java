@@ -46,6 +46,8 @@ import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
@@ -525,6 +527,39 @@ public class FeedActivity extends DataActivity implements
 
         feedFragment.displayTotalDebt(getResources(), userCurrency);
     }
+
+	public void onEvenOut() {
+
+		final HashSet<UUID> wasPaidback = new HashSet<>();
+
+		for(Debt debt: feed) {
+			wasPaidback.add(debt.id);
+		}
+
+		Undo.executeAction(this, R.string.renamed_person, new Undo.UndoableAction() {
+			@Override
+			public void onDisplay() {
+				for(Debt debt: feed) {
+					debt.setPaidBack(true);
+				}
+				feedFragment.adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onRevert() {
+				for(Debt debt: feed) {
+					debt.setPaidBack(wasPaidback.contains(debt.id));
+				}
+				feedFragment.adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onCommit() {
+				storage.commit();
+			}
+		});
+
+	}
 
     @Override
     public void onUpdateAmount() {

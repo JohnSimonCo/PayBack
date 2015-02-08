@@ -369,7 +369,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             @Override
             public void onCommit() {
-                adapter.notifyDataSetChanged();
+				//TODO might not be needed
+                //adapter.notifyDataSetChanged();
 
                 storage.commit();
             }
