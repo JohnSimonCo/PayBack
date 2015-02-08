@@ -29,20 +29,24 @@ uses-permission#android.permission.GET_ACCOUNTS
 ADDED from AndroidManifest.xml:8:5
 	android:name
 		ADDED from AndroidManifest.xml:8:22
-uses-permission#com.android.vending.BILLING
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from AndroidManifest.xml:9:5
-MERGED from com.anjlab.android.iab.v3:library:1.0.19:11:5
 	android:name
 		ADDED from AndroidManifest.xml:9:22
+uses-permission#com.android.vending.BILLING
+ADDED from AndroidManifest.xml:10:5
+MERGED from com.anjlab.android.iab.v3:library:1.0.20:11:5
+	android:name
+		ADDED from AndroidManifest.xml:10:22
 application
-ADDED from AndroidManifest.xml:11:5
+ADDED from AndroidManifest.xml:12:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:recyclerview-v7:21.0.0:17:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.shamanland:fab:0.0.7:12:5
 MERGED from com.williammora:snackbar:1.4.0:12:5
-MERGED from com.anjlab.android.iab.v3:library:1.0.19:13:5
+MERGED from com.anjlab.android.iab.v3:library:1.0.20:13:5
 MERGED from com.google.android.gms:play-services-drive:6.5.87:19:5
 MERGED from com.google.android.gms:play-services-base:6.5.87:20:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
@@ -52,17 +56,17 @@ MERGED from com.android.support:appcompat-v7:21.0.3:16:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.mcxiaoke.volley:library:1.0.10:11:5
 	android:allowBackup
-		ADDED from AndroidManifest.xml:12:9
-	android:icon
 		ADDED from AndroidManifest.xml:13:9
-	android:theme
+	android:icon
 		ADDED from AndroidManifest.xml:14:9
+	android:theme
+		ADDED from AndroidManifest.xml:15:9
 meta-data#com.google.android.apps.drive.APP_ID
-ADDED from AndroidManifest.xml:26:9
+ADDED from AndroidManifest.xml:27:9
 	android:value
-		ADDED from AndroidManifest.xml:28:13
+		ADDED from AndroidManifest.xml:29:13
 	android:name
-		ADDED from AndroidManifest.xml:27:13
+		ADDED from AndroidManifest.xml:28:13
 activity#com.johnsimon.payback.ui.FeedActivity
 ADDED from AndroidManifest.xml:31:9
 	android:label
@@ -138,7 +142,7 @@ MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.shamanland:fab:0.0.7:8:5
 MERGED from com.makeramen:roundedimageview:1.4.0:7:5
 MERGED from com.williammora:snackbar:1.4.0:8:5
-MERGED from com.anjlab.android.iab.v3:library:1.0.19:7:5
+MERGED from com.anjlab.android.iab.v3:library:1.0.20:7:5
 MERGED from com.google.android.gms:play-services-drive:6.5.87:18:5
 MERGED from com.google.android.gms:play-services-base:6.5.87:18:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
