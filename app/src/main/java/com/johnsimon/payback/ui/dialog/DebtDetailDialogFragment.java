@@ -78,9 +78,9 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                 PaidBackDialogFragment paidBackDialogFragment;
 
                 if (debt.isPaidBack()) {
-                    paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK, debt);
+                    paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK, debt, false);
                 } else {
-                    paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, debt);
+                    paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, debt, false);
                 }
                 paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
                 paidBackDialogFragment.completeCallback = self;

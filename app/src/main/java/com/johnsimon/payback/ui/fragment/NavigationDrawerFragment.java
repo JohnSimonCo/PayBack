@@ -169,7 +169,7 @@ public class NavigationDrawerFragment extends DataFragment {
         setSelectedPerson(FeedActivity.person);
         selectItem(mCurrentSelectedPosition);
 
-        updateBalance(data);
+        updateBalance();
     }
 
     @Override
@@ -359,7 +359,7 @@ public class NavigationDrawerFragment extends DataFragment {
     }
 
 	//TODO varför behöver den data?
-	public void updateBalance(AppData data) {
+	public void updateBalance() {
 		headerPlus.setText("+ " + data.preferences.getCurrency().render(data.totalPlus()));
 		headerMinus.setText("- " + data.preferences.getCurrency().render(data.totalMinus()));
 	}

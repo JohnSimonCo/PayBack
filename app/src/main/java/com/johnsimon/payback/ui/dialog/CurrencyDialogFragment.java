@@ -288,14 +288,14 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			data.preferences.currency.setValue(userCurrency);
 			storage.commit();
 
-            currencySelectedCallback.onCurrencySelected(userCurrency);
+            currencySelectedCallback.onCurrencySelected();
 
 			alertDialog.dismiss();
 		}
 	};
 
     public interface CurrencySelectedCallback {
-        public void onCurrencySelected(UserCurrency userCurrency);
+        public void onCurrencySelected();
     }
 
 }

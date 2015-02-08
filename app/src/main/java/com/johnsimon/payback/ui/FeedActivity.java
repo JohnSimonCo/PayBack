@@ -51,7 +51,7 @@ import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
-        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback, FeedFragment.OnUpdateAmountCallback {
+        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback, FeedFragment.OnFeedChangeCallback {
 
     public BillingProcessor bp;
 
@@ -66,6 +66,7 @@ public class FeedActivity extends DataActivity implements
 	public Notification feedLinkedNotification = new Notification();
 
 	private MenuItem filterAmount;
+    private MenuItem menu_even_out;
 
 	private NavigationDrawerFragment navigationDrawerFragment;
 
@@ -138,7 +139,7 @@ public class FeedActivity extends DataActivity implements
 		}
 
         feedFragment = new FeedFragment();
-        feedFragment.callback = this;
+        feedFragment.feedChangeCallback = this;
 
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, feedFragment, "feed_fragment_tag")
@@ -223,7 +224,7 @@ public class FeedActivity extends DataActivity implements
 
 		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
 
-        feedFragment.displayTotalDebt(getResources(), data.preferences.getCurrency());
+        feedFragment.displayTotalDebt(getResources());
 
 	}
 
@@ -238,28 +239,28 @@ public class FeedActivity extends DataActivity implements
 		getMenuInflater().inflate(R.menu.feed, menu);
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
-        MenuItem fulllMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+        MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
 
         if (attemptCheckFilterAmount) {
             filterAmount.setChecked(true);
         }
 
-        if (isAll()) {
-            MenuItem menu_even_out = menu.findItem(R.id.menu_even_out);
+        menu_even_out = menu.findItem(R.id.menu_even_out);
+
+        if (isAll() || data.isEven(feed)) {
             menu_even_out.setVisible(false);
         }
 
         sort();
 
 		if (isAll()) {
-			fulllMenuPay.setVisible(false);
+			fullMenuPay.setVisible(false);
 		} else {
             if (!SwishLauncher.hasService(getPackageManager()) || AppData.total(feed) >= 0) {
-                fulllMenuPay.setEnabled(false);
+                fullMenuPay.setEnabled(false);
             } else {
-                fulllMenuPay.setEnabled(true);
+                fullMenuPay.setEnabled(true);
 			}
-
 		}
 		return true;
 	}
@@ -284,7 +285,7 @@ public class FeedActivity extends DataActivity implements
 				break;
 
             case R.id.menu_even_out:
-                //onEvenOut();
+                onEvenOut();
                 break;
 
 		}
@@ -530,11 +531,11 @@ public class FeedActivity extends DataActivity implements
     }
 
     @Override
-    public void onCurrencySelected(UserCurrency userCurrency) {
+    public void onCurrencySelected() {
         feedFragment.adapter.notifyDataSetChanged();
-        navigationDrawerFragment.updateBalance(data);
+        navigationDrawerFragment.updateBalance();
 
-        feedFragment.displayTotalDebt(getResources(), userCurrency);
+        feedFragment.displayTotalDebt(getResources());
     }
 
 	public void onEvenOut() {
@@ -569,16 +570,17 @@ public class FeedActivity extends DataActivity implements
 
 			private void notifyDataSetChanged() {
 				feedFragment.adapter.notifyDataSetChanged();
-				navigationDrawerFragment.updateBalance(data);
+				navigationDrawerFragment.updateBalance();
 
-				feedFragment.displayTotalDebt(getResources(), data.preferences.getCurrency());
+				feedFragment.displayTotalDebt(getResources());
 			}
 		});
 
 	}
 
     @Override
-    public void onUpdateAmount() {
-        navigationDrawerFragment.updateBalance(data);
+    public void onFeedChange() {
+        navigationDrawerFragment.updateBalance();
+        //TODO more refresh
     }
 }

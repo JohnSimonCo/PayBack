@@ -63,7 +63,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	private Subscription<ArrayList<Debt>> feedSubscription;
 	private Notification feedLinkedNotification;
 
-    public OnUpdateAmountCallback callback;
+    public OnFeedChangeCallback feedChangeCallback;
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -180,7 +180,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 	@Override
 	protected void onDataReceived() {
-		displayTotalDebt(getResources(), data.preferences.getCurrency());
+		displayTotalDebt(getResources());
 
 		if (data.preferences.getBackground().equals("mountains")) {
 			headerImage.setImageResource(R.drawable.art);
@@ -203,14 +203,13 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		adapter.notifyDataSetChanged();
 
 		if (getResources() != null) {
-			displayTotalDebt(getResources(), data.preferences.getCurrency());
+			displayTotalDebt(getResources());
 		}
 
 		Resource.actionComplete(getActivity());
 	}
 
-	//TODO varför behöver den en currency?
-	public void displayTotalDebt(Resources resources, UserCurrency currency) {
+	public void displayTotalDebt(Resources resources) {
 		float debt = AppData.total(FeedActivity.feed);
 
         if (debt == 0) {
@@ -219,9 +218,9 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, currency, resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
+		totalDebtTextView.setText(Debt.totalString(debt, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
 
-        callback.onUpdateAmount();
+        feedChangeCallback.onFeedChange();
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -294,7 +293,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 							adapter.notifyItemRemoved(index);
 							adapter.checkAdapterIsEmpty();
 
-							displayTotalDebt(getResources(), data.preferences.getCurrency());
+							displayTotalDebt(getResources());
 						}
 
 						@Override
@@ -303,7 +302,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 							adapter.notifyItemInserted(index);
 							adapter.checkAdapterIsEmpty();
 
-							displayTotalDebt(getResources(), data.preferences.getCurrency());
+							displayTotalDebt(getResources());
 						}
 
 						@Override
@@ -351,8 +350,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		startActivity(intent);
 	}
 
-    public interface OnUpdateAmountCallback {
-        public void onUpdateAmount();
+    public interface OnFeedChangeCallback {
+        public void onFeedChange();
     }
 
 }

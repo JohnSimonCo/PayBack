@@ -187,8 +187,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
                 currencyDialogFragment.currencySelectedCallback = new CurrencyDialogFragment.CurrencySelectedCallback() {
                     @Override
-                    public void onCurrencySelected(UserCurrency userCurrency) {
-                        pref_currency.setSummary(userCurrency.render());
+                    public void onCurrencySelected() {
+                        pref_currency.setSummary(data.preferences.getCurrency().render());
                     }
                 };
 
