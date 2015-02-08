@@ -178,9 +178,13 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 						.itemsCallbackSingleChoice(currencyNames.indexOf(selectedCurrency), new MaterialDialog.ListCallback() {
 							@Override
 							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								selectedCurrency = currencyNames.get(which);
-								displayCurrency = text.toString();
-								updatePreview();
+								try {
+                                    selectedCurrency = currencyNames.get(which);
+                                    displayCurrency = text.toString();
+                                    updatePreview();
+                                } catch (Exception e) {
+                                    //TODO mer avancerad crash prevention
+                                }
 							}
 						})
 						.positiveText(R.string.select)
