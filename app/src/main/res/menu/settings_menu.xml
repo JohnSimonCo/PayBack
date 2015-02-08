@@ -8,6 +8,7 @@
         app:showAsAction="never"    />
 
     <item
+        android:visible="false"
         android:id="@+id/menu_settings_rate"
         android:title="@string/rate_title"
         app:showAsAction="never"    />

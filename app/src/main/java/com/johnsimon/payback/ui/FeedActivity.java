@@ -159,7 +159,7 @@ public class FeedActivity extends DataActivity implements
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
 
         //TODO REMOVE
-        LocalStorage.test(this, data);
+        //LocalStorage.test(this, data);
     }
 
     @Override
