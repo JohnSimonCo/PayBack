@@ -542,7 +542,7 @@ public class FeedActivity extends DataActivity implements
 				for(Debt debt: feed) {
 					debt.setPaidBack(true);
 				}
-				feedFragment.adapter.notifyDataSetChanged();
+				notifyDataSetChanged();
 			}
 
 			@Override
@@ -550,12 +550,19 @@ public class FeedActivity extends DataActivity implements
 				for(Debt debt: feed) {
 					debt.setPaidBack(wasPaidback.contains(debt.id));
 				}
-				feedFragment.adapter.notifyDataSetChanged();
+				notifyDataSetChanged();
 			}
 
 			@Override
 			public void onCommit() {
 				storage.commit();
+			}
+
+			private void notifyDataSetChanged() {
+				feedFragment.adapter.notifyDataSetChanged();
+				navigationDrawerFragment.updateBalance(data);
+
+				feedFragment.displayTotalDebt(getResources(), data.preferences.getCurrency());
 			}
 		});
 

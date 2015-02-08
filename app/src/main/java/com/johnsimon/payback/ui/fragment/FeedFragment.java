@@ -208,6 +208,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 		Resource.actionComplete(getActivity());
 	}
+
+	//TODO varför behöver den en currency?
 	public void displayTotalDebt(Resources resources, UserCurrency currency) {
 		float debt = AppData.total(FeedActivity.feed);
 
