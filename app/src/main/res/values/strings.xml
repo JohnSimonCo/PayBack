@@ -150,8 +150,6 @@
     <string name="author_rbm">Evgeny Shishkin</string>
     <string name="lib_iab">Android In-App Billing</string>
     <string name="author_iab">AnjLab</string>
-    <string name="lib_bp">Betterpickers</string>
-    <string name="author_bp">Derek Brameyer</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>
