@@ -325,7 +325,7 @@ public class FeedActivity extends DataActivity implements
 
                 final FeedActivity self = this;
 
-                new MaterialDialog.Builder(getApplicationContext())
+                new MaterialDialog.Builder(this)
                         .title(getString(R.string.upgrade_title))
                         .content(getString(R.string.upgrade_text))
                         .positiveText(R.string.upgrade_confirm_text)
@@ -388,8 +388,6 @@ public class FeedActivity extends DataActivity implements
 
         if(!Resource.canHold(data.debts.size(), debts.length)) {
 
-            final FeedActivity self = this;
-
             new MaterialDialog.Builder(this)
                     .title(getString(R.string.upgrade_title))
                     .content(getString(R.string.upgrade_text))
@@ -399,7 +397,7 @@ public class FeedActivity extends DataActivity implements
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            bp.purchase(self, "full_version");
+                            bp.purchase(FeedActivity.this, "full_version");
                             dialog.dismiss();
                         }
 
@@ -428,7 +426,7 @@ public class FeedActivity extends DataActivity implements
 
 				if(fullSync) {
 
-                    new MaterialDialog.Builder(self)
+                    new MaterialDialog.Builder(FeedActivity.this)
                             .content(String.format(self.getString(R.string.overwrite_nfc_text), person.getName()))
                             .positiveText(R.string.overwrite_nfc_title)
                             .negativeText(R.string.cancel)
@@ -496,7 +494,7 @@ public class FeedActivity extends DataActivity implements
             return;
         }
 
-        new MaterialDialog.Builder(getApplicationContext())
+        new MaterialDialog.Builder(this)
                 .title(R.string.cloud_sync)
                 .content(R.string.cloud_sync_description_first)
                 .positiveText(R.string.activate)

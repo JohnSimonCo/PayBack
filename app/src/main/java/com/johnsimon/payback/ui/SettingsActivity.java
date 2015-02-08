@@ -84,7 +84,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
 
-        final Activity self = this;
 		Preference pref_export_data = findPreference("pref_export_data");
 		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
@@ -144,7 +143,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                     storage.commit(AppData.fromJson(JSON));
                                     storage.emit();
 
-                                    Snackbar.with(self).text(self.getString(R.string.restore_success)).show(self);
+                                    Snackbar.with(SettingsActivity.this).text(SettingsActivity.this.getString(R.string.restore_success)).show(SettingsActivity.this);
 
                                     dialog.dismiss();
                                 }
@@ -230,7 +229,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (pref_cloud_sync.isChecked()) {
 
-					new MaterialDialog.Builder(self)
+					new MaterialDialog.Builder(SettingsActivity.this)
 							.title(R.string.disable_cloud_sync_title)
 							.content(R.string.disable_cloud_sync_content)
 							.positiveText(R.string.disable_cloud_sync_affirmative)
@@ -247,14 +246,14 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 								@Override
 								public void onPositive(MaterialDialog dialog) {
 									super.onPositive(dialog);
-									StorageManager.migrateToLocal(self);
+									StorageManager.migrateToLocal(SettingsActivity.this);
 									pref_cloud_sync_account.setSummary("");
 									dialog.dismiss();
 								}
 							})
 					.show();
                 } else {
-                    new MaterialDialog.Builder(self)
+                    new MaterialDialog.Builder(SettingsActivity.this)
                             .cancelable(false)
                             .title(R.string.cloud_sync)
                             .content(R.string.cloud_sync_description)
@@ -298,7 +297,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				new MaterialDialog.Builder(self)
+				new MaterialDialog.Builder(SettingsActivity.this)
 						.cancelable(true)
 						.title(R.string.wipe_data)
 						.content(Resource.isFull ? R.string.wipe_data_confirm_full : R.string.wipe_data_confirm_free)
