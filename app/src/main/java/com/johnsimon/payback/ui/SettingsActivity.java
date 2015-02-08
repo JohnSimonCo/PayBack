@@ -358,13 +358,15 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
         _toolbar.inflateMenu(R.menu.settings_menu);
 
-        if (Resource.isFull) {
-            if (!FileManager.hasFile()) {
-                MenuItem removeBackup = _toolbar.getMenu().findItem(R.id.menu_settings_remove_backup);
-                removeBackup.setVisible(false);
+        if (!FileManager.hasFile()) {
+            MenuItem removeBackup = _toolbar.getMenu().findItem(R.id.menu_settings_remove_backup);
+            removeBackup.setVisible(false);
+            if (Resource.isFull) {
                 pref_import_data.setEnabled(false);
                 pref_import_data.setSummary(R.string.no_backup_available);
-            } else {
+            }
+        } else {
+            if (Resource.isFull) {
                 pref_import_data.setEnabled(true);
                 pref_import_data.setSummary(null);
             }
