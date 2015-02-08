@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.data.Debt;
 
@@ -20,10 +21,12 @@ public class PaidBackDialogFragment extends DialogFragment {
 
 	private static boolean payBack = false;
 	private static Debt debt;
+    private static boolean evenOut;
 
-	public static PaidBackDialogFragment newInstance(int flag, Debt _debt) {
+	public static PaidBackDialogFragment newInstance(int flag, Debt _debt, boolean _evenOut) {
 		payBack = flag == PAY_BACK;
 		debt = _debt;
+        evenOut = _evenOut;
 		return new PaidBackDialogFragment();
 	}
 
@@ -60,6 +63,12 @@ public class PaidBackDialogFragment extends DialogFragment {
 					frameAnimation.start();
 				}
 			});
+
+            if (evenOut) {
+                RobotoTextView paid_back_dialog_text = (RobotoTextView) rootView.findViewById(R.id.paid_back_dialog_text);
+                paid_back_dialog_text.setText(R.string.evened_out);
+                //TODO CONT
+            }
 		} else {
 			rootView = inflater.inflate(R.layout.paid_back_dialog_reverse, null);
 

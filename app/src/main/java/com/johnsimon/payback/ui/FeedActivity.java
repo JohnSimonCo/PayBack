@@ -244,6 +244,11 @@ public class FeedActivity extends DataActivity implements
             filterAmount.setChecked(true);
         }
 
+        if (isAll()) {
+            MenuItem menu_even_out = menu.findItem(R.id.menu_even_out);
+            menu_even_out.setVisible(false);
+        }
+
         sort();
 
 		if (isAll()) {
@@ -277,6 +282,10 @@ public class FeedActivity extends DataActivity implements
 			case R.id.feed_menu_pay_back:
 				SwishLauncher.startSwish(this, AppData.total(feed), person);
 				break;
+
+            case R.id.menu_even_out:
+                //onEvenOut();
+                break;
 
 		}
 

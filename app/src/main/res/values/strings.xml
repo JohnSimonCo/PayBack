@@ -124,6 +124,8 @@
     <string name="disabled_in_free">Disabled in free version</string>
     <string name="no_backup_available">No backup available</string>
     <string name="set_reminder">Set reminder</string>
+    <string name="even_out">Even out</string>
+    <string name="evened_out">Evened out</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

@@ -4,8 +4,14 @@
       tools:context="se.jrp.deptapp.FeedActivity">
 
     <item
+        android:id="@+id/menu_even_out"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_check"
+        android:title="@string/even_out"    />
+
+    <item
         android:id="@+id/menu_filter"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_filter"
         android:title="@string/filter"  >
 
