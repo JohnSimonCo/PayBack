@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    <string name="Play Store Description">
+        Pay Back è un programma di gestione IOU (I Owe You = Ti devo) che ti può aiutare ad organizzare i tuoi debiti/crediti personali. Tieni traccia dei tuoi debiti utilizzando un'interfaccia semplice e lineare con un design moderno. Sincronizza i dati con i tuoi amici utilizzando l'NFC.
+        Nella versione gratuita avrai il limite di 5 debiti simultanei e i tuoi dati non verranno sincronizzati tra i tuoi dispositivi. Un acquisto in-app è necessario per sbloccare la versione completa.
+        <b>Le funzioni includono:</b>
+        &bull; Visione d'insieme dei tuoi debiti
+        &bull; Material Design
+        &bull; Sincronizzazione tramite NFC
+        &bull; Visualizza il tuo bilancio globale ed individuale
+        &bull; Ottimizzato per Android Lollipop
+        &bull; Integrazione con contatti telefonici
+        <b>La versione completa aggiunge:</b>
+        &bull; Rimozione limite di 5 debiti simultanei
+        &bull; Sincronizzazione su più dispositivi
+        &bull; Backup e ripristino dati
+        Icona realizzata da Jovie Brett Bardoles, dai un'occhiati ai suoi altri lavori qui:
+        &bull; https://plus.google.com/+JovieBrettBardoles
+        &bull; https://dribbble.com/bretbardolees
+        &bull; https://www.behance.net/bretbardolees</string>
+    <string name="Play Store Short Description">Un bellissimo, semplice e moderno Manager IOU</string>
+    <string name="Play Store Name">Pay Back - IOU Manager</string>-->
+    <string name="app_name">Pay Back</string>
+    <string name="navigation_drawer_open">Apri barra di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi barra di navigazione</string>
+    <string name="all">Tutti</string>
+    <string name="balance">Bilancio:</string>
+    <string name="title_activity_setup">Pay Back</string>
+    <string name="welcome">Benvenuto su Pay Back!</string>
+    <string name="list_empty_text">Quando avrai aggiunto qualcosa, apparirà qui sotto</string>
+    <string name="even">Siamo pari!</string>
+    <string name="person_hint">Con chi?</string>
+    <string name="they_owe">Io devo</string>
+    <string name="i_owe">Mi deve</string>
+    <string name="amount">Ammontare</string>
+    <string name="share">Condividi tramite</string>
+    <string name="note">Nota</string>
+    <string name="paid_back_exclamation">Pagato!</string>
+    <string name="paid_back">Pagato</string>
+    <string name="checkbox">Checkbox!</string>
+    <string name="create_fab_error">Inserisci nome e ammontare</string>
+    <string name="pay_back">Pay Back</string>
+    <string name="send">Invia</string>
+    <string name="about_title">Info</string>
+    <string name="filter">Filtro</string>
+    <string name="welcome_text">In  questa versione gratuita hai il limite di 5 debiti alla volta e non hai la sincronizzazione cloud. Un acquisto in-app è necessario per sbloccare la versione completa.</string>
+    <string name="currency_text">Prima di iniziare inserisci la valuta che intendi utilizzare. Potrai modificarla in seguito dalle impostazioni.</string>
+    <string name="welcome_continue">Continua</string>
+    <string name="welcome_currency_hint">Valuta (es. $)</string>
+    <string name="welcome_using_nfc">Utilizzando NFC</string>
+    <string name="welcome_using_nfc_text">Appoggia i tue dispositivi l'un altro per sincronizzare i debiti. Potrai sincronizzare un'intera pagina od uno specifico debito.</string>
+    <string name="welcome_got_it">Capito!</string>
+    <string name="cash">Contanti</string>
+    <string name="manage_people">Gestisci persone</string>
+    <string name="undid">Annullato!</string>
+    <string name="undo_pay_back">Annulla Pagamento</string>
+    <string name="edit">Modifica</string>
+    <string name="delete">Elimina</string>
+    <string name="ioweyou">Ti devo</string>
+    <string name="youoweme">Mi devi</string>
+    <string name="debt_for">per</string>
+    <string name="bytime">Per data</string>
+    <string name="byamount">Per ammontare</string>
+    <string name="clear">Svuota</string>
+    <string name="justnow">Proprio adesso</string>
+    <string name="done">Fatto</string>
+    <string name="welcome_currency">Seleziona la tua valuta preferita</string>
+    <string name="sort_az">Ordina alfabeticamente</string>
+    <string name="people_empty_text">Nessuna persona aggiunta</string>
+    <string name="select_person">Seleziona una persona</string>
+    <string name="change_person">Cambia persona</string>
+    <string name="rename">Rinomina</string>
+    <string name="merge_to">Unisci a</string>
+    <string name="merge">Unisci</string>
+    <string name="name">Nome</string>
+    <string name="delete_person_text">Eliminare persona?</string>
+    <string name="merge_confirm_text_format">Vuoi unire tutti i valori da %1$s a %2$s?</string>
+    <string name="confirm">Conferma</string>
+    <string name="cancel">Annulla</string>
+    <string name="you">Tu</string>
+    <string name="rate_title">Vota Pay Back!</string>
+    <string name="rate_text">Se ti piace l'applicazione ti chiediamo cortesemente di votarla sul Play Store!</string>
+    <string name="ok">OK</string>
+    <string name="rate_now">Vota adesso</string>
+    <string name="rate_later">Forse dopo</string>
+    <string name="rate_never">No grazie</string>
+    <string name="undo">Annulla</string>
+    <string name="sort_list">Ordinamento effettuato</string>
+    <string name="deleted_person">Persona eliminata</string>
+    <string name="renamed_person">Persona rinominata</string>
+    <string name="merged_people">Persone unite</string>
+    <string name="already_sorted">Già ordinato</string>
+    <string name="deleted_debt">Elemento eliminato</string>
+    <string name="delete_entry">Elimina elemento</string>
+    <string name="overwrite_nfc_title">Sovrascrivi</string>
+    <string name="overwrite_nfc_text">Sei sicuro di voler sovrascrivere tutti gli elementi da %1$s?</string>
+    <string name="from_who_title">Da chi?</string>
+    <string name="nfc_error_all">Impossibile inviare elementi da "Tutti"</string>
+    <string name="title_activity_people_manager">Persone</string>
+    <string name="upgrade_title">Sblocca versione completa</string>
+    <string name="upgrade_text">Acquista la versione completa di Pay Back per non avere il limite dei 5 debiti e per sincronizzare i vari dispositivi.</string>
+    <string name="upgrade_confirm_text">Acquista</string>
+    <string name="cloud_sync">Sincronizzazione Cloud</string>
+    <string name="cloud_sync_description_first">Ti ringraziamo per l'acquisto della versione completa di Pay Back! Attiva la sincronizzazione cloud per sincronizzare i debiti tra i tuoi dispositivi tramite Google Drive. Lo puoi fare in seguito dalle impostazioni.</string>
+    <string name="cloud_sync_description">Attiva la sincro cloud per sincronizzare i debiti tra i tuoi dispositivi tramite Google Drive.</string>
+    <string name="activate">Attiva</string>
+    <string name="not_now">Non adesso</string>
+    <string name="cloud_sync_not_full">Richiede la versione completa</string>
+    <string name="upgrade_navigation_drawer">Sblocca versione completa</string>
+    <string name="debt_free">Non hai debiti!</string>
+    <string name="add_person">Aggiungi persona</string>
+    <string name="debt_single">debito</string>
+    <string name="debt_plural">debiti</string>
+    <string name="people">persone</string>
+    <string name="person">persona</string>
+    <string name="cloud_sync_account">Sincronizza account</string>
+    <string name="wipe_data">Elimina dati applicazione</string>
+    <string name="wipe_data_confirm_free">Sei sicuro di voler eliminare tutti i dati dell'applicazione?</string>
+    <string name="wipe_data_confirm_full">Sei sicuri di voler eliminare tutti i dati dell'applicazione? Questo include anche i dati salvati in Google Drive</string>
+    <string name="wipe">Fai un wipe</string>
+    <string name="phone_number">Numero di telefono</string>
+    <string name="swish_copy_toast_end">copiato negli appunti</string>
+    <string name="pay_with_swish">Paga con Swish</string>
+    <string name="currency_checkbox">Simbolo dopo ammontare</string>
+    <string name="select_currency">Seleziona valuta</string>
+    <string name="select">Seleziona</string>
+    <string name="change_currency">Cambia valuta</string>
+    <string name="currency_symbol">Simbolo valuta</string>
+    <string name="currency_symbol_after_checkbox">Simbolo dopo l'ammontare</string>
+    <string name="currency_decimal_separator_checkbox">Virgola come separatore decimale</string>
+    <string name="thousand_separator">Separatore delle migliaia</string>
+    <string name="save_fail">Impossibile salvare file</string>
+    <string name="no_file">Nessun backup trovato</string>
+    <string name="read_failed">Impossibile leggere file</string>
+    <string name="save_success_start">File salvato in "%1$s"</string>
+    <string name="restore_success">Ripristino riuscito</string>
+    <string name="disable_cloud_sync_title">Disattiva sincronizzazione cloud</string>
+    <string name="disable_cloud_sync_content">Sei sicuro di voler disattivare la sincronizzazione cloud? Nessun dato verrà perso.</string>
+    <string name="disable_cloud_sync_affirmative">Disattiva</string>
+    <string name="restore_single">Ripristina</string>
+    <string name="remove_backup">Rimuovi backup</string>
+    <string name="backup_removed_success">Rimozione backup riuscita</string>
+    <string name="disabled_in_free">Non disponibile nella versione gratuita</string>
+    <string name="no_backup_available">Nessun backup disponibile</string>
+    <string name="lib_devdesign">Sviluppo e Progettazione</string>
+    <string name="author_johnsimon">John Rapp Farnes\nSimon Halvdansson</string>
+    <string name="lib_icon">Icona</string>
+    <string name="author_icon">Jovie Brett Bardoles</string>
+    <string name="lib_riv">RoundedImageView</string>
+    <string name="author_riv">Vince Mi</string>
+    <string name="lib_fab">Floating Action Button</string>
+    <string name="author_fab">Faiz Malkani</string>
+    <string name="lib_gson">GSON</string>
+    <string name="author_gson">Google</string>
+    <string name="lib_pic">Picasso</string>
+    <string name="author_pic">Square</string>
+    <string name="lib_dsr">DragSortRecycler</string>
+    <string name="author_dsr">Emile Belanger</string>
+    <string name="lib_qr">QuickReturn</string>
+    <string name="author_qr">Etienne Lawlor</string>
+    <string name="lib_snb">Snackbar</string>
+    <string name="author_snb">William Mora</string>
+    <string name="lib_md">Material Dialogs</string>
+    <string name="author_md">Aidan Follestad</string>
+    <string name="lib_rbm">Android-RobotoTextView</string>
+    <string name="author_rbm">Evgeny Shishkin</string>
+    <string name="lib_iab">Android In-App Billing</string>
+    <string name="author_iab">AnjLab</string>
+    <string name="pref_settings">Impostazioni</string>
+    <string name="pref_general">Generali</string>
+    <string name="pref_data">Dati</string>
+    <string name="pref_sync">Sincronizzazione</string>
+    <string name="currency">Valuta</string>
+    <string name="background">Sfondo</string>
+    <string name="pref_cloud_sync">Sincronizza dispositivi</string>
+    <string name="pref_backup_data">Backup dati in memoria</string>
+    <string name="pref_restore_data">Ripristino dati dalla memoria</string>
+    <string name="pref_restore_data_description">Sei sicuro di voler ripristinare i dati dalla memoria? Sovrascriverai i dati presenti.</string>
+    <string name="pref_backup_confirm">Sovrascrivi backup</string>
+    <string name="pref_backup_confirm_text">Sei sicuro di voler sovrascrivere i dati precedentemente salvati? Quest'azione non potrà essere annullata.</string>
+    <string name="pref_backup_confirm_single">Backup</string>
+    <string-array name="thousand_seperator_list">
+        <item>Nessuno</item>
+        <item>Punto</item>
+        <item>Virgola</item>
+        <item>Spazio</item>
+    </string-array>
+    <string-array name="bg_display">
+        <item>Monti</item>
+        <item>Città</item>
+    </string-array>
+    <string-array name="bg_entries">
+        <!--Do _NOT_ translate this-->
+        <item>mountains</item>
+        <!--Do _NOT_ translate this-->
+        <item>city</item>
+    </string-array>
+</resources>
