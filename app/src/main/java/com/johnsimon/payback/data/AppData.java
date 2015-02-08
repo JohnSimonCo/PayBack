@@ -290,6 +290,10 @@ public class AppData {
 		peopleOrderTouched = System.currentTimeMillis();
 	}
 
+	public boolean isEven(ArrayList<Debt> debts) {
+		return total(debts) == 0;
+	}
+
     public static AppData fromJson(String JSON) {
 		if(JSON == null) {
 			return AppData.defaultAppData();
