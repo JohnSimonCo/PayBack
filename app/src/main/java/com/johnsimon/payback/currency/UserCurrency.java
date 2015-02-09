@@ -54,9 +54,9 @@ public class UserCurrency {
 
 	public String render(float amount) {
 		if(format == null) format = createFormat();
-		String output = format.format(Math.abs(amount));
 
-		/*
+		/*String output = format.format(Math.abs(amount));
+
 		if(trailingZeros) {
 			//Amount is an integer
 			if((int) amount == amount) {
@@ -67,9 +67,11 @@ public class UserCurrency {
 					output += "0";
 				}
 			}
-		}*/
+		}
 
-        return output;
+        return output;*/
+
+		return format.format(Math.abs(amount));
 	}
 
 	private DecimalFormat createFormat() {
@@ -84,7 +86,7 @@ public class UserCurrency {
 
 		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###." : "###,###.";
 
-		formatString += trailingZeros || true ? "00" : "##";
+		formatString += trailingZeros ? "00" : "##";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
