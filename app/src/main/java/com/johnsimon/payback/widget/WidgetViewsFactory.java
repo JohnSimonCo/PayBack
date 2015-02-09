@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.data.Debt;
@@ -26,27 +27,30 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     protected void onDataLinked() {
-
     }
 
     @Override
     public void onCreate() {
-        // no-op
+        Toast.makeText(context, data.debts.size() + " start", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDestroy() {
-        // no-op
+
     }
 
     @Override
     public int getCount() {
+        Toast.makeText(context, data.debts.size() + " hejhopp size", Toast.LENGTH_SHORT).show();
         return data.debts.size();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
         final RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.feed_list_item);
+
+        Toast.makeText(context, position + " pos", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, data.debts.size() + " size", Toast.LENGTH_SHORT).show();
 
         Debt debt = data.debts.get(position);
 
