@@ -21,17 +21,17 @@ public class UserCurrency {
     public final int decimalSeparator;
     public final int thousandSeparator;
 
-	public final boolean trailingZero;
+	public final boolean trailingZeros;
 
     private transient DecimalFormat format;
 
-	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator, boolean trailingZero) {
+	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator, boolean trailingZeros) {
 		this.id = id;
 		this.displayName = displayName;
 		this.before = before;
         this.decimalSeparator = decimalSeparator;
         this.thousandSeparator = thousandSeparator;
-		this.trailingZero = trailingZero;
+		this.trailingZeros = trailingZeros;
 
 		format = createFormat();
 	}
@@ -56,7 +56,8 @@ public class UserCurrency {
 		if(format == null) format = createFormat();
 		String output = format.format(Math.abs(amount));
 
-		if(trailingZero) {
+		/*
+		if(trailingZeros) {
 			//Amount is an integer
 			if((int) amount == amount) {
 				output += decimalSeparator() + "0";
@@ -66,7 +67,7 @@ public class UserCurrency {
 					output += "0";
 				}
 			}
-		}
+		}*/
 
         return output;
 	}
@@ -83,7 +84,7 @@ public class UserCurrency {
 
 		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###." : "###,###.";
 
-		formatString += trailingZero ? "00" : "##";
+		formatString += trailingZeros || true ? "00" : "##";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
