@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.internal.widget.TintCheckBox;
 import android.support.v7.internal.widget.TintSpinner;
 import android.view.LayoutInflater;
@@ -280,7 +281,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency);
 		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
