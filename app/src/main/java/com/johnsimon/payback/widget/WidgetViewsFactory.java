@@ -14,7 +14,11 @@ import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 
+import java.util.ArrayList;
+
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
+
+    private ArrayList<Debt> debts;
 
     public WidgetViewsFactory(Context context, Intent intent) {
         super(context);
@@ -22,7 +26,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     protected void onDataReceived() {
-
+        onDataSetChanged();
     }
 
     @Override
@@ -31,7 +35,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     public void onCreate() {
-        Toast.makeText(context, data.debts.size() + " start", Toast.LENGTH_SHORT).show();
+        debts = new ArrayList<>();
     }
 
     @Override
@@ -41,8 +45,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     public int getCount() {
-        Toast.makeText(context, data.debts.size() + " hejhopp size", Toast.LENGTH_SHORT).show();
-        return data.debts.size();
+        return debts.size();
     }
 
     @Override
@@ -110,6 +113,9 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-
+        debts.clear();
+        if (data != null && data.debts != null) {
+            debts = new ArrayList<>(data.debts);
+        }
     }
 }

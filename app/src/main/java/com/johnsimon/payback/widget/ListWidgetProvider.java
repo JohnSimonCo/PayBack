@@ -23,13 +23,10 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
             RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
-            widget.setRemoteAdapter(appWidgetIds[i], R.id.feed_list_item_master, svcIntent);
+            widget.setRemoteAdapter(R.id.widget_list, svcIntent);
 
             Intent clickIntent = new Intent(context, FeedActivity.class);
-            PendingIntent clickPI = PendingIntent
-                    .getActivity(context, 0,
-                            clickIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             widget.setPendingIntentTemplate(R.id.feed_list_item_master, clickPI);
 

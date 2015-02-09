@@ -17,7 +17,7 @@ import com.makeramen.RoundedImageView;
 import java.util.ArrayList;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
-	private final static NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
+	private NavigationDrawerItem allItem = new NavigationDrawerItem(NavigationDrawerItem.Type.All);
 	public ArrayList<NavigationDrawerItem> items = new ArrayList<>();
 
 	private final DataActivity activity;
