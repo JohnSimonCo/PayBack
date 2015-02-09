@@ -79,6 +79,8 @@ public class FeedActivity extends DataActivity implements
 
     private boolean attemptCheckFilterAmount = false;
 
+	//TODO spara sort som en preference
+
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

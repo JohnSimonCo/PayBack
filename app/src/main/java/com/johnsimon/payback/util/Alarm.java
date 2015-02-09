@@ -86,8 +86,6 @@ public class Alarm  {
                         .setContentText(getContentText(debt, data))
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setColor(context.getResources().getColor(R.color.primary_color))
-                        .setDefaults(Notification.DEFAULT_SOUND)
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
                         .addAction(getPayBackAction(id))
                         .addAction(getRemindLaterAction(id))
                         .setContentIntent(getDetailPendingIntent(id));
@@ -96,12 +94,9 @@ public class Alarm  {
                     builder.setVisibility(Notification.VISIBILITY_PRIVATE);
                 }
 
-                Notification notification = builder.build();
-                notification.ledARGB = context.getResources().getColor(R.color.primary_color);
-
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                notificationManager.notify(debt.id.hashCode(), notification);
+                notificationManager.notify(debt.id.hashCode(), builder.build());
             }
         };
 
@@ -121,17 +116,10 @@ public class Alarm  {
             remindLaterIntent.setAction(NotificationEventReceiver.ACTION_REMIND_LATER);
             remindLaterIntent.putExtra(Alarm.ALARM_ID, id);
 
-            if (Resource.isLOrAbove()) {
-                return new NotificationCompat.Action(
-                        R.drawable.ic_material_reminder_finger_dark,
-                        context.getString(R.string.notif_remind_later),
-                        PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-            } else {
-                return new NotificationCompat.Action(
-                        R.drawable.ic_material_reminder_finger_light,
-                        context.getString(R.string.notif_remind_later),
-                        PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-            }
+            return new NotificationCompat.Action(
+                    R.drawable.abc_ab_share_pack_holo_dark,
+                    context.getString(R.string.notif_remind_later),
+                    PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         }
 
         private PendingIntent getDetailPendingIntent(UUID id) {

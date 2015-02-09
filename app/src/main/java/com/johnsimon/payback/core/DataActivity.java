@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
@@ -24,7 +22,6 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 	public User user;
 
-	protected Notification dataLink;
     protected ContactLoader contactLoader;
 
 	@Override
@@ -55,10 +52,6 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 	public ContactLoader getContactLoader() {
 		return contactLoader;
 	}
-	@Override
-	public Notification getDataLink() {
-		return dataLink;
-	}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +61,7 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
 
-		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
+		DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
 	}
 
 	@Override
@@ -79,9 +72,9 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		dataLink.listen(dataLinkedCallback);
-
 		contactLoader.userLoaded.then(userLoadedCallback);
+
+		DataLinker.linked.listen(dataLinkedCallback);
 
 		storage.connect();
     }
@@ -93,6 +86,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		storage.subscription.unregister(dataLoadedCallback);
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
+
+		DataLinker.linked.unregister(dataLinkedCallback);
 
         storage.disconnect();
 

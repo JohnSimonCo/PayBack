@@ -8,6 +8,8 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.util.Resource;
 
+import org.apache.http.impl.cookie.BasicMaxAgeHandler;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -98,6 +100,10 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 
 	public float getAmount() {
 		return amount;
+	}
+
+	public float getAbsoluteAmount() {
+		return Math.abs(amount);
 	}
 
 	public void setAmount(float amount) {

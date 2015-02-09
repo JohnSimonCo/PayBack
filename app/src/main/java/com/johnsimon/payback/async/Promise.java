@@ -16,12 +16,6 @@ public class Promise<D> {
         }
     }
 
-    public void thenUnique(Callback<D> callback) {
-        if(!callbacks.contains(callback)) {
-            then(callback);
-        }
-    }
-
 	public void unregister(Callback<D> callback) {
 		callbacks.remove(callback);
 	}

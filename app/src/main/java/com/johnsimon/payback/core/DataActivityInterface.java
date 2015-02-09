@@ -18,7 +18,6 @@ public interface DataActivityInterface extends DataContextInterface {
 
 	Storage getStorage();
 	ContactLoader getContactLoader();
-	Notification getDataLink();
 
 	void setStorage(Storage storage);
 }
