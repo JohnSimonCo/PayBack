@@ -35,6 +35,7 @@ import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
+import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
@@ -538,39 +539,47 @@ public class FeedActivity extends DataActivity implements
 
 	public void onEvenOut() {
 
-		final HashSet<UUID> wasPaidback = new HashSet<>();
+        PaidBackDialogFragment paidBackDialogFragment;
 
-		for(Debt debt: feed) {
-			wasPaidback.add(debt.id);
-		}
+        paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, null, true);
+        paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "evened_out_dialog");
+        paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
+            @Override
+            public void onComplete(Debt nothing) {
+                final HashSet<UUID> wasPaidBack = new HashSet<>();
 
-		Undo.executeAction(this, R.string.renamed_person, new Undo.UndoableAction() {
-			@Override
-			public void onDisplay() {
-				for(Debt debt: feed) {
-					debt.setPaidBack(true);
-				}
-				notifyDataSetChanged();
-			}
+                for(Debt debt: feed) {
+                    if (debt.isPaidBack()) {
+                        wasPaidBack.add(debt.id);
+                    }
+                }
 
-			@Override
-			public void onRevert() {
-				for(Debt debt: feed) {
-					debt.setPaidBack(wasPaidback.contains(debt.id));
-				}
-				notifyDataSetChanged();
-			}
+                Undo.executeAction(FeedActivity.this, R.string.evened_out, new Undo.UndoableAction() {
+                    @Override
+                    public void onDisplay() {
+                        for(Debt debt: feed) {
+                            debt.setPaidBack(true);
+                        }
+                        feedFragment.adapter.notifyDataSetChanged();
+                        feedFragment.feedChangeCallback.onFeedChange();
+                    }
 
-			@Override
-			public void onCommit() {
-				storage.commit();
-			}
+                    @Override
+                    public void onRevert() {
+                        for(Debt debt: feed) {
+                            debt.setPaidBack(wasPaidBack.contains(debt.id));
+                        }
+                        feedFragment.adapter.notifyDataSetChanged();
+                        feedFragment.feedChangeCallback.onFeedChange();
+                    }
 
-			private void notifyDataSetChanged() {
-				feedFragment.adapter.notifyDataSetChanged();
-				feedFragment.feedChangeCallback.onFeedChange();
-			}
-		});
+                    @Override
+                    public void onCommit() {
+                        storage.commit();
+                    }
+                });
+            }
+        };
 	}
 
     @Override
