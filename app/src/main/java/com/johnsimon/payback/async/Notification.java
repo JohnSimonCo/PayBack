@@ -34,4 +34,8 @@ public class Notification {
 			callback.onNotify();
 		}
 	}
+
+	public void clearCallbacks() {
+		callbacks.clear();
+	}
 }

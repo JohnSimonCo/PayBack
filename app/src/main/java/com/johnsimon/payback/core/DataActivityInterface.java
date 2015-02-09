@@ -3,6 +3,7 @@ package com.johnsimon.payback.core;
 import android.app.Activity;
 
 import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
@@ -18,6 +19,7 @@ public interface DataActivityInterface extends DataContextInterface {
 
 	Storage getStorage();
 	ContactLoader getContactLoader();
+	DataLinker getDataLinker();
 
 	void setStorage(Storage storage);
 }

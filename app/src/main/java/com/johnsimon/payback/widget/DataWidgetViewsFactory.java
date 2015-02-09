@@ -14,12 +14,16 @@ import com.johnsimon.payback.loader.ContactsLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.AlarmScheduler;
 
 public abstract class DataWidgetViewsFactory implements DataContextInterface, RemoteViewsService.RemoteViewsFactory {
 
     protected AppData data;
     protected Storage storage;
     protected Context context;
+
+	private DataLinker dataLinker;
+	private AlarmScheduler alarmScheduler;
 
     protected DataWidgetViewsFactory(Context context) {
         this.context = context;
@@ -28,9 +32,9 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
         ContactsLoader contactsLoader = new ContactsLoader();
         contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getContentResolver());
 
-        DataLinker.link(storage.subscription, contactsLoader.promise);
+		dataLinker = new DataLinker(storage.subscription, contactsLoader.promise);
 
-		Alarm.listen(context, storage.subscription);
+		alarmScheduler = new AlarmScheduler(context, storage.subscription);
 	}
 
     @Override
@@ -64,12 +68,13 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
     @Override
     public void onCreate() {
         storage.subscription.listen(dataLoadedCallback);
-        DataLinker.linked.listen(dataLinkedCallback);
+		dataLinker.linked.listen(dataLinkedCallback);
     }
 
     @Override
     public void onDestroy() {
         storage.subscription.unregister(dataLoadedCallback);
-		DataLinker.linked.unregister(dataLinkedCallback);
+		dataLinker.die();
+		alarmScheduler.die();
     }
 }

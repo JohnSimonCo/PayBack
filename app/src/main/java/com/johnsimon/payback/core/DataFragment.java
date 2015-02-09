@@ -14,11 +14,9 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
 
 public abstract class DataFragment extends Fragment {
-    protected Storage storage;
-    public AppData data;
-    public User user;
-
-	private ContactLoader contactLoader;
+	protected Storage storage;
+	public AppData data;
+	public User user;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -27,8 +25,6 @@ public abstract class DataFragment extends Fragment {
 		DataActivityInterface activity = getDataActivity();
 
 		this.storage = activity.getStorage();
-
-		contactLoader = activity.getContactLoader();
 	}
 
 	protected DataActivityInterface getDataActivity() {
@@ -39,52 +35,55 @@ public abstract class DataFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 
+		DataActivityInterface activity = getDataActivity();
+
 		storage.subscription.listen(dataLoadedCallback);
 
-        DataLinker.linked.listen(dataLinkedCallback);
+		activity.getContactLoader().userLoaded.then(userLoadedCallback);
 
-		contactLoader.userLoaded.then(userLoadedCallback);
+		activity.getDataLinker().linked.listen(dataLinkedCallback);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 
+		DataActivityInterface activity = getDataActivity();
+
 		storage.subscription.unregister(dataLoadedCallback);
 
-		DataLinker.linked.unregister(dataLinkedCallback);
+		activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
 
-        contactLoader.userLoaded.unregister(userLoadedCallback);
 	}
 
-    private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
-        @Override
-        public void onCalled(AppData _data) {
-            data = _data;
-            onDataReceived();
-        }
-    };
+	private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
+		@Override
+		public void onCalled(AppData _data) {
+			data = _data;
+			onDataReceived();
+		}
+	};
 
-    private NotificationCallback dataLinkedCallback = new NotificationCallback() {
+	private NotificationCallback dataLinkedCallback = new NotificationCallback() {
 		@Override
 		public void onNotify() {
 			onDataLinked();
 		}
 	};
 
-    private boolean userLoaded = false;
-    private Callback<User> userLoadedCallback = new Callback<User>() {
-        @Override
-        public void onCalled(User _user) {
-            if(userLoaded) return;
+	private boolean userLoaded = false;
+	private Callback<User> userLoadedCallback = new Callback<User>() {
+		@Override
+		public void onCalled(User _user) {
+			if(userLoaded) return;
 
-            userLoaded = true;
+			userLoaded = true;
 
-            user = _user;
+			user = _user;
 
-            onUserLoaded();
-        }
-    };
+			onUserLoaded();
+		}
+	};
 
 	protected void onDataReceived() {
 	}

@@ -14,6 +14,7 @@ import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.Undo;
 
 public abstract class DataActivity extends ActionBarActivity implements DataActivityInterface {
@@ -24,6 +25,9 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 	public User user;
 
     protected ContactLoader contactLoader;
+
+	private DataLinker dataLinker;
+	private AlarmScheduler alarmScheduler;
 
 	@Override
 	public Activity getContext() {
@@ -54,6 +58,11 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		return contactLoader;
 	}
 
+	@Override
+	public DataLinker getDataLinker() {
+		return dataLinker;
+	}
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +70,6 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
         storage = StorageManager.getStorage(getApplicationContext());
 
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
-
-		DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
-
-		Alarm.listen(this, storage.subscription);
 	}
 
 	@Override
@@ -77,7 +82,10 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		contactLoader.userLoaded.then(userLoadedCallback);
 
-		DataLinker.linked.listen(dataLinkedCallback);
+		dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+		dataLinker.linked.listen(dataLinkedCallback);
+
+		alarmScheduler = new AlarmScheduler(this, storage.subscription);
 
 		storage.connect();
     }
@@ -90,7 +98,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
-		DataLinker.linked.unregister(dataLinkedCallback);
+		dataLinker.die();
+		alarmScheduler.die();
 
         storage.disconnect();
 

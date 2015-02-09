@@ -9,14 +9,9 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 
 public abstract class Storage {
-    protected Context context;
     public Subscription<AppData> subscription = new Subscription<>();
 
     protected AppData data;
-
-    public Storage(Context context) {
-        this.context = context;
-    }
 
 	public abstract SharedPreferences getPreferences();
 

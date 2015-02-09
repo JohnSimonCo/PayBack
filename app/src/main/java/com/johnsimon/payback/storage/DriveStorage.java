@@ -39,8 +39,6 @@ import java.io.InputStreamReader;
 public class DriveStorage extends Storage {
     private final static String FILE_NAME = "data.json";
 
-	public Context context;
-
     public Activity activity;
 
     private GoogleApiClient client;
@@ -49,11 +47,7 @@ public class DriveStorage extends Storage {
 
     private DriveFile file = null;
 
-    public DriveStorage(Context context, GoogleApiClient client, final LocalStorage localStorage) {
-        super(context);
-
-        this.context = context;
-
+    public DriveStorage(GoogleApiClient client, final LocalStorage localStorage) {
         this.localStorage = localStorage;
 
 		localStorage.subscription.listen(new Callback<AppData>() {

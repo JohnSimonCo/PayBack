@@ -27,31 +27,6 @@ public class Alarm  {
 
     public final static String ALARM_ID = "ALARM_ID";
 
-	private static Subscription<AppData> dataSubscription;
-	private static Context context;
-
-	public static void listen(Context context, Subscription<AppData> dataSubscription) {
-		Alarm.context = context;
-
-		if(Alarm.dataSubscription != null) {
-			Alarm.dataSubscription.unregister(dataLoadedCallback);
-		}
-
-		Alarm.dataSubscription = dataSubscription;
-		dataSubscription.listen(dataLoadedCallback);
-	}
-
-	private static Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
-		@Override
-		public void onCalled(AppData data) {
-			for(Debt debt : data.debts) {
-				if(debt.getRemindDate() != null && !hasAlarm(context, debt.id)) {
-					addAlarm(context, debt);
-				}
-			}
-		}
-	};
-
     //TODO PendingIntent.getBroadcast requestCode "0" is magic number, see if it has effect or not
     public static void addAlarm(Context context, Debt debt) {
 		Intent intentAlarm = new Intent(context, Alarm.class);

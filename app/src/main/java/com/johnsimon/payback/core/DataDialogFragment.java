@@ -18,8 +18,6 @@ public abstract class DataDialogFragment extends DialogFragment {
 	public AppData data;
 	public User user;
 
-	private ContactLoader contactLoader;
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -27,8 +25,6 @@ public abstract class DataDialogFragment extends DialogFragment {
 		DataActivityInterface activity = getDataActivity();
 
 		this.storage = activity.getStorage();
-
-		contactLoader = activity.getContactLoader();
 	}
 
 	protected DataActivityInterface getDataActivity() {
@@ -39,22 +35,25 @@ public abstract class DataDialogFragment extends DialogFragment {
 	public void onStart() {
 		super.onStart();
 
+		DataActivityInterface activity = getDataActivity();
+
 		storage.subscription.listen(dataLoadedCallback);
 
-		DataLinker.linked.listen(dataLinkedCallback);
+		activity.getContactLoader().userLoaded.then(userLoadedCallback);
 
-		contactLoader.userLoaded.then(userLoadedCallback);
+		activity.getDataLinker().linked.listen(dataLinkedCallback);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 
+		DataActivityInterface activity = getDataActivity();
+
 		storage.subscription.unregister(dataLoadedCallback);
 
-		DataLinker.linked.unregister(dataLinkedCallback);
+		activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
 
-		contactLoader.userLoaded.unregister(userLoadedCallback);
 	}
 
 	private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {

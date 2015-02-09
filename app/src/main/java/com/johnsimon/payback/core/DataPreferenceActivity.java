@@ -15,6 +15,7 @@ import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.Undo;
 
 public class DataPreferenceActivity extends PreferenceActivity implements DataActivityInterface {
@@ -25,6 +26,9 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	public User user;
 
 	protected ContactLoader contactLoader;
+
+	private DataLinker dataLinker;
+	private AlarmScheduler alarmScheduler;
 
 	@Override
 	public Activity getContext() {
@@ -56,16 +60,17 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	}
 
 	@Override
+	public DataLinker getDataLinker() {
+		return dataLinker;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		storage = StorageManager.getStorage(getApplicationContext());
 
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
-
-		DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
-
-		Alarm.listen(this, storage.subscription);
 	}
 
 	@Override
@@ -78,7 +83,10 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader.userLoaded.then(userLoadedCallback);
 
-		DataLinker.linked.listen(dataLinkedCallback);
+		dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+		dataLinker.linked.listen(dataLinkedCallback);
+
+		alarmScheduler = new AlarmScheduler(this, storage.subscription);
 
 		storage.connect();
 	}
@@ -91,7 +99,8 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
-		DataLinker.linked.unregister(dataLinkedCallback);
+		dataLinker.die();
+		alarmScheduler.die();
 
 		storage.disconnect();
 

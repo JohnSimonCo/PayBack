@@ -19,8 +19,6 @@ public class LocalStorage extends Storage {
     private SharedPreferences preferences;
 
     public LocalStorage(Context context) {
-        super(context);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String JSON = preferences.getString(SAVE_KEY_DATA, null);

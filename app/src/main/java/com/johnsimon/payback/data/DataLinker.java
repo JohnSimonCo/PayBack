@@ -10,28 +10,20 @@ import java.util.ArrayList;
 
 public class DataLinker {
 
-	private static AppData data;
-    public static Notification linked = new Notification();
+	private AppData data;
+    public Notification linked = new Notification();
 
-	private static Subscription<AppData> dataSubscription;
-	private static Promise<ArrayList<Contact>> contactsPromise;
+	private Subscription<AppData> dataSubscription;
+	private Promise<ArrayList<Contact>> contactsPromise;
 
-	public static void link(Subscription<AppData> dataSubscription, Promise<ArrayList<Contact>> contactsPromise) {
-		if(DataLinker.dataSubscription != null) {
-			DataLinker.dataSubscription.unregister(dataLoadedCallback);
-		}
-
-		if(DataLinker.contactsPromise != null) {
-			DataLinker.contactsPromise.unregister(contactsLoadedCallback);
-		}
-
-		DataLinker.dataSubscription = dataSubscription;
-		DataLinker.contactsPromise = contactsPromise;
+	public DataLinker(Subscription<AppData> dataSubscription, Promise<ArrayList<Contact>> contactsPromise) {
+		this.dataSubscription = dataSubscription;
+		this.contactsPromise = contactsPromise;
 
 		dataSubscription.listen(dataLoadedCallback);
 	}
 
-	public static Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
+	public Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
 		@Override
 		public void onCalled(final AppData _data) {
 			data = _data;
@@ -39,7 +31,7 @@ public class DataLinker {
 		}
 	};
 
-	public static Callback<ArrayList<Contact>> contactsLoadedCallback = new Callback<ArrayList<Contact>>() {
+	public Callback<ArrayList<Contact>> contactsLoadedCallback = new Callback<ArrayList<Contact>>() {
 		@Override
 		public void onCalled(ArrayList<Contact> contacts) {
 			if(data.contacts == null) {
@@ -53,6 +45,12 @@ public class DataLinker {
 			linked.broadcast();
 		}
 	};
+
+	public void die() {
+		dataSubscription.unregister(dataLoadedCallback);
+		contactsPromise.unregister(contactsLoadedCallback);
+		linked.clearCallbacks();
+	}
 
 	public static void link(Person person, ArrayList<Contact> contacts) {
 		for(Contact contact : contacts) {
