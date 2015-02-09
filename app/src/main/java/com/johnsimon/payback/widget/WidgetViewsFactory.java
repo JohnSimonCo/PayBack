@@ -6,15 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
-
-import java.util.ArrayList;
 
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
@@ -40,15 +37,12 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
     public RemoteViews getViewAt(int position) {
         final RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.feed_list_item);
 
-        Toast.makeText(context, position + " pos", Toast.LENGTH_SHORT).show();
-        Toast.makeText(context, data.debts.size() + " size", Toast.LENGTH_SHORT).show();
-
         Debt debt = data.debts.get(position);
 
         if (debt.getOwner().hasImage()) {
-            row.setImageViewUri(R.id.list_item_avatar, Uri.parse(debt.getOwner().link.photoURI));
+    //        row.setImageViewUri(R.id.list_item_avatar, Uri.parse(debt.getOwner().link.photoURI));
         } else {
-            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ColorPalette.getInstance(this), debt.getOwner().paletteIndex)));
+//            row.setImageViewBitmap(R.id.list_item_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ColorPalette.getInstance(this), debt.getOwner().paletteIndex)));
             row.setViewVisibility(R.id.list_item_avatar_letter, View.VISIBLE);
             row.setTextViewText(R.id.list_item_avatar_letter, debt.getOwner().getAvatarLetter());
         }
