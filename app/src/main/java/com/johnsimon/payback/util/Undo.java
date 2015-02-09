@@ -30,7 +30,7 @@ public class Undo {
 		Snackbar snackbar = Snackbar.with(context.getApplicationContext());
 		snackbar.text(context.getString(textId))
 			.actionLabel(context.getString(R.string.undo))
-			.actionColor(context.getResources().getColor(R.color.button_color))
+			.actionColor(context.getResources().getColor(R.color.undo_color))
 			.duration(DURATION)
 			.eventListener(new Snackbar.EventListener() {
 				@Override

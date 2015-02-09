@@ -20,7 +20,7 @@
     <PreferenceCategory
         android:title="@string/pref_sync"   >
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="pref_cloud_sync"
             android:title="@string/cloud_sync"
             android:summary="@string/pref_cloud_sync"

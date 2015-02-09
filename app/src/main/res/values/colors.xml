@@ -9,6 +9,7 @@
     <color name="icon_green">#0e9c57</color>
     <color name="button_color">#009688</color>
     <color name="button_color_disabled">#80CBC4</color>
+    <color name="undo_color">#FFEB3B</color>
 
     <color name="gray_text_dark">#181818</color>
     <color name="gray_text_normal">#333333</color>
@@ -26,8 +27,6 @@
     <color name="white_on_red_selector">#66ffffff</color>
     <color name="white_on_red_darker_selector">#44ffffff</color>
     <color name="apptheme_greenedittext_color">#8db69e</color>
-
-    <color name="actionbar_subtitle_color">#bbffffff</color>
 
     <!-- Placeholder colors for casuals with no profile picture -->
     <color name="color1">#31B579</color>

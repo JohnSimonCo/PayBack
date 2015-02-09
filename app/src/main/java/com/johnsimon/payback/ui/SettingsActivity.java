@@ -18,6 +18,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
+import android.preference.SwitchPreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -55,7 +56,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
 	private Preference pref_cloud_sync_account;
     private Preference pref_import_data;
-    private CheckBoxPreference pref_cloud_sync;
+    private SwitchPreference pref_cloud_sync;
 
     private BillingProcessor bp;
 
@@ -197,7 +198,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             }
         });
 
-        pref_cloud_sync = (CheckBoxPreference) findPreference("pref_cloud_sync");
+        pref_cloud_sync = (SwitchPreference) findPreference("pref_cloud_sync");
 
 		pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
 		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, null));
