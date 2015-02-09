@@ -15,8 +15,8 @@ import com.johnsimon.payback.util.Resource;
 
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
-    public WidgetViewsFactory(Context ctx, Intent intent) {
-        super(ctx);
+    public WidgetViewsFactory(Context context, Intent intent) {
+        super(context);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews row = new RemoteViews(ctx.getPackageName(), R.layout.feed_list_item);
+        final RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.feed_list_item);
 
         Debt debt = data.debts.get(position);
 
@@ -59,18 +59,18 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         }
 
         row.setTextViewText(R.id.list_item_person, debt.getOwner().getName());
-        row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? ctx.getResources().getString(R.string.cash) : debt.getNote());
-        row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(ctx, debt.timestamp));
+        row.setTextViewText(R.id.list_item_note, debt.getNote() == null ? context.getResources().getString(R.string.cash) : debt.getNote());
+        row.setTextViewText(R.id.list_item_date, " - " + Resource.getRelativeTimeString(context, debt.timestamp));
 		row.setTextViewText(R.id.list_item_amount, data.preferences.getCurrency().render(debt));
 
         if (debt.isPaidBack()) {
-            row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_very_light));
-            row.setTextColor(R.id.list_item_note, ctx.getResources().getColor(R.color.gray_oncolor_light));
-            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getDisabledColor()));
+            row.setTextColor(R.id.list_item_person, context.getResources().getColor(R.color.gray_text_very_light));
+            row.setTextColor(R.id.list_item_note, context.getResources().getColor(R.color.gray_oncolor_light));
+            row.setTextColor(R.id.list_item_amount, context.getResources().getColor(debt.getDisabledColor()));
         } else {
-            row.setTextColor(R.id.list_item_person, ctx.getResources().getColor(R.color.gray_text_normal));
-            row.setTextColor(R.id.list_item_note, ctx.getResources().getColor(R.color.gray_text_light));
-            row.setTextColor(R.id.list_item_amount, ctx.getResources().getColor(debt.getColor()));
+            row.setTextColor(R.id.list_item_person, context.getResources().getColor(R.color.gray_text_normal));
+            row.setTextColor(R.id.list_item_note, context.getResources().getColor(R.color.gray_text_light));
+            row.setTextColor(R.id.list_item_amount, context.getResources().getColor(debt.getColor()));
         }
 
         Intent intent = new Intent();

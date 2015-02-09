@@ -14,20 +14,20 @@ import com.johnsimon.payback.ui.FeedActivity;
 public class ListWidgetProvider extends AppWidgetProvider {
 
     @Override
-    public void onUpdate(Context ctx, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int i = 0; i < appWidgetIds.length; i++) {
-            Intent svcIntent = new Intent(ctx, ListWidgetService.class);
+            Intent svcIntent = new Intent(context, ListWidgetService.class);
 
             svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
             svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-            RemoteViews widget = new RemoteViews(ctx.getPackageName(), R.layout.widget_layout);
+            RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
             widget.setRemoteAdapter(appWidgetIds[i], R.id.feed_list_item_master, svcIntent);
 
-            Intent clickIntent = new Intent(ctx, FeedActivity.class);
+            Intent clickIntent = new Intent(context, FeedActivity.class);
             PendingIntent clickPI = PendingIntent
-                    .getActivity(ctx, 0,
+                    .getActivity(context, 0,
                             clickIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -36,6 +36,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
         }
 
-        super.onUpdate(ctx, appWidgetManager, appWidgetIds);
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 }
