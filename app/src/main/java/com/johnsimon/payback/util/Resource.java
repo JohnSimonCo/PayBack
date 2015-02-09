@@ -162,11 +162,11 @@ public class Resource {
 	}
 
 	//TODO fördela
-	public static void actionComplete(final Context context) {
+	public static void actionComplete(final Activity activity) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
 
-		final SharedPreferences preferences = StorageManager.getPreferences(context);
+		final SharedPreferences preferences = StorageManager.getPreferences(activity);
 
 		//Increment actions and compare to MAX_ACTIONS
 		if(++actions >= MAX_ACTIONS) {
@@ -174,7 +174,7 @@ public class Resource {
 
 			//Open the request rate dialog
 
-            new MaterialDialog.Builder(context)
+            new MaterialDialog.Builder(activity)
                     .title(R.string.rate_title)
                     .content(R.string.rate_text)
                     .positiveText(R.string.rate_now)
@@ -184,11 +184,11 @@ public class Resource {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            final String appPackageName = context.getPackageName();
+                            final String appPackageName = activity.getPackageName();
                             try {
-                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                             } catch (android.content.ActivityNotFoundException anfe) {
-                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
                             }
 
                             neverRate = true;

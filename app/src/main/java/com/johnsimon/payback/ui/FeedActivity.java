@@ -30,7 +30,6 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
@@ -86,7 +85,7 @@ public class FeedActivity extends DataActivity implements
         Intent sentIntent = getIntent();
 
         if (sentIntent.getBooleanExtra(ARG_FROM_CREATE, false)) {
-            Resource.actionComplete(getApplicationContext());
+            Resource.actionComplete(this);
             sentIntent.removeExtra(ARG_FROM_CREATE);
         }
 
