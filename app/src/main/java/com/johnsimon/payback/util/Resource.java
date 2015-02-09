@@ -249,8 +249,18 @@ public class Resource {
 
     public static class AmountComparator implements Comparator<Debt> {
         @Override
-        public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt2.getAbsoluteAmount() - debt1.getAbsoluteAmount());
+        public int compare(Debt a, Debt b) {
+			if(a.isPaidBack()) {
+				if(b.isPaidBack()) {
+					return Math.round(b.getAbsoluteAmount() - a.getAbsoluteAmount());
+				} else {
+					return 1;
+				}
+			} else if(b.isPaidBack()) {
+				return -1;
+			} else {
+				return Math.round(b.getAbsoluteAmount() - a.getAbsoluteAmount());
+			}
         }
     }
 
