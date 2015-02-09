@@ -20,8 +20,6 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
     protected Storage storage;
     protected Context ctx;
 
-    Notification dataLink;
-
     protected DataWidgetViewsFactory(Context ctx) {
         this.ctx = ctx;
         storage = StorageManager.getStorage(ctx);
@@ -29,7 +27,7 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
         ContactsLoader contactsLoader = new ContactsLoader();
         contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ctx.getContentResolver());
 
-        dataLink = new DataLinker().link(storage.subscription, contactsLoader.promise);
+        DataLinker.link(storage.subscription, contactsLoader.promise);
     }
 
     @Override
@@ -63,12 +61,12 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
     @Override
     public void onCreate() {
         storage.subscription.listen(dataLoadedCallback);
-        dataLink.listen(dataLinkedCallback);
+        DataLinker.linked.listen(dataLinkedCallback);
     }
 
     @Override
     public void onDestroy() {
         storage.subscription.unregister(dataLoadedCallback);
-        dataLink.unregister(dataLinkedCallback);
+		DataLinker.linked.unregister(dataLinkedCallback);
     }
 }

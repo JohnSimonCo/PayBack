@@ -114,7 +114,7 @@ public class Alarm  {
             remindLaterIntent.putExtra(Alarm.ALARM_ID, id);
 
             return new NotificationCompat.Action(
-                    R.drawable.notif_remind_later,
+                    R.drawable.abc_ab_share_pack_holo_dark,
                     context.getString(R.string.notif_remind_later),
                     PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         }

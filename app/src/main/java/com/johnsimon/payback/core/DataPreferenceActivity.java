@@ -23,21 +23,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 	public User user;
 
-	protected Notification dataLink;
 	protected ContactLoader contactLoader;
-
-	@Override
-	public Storage getStorage() {
-		return storage;
-	}
-	@Override
-	public ContactLoader getContactLoader() {
-		return contactLoader;
-	}
-	@Override
-	public Notification getDataLink() {
-		return dataLink;
-	}
 
 	@Override
 	public Activity getContext() {
@@ -60,6 +46,15 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	}
 
 	@Override
+	public Storage getStorage() {
+		return storage;
+	}
+	@Override
+	public ContactLoader getContactLoader() {
+		return contactLoader;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -67,7 +62,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
 
-		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
+		DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
 	}
 
 	@Override
@@ -78,9 +73,9 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		dataLink.listen(dataLinkedCallback);
-
 		contactLoader.userLoaded.then(userLoadedCallback);
+
+		DataLinker.linked.listen(dataLinkedCallback);
 
 		storage.connect();
 	}
@@ -93,7 +88,10 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
+		DataLinker.linked.unregister(dataLinkedCallback);
+
 		storage.disconnect();
+
 	}
 
 	@Override
@@ -114,6 +112,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 			onDataReceived();
 		}
 	};
+
 
 	private NotificationCallback dataLinkedCallback = new NotificationCallback() {
 		@Override

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
+import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
@@ -19,8 +20,6 @@ public abstract class DataFragment extends Fragment {
 
 	private ContactLoader contactLoader;
 
-    private Notification dataLink;
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -30,8 +29,6 @@ public abstract class DataFragment extends Fragment {
 		this.storage = activity.getStorage();
 
 		contactLoader = activity.getContactLoader();
-
-		dataLink = activity.getDataLink();
 	}
 
 	protected DataActivityInterface getDataActivity() {
@@ -44,7 +41,7 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-        dataLink.listen(dataLinkedCallback);
+        DataLinker.linked.listen(dataLinkedCallback);
 
 		contactLoader.userLoaded.then(userLoadedCallback);
 	}
@@ -55,8 +52,7 @@ public abstract class DataFragment extends Fragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-        dataLink.unregister(dataLinkedCallback);
-
+		DataLinker.linked.unregister(dataLinkedCallback);
 
         contactLoader.userLoaded.unregister(userLoadedCallback);
 	}
