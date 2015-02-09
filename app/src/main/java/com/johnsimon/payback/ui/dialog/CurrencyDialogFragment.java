@@ -116,7 +116,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		custom_currency_check_after = (TintCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
         custom_currency_decimal_separator = (TintCheckBox) rootView.findViewById(R.id.custom_currency_decimal_separator);
-        custom_currency_trailing_zeros = (TintCheckBox) rootView.findViewById(R.id.custom_currency_trailing_zero);
+        custom_currency_trailing_zeros = (TintCheckBox) rootView.findViewById(R.id.custom_currency_trailing_zeros);
 		currency_thousand_separator = (TintSpinner) rootView.findViewById(R.id.currency_thousand_separator);
 
         welcome_currency_preview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
