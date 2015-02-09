@@ -169,6 +169,8 @@
             </com.johnsimon.payback.view.FloatLabelLayout>
 
             <Button
+                android:drawableLeft="@drawable/ic_launcher"
+                android:background="?android:attr/selectableItemBackground"
                 android:id="@+id/reminder_button"
                 android:text="@string/set_reminder"
                 android:layout_width="wrap_content"

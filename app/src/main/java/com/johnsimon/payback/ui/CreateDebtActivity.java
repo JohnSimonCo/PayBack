@@ -296,6 +296,7 @@ public class CreateDebtActivity extends DataActivity {
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.getOwner().getName());
 
+            //TODO E12 HERE?
             floatLabelAmountEditText.setText(new DecimalFormat("###.###").format(editingDebt.getAmount()));
 
 			floatLabelNoteEditText.setText(editingDebt.getNote());
