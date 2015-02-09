@@ -56,8 +56,14 @@ public class UserCurrency {
 		if(format == null) format = createFormat();
 		String output = format.format(Math.abs(amount));
 
+		//Has decimals
 		if(trailingZero) {
-
+			//Amount is an integer
+			if((int) amount == amount) {
+				output += decimalSeparator() + "0";
+			} else {
+				output += "0";
+			}
 		}
 
         return output;
