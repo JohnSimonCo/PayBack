@@ -168,6 +168,12 @@
 
             </com.johnsimon.payback.view.FloatLabelLayout>
 
+            <Button
+                android:id="@+id/reminder_button"
+                android:text="@string/set_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <include

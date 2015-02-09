@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
@@ -49,6 +52,7 @@ import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 //TODO EDITAR HÖGA TAL SÅ KOMMER MAN HIT MED JÄVLA E12
@@ -179,6 +183,23 @@ public class CreateDebtActivity extends DataActivity {
 				}
 			}
 		});
+
+        Button reminderButton = (Button) findViewById(R.id.reminder_button);
+        reminderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            }
+        });
 
         if (Resource.isLOrAbove()) {
             create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
