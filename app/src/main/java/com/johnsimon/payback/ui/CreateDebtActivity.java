@@ -198,13 +198,18 @@ public class CreateDebtActivity extends DataActivity {
         final TimePickerDialog.OnTimeSetListener timeSetCallback = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
+                reminderCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                reminderCalendar.set(Calendar.MINUTE, minute);
+                updateDate();
             }
         };
 
         final DatePickerDialog.OnDateSetListener dateSetCallback = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                reminderCalendar.set(year, monthOfYear, dayOfMonth);
+                updateDate();
+
                 TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(CreateDebtActivity.this));
                 timePickerDialog.show();
             }
@@ -305,6 +310,10 @@ public class CreateDebtActivity extends DataActivity {
 			floatLabelAmountEditText.requestFocus();
 		}
 	}
+
+    private void updateDate() {
+
+    }
 
     @Override
     protected void onDataLinked() {
