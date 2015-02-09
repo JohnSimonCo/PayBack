@@ -5,8 +5,6 @@ import com.johnsimon.payback.data.Debt;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Currency;
-import java.util.Locale;
 
 public class UserCurrency {
 	public final static int DECIMAL_SEPARATOR_DOT    = 0;
@@ -23,14 +21,17 @@ public class UserCurrency {
     public final int decimalSeparator;
     public final int thousandSeparator;
 
+	public final boolean trailingZero;
+
     private transient DecimalFormat format;
 
-	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator) {
+	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator, boolean trailingZero) {
 		this.id = id;
 		this.displayName = displayName;
 		this.before = before;
         this.decimalSeparator = decimalSeparator;
         this.thousandSeparator = thousandSeparator;
+		this.trailingZero = trailingZero;
 
 		format = createFormat();
 	}
@@ -66,7 +67,8 @@ public class UserCurrency {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###." : "###,###.";
+		formatString += trailingZero || true ? "0" : "###";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
