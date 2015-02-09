@@ -157,14 +157,14 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context ctx, UserCurrency userCurrency) {
+	public String getShareString(Context context, UserCurrency userCurrency) {
 		String shareText = this.amount < 0
-			? ctx.getString(R.string.ioweyou)
-			: ctx.getString(R.string.youoweme);
+			? context.getString(R.string.ioweyou)
+			: context.getString(R.string.youoweme);
 
 		shareText += " " + userCurrency.render(this);
 		if (!TextUtils.isEmpty(this.note)) {
-			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
+			shareText += " " + context.getString(R.string.debt_for) + " " +  this.note;
 		}
 
 		return shareText;

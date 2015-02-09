@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
@@ -26,30 +27,32 @@ public class Alarm  {
     public final static String ALARM_ID = "ALARM_ID";
 
     //TODO PendingIntent.getBroadcast requestCode "0" is magic number, see if it has effect or not
-    public static void addAlarm(Calendar targetDate, Context ctx, Debt debt) {
-        Intent intentAlarm = new Intent(ctx, Alarm.class);
+    public static void addAlarm(Calendar targetDate, Context context, Debt debt) {
+        Intent intentAlarm = new Intent(context, Alarm.class);
         intentAlarm.putExtra(ALARM_ID, debt.getId());
 
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, targetDate.getTimeInMillis(), PendingIntent.getBroadcast(ctx, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+      //TODO CONT  Toast.makeText(context, Calendar.getInstance().getTimeInMillis())
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetDate.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
-    public static boolean hasAlarm (Context ctx, UUID id) {
-        Intent intentAlarm = new Intent(ctx, Alarm.class);
+    public static boolean hasAlarm (Context context, UUID id) {
+        Intent intentAlarm = new Intent(context, Alarm.class);
         intentAlarm.putExtra(ALARM_ID, id);
 
-        return (PendingIntent.getBroadcast(ctx, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
+        return (PendingIntent.getBroadcast(context, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
     }
 
-    public static void cancelAlarm(Context ctx, UUID id) {
-        Intent intent = new Intent(ctx, Alarm.class);
+    public static void cancelAlarm(Context context, UUID id) {
+        Intent intent = new Intent(context, Alarm.class);
         intent.putExtra(ALARM_ID, id);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         pendingIntent.cancel();
 
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.cancel(pendingIntent);
     }

@@ -18,23 +18,23 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
 
     protected AppData data;
     protected Storage storage;
-    protected Context ctx;
+    protected Context context;
 
     Notification dataLink;
 
-    protected DataWidgetViewsFactory(Context ctx) {
-        this.ctx = ctx;
-        storage = StorageManager.getStorage(ctx);
+    protected DataWidgetViewsFactory(Context context) {
+        this.context = context;
+        storage = StorageManager.getStorage(context);
 
         ContactsLoader contactsLoader = new ContactsLoader();
-        contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ctx.getContentResolver());
+        contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getContentResolver());
 
         dataLink = new DataLinker().link(storage.subscription, contactsLoader.promise);
     }
 
     @Override
     public Context getContext() {
-        return ctx;
+        return context;
     }
 
     @Override

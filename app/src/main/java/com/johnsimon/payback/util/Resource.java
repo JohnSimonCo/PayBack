@@ -130,10 +130,10 @@ public class Resource {
 		return Build.VERSION.SDK_INT >= 21;
 	}
 
-    public static CharSequence getRelativeTimeString(Context ctx, long timestamp) {
+    public static CharSequence getRelativeTimeString(Context context, long timestamp) {
         long now = System.currentTimeMillis();
         return (now - timestamp < 60000)
-                ? ctx.getString(R.string.justnow)
+                ? context.getString(R.string.justnow)
                 : DateUtils.getRelativeTimeSpanString(
 					timestamp,
 					now,

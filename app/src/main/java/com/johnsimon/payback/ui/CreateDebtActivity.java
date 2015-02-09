@@ -47,6 +47,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
@@ -200,6 +201,7 @@ public class CreateDebtActivity extends DataActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 reminderCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 reminderCalendar.set(Calendar.MINUTE, minute);
+
                 updateDate();
             }
         };
@@ -332,18 +334,20 @@ public class CreateDebtActivity extends DataActivity {
         public void onClick(View v) {
 
             if (v.isActivated()) {
-                Person person = saveDebt(
+                Debt debt = saveDebt(
                         floatLabelNameAutoCompleteTextView.getText().toString().trim(),
                         radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
                         Float.parseFloat(floatLabelAmountEditText.getText().toString()),
                         floatLabelNoteEditText.getText().toString().trim()
                 );
 
+                Alarm.addAlarm(reminderCalendar, CreateDebtActivity.this, debt);
+
                 finishAffinity();
                 final Intent intent = new Intent(getApplicationContext(), FeedActivity.class)
 						.putExtra(FeedActivity.ARG_FROM_CREATE, true);
 
-                FeedActivity.person = person;
+                FeedActivity.person = debt.getOwner();
 
                 if (Resource.isLOrAbove()) {
                     startActivity(intent);
@@ -360,7 +364,7 @@ public class CreateDebtActivity extends DataActivity {
         }
     };
 
-	public Person saveDebt(String name, boolean iOwe, float amount, String note) {
+	public Debt saveDebt(String name, boolean iOwe, float amount, String note) {
 		if(iOwe) {
 			amount = -amount;
 		}
@@ -368,20 +372,22 @@ public class CreateDebtActivity extends DataActivity {
 			note = null;
 		}
 
-		Person person;
+		Debt debt;
 		if(editingDebt == null) {
-			person = data.getOrCreatePerson(name, ColorPalette.getInstance(this));
-			data.addFirst(new Debt(person, amount, note, data.preferences.getCurrency().id));
+			Person person = data.getOrCreatePerson(name, ColorPalette.getInstance(this));
+			data.addFirst(debt = new Debt(person, amount, note, data.preferences.getCurrency().id));
 		} else {
-			person = editingDebt.getOwner().getName().equals(name)
+			Person person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()
 				: data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 
 			editingDebt.edit(person, amount, note);
+
+            debt = editingDebt;
 		}
 
 		storage.commit();
-		return person;
+		return debt;
 	}
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
