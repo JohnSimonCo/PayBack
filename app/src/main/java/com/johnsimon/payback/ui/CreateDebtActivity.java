@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,8 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v7.internal.widget.TintEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -37,6 +40,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TimePicker;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
@@ -61,10 +65,12 @@ public class CreateDebtActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
-	public static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
-    public static String ARG_ANIMATE_TOOLBAR = Resource.arg(ARG_PREFIX, "ANIMATE_TOOLBAR");
-	public static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
-	public static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
+	public final static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
+    public final static String ARG_ANIMATE_TOOLBAR = Resource.arg(ARG_PREFIX, "ANIMATE_TOOLBAR");
+	public final static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
+	public final static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
+
+    public final static String KEY_CALENDAR = "KEY_CALENDAR";
 
 	private TintEditText floatLabelAmountEditText;
 	private TintEditText floatLabelNoteEditText;
@@ -79,6 +85,8 @@ public class CreateDebtActivity extends DataActivity {
 	private Debt editingDebt = null;
 
     private TransitionDrawable transitionDrawable;
+
+    private Calendar reminderCalendar;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -126,6 +134,8 @@ public class CreateDebtActivity extends DataActivity {
             if (getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
                 animateIn(toolbar);
             }
+
+            reminderCalendar = Calendar.getInstance();
         }
 
 		Resources res = getResources();
@@ -189,17 +199,23 @@ public class CreateDebtActivity extends DataActivity {
             @Override
             public void onClick(View v) {
 
-                final Calendar calendar = Calendar.getInstance();
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        calendar.set(year, monthOfYear, dayOfMonth);
-
-                    }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateSelectedCallback, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             }
         });
+
+        DatePickerDialog.OnDateSetListener dateSetCallback = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, )
+            }
+        };
+
+        TimePickerDialog.OnTimeSetListener timeSetCallback = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            }
+        };
 
         if (Resource.isLOrAbove()) {
             create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
@@ -479,4 +495,15 @@ public class CreateDebtActivity extends DataActivity {
 		Log.i("my_app", "New intent with flags " + intent.getFlags());
 	}
 
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        reminderCalendar.setTimeInMillis(savedInstanceState.getLong(KEY_CALENDAR));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
+    }
 }

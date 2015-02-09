@@ -39,12 +39,14 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	public final static String CURRENCY_DISPLAY_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
 	public final static String CURRENCY_CHECKBOX = "CURRENCY_CHECKBOX";
 	public final static String CURRENCY_DECIMAL_SEPARATOR = "CURRENCY_DECIMAL_SEPARATOR";
+	public final static String CURRENCY_TRAILING_ZERO = "CURRENCY_TRAILING_ZERO";
 	public final static String CURRENCY_THOUSAND_SPINNER = "CURRENCY_THOUSAND_SPINNER";
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
 	private TintCheckBox custom_currency_check_after;
     private TintCheckBox custom_currency_decimal_separator;
+    private TintCheckBox custom_currency_trailing_zero;
     private TintSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
@@ -113,6 +115,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 		custom_currency_check_after = (TintCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
         custom_currency_decimal_separator = (TintCheckBox) rootView.findViewById(R.id.custom_currency_decimal_separator);
+        custom_currency_trailing_zero = (TintCheckBox) rootView.findViewById(R.id.custom_currency_trailing_zero);
 		currency_thousand_separator = (TintSpinner) rootView.findViewById(R.id.currency_thousand_separator);
 
         welcome_currency_preview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
@@ -156,6 +159,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
             custom_currency_check_after.setChecked(savedInstanceState.getBoolean(CURRENCY_CHECKBOX, false));
             custom_currency_decimal_separator.setChecked(savedInstanceState.getBoolean(CURRENCY_DECIMAL_SEPARATOR, false));
+            custom_currency_trailing_zero.setChecked(savedInstanceState.getBoolean(CURRENCY_TRAILING_ZERO, false));
 
 			currency_thousand_separator.setSelection(savedInstanceState.getInt(CURRENCY_THOUSAND_SPINNER, UserCurrency.THOUSAND_SEPARATOR_NONE));
 		} else {
@@ -163,11 +167,11 @@ public class CurrencyDialogFragment extends DataDialogFragment {
         }
 
         rootView.findViewById(R.id.welcome_cancel).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				alertDialog.dismiss();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -175,18 +179,18 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				new MaterialDialog.Builder(getActivity())
 						.title(R.string.select_currency)
 						.items(currencyNames.toArray(new String[currencyNames.size()]))
-						.itemsCallbackSingleChoice(currencyNames.indexOf(selectedCurrency), new MaterialDialog.ListCallback() {
-							@Override
-							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								try {
-                                    selectedCurrency = currencyNames.get(which);
-                                    displayCurrency = text.toString();
+						.itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog materialDialog, View view, int which, CharSequence charSequence) {
+                                try {
+                                    selectedCurrency = charSequence.toString();
+                                    displayCurrency = charSequence.toString();
                                     updatePreview();
                                 } catch (Exception e) {
                                     //TODO mer avancerad crash prevention
                                 }
-							}
-						})
+                            }
+                        })
 						.positiveText(R.string.select)
 						.show();
 			}
@@ -222,6 +226,13 @@ public class CurrencyDialogFragment extends DataDialogFragment {
             }
         });
 
+        custom_currency_trailing_zero.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePreview();
+            }
+        });
+
 		currency_thousand_separator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -246,18 +257,22 @@ public class CurrencyDialogFragment extends DataDialogFragment {
     @Override
     protected void onDataReceived() {
         if (!usingDefaults) {
-            selectedCurrency = data.preferences.getCurrency().id;
-            displayCurrency = data.preferences.getCurrency().getDisplayName();
-            custom_currency_check_after.setChecked(!data.preferences.getCurrency().before);
-            custom_currency_decimal_separator.setChecked(data.preferences.getCurrency().decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
-			currency_thousand_separator.setSelection(data.preferences.getCurrency().thousandSeparator);
+
+            UserCurrency userCurrency = data.preferences.getCurrency();
+
+            selectedCurrency = userCurrency.id;
+            displayCurrency = userCurrency.getDisplayName();
+            custom_currency_check_after.setChecked(!userCurrency.before);
+            custom_currency_decimal_separator.setChecked(userCurrency.decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
+            custom_currency_trailing_zero.setChecked(userCurrency.trailingZero);
+			currency_thousand_separator.setSelection(userCurrency.thousandSeparator);
             updatePreview();
         }
         super.onDataReceived();
     }
 
     private void updatePreview() {
-		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
+		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition(), custom_currency_trailing_zero.isChecked());
 		welcome_currency_preview.setText(cur.render(2400.5f) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
 
 		welcome_select_currency.setText(getString(R.string.currency) + " (" + selectedCurrency + ")");
@@ -271,6 +286,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
         outState.putBoolean(CURRENCY_CHECKBOX, custom_currency_check_after.isChecked());
         outState.putBoolean(CURRENCY_DECIMAL_SEPARATOR, custom_currency_decimal_separator.isChecked());
+        outState.putBoolean(CURRENCY_TRAILING_ZERO, custom_currency_trailing_zero.isChecked());
 		outState.putInt(CURRENCY_THOUSAND_SPINNER, currency_thousand_separator.getSelectedItemPosition());
 	}
 
@@ -283,7 +299,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			UserCurrency userCurrency = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
+			UserCurrency userCurrency = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition(), custom_currency_trailing_zero.isChecked());
 
 			data.preferences.currency.setValue(userCurrency);
 			storage.commit();

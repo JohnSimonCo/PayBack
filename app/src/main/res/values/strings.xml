@@ -125,6 +125,7 @@
     <string name="set_reminder">Set reminder</string>
     <string name="even_out">Even out</string>
     <string name="evened_out">Evened out</string>
+    <string name="currency_show_trailing_zeros">Show trailing zero</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
