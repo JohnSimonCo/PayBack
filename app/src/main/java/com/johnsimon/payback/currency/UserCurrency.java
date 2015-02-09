@@ -56,13 +56,15 @@ public class UserCurrency {
 		if(format == null) format = createFormat();
 		String output = format.format(Math.abs(amount));
 
-		//Has decimals
 		if(trailingZero) {
 			//Amount is an integer
 			if((int) amount == amount) {
 				output += decimalSeparator() + "0";
 			} else {
-				output += "0";
+				//Amount of decimals < 2
+				if(output.length() - output.lastIndexOf(decimalSeparator()) - 1 < 2) {
+					output += "0";
+				}
 			}
 		}
 
@@ -79,7 +81,9 @@ public class UserCurrency {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###." : "###,###.";
+
+		formatString += trailingZero ? "00" : "##";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
