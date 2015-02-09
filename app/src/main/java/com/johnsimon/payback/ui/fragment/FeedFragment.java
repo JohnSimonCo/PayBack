@@ -53,6 +53,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 	public TextView totalDebtTextView;
     public TextView feed_header_balance;
+    private ImageButton fab_l;
 
     public RecyclerView recyclerView;
     private View emptyView;
@@ -83,18 +84,18 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
         //FAB is different on L
         if (Resource.isLOrAbove()) {
-            final ImageButton fab = (ImageButton) headerView.findViewById(R.id.feed_fab_l);
+            fab_l = (ImageButton) headerView.findViewById(R.id.feed_fab_l);
 
-            fab.setOutlineProvider(new ViewOutlineProvider() {
+            fab_l.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, fab.getWidth(), fab.getHeight());
+                    outline.setOval(0, 0, fab_l.getWidth(), fab_l.getHeight());
                 }
             });
 
-            fab.setClipToOutline(true);
+            fab_l.setClipToOutline(true);
 
-            fab.setOnClickListener(fabClickListener);
+            fab_l.setOnClickListener(fabClickListener);
         } else {
             FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
             fab.setOnClickListener(fabClickListener);
@@ -342,7 +343,13 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 .putExtra(CreateDebtActivity.ARG_ANIMATE_TOOLBAR, false)
 				.putExtra(CreateDebtActivity.ARG_ID, debt.id);
 
-		startActivity(intent);
+        if (Resource.isLOrAbove()) {
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), fab_l, "fab");
+
+            startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
+        }
 	}
 
     public interface OnFeedChangeCallback {
