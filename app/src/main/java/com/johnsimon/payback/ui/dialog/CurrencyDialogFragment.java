@@ -168,11 +168,11 @@ public class CurrencyDialogFragment extends DataDialogFragment {
         }
 
         rootView.findViewById(R.id.welcome_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				alertDialog.dismiss();
+			}
+		});
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -265,7 +265,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
             displayCurrency = userCurrency.getDisplayName();
             custom_currency_check_after.setChecked(!userCurrency.before);
             custom_currency_decimal_separator.setChecked(userCurrency.decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
-            custom_currency_trailing_zeros.setChecked(userCurrency.trailingZero);
+            custom_currency_trailing_zeros.setChecked(userCurrency.trailingZeros);
 			currency_thousand_separator.setSelection(userCurrency.thousandSeparator);
             updatePreview();
         }
