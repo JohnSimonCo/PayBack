@@ -13,6 +13,7 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Undo;
 
 public abstract class DataActivity extends ActionBarActivity implements DataActivityInterface {
@@ -62,6 +63,8 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
 
 		DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
+
+		Alarm.listen(this, storage.subscription);
 	}
 
 	@Override

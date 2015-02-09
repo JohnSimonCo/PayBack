@@ -14,6 +14,7 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Undo;
 
 public class DataPreferenceActivity extends PreferenceActivity implements DataActivityInterface {
@@ -63,6 +64,8 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
 
 		DataLinker.link(storage.subscription, contactLoader.contactsLoaded);
+
+		Alarm.listen(this, storage.subscription);
 	}
 
 	@Override

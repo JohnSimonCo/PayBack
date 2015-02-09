@@ -42,8 +42,8 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	@SerializedName("currencyId")
 	public String currencyId;
 
-	@SerializedName("remindMe")
-	public Long remindMe;
+	@SerializedName("remindDate")
+	public Long remindDate;
 
 	public transient Person owner;
 
@@ -132,13 +132,13 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.paidBack = isPaidBack;
 	}
 
-	public void setRemindMe(Long remindMe) {
+	public void setRemindDate(Long remindDate) {
 		touch();
-		this.remindMe = remindMe;
+		this.remindDate = remindDate;
 	}
 
-	public Long getRemindMe() {
-		return remindMe;
+	public Long getRemindDate() {
+		return remindDate;
 	}
 
 	public void edit(Person owner, float amount, String note) {

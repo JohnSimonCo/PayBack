@@ -13,14 +13,13 @@ import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.loader.ContactsLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.util.Alarm;
 
 public abstract class DataWidgetViewsFactory implements DataContextInterface, RemoteViewsService.RemoteViewsFactory {
 
     protected AppData data;
     protected Storage storage;
     protected Context context;
-
-    Notification dataLink;
 
     protected DataWidgetViewsFactory(Context context) {
         this.context = context;
@@ -30,7 +29,9 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
         contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getContentResolver());
 
         DataLinker.link(storage.subscription, contactsLoader.promise);
-    }
+
+		Alarm.listen(context, storage.subscription);
+	}
 
     @Override
     public Context getContext() {

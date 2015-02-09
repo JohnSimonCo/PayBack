@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
+import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.storage.LocalStorage;
@@ -26,16 +27,41 @@ public class Alarm  {
 
     public final static String ALARM_ID = "ALARM_ID";
 
+	private static Subscription<AppData> dataSubscription;
+	private static Context context;
+
+	public static void listen(Context context, Subscription<AppData> dataSubscription) {
+		Alarm.context = context;
+
+		if(Alarm.dataSubscription != null) {
+			Alarm.dataSubscription.unregister(dataLoadedCallback);
+		}
+
+		Alarm.dataSubscription = dataSubscription;
+		dataSubscription.listen(dataLoadedCallback);
+	}
+
+	private static Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
+		@Override
+		public void onCalled(AppData data) {
+			for(Debt debt : data.debts) {
+				if(debt.getRemindDate() != null && !hasAlarm(context, debt.id)) {
+					addAlarm(context, debt);
+				}
+			}
+		}
+	};
+
     //TODO PendingIntent.getBroadcast requestCode "0" is magic number, see if it has effect or not
-    public static void addAlarm(Calendar targetDate, Context context, Debt debt) {
-        Intent intentAlarm = new Intent(context, Alarm.class);
+    public static void addAlarm(Context context, Debt debt) {
+		Intent intentAlarm = new Intent(context, Alarm.class);
         intentAlarm.putExtra(ALARM_ID, debt.getId());
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
       //TODO CONT  Toast.makeText(context, Calendar.getInstance().getTimeInMillis())
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, targetDate.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     public static boolean hasAlarm (Context context, UUID id) {
@@ -172,11 +198,9 @@ public class Alarm  {
                         break;
 
                     case ACTION_REMIND_LATER:
-                        Calendar calendar = Calendar.getInstance();
-                        // 86400000 = 1000 * 60 * 60 * 24 = One day
-                        calendar.setTimeInMillis(calendar.getTimeInMillis() + 86400000);
-
-                        Alarm.addAlarm(calendar, context, debt);
+						// 86400000 = 1000 * 60 * 60 * 24 = One day
+						debt.setRemindDate(System.currentTimeMillis() + 86400000);
+						Alarm.addAlarm(context, debt);
                         break;
                 }
             }
