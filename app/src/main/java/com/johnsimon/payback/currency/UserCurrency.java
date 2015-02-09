@@ -54,7 +54,13 @@ public class UserCurrency {
 
 	public String render(float amount) {
 		if(format == null) format = createFormat();
-        return format.format(Math.abs(amount));
+		String output = format.format(Math.abs(amount));
+
+		if(trailingZero) {
+
+		}
+
+        return output;
 	}
 
 	private DecimalFormat createFormat() {
@@ -67,8 +73,7 @@ public class UserCurrency {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###." : "###,###.";
-		formatString += trailingZero || true ? "0" : "###";
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
