@@ -85,7 +85,7 @@ public class FeedActivity extends DataActivity implements
         Intent sentIntent = getIntent();
 
         if (sentIntent.getBooleanExtra(ARG_FROM_CREATE, false)) {
-            Resource.actionComplete(getApplicationContext());
+            Resource.actionComplete(this);
             sentIntent.removeExtra(ARG_FROM_CREATE);
         }
 
