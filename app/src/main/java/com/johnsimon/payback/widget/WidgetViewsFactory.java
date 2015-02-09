@@ -18,8 +18,6 @@ import java.util.ArrayList;
 
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
-    private ArrayList<Debt> debts;
-
     public WidgetViewsFactory(Context context, Intent intent) {
         super(context);
     }
@@ -34,18 +32,8 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
     }
 
     @Override
-    public void onCreate() {
-        debts = new ArrayList<>();
-    }
-
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
     public int getCount() {
-        return debts.size();
+        return data == null ? 0 : data.debts.size();
     }
 
     @Override
@@ -113,9 +101,5 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-        debts.clear();
-        if (data != null && data.debts != null) {
-            debts = new ArrayList<>(data.debts);
-        }
     }
 }
