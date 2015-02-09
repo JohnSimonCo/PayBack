@@ -250,7 +250,7 @@ public class Resource {
     public static class AmountComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt2.getAmount() - debt1.getAmount());
+            return Math.round(debt2.getAbsoluteAmount() - debt1.getAbsoluteAmount());
         }
     }
 
