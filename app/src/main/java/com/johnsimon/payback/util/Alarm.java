@@ -28,21 +28,19 @@ public class Alarm  {
 
     public final static String ALARM_ID = "ALARM_ID";
 
-	private final static int ALARM_FLAG = 0;
-
     //TODO PendingIntent.getBroadcast requestCode "0" is m	agic number, see if it has effect or not
     public static void addAlarm(Context context, Debt debt) {
-		Intent intentAlarm = new Intent(context, Alarm.class);
+		Intent intentAlarm = new Intent(context, AlarmReceiver.class);
         intentAlarm.putExtra(ALARM_ID, debt.getId());
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
 		//alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, ALARM_FLAG));
+		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     public static boolean hasAlarm (Context context, Debt debt) {
-        Intent intentAlarm = new Intent(context, Alarm.class);
+        Intent intentAlarm = new Intent(context, AlarmReceiver.class);
         intentAlarm.putExtra(ALARM_ID, debt.id);
 
 		//return (PendingIntent.getBroadcast(context, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
@@ -51,11 +49,11 @@ public class Alarm  {
     }
 
     public static void cancelAlarm(Context context, Debt debt) {
-        Intent intent = new Intent(context, Alarm.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra(ALARM_ID, debt.id);
 
 		//PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, debt.getIntegerId(), intent, ALARM_FLAG);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, debt.getIntegerId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         pendingIntent.cancel();
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -63,30 +61,14 @@ public class Alarm  {
         alarmManager.cancel(pendingIntent);
     }
 
-	public static class AlarmBootListener extends BroadcastReceiver implements Callback<AppData> {
-
-		private AlarmScheduler scheduler;
-
-		public AlarmBootListener() {
-		}
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			LocalStorage localStorage = new LocalStorage(context);
-			scheduler = new AlarmScheduler(context, localStorage.subscription);
-			localStorage.subscription.listen(this);
-		}
-
-		@Override
-		public void onCalled(AppData data) {
-			scheduler.die();
-		}
-	}
-
-    private static class AlarmReceiver extends BroadcastReceiver {
+	public static class AlarmReceiver extends BroadcastReceiver {
 
         private Context context;
         private Intent intent;
+
+		public AlarmReceiver() {
+			int i = 0;
+		}
 
         @Override
         public void onReceive(final Context context, Intent intent) {
@@ -165,6 +147,23 @@ public class Alarm  {
             }
         }
     }
+
+	public static class AlarmBootListener extends BroadcastReceiver implements Callback<AppData> {
+
+		private AlarmScheduler scheduler;
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			LocalStorage localStorage = new LocalStorage(context);
+			scheduler = new AlarmScheduler(context, localStorage.subscription);
+			localStorage.subscription.listen(this);
+		}
+
+		@Override
+		public void onCalled(AppData data) {
+			scheduler.die();
+		}
+	}
 
     private static class NotificationEventReceiver extends BroadcastReceiver {
 

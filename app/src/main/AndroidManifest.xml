@@ -81,6 +81,9 @@
             android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+
+        <receiver android:name=".util.Alarm$AlarmReceiver">
+        </receiver>
         <receiver
             android:name=".util.Alarm$AlarmBootListener">
             <intent-filter>
