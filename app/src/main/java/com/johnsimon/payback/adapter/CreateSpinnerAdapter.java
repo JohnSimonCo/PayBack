@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.johnsimon.payback.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.CalendarOptionItem> {
 

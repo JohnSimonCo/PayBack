@@ -213,7 +213,8 @@ public class CreateDebtActivity extends DataActivity {
 		dayList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.tomorrow), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW));
 		dayList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_date), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM));
 
-		spinnerDay.setAdapter(new CreateSpinnerAdapter(getApplicationContext(), 0, dayList));
+		CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList);
+		spinnerDay.setAdapter(dayAdapter);
 
 		ArrayList<CreateSpinnerAdapter.CalendarOptionItem> timeList = new ArrayList<>();
 		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.morning), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING));
@@ -222,6 +223,13 @@ public class CreateDebtActivity extends DataActivity {
 		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.night), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT));
 		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM));
 
+		CreateSpinnerAdapter timeAdapter = new CreateSpinnerAdapter(getApplicationContext(), 0, timeList);
+		spinnerTime.setAdapter(timeAdapter);
+
+		if (savedInstanceState == null) {
+			spinnerDay.setSelection(1);
+			spinnerTime.setSelection(0);
+		}
 
         final TimePickerDialog.OnTimeSetListener timeSetCallback = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -353,9 +361,13 @@ public class CreateDebtActivity extends DataActivity {
 		if (reminderCalendar == null) {
 			reminderButton.setText(R.string.set_reminder);
 			clearReminderButton.setVisibility(View.GONE);
+			spinnerDay.setVisibility(View.GONE);
+			spinnerTime.setVisibility(View.GONE);
 		} else {
 			reminderButton.setText("");
 			clearReminderButton.setVisibility(View.VISIBLE);
+			spinnerDay.setVisibility(View.VISIBLE);
+			spinnerTime.setVisibility(View.VISIBLE);
 		}
 
 	}
