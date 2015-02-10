@@ -1,6 +1,7 @@
 package com.johnsimon.payback.adapter;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,26 +15,26 @@ import java.util.ArrayList;
 
 public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.CalendarOptionItem> {
 
-	private ArrayList<CalendarOptionItem> list;
+	private ArrayList<CreateSpinnerAdapter.CalendarOptionItem> list;
 	private Context context;
 
-	public CreateSpinnerAdapter(Context context, int resource, ArrayList<CalendarOptionItem> list) {
-		super(context, resource);
-		this.context = context;
+	public CreateSpinnerAdapter(Context context, int resourceId, ArrayList<CreateSpinnerAdapter.CalendarOptionItem> list) {
+		super(context, resourceId, list);
 		this.list = list;
+		this.context = context;
 	}
 
 	@Override
-	public View getDropDownView(int position, View convertView,ViewGroup parent) {
-		return getCustomView(position, convertView, parent);
+	public View getDropDownView(int position, View convertView, ViewGroup parent) {
+		return getCustomView(position, convertView, true);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		return getCustomView(position, convertView, parent);
+		return getCustomView(position, convertView, false);
 	}
 
-	private View getCustomView(int position, View convertView, ViewGroup parent) {
+	public View getCustomView(int position, View convertView, boolean dropdown) {
 		ViewHolder holder;
 		CalendarOptionItem calendarOptionItem = list.get(position);
 
@@ -51,12 +52,24 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 		}
 
 		holder.textView.setText(calendarOptionItem.text);
-		holder.secondaryTextView.setText(calendarOptionItem.secondaryText);
-
-		if (calendarOptionItem.calendarFlag == CalendarOptionItem.FLAG_CALENDAR_CUSTOM) {
-			holder.masterLayout.setBackgroundColor(context.getResources().getColor(R.color.gray_oncolor_very_light));
+		if (calendarOptionItem.secondaryText != null && dropdown) {
+			holder.secondaryTextView.setText(calendarOptionItem.secondaryText);
+			holder.secondaryTextView.setVisibility(View.VISIBLE);
 		} else {
-			holder.masterLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+			holder.secondaryTextView.setVisibility(View.GONE);
+		}
+
+		if (dropdown) {
+			if (calendarOptionItem.calendarFlag == CalendarOptionItem.FLAG_CALENDAR_CUSTOM) {
+				holder.masterLayout.setBackgroundColor(context.getResources().getColor(R.color.gray_oncolor_extremely_light));
+			} else {
+				holder.masterLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+			}
+
+			holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+		} else {
+			holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+			holder.textView.setText(calendarOptionItem.selectedString);
 		}
 
 		return convertView;
@@ -87,11 +100,17 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 		public String text;
 		public String secondaryText;
 		public int calendarFlag;
+		public String selectedString;
 
-		public CalendarOptionItem(String text, String secondaryText, int calendarFlag) {
+		public CalendarOptionItem(String text, String secondaryText, int calendarFlag, String selectedString) {
 			this.text = text;
 			this.secondaryText = secondaryText;
 			this.calendarFlag = calendarFlag;
+			if (selectedString == null) {
+				this.selectedString = text;
+			} else {
+				this.selectedString = selectedString;
+			}
 		}
 
 	}

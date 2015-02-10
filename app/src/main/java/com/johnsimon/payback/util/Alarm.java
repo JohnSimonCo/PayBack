@@ -88,7 +88,7 @@ public class Alarm  {
                         .setContentTitle(context.getString(R.string.notif_pay_back_reminder))
                         .setContentText(getContentText(debt, data))
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setColor(context.getResources().getColor(R.color.primary_color))
+                        .setColor(context.getResources().getColor(R.color.icon_green))
                         .addAction(getPayBackAction(id))
                         .addAction(getRemindLaterAction(id))
                         .setContentIntent(getDetailPendingIntent(id));
@@ -199,8 +199,7 @@ public class Alarm  {
                         break;
 
                     case ACTION_REMIND_LATER:
-						// 86400000 = 1000 * 60 * 60 * 24 = One day
-						debt.setRemindDate(System.currentTimeMillis() + 86400000);
+						debt.setRemindDate(System.currentTimeMillis() + Resource.ONE_DAY);
 						Alarm.addAlarm(context, debt);
                         break;
                 }
