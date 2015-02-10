@@ -43,7 +43,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
@@ -85,9 +85,9 @@ public class CreateDebtActivity extends DataActivity {
 	private FloatLabelLayout floatLabelLayout;
     private ImageButton create_fab_l;
 	private Button reminderButton;
+    private Button reminderDayButton;
+    private Button reminderTimeButton;
 	private ImageButton clearReminderButton;
-	private TintSpinner spinnerDay;
-	private TintSpinner spinnerTime;
 
 	private RadioGroup radioGroup;
 
@@ -206,8 +206,7 @@ public class CreateDebtActivity extends DataActivity {
 			}
 		});
 
-		spinnerDay = (TintSpinner) findViewById(R.id.create_spinner_day);
-		spinnerTime = (TintSpinner) findViewById(R.id.create_spinner_time);
+
 
 		final ArrayList<CreateSpinnerAdapter.CalendarOptionItem> dayList = new ArrayList<CreateSpinnerAdapter.CalendarOptionItem>() {{
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.today), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY, null));
@@ -215,8 +214,6 @@ public class CreateDebtActivity extends DataActivity {
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_date), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM, null));
 		}};
 
-		CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList);
-		spinnerDay.setAdapter(dayAdapter);
 
 		final ArrayList<CreateSpinnerAdapter.CalendarOptionItem> timeList = new ArrayList<CreateSpinnerAdapter.CalendarOptionItem>() {{
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.morning), getTimeString(9), CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING, null));
@@ -226,91 +223,107 @@ public class CreateDebtActivity extends DataActivity {
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM, null));
 		}};
 
+        CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList);
 		CreateSpinnerAdapter timeAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, timeList);
-		spinnerTime.setAdapter(timeAdapter);
 
-		spinnerTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				switch (timeList.get(position).calendarFlag) {
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING:
-						reminderCalendar.set(Calendar.HOUR_OF_DAY, 9);
-						reminderCalendar.set(Calendar.MINUTE, 0);
-						updateDate();
-						break;
+        reminderDayButton = (Button) findViewById(R.id.create_button_day);
+        reminderTimeButton = (Button) findViewById(R.id.create_button_time);
 
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON:
-						reminderCalendar.set(Calendar.HOUR_OF_DAY, 13);
-						reminderCalendar.set(Calendar.MINUTE, 0);
-						updateDate();
-						break;
+        final ListPopupWindow popupWindowDay = new ListPopupWindow(this);
+        final ListPopupWindow popupWindowTime = new ListPopupWindow(this);
 
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING:
-						reminderCalendar.set(Calendar.HOUR_OF_DAY, 17);
-						reminderCalendar.set(Calendar.MINUTE, 0);
-						updateDate();
-						break;
+        popupWindowDay.setAnchorView(reminderDayButton);
+        popupWindowTime.setAnchorView(reminderTimeButton);
 
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT:
-						reminderCalendar.set(Calendar.HOUR_OF_DAY, 20);
-						reminderCalendar.set(Calendar.MINUTE, 0);
-						updateDate();
-						break;
+        popupWindowDay.setAdapter(dayAdapter);
+        popupWindowTime.setAdapter(timeAdapter);
 
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
-						TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(CreateDebtActivity.this));
-						timePickerDialog.show();
-						break;
-				}
-			}
+        reminderDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowDay.show();
+            }
+        });
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
+        reminderTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowTime.show();
+            }
+        });
 
-			}
-		});
+        popupWindowDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (timeList.get(position).calendarFlag) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
+                        Calendar nowToday = Calendar.getInstance();
+                        nowToday.setTimeInMillis(nowToday.getTimeInMillis() + Resource.ONE_DAY);
 
-		spinnerDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				switch (timeList.get(position).calendarFlag) {
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
-						Calendar nowToday = Calendar.getInstance();
-						nowToday.setTimeInMillis(nowToday.getTimeInMillis() + Resource.ONE_DAY);
+                        reminderCalendar.set(Calendar.YEAR, nowToday.get(Calendar.YEAR));
+                        reminderCalendar.set(Calendar.MONTH, nowToday.get(Calendar.MONTH));
+                        reminderCalendar.set(Calendar.DAY_OF_MONTH, nowToday.get(Calendar.DAY_OF_MONTH));
 
-						reminderCalendar.set(Calendar.YEAR, nowToday.get(Calendar.YEAR));
-						reminderCalendar.set(Calendar.MONTH, nowToday.get(Calendar.MONTH));
-						reminderCalendar.set(Calendar.DAY_OF_MONTH, nowToday.get(Calendar.DAY_OF_MONTH));
+                        updateDate();
+                        break;
 
-						updateDate();
-						break;
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW:
+                        Calendar nowTomorrow = Calendar.getInstance();
+                        nowTomorrow.setTimeInMillis(nowTomorrow.getTimeInMillis() + Resource.ONE_DAY);
 
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW:
-						Calendar nowTomorrow = Calendar.getInstance();
-						nowTomorrow.setTimeInMillis(nowTomorrow.getTimeInMillis() + Resource.ONE_DAY);
+                        reminderCalendar.set(Calendar.YEAR, nowTomorrow.get(Calendar.YEAR));
+                        reminderCalendar.set(Calendar.MONTH, nowTomorrow.get(Calendar.MONTH));
+                        reminderCalendar.set(Calendar.DAY_OF_MONTH, nowTomorrow.get(Calendar.DAY_OF_MONTH));
+                        updateDate();
+                        break;
 
-						reminderCalendar.set(Calendar.YEAR, nowTomorrow.get(Calendar.YEAR));
-						reminderCalendar.set(Calendar.MONTH, nowTomorrow.get(Calendar.MONTH));
-						reminderCalendar.set(Calendar.DAY_OF_MONTH, nowTomorrow.get(Calendar.DAY_OF_MONTH));
-						updateDate();
-						break;
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateSetCallback, reminderCalendar.get(Calendar.YEAR), reminderCalendar.get(Calendar.MONTH), reminderCalendar.get(Calendar.DAY_OF_MONTH));
+                        datePickerDialog.show();
+                        break;
+                }
+            }
+        });
 
-					case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
-						DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateSetCallback, reminderCalendar.get(Calendar.YEAR), reminderCalendar.get(Calendar.MONTH), reminderCalendar.get(Calendar.DAY_OF_MONTH));
-						datePickerDialog.show();
-						break;
-				}
-			}
+        popupWindowTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (timeList.get(position).calendarFlag) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 9);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate();
+                        break;
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 13);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate();
+                        break;
 
-			}
-		});
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 17);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate();
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 20);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate();
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(CreateDebtActivity.this));
+                        timePickerDialog.show();
+                        break;
+                }
+            }
+        });
 
 		if (savedInstanceState == null) {
-			spinnerDay.setSelection(1);
-			spinnerTime.setSelection(0);
+			popupWindowDay.setSelection(1);
+			popupWindowTime.setSelection(0);
 		}
 
 		clearReminderButton = (ImageButton) findViewById(R.id.create_clear_reminder);
@@ -424,13 +437,13 @@ public class CreateDebtActivity extends DataActivity {
 		if (usingCustomDate) {
 			reminderButton.setVisibility(View.GONE);
 			clearReminderButton.setVisibility(View.VISIBLE);
-			spinnerDay.setVisibility(View.VISIBLE);
-			spinnerTime.setVisibility(View.VISIBLE);
+            reminderDayButton.setVisibility(View.VISIBLE);
+            reminderTimeButton.setVisibility(View.VISIBLE);
 		} else {
 			reminderButton.setVisibility(View.VISIBLE);
 			clearReminderButton.setVisibility(View.GONE);
-			spinnerDay.setVisibility(View.GONE);
-			spinnerTime.setVisibility(View.GONE);
+            reminderDayButton.setVisibility(View.GONE);
+            reminderTimeButton.setVisibility(View.GONE);
 		}
 
 	}
