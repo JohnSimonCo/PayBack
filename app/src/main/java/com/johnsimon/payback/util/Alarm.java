@@ -28,14 +28,13 @@ public class Alarm  {
 
     public final static String ALARM_ID = "ALARM_ID";
 
-    //TODO PendingIntent.getBroadcast requestCode "0" is m	agic number, see if it has effect or not
     public static void addAlarm(Context context, Debt debt) {
 		Intent intentAlarm = new Intent(context, AlarmReceiver.class);
         intentAlarm.putExtra(ALARM_ID, debt.getId());
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-		//alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+		//alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
@@ -43,16 +42,13 @@ public class Alarm  {
         Intent intentAlarm = new Intent(context, AlarmReceiver.class);
         intentAlarm.putExtra(ALARM_ID, debt.id);
 
-		//return (PendingIntent.getBroadcast(context, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
-		PendingIntent alarmIntent = PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_NO_CREATE);
-		return alarmIntent != null;
+		return PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_NO_CREATE) != null;
     }
 
     public static void cancelAlarm(Context context, Debt debt) {
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra(ALARM_ID, debt.id);
 
-		//PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, debt.getIntegerId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         pendingIntent.cancel();
 
@@ -67,7 +63,6 @@ public class Alarm  {
         private Intent intent;
 
 		public AlarmReceiver() {
-			int i = 0;
 		}
 
         @Override
