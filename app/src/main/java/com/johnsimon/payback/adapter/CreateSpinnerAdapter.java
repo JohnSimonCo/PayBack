@@ -66,9 +66,9 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 				holder.masterLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
 			}
 
-			holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+			holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 		} else {
-			holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+			holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 			holder.textView.setText(calendarOptionItem.selectedString);
 		}
 
