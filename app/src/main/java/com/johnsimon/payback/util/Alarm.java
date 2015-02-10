@@ -124,10 +124,17 @@ public class Alarm  {
             remindLaterIntent.setAction(NotificationEventReceiver.ACTION_REMIND_LATER);
             remindLaterIntent.putExtra(Alarm.ALARM_ID, id);
 
-            return new NotificationCompat.Action(
-                    R.drawable.abc_ab_share_pack_holo_dark,
-                    context.getString(R.string.notif_remind_later),
-                    PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+			if (Resource.isLOrAbove()) {
+				return new NotificationCompat.Action(
+						R.drawable.ic_material_reminder_finger_dark,
+						context.getString(R.string.notif_remind_later),
+						PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+			} else {
+				return new NotificationCompat.Action(
+						R.drawable.ic_material_reminder_finger_light,
+						context.getString(R.string.notif_remind_later),
+						PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+			}
         }
 
         private PendingIntent getDetailPendingIntent(UUID id) {
