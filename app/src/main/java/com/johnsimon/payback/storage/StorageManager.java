@@ -25,6 +25,7 @@ public class StorageManager {
 
 	public static DriveLoginManager loginManager = null;
 
+
 	public static LocalStorage getLocalStorage(Context context) {
 		if(localStorage == null) {
 			localStorage = new LocalStorage(context);
@@ -39,10 +40,8 @@ public class StorageManager {
     public static Storage getStorage(Context context) {
 		if(storage == null) {
 			LocalStorage localStorage = getLocalStorage(context);
+
 			switch (localStorage.getPreferences().getInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL)) {
-				case STORAGE_TYPE_LOCAL:
-					storage = localStorage;
-					break;
 				case STORAGE_TYPE_DRIVE:
 					DriveConnector connector = new DriveConnector(context);
 
@@ -51,10 +50,10 @@ public class StorageManager {
 
 					storage = driveStorage;
 					break;
+				case STORAGE_TYPE_LOCAL: default:
+					storage = localStorage;
+					break;
 			}
-		}
-		if(BuildConfig.DEBUG && storage.isDriveStorage() && context instanceof Activity) {
-			storage.asDriveStorage().activity = (Activity) context;
 		}
 
         return storage;

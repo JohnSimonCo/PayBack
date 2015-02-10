@@ -22,8 +22,9 @@ public class FileManager {
 	private final static String parentDir = Resource.isKkOrAbove() ? Environment.DIRECTORY_DOCUMENTS : "Documents";
 	private final static String dirName = "PayBack";
 	private final static String fileName = "data.json";
+	public final static String simpleFilePath = parentDir + "/" + dirName;
 
-	public static void write(Activity activity, String JSON) {
+	public static WriteResult write(String JSON) {
 		/*
 		if(!isExternalStorageWritable()) {
 			show(activity, R.string.library_roundedimageview_licenseId);
@@ -49,14 +50,14 @@ public class FileManager {
 			writer.write(JSON);
 			writer.close();
 
-			show(activity, String.format(activity.getString(R.string.save_success_start), parentDir + "/" + dirName));
+			return new WriteResult(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			show(activity, R.string.save_fail);
+			return new WriteResult(false);
 		}
 	}
 
-	public static String read(Activity activity) {
+	public static ReadResult read() {
 		/*if(!isExternalStorageReadable()) {
 			show(activity, R.string.library_roundedimageview_licenseId);
 			return null;
@@ -70,13 +71,12 @@ public class FileManager {
 				builder.append(line);
 			}
 			reader.close();
+			return new ReadResult(builder.toString());
 		} catch(FileNotFoundException e) {
-			show(activity, R.string.no_file);
+			return new ReadResult(ReadResult.ERROR_NO_FILE);
 		} catch(Exception e) {
-			show(activity, R.string.read_failed);
+			return new ReadResult(ReadResult.ERROR_UNKNOWN);
 		}
-
-		return builder.toString();
 	}
 
 	public static boolean hasFile() {
@@ -114,6 +114,36 @@ public class FileManager {
 		}
 		return false;
 	}*/
+
+	public static class WriteResult {
+		public boolean success;
+
+		public WriteResult(boolean success) {
+			this.success = success;
+		}
+	}
+	public static class ReadResult {
+		public final static int ERROR_UNKNOWN = 0;
+		public final static int ERROR_NO_FILE = 1;
+
+		public boolean success;
+		public int error;
+		public String content;
+
+		private ReadResult(boolean success) {
+			this.success = success;
+		}
+
+		public ReadResult(String content) {
+			this(true);
+			this.content = content;
+		}
+
+		public ReadResult(int error) {
+			this(false);
+			this.error = error;
+		}
+	}
 
 	private static void show(Activity activity, int messageId) {
         show(activity, activity.getString(messageId));

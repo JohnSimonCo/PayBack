@@ -1,13 +1,10 @@
 package com.johnsimon.payback.data;
 
-import com.johnsimon.payback.preferences.Preference;
 import com.johnsimon.payback.preferences.Preferences;
-import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
 
 public class DataSyncer {

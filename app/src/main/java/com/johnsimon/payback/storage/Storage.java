@@ -40,6 +40,14 @@ public abstract class Storage {
 		commit();
     }
 
+	public boolean isExternalStorage() {
+		return this instanceof ExternalStorage;
+	}
+
+	public ExternalStorage asExternalStorage() {
+		return (ExternalStorage) this;
+	}
+
 	public boolean isDriveStorage() {
 		return this instanceof DriveStorage;
 	}

@@ -113,4 +113,18 @@ public class UserCurrency {
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof UserCurrency))return false;
+		UserCurrency other = (UserCurrency) o;
+
+		return other.id.equals(id)
+			&& other.displayName.equals(displayName)
+			&& other.before == before
+			&& other.decimalSeparator == decimalSeparator
+			&& other.thousandSeparator == thousandSeparator
+			&& other.trailingZeros == trailingZeros;
+	}
 }

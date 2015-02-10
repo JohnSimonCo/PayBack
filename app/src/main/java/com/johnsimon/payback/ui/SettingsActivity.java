@@ -1,9 +1,7 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -13,7 +11,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -29,7 +26,6 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
@@ -100,7 +96,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-                                    FileManager.write(SettingsActivity.this, data.save());
+									displayWriteResult(FileManager.write(data.save()));
                                     updateBackupStatus(true);
 
                                     dialog.dismiss();
@@ -114,7 +110,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                             })
                             .show();
                 } else {
-                    FileManager.write(SettingsActivity.this, data.save());
+					displayWriteResult(FileManager.write(data.save()));
                     updateBackupStatus(true);
                 }
 
@@ -127,9 +123,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                final String JSON = FileManager.read(SettingsActivity.this);
+				final FileManager.ReadResult result = FileManager.read();
 
-                if (!TextUtils.isEmpty(JSON)) {
+                if(result.success) {
                     new MaterialDialog.Builder(SettingsActivity.this)
                             .title(R.string.pref_restore_data)
                             .content(R.string.pref_restore_data_description)
@@ -141,7 +137,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                     super.onPositive(dialog);
 
                                     FeedActivity.goToAll();
-                                    storage.commit(AppData.fromJson(JSON));
+                                    storage.commit(AppData.fromJson(result.content));
                                     storage.emit();
 
                                     Snackbar.with(SettingsActivity.this).text(SettingsActivity.this.getString(R.string.restore_success)).show(SettingsActivity.this);
@@ -156,7 +152,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 }
                             })
                             .show();
-                }
+                } else {
+					displayReadError(result);
+				}
                 return true;
             }
         });
@@ -349,6 +347,22 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         updateBackupStatus(false);
 
     }
+
+	private void displayWriteResult(FileManager.WriteResult result) {
+		snackbar(result.success
+				? getString(R.string.save_success_start, FileManager.simpleFilePath)
+				: getString(R.string.save_fail));
+	}
+
+	private void displayReadError(FileManager.ReadResult result) {
+		snackbar(getString(result.error == FileManager.ReadResult.ERROR_NO_FILE ? R.string.no_file : R.string.read_failed));
+	}
+
+	private void snackbar(String text) {
+		Snackbar.with(this)
+				.text(text)
+				.show(this);
+	}
 
     private void updateBackupStatus(boolean clearFirst) {
 
