@@ -193,6 +193,10 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
         return id;
     }
 
+	public int getIntegerId() {
+		return id.hashCode();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) return false;

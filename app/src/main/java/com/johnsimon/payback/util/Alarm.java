@@ -28,28 +28,34 @@ public class Alarm  {
 
     public final static String ALARM_ID = "ALARM_ID";
 
-    //TODO PendingIntent.getBroadcast requestCode "0" is magic number, see if it has effect or not
+	private final static int ALARM_FLAG = 0;
+
+    //TODO PendingIntent.getBroadcast requestCode "0" is m	agic number, see if it has effect or not
     public static void addAlarm(Context context, Debt debt) {
 		Intent intentAlarm = new Intent(context, Alarm.class);
         intentAlarm.putExtra(ALARM_ID, debt.getId());
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+		//alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, ALARM_FLAG));
     }
 
     public static boolean hasAlarm (Context context, Debt debt) {
         Intent intentAlarm = new Intent(context, Alarm.class);
         intentAlarm.putExtra(ALARM_ID, debt.id);
 
-        return (PendingIntent.getBroadcast(context, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
+		//return (PendingIntent.getBroadcast(context, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
+		PendingIntent alarmIntent = PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_NO_CREATE);
+		return alarmIntent != null;
     }
 
     public static void cancelAlarm(Context context, Debt debt) {
         Intent intent = new Intent(context, Alarm.class);
         intent.putExtra(ALARM_ID, debt.id);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		//PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, debt.getIntegerId(), intent, ALARM_FLAG);
         pendingIntent.cancel();
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
