@@ -168,22 +168,59 @@
 
             </com.johnsimon.payback.view.FloatLabelLayout>
 
-            <Button
-                android:layout_marginTop="12dp"
-                android:drawableLeft="@drawable/ic_material_reminder_finger_dark"
-                android:layout_marginLeft="@dimen/create_start_margin"
-                android:background="?android:attr/selectableItemBackground"
-                android:id="@+id/reminder_button"
-                android:paddingRight="16dp"
-                android:textAllCaps="false"
-                android:drawablePadding="4dp"
-                android:textStyle="italic"
-                android:textSize="17sp"
-                android:textColor="@color/gray_text_very_light"
-                android:fontFamily="sans-serif"
-                android:text="@string/set_reminder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:layout_marginTop="12dp"
+                        android:drawableLeft="@drawable/ic_material_reminder_finger_dark"
+                        android:layout_marginLeft="@dimen/create_start_margin"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:id="@+id/create_reminder_button"
+                        android:paddingRight="16dp"
+                        android:textAllCaps="false"
+                        android:drawablePadding="4dp"
+                        android:textStyle="italic"
+                        android:textSize="17sp"
+                        android:textColor="@color/gray_text_very_light"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/set_reminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.v7.internal.widget.TintSpinner
+                        app:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:id="@+id/create_spinner_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"    />
+
+                    <android.support.v7.internal.widget.TintSpinner
+                        app:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:id="@+id/create_spinner_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"    />
+
+                </LinearLayout>
+
+                <ImageButton
+                    style="@style/RippleBackground"
+                    android:id="@+id/create_clear_reminder"
+                    android:contentDescription="Clear button"
+                    android:src="@drawable/ic_clear_dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

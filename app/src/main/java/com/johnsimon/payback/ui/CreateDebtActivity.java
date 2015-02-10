@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
@@ -20,6 +21,7 @@ import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.internal.widget.TintEditText;
+import android.support.v7.internal.widget.TintSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -30,20 +32,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.PathInterpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.adapter.CreateSpinnerAdapter;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
@@ -58,10 +64,9 @@ import com.shamanland.fab.FloatingActionButton;
 import com.williammora.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
-
-//TODO EDITAR HÖGA TAL SÅ KOMMER MAN HIT MED JÄVLA E12
 
 public class CreateDebtActivity extends DataActivity {
 
@@ -79,6 +84,10 @@ public class CreateDebtActivity extends DataActivity {
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
 	private FloatLabelLayout floatLabelLayout;
     private ImageButton create_fab_l;
+	private Button reminderButton;
+	private ImageButton clearReminderButton;
+	private TintSpinner spinnerDay;
+	private TintSpinner spinnerTime;
 
 	private RadioGroup radioGroup;
 
@@ -196,6 +205,24 @@ public class CreateDebtActivity extends DataActivity {
 			}
 		});
 
+		spinnerDay = (TintSpinner) findViewById(R.id.create_spinner_day);
+		spinnerTime = (TintSpinner) findViewById(R.id.create_spinner_time);
+
+		ArrayList<CreateSpinnerAdapter.CalendarOptionItem> dayList = new ArrayList<>();
+		dayList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.today), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY));
+		dayList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.tomorrow), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW));
+		dayList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_date), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM));
+
+		spinnerDay.setAdapter(new CreateSpinnerAdapter(getApplicationContext(), 0, dayList));
+
+		ArrayList<CreateSpinnerAdapter.CalendarOptionItem> timeList = new ArrayList<>();
+		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.morning), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING));
+		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.afternoon), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON));
+		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.evening), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING));
+		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.night), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT));
+		timeList.add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM));
+
+
         final TimePickerDialog.OnTimeSetListener timeSetCallback = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -217,7 +244,16 @@ public class CreateDebtActivity extends DataActivity {
             }
         };
 
-        final Button reminderButton = (Button) findViewById(R.id.reminder_button);
+		clearReminderButton = (ImageButton) findViewById(R.id.create_clear_reminder);
+		clearReminderButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				reminderCalendar = null;
+				updateDate();
+			}
+		});
+
+        reminderButton = (Button) findViewById(R.id.create_reminder_button);
         reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,7 +334,6 @@ public class CreateDebtActivity extends DataActivity {
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.getOwner().getName());
 
-			//TODO E12 HERE?
 			floatLabelAmountEditText.setText(new DecimalFormat("###.###").format(editingDebt.getAbsoluteAmount()));
 
 			floatLabelNoteEditText.setText(editingDebt.getNote());
@@ -315,8 +350,15 @@ public class CreateDebtActivity extends DataActivity {
 	}
 
     private void updateDate() {
+		if (reminderCalendar == null) {
+			reminderButton.setText(R.string.set_reminder);
+			clearReminderButton.setVisibility(View.GONE);
+		} else {
+			reminderButton.setText("");
+			clearReminderButton.setVisibility(View.VISIBLE);
+		}
 
-    }
+	}
 
     @Override
     protected void onDataLinked() {
@@ -517,12 +559,18 @@ public class CreateDebtActivity extends DataActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        reminderCalendar.setTimeInMillis(savedInstanceState.getLong(KEY_CALENDAR));
+		long time = savedInstanceState.getLong(KEY_CALENDAR);
+		if (time != 0) {
+			reminderCalendar.setTimeInMillis(time);
+			updateDate();
+		}
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
+		if (reminderCalendar != null) {
+			outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
+		}
     }
 }

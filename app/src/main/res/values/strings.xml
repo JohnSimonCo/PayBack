@@ -191,4 +191,13 @@
         <item>city</item>
     </string-array>
 
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="pick_date">Pick a date…</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
+    <string name="pick_time">Pick a time…</string>
+
 </resources>
