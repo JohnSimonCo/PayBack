@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.johnsimon.payback.R;
@@ -34,21 +35,19 @@ public class Alarm  {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-      //TODO CONT  Toast.makeText(context, Calendar.getInstance().getTimeInMillis())
-
         alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
-    public static boolean hasAlarm (Context context, UUID id) {
+    public static boolean hasAlarm (Context context, Debt debt) {
         Intent intentAlarm = new Intent(context, Alarm.class);
-        intentAlarm.putExtra(ALARM_ID, id);
+        intentAlarm.putExtra(ALARM_ID, debt.id);
 
         return (PendingIntent.getBroadcast(context, 0, intentAlarm,PendingIntent.FLAG_NO_CREATE) != null);
     }
 
-    public static void cancelAlarm(Context context, UUID id) {
+    public static void cancelAlarm(Context context, Debt debt) {
         Intent intent = new Intent(context, Alarm.class);
-        intent.putExtra(ALARM_ID, id);
+        intent.putExtra(ALARM_ID, debt.id);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         pendingIntent.cancel();
@@ -57,6 +56,26 @@ public class Alarm  {
 
         alarmManager.cancel(pendingIntent);
     }
+
+	public static class AlarmBootListener extends BroadcastReceiver implements Callback<AppData> {
+
+		private AlarmScheduler scheduler;
+
+		public AlarmBootListener() {
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			LocalStorage localStorage = new LocalStorage(context);
+			scheduler = new AlarmScheduler(context, localStorage.subscription);
+			localStorage.subscription.listen(this);
+		}
+
+		@Override
+		public void onCalled(AppData data) {
+			scheduler.die();
+		}
+	}
 
     private static class AlarmReceiver extends BroadcastReceiver {
 

@@ -1,6 +1,7 @@
 package com.johnsimon.payback.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
@@ -29,7 +30,7 @@ public class AlarmScheduler {
 		@Override
 		public void onCalled(AppData data) {
 			for(Debt debt : data.debts) {
-				if(debt.getRemindDate() != null && !Alarm.hasAlarm(context, debt.id)) {
+				if(debt.getRemindDate() != null && !Alarm.hasAlarm(context, debt)) {
 					Alarm.addAlarm(context, debt);
 				}
 			}

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
@@ -79,6 +80,13 @@
         <service
             android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name=".util.Alarm$AlarmBootListener">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
