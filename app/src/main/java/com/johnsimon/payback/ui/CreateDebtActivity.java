@@ -439,14 +439,59 @@ public class CreateDebtActivity extends DataActivity {
 			clearReminderButton.setVisibility(View.VISIBLE);
             reminderDayButton.setVisibility(View.VISIBLE);
             reminderTimeButton.setVisibility(View.VISIBLE);
+
+            int year = reminderCalendar.get(Calendar.YEAR);
+            int month = reminderCalendar.get(Calendar.MONTH);
+            int day = reminderCalendar.get(Calendar.DAY_OF_MONTH);
+            int hour = reminderCalendar.get(Calendar.HOUR_OF_DAY);
+            int minute = reminderCalendar.get(Calendar.MINUTE);
+
+            Calendar now = Calendar.getInstance();
+
+            int yearNow = now.get(Calendar.YEAR);
+            int monthNow = now.get(Calendar.MONTH);
+            int dayNow = now.get(Calendar.DAY_OF_MONTH);
+            int hourNow = now.get(Calendar.HOUR_OF_DAY);
+            int minuteNow = now.get(Calendar.MINUTE);
+
+            reminderDayButton.setText(getDayString(year, month, day, now));
+            reminderTimeButton.setText(getTimeString(hour, minute, now));
+
 		} else {
 			reminderButton.setVisibility(View.VISIBLE);
 			clearReminderButton.setVisibility(View.GONE);
             reminderDayButton.setVisibility(View.GONE);
             reminderTimeButton.setVisibility(View.GONE);
 		}
-
 	}
+
+    private String getDayString(int year, int month, int day, Calendar now) {
+
+        int yearNow = now.get(Calendar.YEAR);
+        int monthNow = now.get(Calendar.MONTH);
+        int dayNow = now.get(Calendar.DAY_OF_MONTH);
+
+        if (year == yearNow && month == monthNow && day == dayNow) {
+            return getString(R.string.today);
+        }
+
+        now.setTimeInMillis(now.getTimeInMillis() + Resource.ONE_DAY);
+
+        yearNow = now.get(Calendar.YEAR);
+        monthNow = now.get(Calendar.MONTH);
+        dayNow = now.get(Calendar.DAY_OF_MONTH);
+
+        if (year == yearNow && month == monthNow && day == dayNow) {
+            return getString(R.string.tomorrow);
+        }
+
+
+
+    }
+
+    private int getTimeString(int hour, int month, Calendar now) {
+
+    }
 
     @Override
     protected void onDataLinked() {
