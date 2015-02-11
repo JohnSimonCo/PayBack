@@ -211,6 +211,11 @@
                             android:id="@+id/create_button_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"    />
+                        
+                        <View
+                            android:background="@color/gray_text_very_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp" />
 
                     </FrameLayout>
 
@@ -225,6 +230,11 @@
                             android:id="@+id/create_button_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"    />
+
+                        <View
+                            android:background="@color/gray_text_very_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp" />
 
                     </FrameLayout>
 
