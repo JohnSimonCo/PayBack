@@ -20,7 +20,10 @@ import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
+import com.johnsimon.payback.async.NullCallback;
+import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
@@ -79,7 +82,11 @@ public class FeedActivity extends DataActivity implements
 
     private boolean attemptCheckFilterAmount = false;
 
+<<<<<<< HEAD
 	//TODO spara sort som en preference
+=======
+	private NullPromise bpInitialized = new NullPromise();
+>>>>>>> 081a74e... Experimental fix for IAP error
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -327,8 +334,6 @@ public class FeedActivity extends DataActivity implements
 				break;
             case R.id.navigation_drawer_footer_upgrade:
 
-                final FeedActivity self = this;
-
                 new MaterialDialog.Builder(this)
                         .title(getString(R.string.upgrade_title))
                         .content(getString(R.string.upgrade_text))
@@ -338,7 +343,7 @@ public class FeedActivity extends DataActivity implements
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
-                                bp.purchase(self, "full_version");
+								purchaseFullVersion();
                                 dialog.dismiss();
                             }
 
@@ -352,6 +357,18 @@ public class FeedActivity extends DataActivity implements
                 break;
 		}
 	}
+
+	public void purchaseFullVersion() {
+		bpInitialized.thenUnique(billingInitializedCallback);
+
+	}
+
+	private NullCallback billingInitializedCallback = new NullCallback() {
+		@Override
+		public void onCalled() {
+			bp.purchase(FeedActivity.this, "full_version");
+		}
+	};
 
 	@Override
 	public void onPostCreate(Bundle savedInstanceState) {
@@ -401,8 +418,8 @@ public class FeedActivity extends DataActivity implements
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            bp.purchase(FeedActivity.this, "full_version");
-                            dialog.dismiss();
+							purchaseFullVersion();
+							dialog.dismiss();
                         }
 
                         @Override
@@ -525,11 +542,13 @@ public class FeedActivity extends DataActivity implements
     }
 
     @Override
-    public void onBillingError(int i, Throwable throwable) {
-    }
+    public void onBillingError(int error, Throwable throwable) {
+	}
 
     @Override
     public void onBillingInitialized() {
+		bpInitialized.fire();
+		Resource.checkFull(bp);
     }
 
     @Override

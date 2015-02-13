@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
@@ -242,8 +243,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 }
             } else {
 
-                final Activity self = getActivity();
-
                 new MaterialDialog.Builder(getActivity())
                         .title(getString(R.string.upgrade_title))
                         .content(getString(R.string.upgrade_text))
@@ -253,7 +252,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
-                                ((FeedActivity) getActivity()).bp.purchase(self, "full_version");
+								((FeedActivity) getActivity()).purchaseFullVersion();
                                 dialog.dismiss();
                             }
 
