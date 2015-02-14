@@ -201,21 +201,24 @@
                         android:layout_height="wrap_content" />
 
                     <Button
+                        android:textSize="15dp"
+                        android:textColor="@color/gray_text_normal"
+                        android:textAllCaps="false"
                         android:background="?android:attr/selectableItemBackground"
                         android:layout_marginLeft="@dimen/create_start_margin_reduced"
                         android:layout_marginStart="@dimen/create_start_margin_reduced"
                         android:id="@+id/create_button_day"
-                        android:layout_width="wrap_content"
+                        android:layout_width="115dp"
                         android:layout_height="wrap_content"    />
 
                     <Button
+                        android:textSize="15dp"
+                        android:textColor="@color/gray_text_normal"
+                        android:textAllCaps="false"
                         android:background="?android:attr/selectableItemBackground"
-                        android:layout_marginLeft="@dimen/create_start_margin_reduced"
-                        android:layout_marginStart="@dimen/create_start_margin_reduced"
                         android:id="@+id/create_button_time"
-                        android:layout_width="wrap_content"
+                        android:layout_width="115dp"
                         android:layout_height="wrap_content"    />
-
 
                 </LinearLayout>
 
