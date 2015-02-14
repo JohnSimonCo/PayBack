@@ -166,9 +166,12 @@ public class CreateDebtActivity extends DataActivity {
 		);
 
 		final ImageButton clearEditText = (ImageButton) findViewById(R.id.create_clear);
-		clearEditText.setOnClickListener(v -> {
-            floatLabelNameAutoCompleteTextView.setText("");
-            floatLabelNameAutoCompleteTextView.requestFocus();
+		clearEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatLabelNameAutoCompleteTextView.setText("");
+                floatLabelNameAutoCompleteTextView.requestFocus();
+            }
         });
 
 		if (TextUtils.isEmpty(floatLabelNameAutoCompleteTextView.getText().toString())) {
@@ -177,28 +180,38 @@ public class CreateDebtActivity extends DataActivity {
 
         final ScrollView mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
 
-        floatLabelNoteEditText.setOnFocusChangeListener((v, hasFocus) -> {
+        floatLabelNoteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
-                new Handler().postDelayed(() -> mainScrollView.smoothScrollTo(0, mainScrollView.getBottom()), 200);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainScrollView.smoothScrollTo(0, mainScrollView.getBottom());
+                        }
+                    }, 200);
+                }
             }
         });
 
-		floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-				if (TextUtils.isEmpty(s.toString())) {
-					clearEditText.setVisibility(View.GONE);
-				} else {
-					clearEditText.setVisibility(View.VISIBLE);
-				}
-			}
-		});
+        floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    clearEditText.setVisibility(View.GONE);
+                } else {
+                    clearEditText.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
 
 
@@ -232,70 +245,86 @@ public class CreateDebtActivity extends DataActivity {
         popupWindowDay.setAdapter(dayAdapter);
         popupWindowTime.setAdapter(timeAdapter);
 
-        reminderDayButton.setOnClickListener(v -> popupWindowDay.show());
-
-        reminderTimeButton.setOnClickListener(v -> popupWindowTime.show());
-
-        popupWindowDay.setOnItemClickListener((parent, view, position, id) -> {
-            switch (timeList.get(position).calendarFlag) {
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
-                    Calendar nowToday = Calendar.getInstance();
-                    nowToday.setTimeInMillis(nowToday.getTimeInMillis() + Resource.ONE_DAY);
-
-                    reminderCalendar.set(Calendar.YEAR, nowToday.get(Calendar.YEAR));
-                    reminderCalendar.set(Calendar.MONTH, nowToday.get(Calendar.MONTH));
-                    reminderCalendar.set(Calendar.DAY_OF_MONTH, nowToday.get(Calendar.DAY_OF_MONTH));
-
-                    updateDate(false);
-                    break;
-
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW:
-                    Calendar nowTomorrow = Calendar.getInstance();
-                    nowTomorrow.setTimeInMillis(nowTomorrow.getTimeInMillis() + Resource.ONE_DAY);
-
-                    reminderCalendar.set(Calendar.YEAR, nowTomorrow.get(Calendar.YEAR));
-                    reminderCalendar.set(Calendar.MONTH, nowTomorrow.get(Calendar.MONTH));
-                    reminderCalendar.set(Calendar.DAY_OF_MONTH, nowTomorrow.get(Calendar.DAY_OF_MONTH));
-                    updateDate(false);
-                    break;
-
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateSetCallback, reminderCalendar.get(Calendar.YEAR), reminderCalendar.get(Calendar.MONTH), reminderCalendar.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.show();
-                    break;
+        reminderDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowDay.show();
             }
         });
 
-        popupWindowTime.setOnItemClickListener((parent, view, position, id) -> {
-            switch (timeList.get(position).calendarFlag) {
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING:
-                    reminderCalendar.set(Calendar.HOUR_OF_DAY, 9);
-                    reminderCalendar.set(Calendar.MINUTE, 0);
-                    updateDate(false);
-                    break;
+        reminderTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowTime.show();
+            }
+        });
 
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON:
-                    reminderCalendar.set(Calendar.HOUR_OF_DAY, 13);
-                    reminderCalendar.set(Calendar.MINUTE, 0);
-                    updateDate(false);
-                    break;
+        popupWindowDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (timeList.get(position).calendarFlag) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
+                        Calendar nowToday = Calendar.getInstance();
+                        nowToday.setTimeInMillis(nowToday.getTimeInMillis() + Resource.ONE_DAY);
 
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING:
-                    reminderCalendar.set(Calendar.HOUR_OF_DAY, 17);
-                    reminderCalendar.set(Calendar.MINUTE, 0);
-                    updateDate(false);
-                    break;
+                        reminderCalendar.set(Calendar.YEAR, nowToday.get(Calendar.YEAR));
+                        reminderCalendar.set(Calendar.MONTH, nowToday.get(Calendar.MONTH));
+                        reminderCalendar.set(Calendar.DAY_OF_MONTH, nowToday.get(Calendar.DAY_OF_MONTH));
 
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT:
-                    reminderCalendar.set(Calendar.HOUR_OF_DAY, 20);
-                    reminderCalendar.set(Calendar.MINUTE, 0);
-                    updateDate(false);
-                    break;
+                        updateDate(false);
+                        break;
 
-                case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(CreateDebtActivity.this));
-                    timePickerDialog.show();
-                    break;
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW:
+                        Calendar nowTomorrow = Calendar.getInstance();
+                        nowTomorrow.setTimeInMillis(nowTomorrow.getTimeInMillis() + Resource.ONE_DAY);
+
+                        reminderCalendar.set(Calendar.YEAR, nowTomorrow.get(Calendar.YEAR));
+                        reminderCalendar.set(Calendar.MONTH, nowTomorrow.get(Calendar.MONTH));
+                        reminderCalendar.set(Calendar.DAY_OF_MONTH, nowTomorrow.get(Calendar.DAY_OF_MONTH));
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateSetCallback, reminderCalendar.get(Calendar.YEAR), reminderCalendar.get(Calendar.MONTH), reminderCalendar.get(Calendar.DAY_OF_MONTH));
+                        datePickerDialog.show();
+                        break;
+                }
+            }
+        });
+
+        popupWindowTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (timeList.get(position).calendarFlag) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 9);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 13);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 17);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 20);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(CreateDebtActivity.this));
+                        timePickerDialog.show();
+                        break;
+                }
             }
         });
 
@@ -305,15 +334,21 @@ public class CreateDebtActivity extends DataActivity {
 		}
 
 		clearReminderButton = (ImageButton) findViewById(R.id.create_clear_reminder);
-		clearReminderButton.setOnClickListener(v -> {
-            usingCustomDate = false;
-            updateDate(true);
-        });
+		clearReminderButton.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   usingCustomDate = false;
+                   updateDate(true);
+               }
+            });
 
         reminderButton = (Button) findViewById(R.id.create_reminder_button);
-        reminderButton.setOnClickListener(v -> {
-            usingCustomDate = true;
-            updateDate(true);
+        reminderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                usingCustomDate = true;
+                updateDate(true);
+            }
         });
 
         if (Resource.isLOrAbove()) {
@@ -486,10 +521,8 @@ public class CreateDebtActivity extends DataActivity {
                         Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, android.R.anim.fade_in);
 
                         reminderButton.setVisibility(View.VISIBLE);
+                        reminderButton.startAnimation(fadeIn);
 
-                        clearReminderButton.startAnimation(fadeIn);
-                        reminderDayButton.startAnimation(fadeIn);
-                        reminderTimeButton.startAnimation(fadeIn);
                     }
 
                     @Override
