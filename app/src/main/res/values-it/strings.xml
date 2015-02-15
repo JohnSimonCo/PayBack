@@ -178,8 +178,6 @@
     </string-array>
 
 
-    <string name="even_out">Livellare</string>
-    <string name="evened_out">Pagato</string>
-
-    <string name="currency_show_trailing_zeros">Mostrare zeri finali</string>
+    <string name="even_out">Italian placeholder</string>
+    <string name="evened_out">Italian placeholder</string>
 </resources>

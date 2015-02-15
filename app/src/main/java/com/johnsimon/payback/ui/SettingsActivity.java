@@ -162,8 +162,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         if (!Resource.isFull) {
             pref_export_data.setEnabled(false);
             pref_import_data.setEnabled(false);
-            pref_export_data.setSummary(R.string.cloud_sync_not_full);
-            pref_import_data.setSummary(R.string.cloud_sync_not_full);
+            pref_export_data.setSummary(R.string.not_full_version);
+            pref_import_data.setSummary(R.string.not_full_version);
         } else {
             pref_export_data.setEnabled(true);
             pref_import_data.setEnabled(true);
