@@ -86,7 +86,6 @@
     <string name="cloud_sync_description">Activate cloud sync to sync debt data across devices using Google Drive.</string>
     <string name="activate">Activate</string>
     <string name="not_now">Not now</string>
-    <string name="not_full_version">Requires full version</string>
     <string name="upgrade_navigation_drawer">Unlock full version</string>
     <string name="debt_free">Debt free!</string>
     <string name="add_person">Add person</string>
@@ -126,6 +125,9 @@
     <string name="even_out">Even out</string>
     <string name="evened_out">Evened out</string>
     <string name="currency_show_trailing_zeros">Show trailing zeros</string>
+
+    <string name="cloud_sync_not_full">Requires full version</string>
+    <string name="disabled_in_free">Requires full version</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -169,10 +171,10 @@
     <string name="pref_backup_confirm_single">Backup</string>
 
     <!-- Notifications -->
-    <string name="notif_pay_back_reminder">Pay Back Reminder</string>
-    <string name="notif_remind_later">Remind later</string>
-    <string name="notif_they_owe">%1$s owes you %2$s</string>
-    <string name="notif_you_owe">You owe %1$s %2$s</string>
+    <string translatable="false" name="notif_pay_back_reminder">Pay Back Reminder</string>
+    <string translatable="false" name="notif_remind_later">Remind later</string>
+    <string translatable="false" name="notif_they_owe">%1$s owes you %2$s</string>
+    <string translatable="false" name="notif_you_owe">You owe %1$s %2$s</string>
 
     <string-array name="thousand_seperator_list">
         <item>None</item>
@@ -191,13 +193,13 @@
         <item>city</item>
     </string-array>
 
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
-    <string name="pick_date">Pick a date…</string>
-    <string name="morning">Morning</string>
-    <string name="afternoon">Afternoon</string>
-    <string name="evening">Evening</string>
-    <string name="night">Night</string>
-    <string name="pick_time">Pick a time…</string>
+    <string translatable="false" name="today">Today</string>
+    <string translatable="false" name="tomorrow">Tomorrow</string>
+    <string translatable="false" name="pick_date">Pick a date…</string>
+    <string translatable="false" name="morning">Morning</string>
+    <string translatable="false" name="afternoon">Afternoon</string>
+    <string translatable="false" name="evening">Evening</string>
+    <string translatable="false" name="night">Night</string>
+    <string translatable="false" name="pick_time">Pick a time…</string>
 
 </resources>
