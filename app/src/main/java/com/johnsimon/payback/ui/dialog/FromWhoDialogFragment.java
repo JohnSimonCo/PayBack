@@ -69,13 +69,7 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 				Resource.getPx(8, res)
 		);
 
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getActivity(),
-				R.layout.autocomplete_list_item,
-				R.id.autocomplete_list_item_title,
-				data.getAllNames());
 
-		actv.setAdapter(adapter);
 
 		Bundle args = getArguments();
 		if (args != null) {
@@ -85,20 +79,8 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 				actv.setText(sentName);
 
 				actv.setSelection(0, actv.getText().length());
-				actv.setAdapter(null);
 				actv.requestFocus();
 
-				Handler handler = new Handler() {
-					public void handleMessage(Message msg) {
-						((AutoCompleteTextView) msg.obj).setAdapter(adapter);
-					}
-				};
-
-				Message msg = handler.obtainMessage();
-				msg.obj = actv;
-				handler.sendMessageDelayed(msg, 200);
-
-				actv.setSelection(actv.getText().length());
 				enableButton(confirmButton);
 			}
 		}
@@ -137,7 +119,25 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
 	@Override
 	protected void onDataReceived() {
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.autocomplete_list_item,
+                R.id.autocomplete_list_item_title,
+                data.getAllNames());
 
+        actv.setAdapter(adapter);
+
+        Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                ((AutoCompleteTextView) msg.obj).setAdapter(adapter);
+            }
+        };
+
+        Message msg = handler.obtainMessage();
+        msg.obj = actv;
+        handler.sendMessageDelayed(msg, 200);
+
+        actv.setSelection(actv.getText().length());
 	}
 
 	@Override

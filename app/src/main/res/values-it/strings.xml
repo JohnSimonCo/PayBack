@@ -10,8 +10,8 @@
     <string name="list_empty_text">Quando avrai aggiunto qualcosa, apparirà qui sotto</string>
     <string name="even">Siamo pari!</string>
     <string name="person_hint">Con chi?</string>
-    <string name="they_owe">Mi devo</string>
-    <string name="i_owe">Io deve</string>
+    <string name="they_owe">Mi deve</string>
+    <string name="i_owe">Io devo</string>
     <string name="amount">Ammontare</string>
     <string name="share">Condividi tramite</string>
     <string name="note">Nota</string>
