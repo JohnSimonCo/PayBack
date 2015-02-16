@@ -441,7 +441,7 @@ public class CreateDebtActivity extends DataActivity {
 	}
 	//TODO WORK
     private void updateDate(boolean anim) {
-		if (usingCustomDate) {
+		/*if (usingCustomDate) {
 
             Calendar now = Calendar.getInstance();
 
@@ -542,7 +542,12 @@ public class CreateDebtActivity extends DataActivity {
                 reminderTimeButton.setVisibility(View.GONE);
             }
 
-		}
+		}*/
+
+        reminderButton.setVisibility(View.GONE);
+        clearReminderButton.setVisibility(View.GONE);
+        reminderDayButton.setVisibility(View.GONE);
+        reminderTimeButton.setVisibility(View.GONE);
 	}
 
     private String getDayString(int year, int month, int day, Calendar now) {

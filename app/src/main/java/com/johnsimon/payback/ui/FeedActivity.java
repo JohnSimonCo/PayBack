@@ -82,11 +82,8 @@ public class FeedActivity extends DataActivity implements
 
     private boolean attemptCheckFilterAmount = false;
 
-<<<<<<< HEAD
 	//TODO spara sort som en preference
-=======
 	private NullPromise bpInitialized = new NullPromise();
->>>>>>> 081a74e... Experimental fix for IAP error
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
