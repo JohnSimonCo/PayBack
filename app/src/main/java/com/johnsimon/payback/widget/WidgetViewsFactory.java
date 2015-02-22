@@ -9,8 +9,6 @@ import android.widget.RemoteViews;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.data.Debt;
-import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
-import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 
 public class WidgetViewsFactory extends DataWidgetViewsFactory {
@@ -35,7 +33,9 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.feed_list_item);
+        final RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
+
+        /*
 
         Debt debt = data.debts.get(position);
 
@@ -68,32 +68,33 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         //TODO nämen, här ståre bajs!
         extras.putString(ListWidgetService.EXTRA_SEND, "bajs");
         intent.putExtras(extras);
-        row.setOnClickFillInIntent(R.id.feed_list_item_master, intent);
+        row.setOnClickFillInIntent(R.id.feed_list_item_master, intent);*/
 
         return row;
     }
 
     @Override
     public RemoteViews getLoadingView() {
-        return(null);
+        return null;
     }
 
     @Override
     public int getViewTypeCount() {
-        return(1);
+        return 1;
     }
 
     @Override
     public long getItemId(int position) {
-        return(position);
+        return position;
     }
 
     @Override
     public boolean hasStableIds() {
-        return(true);
+        return true;
     }
 
     @Override
     public void onDataSetChanged() {
+
     }
 }

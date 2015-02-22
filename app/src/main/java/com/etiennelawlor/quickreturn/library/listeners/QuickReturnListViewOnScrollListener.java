@@ -15,7 +15,7 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
     // region Member Variables
     private int mMinFooterTranslation;
     private int mMinHeaderTranslation;
-    private int mHeaderDiffTotal = 0;
+    public int mHeaderDiffTotal = 0;
     private int mFooterDiffTotal = 0;
     private int mHeaderMaxHeight = 0;
     public View mHeader;
@@ -170,10 +170,6 @@ public class QuickReturnListViewOnScrollListener extends RecyclerView.OnScrollLi
 			}
 		}
 	}
-
-    public void forceUpdateTranslationY() {
-        mHeader.setTranslationY(Math.min(Math.max(mHeaderDiffTotal, mMinHeaderTranslation), 0));
-    }
 
     public void setCanSlideInIdleScrollState(boolean canSlideInIdleScrollState){
         mCanSlideInIdleScrollState = canSlideInIdleScrollState;

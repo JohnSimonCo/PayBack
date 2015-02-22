@@ -241,9 +241,11 @@ public class FeedActivity extends DataActivity implements
         invalidateOptionsMenu();
 
 		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
+        feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
+        feedFragment.scrollListener.mHeader.setTranslationY(0);
+        feedFragment.scrollListener.mHeaderDiffTotal = 0;
 
         feedFragment.displayTotalDebt(getResources());
-
 	}
 
 	@Override

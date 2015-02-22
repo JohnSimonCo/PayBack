@@ -58,7 +58,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
     public RecyclerView recyclerView;
     private View emptyView;
-	private QuickReturnListViewOnScrollListener scrollListener;
+	public QuickReturnListViewOnScrollListener scrollListener;
 
 	private ImageView headerImage;
 
@@ -174,8 +174,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 adapter.notifyDataSetChanged();
             }
 
-			scrollListener.forceUpdateTranslationY();
-
 			adapter.checkAdapterIsEmpty();
 		}
 	};
@@ -275,7 +273,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 	@Override
 	public void onDelete(final Debt debt) {
-
 		final int index = FeedActivity.feed.indexOf(debt);
 
         new MaterialDialog.Builder(getActivity())
@@ -341,7 +338,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         feedChangeCallback.onFeedChange();
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public void onEdit(Debt debt) {
 		Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
 				.putExtra(CreateDebtActivity.ARG_FROM_FEED, true)
