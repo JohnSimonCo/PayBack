@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
+import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
@@ -75,7 +77,6 @@ public class FeedActivity extends DataActivity implements
 
 	private NavigationDrawerFragment navigationDrawerFragment;
 
-	private NfcAdapter nfcAdapter;
 	private Beamer beamer;
 
 	private FeedFragment feedFragment;
@@ -126,7 +127,7 @@ public class FeedActivity extends DataActivity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout)
 		);
 
-		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		beamer = new Beamer(this, this);
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(beamer, this);
@@ -193,9 +194,18 @@ public class FeedActivity extends DataActivity implements
 
 		// Check to see that the Activity started due to an Android Beam
 		Intent intent = getIntent();
-		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 			beamer.processIntent(intent);
-		}
+		} else if (intent.getExtras() != null && intent.getExtras().get(Alarm.ALARM_ID) != null) {
+            //TODO TEST
+            Debt debt = data.findDebt((UUID) intent.getExtras().get(Alarm.ALARM_ID));
+            person = debt.getOwner();
+            feed = data.feed(person);
+            feedSubscription.broadcast(feed);
+            onFeedChange();
+
+            feedFragment.showDetail(debt);
+        }
     }
 
 	@Override
@@ -239,7 +249,7 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onShowGlobalContextActionBar() {}
 
-	@Override
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Only show items in the action bar relevant to this screen
 		// if the drawer is not showing. Otherwise, let the drawer
@@ -382,7 +392,7 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 
 		if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
@@ -604,11 +614,14 @@ public class FeedActivity extends DataActivity implements
     @Override
     public void onFeedChange() {
         navigationDrawerFragment.updateBalance();
-        if (data.isEven(feed)) {
-            menu_even_out.setVisible(false);
-        } else {
-            menu_even_out.setVisible(true);
+        if (menu_even_out != null) {
+            if (data.isEven(feed)) {
+                menu_even_out.setVisible(false);
+            } else {
+                menu_even_out.setVisible(true);
+            }
         }
+
 
         feedFragment.displayTotalDebt(getResources());
     }

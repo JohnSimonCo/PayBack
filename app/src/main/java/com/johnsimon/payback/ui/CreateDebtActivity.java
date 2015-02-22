@@ -629,8 +629,11 @@ public class CreateDebtActivity extends DataActivity {
                         floatLabelNoteEditText.getText().toString().trim()
                 );
 
-				debt.setRemindDate(reminderCalendar.getTimeInMillis());
-                Alarm.addAlarm(CreateDebtActivity.this, debt);
+                if (usingCustomDate) {
+                    debt.setRemindDate(reminderCalendar.getTimeInMillis());
+                    Alarm.addAlarm(CreateDebtActivity.this, debt);
+                }
+
 
                 finishAffinity();
                 final Intent intent = new Intent(getApplicationContext(), FeedActivity.class)

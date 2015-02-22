@@ -267,6 +267,12 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		}
 	};
 
+    public void showDetail(Debt debt) {
+        DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt);
+        detailDialogFragment.callback = this;
+        detailDialogFragment.show(getFragmentManager(), "notif_detail_screen");
+    }
+
 	@Override
 	public void onDelete(final Debt debt) {
 
