@@ -39,5 +39,4 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.6.2.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.+@aar'
-    compile 'de.hdodenhof:circleimageview:1.2.1'
 }
