@@ -23,7 +23,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	public ArrayList<Debt> list;
 	private final DataActivity activity;
 	private final View emptyView;
-	private DebtDetailDialogFragment.Callback callback;
+    private OnItemClickListener itemClickCallback;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -48,10 +48,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		}
 	}
 
-	public FeedListAdapter(ArrayList<Debt> debts, DataActivity _activity, DebtDetailDialogFragment.Callback _callback, View _emptyView) {
+	public FeedListAdapter(ArrayList<Debt> debts, DataActivity _activity, OnItemClickListener _callback, View _emptyView) {
 		list = debts;
 		activity = _activity;
-		callback = _callback;
+        itemClickCallback = _callback;
 		emptyView = _emptyView;
 	}
 
@@ -61,7 +61,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
     }
 
 	@Override
-	public void onBindViewHolder(final ViewHolder holder, int position) {
+	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		final Debt debt = list.get(position);
 		Person owner = debt.getOwner();
 		Resources resources = activity.getResources();
@@ -88,9 +88,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DebtDetailDialogFragment dialog = DebtDetailDialogFragment.newInstance(debt);
-				dialog.show(activity.getFragmentManager().beginTransaction(), "dialog");
-				dialog.callback = callback;
+                itemClickCallback.onItemClick(v, position, debt);
 			}
 		});
 
@@ -133,4 +131,9 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	public int getItemCount() {
 		return list.size();
 	}
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position, Debt debt);
+    }
+
 }

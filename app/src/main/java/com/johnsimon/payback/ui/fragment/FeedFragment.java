@@ -1,7 +1,6 @@
 package com.johnsimon.payback.ui.fragment;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -20,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
@@ -32,7 +30,6 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
-import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
@@ -46,7 +43,7 @@ import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
+public class FeedFragment extends DataFragment implements FeedListAdapter.OnItemClickListener, DebtDetailDialogFragment.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public FeedListAdapter adapter;
@@ -268,7 +265,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
     public void showDetail(Debt debt) {
         DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt);
         detailDialogFragment.callback = this;
-        detailDialogFragment.show(getFragmentManager(), "notif_detail_screen");
+        detailDialogFragment.show(getFragmentManager(), "detail_screen");
     }
 
 	@Override
@@ -354,6 +351,11 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
             startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
         }
 	}
+
+    @Override
+    public void onItemClick(View view, int position, Debt debt) {
+        showDetail(debt);
+    }
 
     public interface OnFeedChangeCallback {
         public void onFeedChange();
