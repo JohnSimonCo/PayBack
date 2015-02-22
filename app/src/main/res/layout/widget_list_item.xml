@@ -8,6 +8,7 @@
     android:layout_height="wrap_content">
 
     <FrameLayout
+        android:layout_gravity="center_vertical"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -21,7 +22,6 @@
 
         <ImageView
             android:id="@+id/list_widget_avatar"
-            android:scaleType="centerCrop"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginLeft="4dp"
@@ -40,9 +40,8 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="0dp"
         android:orientation="vertical"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content">
