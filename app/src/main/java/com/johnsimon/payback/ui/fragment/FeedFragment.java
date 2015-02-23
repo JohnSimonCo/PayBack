@@ -2,20 +2,13 @@ package com.johnsimon.payback.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.ChangeTransform;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.transition.TransitionSet;
-import android.transition.TransitionValues;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +18,6 @@ import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -47,7 +39,6 @@ import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
-import com.makeramen.RoundedImageView;
 import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -228,6 +219,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 		@TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
 		public void onClick(View v) {
+
             if (Resource.canHold(data.debts.size(), 1)) {
                 Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
                         .putExtra(CreateDebtActivity.ARG_FROM_FEED, true);
@@ -266,42 +258,14 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
                         })
                         .show();
             }
+
 		}
 	};
 
     public void showDetail(Debt debt) {
-        showDetail(debt, false, 0, null, null, null, null, null, null);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void showDetail(Debt debt, boolean animate, int position, TextView person, TextView amount, TextView note, RoundedImageView avatar, TextView avatarLetter, LinearLayout detailContainer) {
-        if (!animate || !Resource.isLOrAbove()) {
-            DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt, null);
-            detailDialogFragment.callback = this;
-            detailDialogFragment.show(getFragmentManager(), "detail_screen");
-
-            return;
-        }
-
-        String transitionName = "feedToDetailTransitionPerson" + position;
-        person.setTransitionName(transitionName);
-
-        DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt, transitionName);
+        DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt);
         detailDialogFragment.callback = this;
-
-        TransitionSet set = new TransitionSet();
-
-        Transition changeTransform = new ChangeTransform();
-        changeTransform.addTarget(person);
-        set.addTransition(changeTransform);
-
-        setSharedElementReturnTransition(set);
-        setExitTransition(set);
-
-        getFragmentManager().beginTransaction()
-                .add(detailDialogFragment, "detail_screen")
-                .addSharedElement(person, person.getTransitionName())
-                .commit();
+        detailDialogFragment.show(getFragmentManager(), "detail_screen");
     }
 
 	@Override
@@ -389,8 +353,8 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 	}
 
     @Override
-    public void onItemClick(TextView person, TextView amount, TextView note, RoundedImageView avatar, TextView avatarLetter, LinearLayout detailContainer, int position, Debt debt) {
-        showDetail(debt, true, position, person, amount, note, avatar, avatarLetter, detailContainer);
+    public void onItemClick(View view, int position, Debt debt) {
+        showDetail(debt);
     }
 
     public interface OnFeedChangeCallback {
