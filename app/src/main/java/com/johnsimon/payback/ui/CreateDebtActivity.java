@@ -150,7 +150,8 @@ public class CreateDebtActivity extends DataActivity {
             ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
 
             if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
-                animateIn(toolbar);
+                animateIn(toolbar, true);
+                animateIn(findViewById(R.id.create_lower_master), false);
             }
 
             reminderCalendar = Calendar.getInstance();
@@ -212,8 +213,6 @@ public class CreateDebtActivity extends DataActivity {
                 }
             }
         });
-
-
 
 		final ArrayList<CreateSpinnerAdapter.CalendarOptionItem> dayList = new ArrayList<CreateSpinnerAdapter.CalendarOptionItem>() {{
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.today), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY, null));
@@ -704,10 +703,14 @@ public class CreateDebtActivity extends DataActivity {
 	}
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void animateIn(final View view) {
+    private void animateIn(final View view, boolean fromTop) {
         view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         view.setAlpha(0f);
-        view.setTranslationY(Resource.getPx(-100, getResources()));
+        if (fromTop) {
+            view.setTranslationY(Resource.getPx(-100, getResources()));
+        } else {
+            view.setTranslationY(Resource.getPx(80, getResources()));
+        }
 
         ObjectAnimator animY = ObjectAnimator.ofFloat(view, "translationY", 0);
         animY.setStartDelay(260);
@@ -718,10 +721,10 @@ public class CreateDebtActivity extends DataActivity {
         animAlpha.setDuration(450);
 
         if (Resource.isLOrAbove()) {
-            PathInterpolator interpolator = new PathInterpolator(0.5f, 1f, 0.75f, 1f);
+            PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
 
-            animY.setInterpolator(interpolator);
-            animAlpha.setInterpolator(interpolator);
+            animY.setInterpolator(pathInterpolator);
+            animAlpha.setInterpolator(pathInterpolator);
         } else {
             animY.setInterpolator(new DecelerateInterpolator());
             animAlpha.setInterpolator(new DecelerateInterpolator());
