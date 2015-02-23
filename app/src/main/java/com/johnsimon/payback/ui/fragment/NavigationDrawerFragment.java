@@ -3,9 +3,11 @@ package com.johnsimon.payback.ui.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.PathInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -207,13 +210,12 @@ public class NavigationDrawerFragment extends DataFragment {
 		view.requestLayout();
     }
 
-    private void toggleHeaderVisibility() {
-        toggleHeaderVisibilityCompat();
-    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void toggleHeaderVisibility() {
 
-    //TODO fix alignment here
+        float scale = 1.1f;
+        float transX = (float) ((headerTextContainer.getWidth() * 1.1) - headerTextContainer.getWidth()) / 4;
 
-    public void toggleHeaderVisibilityCompat() {
         if (inHeaderDetailScreen) {
             //Spin to down arrow
 
@@ -221,43 +223,55 @@ public class NavigationDrawerFragment extends DataFragment {
 			headerTextContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			headerPlus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			headerMinus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            headerName.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
             headerArrow.setRotation(180f);
-
-            ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,
-                    "rotation", 360f);
-            rotation.setDuration(300);
-            rotation.start();
-
             headerTextContainer.setTranslationY(0);
-
-            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(58, getActivity().getResources()));
-            animY.setDuration(300);
-            animY.start();
-
-            headerTextContainer.setScaleX(1.1f);
-            headerTextContainer.setScaleY(1.1f);
-
-            ObjectAnimator scaleX = ObjectAnimator.ofFloat(headerTextContainer, "scaleX", 1f);
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(headerTextContainer, "scaleY", 1f);
-
-            scaleX.setDuration(300);
-            scaleY.setDuration(300);
-
-            scaleX.start();
-            scaleY.start();
-
+            headerTextContainer.setTranslationX(transX);
+            headerTextContainer.setScaleX(scale);
+            headerTextContainer.setScaleY(scale);
             headerPlus.setAlpha(1f);
             headerMinus.setAlpha(1f);
+            headerName.setTranslationY(Resource.getPx(6, getResources()));
 
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,"rotation", 360f);
+            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", Resource.getPx(58, getActivity().getResources()));
+            ObjectAnimator animX = ObjectAnimator.ofFloat(headerTextContainer, "translationX", 0f);
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(headerTextContainer, "scaleX", 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(headerTextContainer, "scaleY", 1f);
             ObjectAnimator alphaP = ObjectAnimator.ofFloat(headerPlus, "alpha", 0f);
             ObjectAnimator alphaM = ObjectAnimator.ofFloat(headerMinus, "alpha", 0f);
+            ObjectAnimator transY = ObjectAnimator.ofFloat(headerName, "translationY", 0f);
 
-            alphaP.setDuration(300);
-            alphaM.setDuration(300);
+            rotation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            animY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            animX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            scaleX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            scaleY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            alphaP.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            alphaM.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            transY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
 
+            if (Resource.isLOrAbove()) {
+                PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
+                rotation.setInterpolator(pathInterpolator);
+                animY.setInterpolator(pathInterpolator);
+                animX.setInterpolator(pathInterpolator);
+                scaleX.setInterpolator(pathInterpolator);
+                scaleY.setInterpolator(pathInterpolator);
+                alphaP.setInterpolator(pathInterpolator);
+                alphaM.setInterpolator(pathInterpolator);
+                transY.setInterpolator(pathInterpolator);
+            }
+
+            rotation.start();
+            animY.start();
+            animX.start();
+            scaleX.start();
+            scaleY.start();
             alphaP.start();
             alphaM.start();
+            transY.start();
 
 			alphaM.addListener(new Animator.AnimatorListener() {
 				@Override
@@ -271,6 +285,7 @@ public class NavigationDrawerFragment extends DataFragment {
 					headerTextContainer.setLayerType(View.LAYER_TYPE_NONE, null);
 					headerPlus.setLayerType(View.LAYER_TYPE_NONE, null);
 					headerMinus.setLayerType(View.LAYER_TYPE_NONE, null);
+                    headerName.setLayerType(View.LAYER_TYPE_NONE, null);
 				}
 
 				@Override
@@ -286,48 +301,59 @@ public class NavigationDrawerFragment extends DataFragment {
 
             inHeaderDetailScreen = false;
         } else {
-
 			headerArrow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			headerTextContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			headerPlus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			headerMinus.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            headerName.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
             headerArrow.setRotation(0f);
-
-            ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow,
-                    "rotation", 180f);
-            rotation.setDuration(300);
-            rotation.start();
-
             headerTextContainer.setTranslationY(Resource.getPx(58, getActivity().getResources()));
-
-            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
-            animY.setDuration(300);
-            animY.start();
-
+            headerTextContainer.setTranslationX(0f);
             headerTextContainer.setScaleX(1f);
             headerTextContainer.setScaleY(1f);
-
-            ObjectAnimator scaleX = ObjectAnimator.ofFloat(headerTextContainer, "scaleX", 1.1f);
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(headerTextContainer, "scaleY", 1.1f);
-
-            scaleX.setDuration(300);
-            scaleY.setDuration(300);
-
-            scaleX.start();
-            scaleY.start();
-
             headerPlus.setAlpha(0f);
             headerMinus.setAlpha(0f);
+            headerName.setTranslationY(0f);
 
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(headerArrow, "rotation", 180f);
+            ObjectAnimator animY = ObjectAnimator.ofFloat(headerTextContainer, "translationY", 0);
+            ObjectAnimator animX = ObjectAnimator.ofFloat(headerTextContainer, "translationX", transX);
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(headerTextContainer, "scaleX", scale);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(headerTextContainer, "scaleY", scale);
             ObjectAnimator alphaP = ObjectAnimator.ofFloat(headerPlus, "alpha", 1f);
             ObjectAnimator alphaM = ObjectAnimator.ofFloat(headerMinus, "alpha", 1f);
+            ObjectAnimator transY = ObjectAnimator.ofFloat(headerName, "translationY", Resource.getPx(6, getResources()));
 
-            alphaP.setDuration(300);
-            alphaM.setDuration(300);
+            rotation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            animY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            animX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            scaleX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            scaleY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            alphaP.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            alphaM.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            transY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
 
+            if (Resource.isLOrAbove()) {
+                PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
+                rotation.setInterpolator(pathInterpolator);
+                animY.setInterpolator(pathInterpolator);
+                animX.setInterpolator(pathInterpolator);
+                scaleX.setInterpolator(pathInterpolator);
+                scaleY.setInterpolator(pathInterpolator);
+                alphaP.setInterpolator(pathInterpolator);
+                alphaM.setInterpolator(pathInterpolator);
+                transY.setInterpolator(pathInterpolator);
+            }
+
+            rotation.start();
+            animY.start();
+            animX.start();
+            scaleX.start();
+            scaleY.start();
             alphaP.start();
             alphaM.start();
+            transY.start();
 
 			alphaM.addListener(new Animator.AnimatorListener() {
 				@Override
@@ -341,6 +367,7 @@ public class NavigationDrawerFragment extends DataFragment {
 					headerTextContainer.setLayerType(View.LAYER_TYPE_NONE, null);
 					headerPlus.setLayerType(View.LAYER_TYPE_NONE, null);
 					headerMinus.setLayerType(View.LAYER_TYPE_NONE, null);
+                    headerName.setLayerType(View.LAYER_TYPE_NONE, null);
 				}
 
 				@Override
