@@ -1,5 +1,7 @@
 package com.johnsimon.payback.ui;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -14,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.PathInterpolator;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -214,7 +218,8 @@ public class FeedActivity extends DataActivity implements
 		setIntent(intent);
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		Undo.completeAction();
 
@@ -240,7 +245,49 @@ public class FeedActivity extends DataActivity implements
 
         invalidateOptionsMenu();
 
-		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
+        feedFragment.recyclerView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        feedFragment.recyclerView.setTranslationY(Resource.getPx(60, getResources()));
+        feedFragment.recyclerView.setAlpha(0f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(feedFragment.recyclerView, "translationY", 0f);
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(feedFragment.recyclerView, "alpha", 1f);
+        animY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        animAlpha.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+
+        if (Resource.isLOrAbove()) {
+            PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
+            animY.setInterpolator(pathInterpolator);
+            animAlpha.setInterpolator(pathInterpolator);
+        } else {
+            DecelerateInterpolator pathInterpolator = new DecelerateInterpolator();
+            animY.setInterpolator(pathInterpolator);
+            animAlpha.setInterpolator(pathInterpolator);
+        }
+
+        animAlpha.start();
+        animY.start();
+
+        animY.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                feedFragment.recyclerView.setLayerType(View.LAYER_TYPE_NONE, null);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
         feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
         feedFragment.scrollListener.mHeader.setTranslationY(0);
         feedFragment.scrollListener.mHeaderDiffTotal = 0;

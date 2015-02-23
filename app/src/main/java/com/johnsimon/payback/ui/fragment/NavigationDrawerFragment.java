@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -262,6 +263,16 @@ public class NavigationDrawerFragment extends DataFragment {
                 alphaP.setInterpolator(pathInterpolator);
                 alphaM.setInterpolator(pathInterpolator);
                 transY.setInterpolator(pathInterpolator);
+            } else {
+                DecelerateInterpolator pathInterpolator = new DecelerateInterpolator();
+                rotation.setInterpolator(pathInterpolator);
+                animY.setInterpolator(pathInterpolator);
+                animX.setInterpolator(pathInterpolator);
+                scaleX.setInterpolator(pathInterpolator);
+                scaleY.setInterpolator(pathInterpolator);
+                alphaP.setInterpolator(pathInterpolator);
+                alphaM.setInterpolator(pathInterpolator);
+                transY.setInterpolator(pathInterpolator);
             }
 
             rotation.start();
@@ -336,6 +347,16 @@ public class NavigationDrawerFragment extends DataFragment {
 
             if (Resource.isLOrAbove()) {
                 PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
+                rotation.setInterpolator(pathInterpolator);
+                animY.setInterpolator(pathInterpolator);
+                animX.setInterpolator(pathInterpolator);
+                scaleX.setInterpolator(pathInterpolator);
+                scaleY.setInterpolator(pathInterpolator);
+                alphaP.setInterpolator(pathInterpolator);
+                alphaM.setInterpolator(pathInterpolator);
+                transY.setInterpolator(pathInterpolator);
+            } else {
+                DecelerateInterpolator pathInterpolator = new DecelerateInterpolator();
                 rotation.setInterpolator(pathInterpolator);
                 animY.setInterpolator(pathInterpolator);
                 animX.setInterpolator(pathInterpolator);
