@@ -1,16 +1,10 @@
-package com.johnsimon.payback.ui.dialog;
+package com.johnsimon.payback.ui;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewCompatKitKat;
-import android.transition.ChangeTransform;
-import android.transition.Transition;
-import android.transition.TransitionSet;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,46 +12,38 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.core.DataDialogFragment;
+import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
+import com.johnsimon.payback.ui.dialog.PersonPickerDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
 
-public class DebtDetailDialogFragment extends DataDialogFragment implements PaidBackDialogFragment.CompleteCallback {
-
-    public static Debt debtAccessible = null;
-    private static Debt debt = null;
-    public static String transitionName;
+public class DebtDetailDialogActivity extends DataActivity implements PaidBackDialogFragment.CompleteCallback {
 
     public Callback callback = null;
-    public AlertDialog alertDialog;
     public MenuItem detailMenuPay;
 
     private TextView dialog_custom_amount;
 
-    public static DebtDetailDialogFragment newInstance(Debt debt, String transitionName) {
-        DebtDetailDialogFragment.transitionName = transitionName;
-        DebtDetailDialogFragment.debt = debt;
-        DebtDetailDialogFragment.debtAccessible = debt;
-
-        return new DebtDetailDialogFragment();
-    }
+    public static Debt debt;
+    private Person person;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Build the dialog and set up the button click handlers
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        setContentView(R.layout.detail_dialog);
 
-        final View rootView = inflater.inflate(R.layout.detail_dialog, null);
+        debt = new Gson().fromJson(getIntent().getStringExtra("debt"), Debt.class);
+        person = new Gson().fromJson(getIntent().getStringExtra("person"), Person.class);
 
-        Button dialog_custom_confirm = (Button) rootView.findViewById(R.id.dialog_custom_confirm);
-        Button dialog_custom_cancel = (Button) rootView.findViewById(R.id.dialog_custom_cancel);
+        Button dialog_custom_confirm = (Button) findViewById(R.id.dialog_custom_confirm);
+        Button dialog_custom_cancel = (Button) findViewById(R.id.dialog_custom_cancel);
 
         if (debt.isPaidBack()) {
             dialog_custom_confirm.setText(R.string.undo_pay_back);
@@ -70,13 +56,12 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
+                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(DebtDetailDialogActivity.this, data.preferences.getCurrency()));
                 sendIntent.setType("text/plain");
-                startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences.getCurrency()) : getString(R.string.share)));
+                startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(DebtDetailDialogActivity.this, data.preferences.getCurrency()) : getString(R.string.share)));
             }
         });
 
-        final DebtDetailDialogFragment self = this;
         dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,18 +74,18 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                     paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, debt, false);
                 }
                 paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
-                paidBackDialogFragment.completeCallback = self;
+                paidBackDialogFragment.completeCallback = DebtDetailDialogActivity.this;
 
-                alertDialog.dismiss();
+                finish();
             }
         });
 
-        dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
+        dialog_custom_amount = (TextView) findViewById(R.id.dialog_custom_amount);
 
-        TextView dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
-        TextView dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
+        TextView dialog_custom_title = (TextView) findViewById(R.id.dialog_custom_title);
+        TextView dialog_custom_content = (TextView) findViewById(R.id.dialog_custom_content);
 
-        dialog_custom_title.setText(debt.getOwner().getName());
+        dialog_custom_title.setText(person.getName());
 
         if (debt.getNote() == null) {
             dialog_custom_content.setText(R.string.cash);
@@ -108,17 +93,17 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             dialog_custom_content.setText(debt.getNote());
         }
 
-        ImageButton detailDialogOverflow = (ImageButton) rootView.findViewById(R.id.detail_dialog_overflow);
+        ImageButton detailDialogOverflow = (ImageButton) findViewById(R.id.detail_dialog_overflow);
         detailDialogOverflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+                PopupMenu popupMenu = new PopupMenu(DebtDetailDialogActivity.this, v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
                 detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
 
                 if (debt.getAmount() < 0) {
-                    if (SwishLauncher.hasService(getActivity().getPackageManager())) {
+                    if (SwishLauncher.hasService(getPackageManager())) {
                         detailMenuPay.setEnabled(true);
                     } else {
                         detailMenuPay.setEnabled(false);
@@ -136,14 +121,14 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 if (callback != null) {
                                     callback.onEdit(debt);
                                 }
-                                alertDialog.dismiss();
+                                finish();
 
                                 return true;
                             case R.id.detail_dialog_delete:
                                 if (callback != null) {
                                     callback.onDelete(debt);
                                 }
-                                alertDialog.dismiss();
+                                finish();
 
                                 return true;
                             case R.id.detail_dialog_change:
@@ -155,18 +140,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 args.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
                                 personPickerDialogFragment.setArguments(args);
 
-								FragmentManager fm = getFragmentManager();
-								if (fm != null) {
-									personPickerDialogFragment.show(fm, "person_dialog");
-									personPickerDialogFragment.completeCallback = changePersonCallback;
-								}
+                                FragmentManager fm = getFragmentManager();
+                                personPickerDialogFragment.show(fm, "person_dialog");
+                                personPickerDialogFragment.completeCallback = changePersonCallback;
 
-                                alertDialog.dismiss();
+                                finish();
                                 return true;
 
-							case R.id.detail_dialog_pay_back:
-                                SwishLauncher.startSwish(getActivity(), debt.getAmount(), debt.getOwner());
-								return true;
+                            case R.id.detail_dialog_pay_back:
+                                SwishLauncher.startSwish(DebtDetailDialogActivity.this, debt.getAmount(), person);
+                                return true;
 
                             default:
                                 return false;
@@ -177,30 +160,24 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             }
         });
 
-        RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
-        TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
+        RoundedImageView avatar = (RoundedImageView) findViewById(R.id.detail_dialog_avatar);
+        TextView avatarLetter = (TextView) findViewById(R.id.detail_dialog_avatar_letter);
 
-        Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
+        Resource.createProfileImage(
+                this,
+                avatar,
+                avatarLetter,
+                getIntent().getBooleanExtra("detailHasImage", false),
+                getIntent().getStringExtra("detailPhotoUri"),
+                getIntent().getIntExtra("detailPaletteIndex", 0),
+                getIntent().getStringExtra("detailAvatarLetter"));
 
+        ViewCompat.setTransitionName(dialog_custom_title, "person" + getIntent().getIntExtra("pos", -1));
+        ViewCompat.setTransitionName(avatar, "avatar" + getIntent().getIntExtra("pos", -1));
+        ViewCompat.setTransitionName(avatarLetter, "avatarLetter" + getIntent().getIntExtra("pos", -1));
+        ViewCompat.setTransitionName(dialog_custom_amount, "amount" + getIntent().getIntExtra("pos", -1));
+        ViewCompat.setTransitionName(dialog_custom_content, "note" + getIntent().getIntExtra("pos", -1));
 
-        ViewCompat.setTransitionName(dialog_custom_title, transitionName);
-
-        TransitionSet set = new TransitionSet();
-
-        Transition changeTransform = new ChangeTransform();
-        changeTransform.addTarget(dialog_custom_title);
-        set.addTransition(changeTransform);
-
-        setSharedElementReturnTransition(set);
-        setExitTransition(set);
-
-
-
-        builder.setView(rootView);
-
-        alertDialog = builder.create();
-
-        return alertDialog;
     }
 
 	@Override
@@ -215,12 +192,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 		}
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		debtAccessible = null;
-	}
-
     @Override
     public void onComplete(Debt _debt) {
         if (callback != null) {
@@ -228,7 +199,13 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         }
     }
 
-	public interface Callback {
+    @Override
+    protected void onDestroy() {
+        debt = null;
+        super.onDestroy();
+    }
+
+    public interface Callback {
 		public void onPaidBack(Debt debt);
 		public void onDelete(Debt debt);
 		public void onEdit(Debt debt);

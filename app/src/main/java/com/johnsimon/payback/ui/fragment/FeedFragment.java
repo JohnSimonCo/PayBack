@@ -2,20 +2,14 @@ package com.johnsimon.payback.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.ChangeTransform;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.transition.TransitionSet;
-import android.transition.TransitionValues;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +25,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
 import com.etiennelawlor.quickreturn.library.listeners.QuickReturnListViewOnScrollListener;
+import com.google.gson.Gson;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.FeedListAdapter;
 import com.johnsimon.payback.async.Callback;
@@ -43,8 +38,8 @@ import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.ui.CreateDebtActivity;
+import com.johnsimon.payback.ui.DebtDetailDialogActivity;
 import com.johnsimon.payback.ui.FeedActivity;
-import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.makeramen.RoundedImageView;
@@ -52,7 +47,7 @@ import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class FeedFragment extends DataFragment implements FeedListAdapter.OnItemClickListener, DebtDetailDialogFragment.Callback {
+public class FeedFragment extends DataFragment implements FeedListAdapter.OnItemClickListener, DebtDetailDialogActivity.Callback {
 	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public FeedListAdapter adapter;
@@ -274,7 +269,38 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void showDetail(Debt debt, boolean animate, int position, TextView person, TextView amount, TextView note, RoundedImageView avatar, TextView avatarLetter, LinearLayout detailContainer) {
+    public void showDetail(Debt debt, boolean animate, int position, View person, View amount, View note, View avatar, View avatarLetter, View detailContainer) {
+
+        Intent intent = new Intent(getActivity(), DebtDetailDialogActivity.class);
+        intent.putExtra("debt", new Gson().toJson(debt));
+        intent.putExtra("person", new Gson().toJson(debt.getOwner()));
+
+        if (!animate || !Resource.isLOrAbove()) {
+            startActivity(intent);
+        } else {
+            intent.putExtra("pos", position);
+
+            intent.putExtra("detailHasImage", debt.getOwner().hasImage());
+            intent.putExtra("detailPhotoUri", debt.getOwner().hasImage() ? debt.getOwner().link.photoURI : null);
+            intent.putExtra("detailPaletteIndex", debt.getOwner().paletteIndex);
+            intent.putExtra("detailAvatarLetter", debt.getOwner().getAvatarLetter());
+
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                    Pair.create(person, "person" + position),
+                    Pair.create(amount, "amount" + position),
+                    Pair.create(note, "note" + position),
+                    Pair.create(avatar, "avatar" + position),
+                    Pair.create(avatarLetter, "avatarLetter" + position),
+                    Pair.create(detailContainer, "container" + position));
+
+            startActivity(intent, options.toBundle());
+        }
+
+
+
+/*
+
+
         if (!animate || !Resource.isLOrAbove()) {
             DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt, null);
             detailDialogFragment.callback = this;
@@ -302,6 +328,8 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
                 .add(detailDialogFragment, "detail_screen")
                 .addSharedElement(person, person.getTransitionName())
                 .commit();
+
+                */
     }
 
 	@Override

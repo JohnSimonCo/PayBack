@@ -8,12 +8,10 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.util.Resource;
 
-import org.apache.http.impl.cookie.BasicMaxAgeHandler;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Debt extends SyncedData<Debt> implements Identifiable{
+public class Debt extends SyncedData<Debt> implements Identifiable {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
@@ -46,7 +44,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public Long remindDate;
 
 	public transient Person owner;
-
 
 	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
 		super(touched);
@@ -148,7 +145,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 	}
 
-
 	public int getColor() {
 		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
 	}
@@ -156,15 +152,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public int getDisabledColor() {
 		return amount > 0 ? POSITIVE_COLOR_DISABLED : NEGATIVE_COLOR_DISABLED;
 	}
-	/*
-	public static int getColor(float amount) {
-		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
-	}
-
-	public static int getDisabledColor(float amount) {
-		return amount > 0 ? POSITIVE_COLOR_DISABLED : NEGATIVE_COLOR_DISABLED;
-	}
-	*/
 
 	public static String totalString(float amount, UserCurrency userCurrency, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {

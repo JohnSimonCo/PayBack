@@ -37,7 +37,6 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
-import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
@@ -51,7 +50,6 @@ import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
