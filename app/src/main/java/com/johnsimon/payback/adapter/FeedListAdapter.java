@@ -13,7 +13,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
+import com.johnsimon.payback.util.AnimationUtils;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
 
@@ -24,6 +24,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	private final DataActivity activity;
 	private final View emptyView;
     private OnItemClickListener itemClickCallback;
+
+    public boolean animate = false;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -105,6 +107,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				}
 			}
 		});
+
+        if (animate) {
+            AnimationUtils.animateIn(holder.itemView, activity.getResources(), position * 67);
+        }
 	}
 
 	private int measureTextWidthTextView(TextView textView) {
