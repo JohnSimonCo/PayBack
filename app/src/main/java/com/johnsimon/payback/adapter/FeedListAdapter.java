@@ -1,6 +1,9 @@
 package com.johnsimon.payback.adapter;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,7 +19,11 @@ import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.makeramen.RoundedImageView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHolder> {
@@ -88,7 +95,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                itemClickCallback.onItemClick(v, position, debt);
+                itemClickCallback.onItemClick(holder.person, holder.amount, holder.note, holder.avatar, holder.avatarLetter, holder.detailContainer, position, debt);
 			}
 		});
 
@@ -133,7 +140,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 	}
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position, Debt debt);
+        public void onItemClick(TextView person, TextView amount, TextView note, RoundedImageView avatar, TextView avatarLetter, LinearLayout detailContainer, int position, Debt debt);
     }
 
 }

@@ -5,6 +5,11 @@ import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewCompatKitKat;
+import android.transition.ChangeTransform;
+import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,14 +31,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 
     public static Debt debtAccessible = null;
     private static Debt debt = null;
+    public static String transitionName;
 
     public Callback callback = null;
     public AlertDialog alertDialog;
     public MenuItem detailMenuPay;
 
-	private TextView dialog_custom_amount;
+    private TextView dialog_custom_amount;
 
-    public static DebtDetailDialogFragment newInstance(Debt debt) {
+    public static DebtDetailDialogFragment newInstance(Debt debt, String transitionName) {
+        DebtDetailDialogFragment.transitionName = transitionName;
         DebtDetailDialogFragment.debt = debt;
         DebtDetailDialogFragment.debtAccessible = debt;
 
@@ -174,6 +181,20 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
 
         Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
+
+
+        ViewCompat.setTransitionName(dialog_custom_title, transitionName);
+
+        TransitionSet set = new TransitionSet();
+
+        Transition changeTransform = new ChangeTransform();
+        changeTransform.addTarget(dialog_custom_title);
+        set.addTransition(changeTransform);
+
+        setSharedElementReturnTransition(set);
+        setExitTransition(set);
+
+
 
         builder.setView(rootView);
 

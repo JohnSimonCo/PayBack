@@ -149,7 +149,7 @@ public class CreateDebtActivity extends DataActivity {
         if (savedInstanceState == null) {
             ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
 
-            if (getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
+            if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
                 animateIn(toolbar);
             }
 
