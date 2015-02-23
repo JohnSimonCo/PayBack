@@ -12,7 +12,7 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.send.NfcData;
-import com.johnsimon.payback.ui.DebtDetailDialogActivity;
+import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.FeedActivity;
 
 import static android.nfc.NdefRecord.createMime;
@@ -28,8 +28,8 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
-		if(DebtDetailDialogActivity.debt != null) {
-			return createMessage(new Debt[] {DebtDetailDialogActivity.debt}, false);
+		if(DebtDetailDialogFragment.debtAccessible != null) {
+			return createMessage(new Debt[] {DebtDetailDialogFragment.debtAccessible}, false);
 		} else if(!FeedActivity.isAll()) {
 			return createMessage(FeedActivity.feed.toArray(new Debt[FeedActivity.feed.size()]), true);
 		} else {

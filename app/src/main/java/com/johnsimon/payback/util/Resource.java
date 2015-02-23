@@ -148,27 +148,23 @@ public class Resource {
 					DateUtils.FORMAT_ABBREV_ALL);
     }
 
-    public static void createProfileImage(DataActivityInterface dataActivity, Person person, RoundedImageView avatar, TextView avatarLetter) {
-        createProfileImage(dataActivity, avatar, avatarLetter, person.hasImage(), person.hasImage() ? person.link.photoURI : null, person.paletteIndex, person.getAvatarLetter());
-    }
-
-	public static void createProfileImage(DataActivityInterface dataActivity, RoundedImageView avatar, TextView avatarLetterView, boolean hasImage, String photoUri, int paletteIndex, String avatarLetter) {
+	public static void createProfileImage(DataActivityInterface dataActivity, Person person, RoundedImageView avatar, TextView avatarLetter) {
 
         Picasso.with(dataActivity.getContext()).cancelRequest(avatar);
 
-		if (hasImage) {
-            avatarLetterView.setVisibility(View.GONE);
+		if (person.hasImage()) {
+			avatarLetter.setVisibility(View.GONE);
 
             Picasso.with(dataActivity.getContext())
-                    .load(photoUri)
+                    .load(person.link.photoURI)
                     .fit()
                     .placeholder(R.drawable.ic_person_placeholder)
                     .into(avatar);
 		} else {
             avatar.setImageBitmap(null);
-			avatar.setImageDrawable(new AvatarPlaceholderDrawable(ColorPalette.getInstance(dataActivity), paletteIndex));
-            avatarLetterView.setVisibility(View.VISIBLE);
-			avatarLetterView.setText(avatarLetter);
+			avatar.setImageDrawable(new AvatarPlaceholderDrawable(ColorPalette.getInstance(dataActivity), person.paletteIndex));
+			avatarLetter.setVisibility(View.VISIBLE);
+			avatarLetter.setText(person.getAvatarLetter());
 		}
 	}
 

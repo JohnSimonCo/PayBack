@@ -56,10 +56,6 @@
             android:theme="@style/AppThemeParent" >
         </activity>
         <activity
-            android:name=".ui.DebtDetailDialogActivity"
-            android:theme="@style/AppThemeParent" >
-        </activity>
-        <activity
             android:name=".ui.SettingsActivity"
             android:parentActivityName=".ui.FeedActivity"
             android:theme="@style/AppThemeParent"
