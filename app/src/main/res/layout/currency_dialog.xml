@@ -26,7 +26,7 @@
                 android:textColor="@android:color/white"
                 android:background="#009688"
                 android:id="@+id/welcome_currency_preview"
-                android:textSize="36sp"
+                android:textSize="32sp"
                 android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"    />

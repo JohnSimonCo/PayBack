@@ -55,22 +55,6 @@ public class UserCurrency {
 	public String render(float amount) {
 		if(format == null) format = createFormat();
 
-		/*String output = format.format(Math.abs(amount));
-
-		if(trailingZeros) {
-			//Amount is an integer
-			if((int) amount == amount) {
-				output += decimalSeparator() + "0";
-			} else {
-				//Amount of decimals < 2
-				if(output.length() - output.lastIndexOf(decimalSeparator()) - 1 < 2) {
-					output += "0";
-				}
-			}
-		}
-
-        return output;*/
-
 		return format.format(Math.abs(amount));
 	}
 

@@ -1,6 +1,7 @@
 package com.johnsimon.payback.preferences;
 
 import com.google.gson.annotations.SerializedName;
+import com.johnsimon.payback.currency.CurrencyUtils;
 import com.johnsimon.payback.currency.UserCurrency;
 
 import java.util.Currency;
@@ -35,8 +36,7 @@ public class Preferences {
 		UserCurrency value = currency.getValue();
 
 		if(value == null) {
-			String symbol = Currency.getInstance(Locale.getDefault()).getSymbol();
-			return new UserCurrency(symbol, symbol, true, UserCurrency.DECIMAL_SEPARATOR_DOT, UserCurrency.THOUSAND_SEPARATOR_SPACE, false);
+			return CurrencyUtils.guessUserCurrency();
 		}
 
 		return value;

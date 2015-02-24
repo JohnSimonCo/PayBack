@@ -30,7 +30,6 @@ public class CurrencyConverter {
             public void onErrorResponse(VolleyError error) {
             }
         });
-// Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
 
