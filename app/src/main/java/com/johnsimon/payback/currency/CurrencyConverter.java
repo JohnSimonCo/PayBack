@@ -8,33 +8,37 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 public class CurrencyConverter {
 
-    public ConvertCallback callback;
-
-    public void convert(Context context, String fromCountryCode, String toCountryCode) {
+    public CurrencyConverter(Context context, String fromCountryCode, String toCountryCode, final ConvertCallback convertCallback) {
         RequestQueue queue = Volley.newRequestQueue(context);
 
         String url = "http://rate-exchange.appspot.com/currency?from=" + fromCountryCode + "&to=" + toCountryCode;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener() {
-
-                    @Override
-                    public void onResponse(Object response) {
-                        
-                    }
-                }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onResponse(String response) {
+                if (response.equals("{\"err\": \"failed to parse response from xe.com.\"}")) {
+                    convertCallback.onCurrencyConverted(0, false);
+                    return;
+                }
+                ConvertResult convertResult = new Gson().fromJson(response, ConvertResult.class);
+                convertCallback.onCurrencyConverted(convertResult.getRate().doubleValue(), true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                convertCallback.onCurrencyConverted(0, false);
             }
         });
+
         queue.add(stringRequest);
     }
 
     public interface ConvertCallback {
-        public void onCurrencyConverted(double amount);
+        public void onCurrencyConverted(double amount, boolean success);
     }
 
 }

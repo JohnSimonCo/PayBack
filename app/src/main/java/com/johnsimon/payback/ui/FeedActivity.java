@@ -31,6 +31,7 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.currency.CurrencyConverter;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
