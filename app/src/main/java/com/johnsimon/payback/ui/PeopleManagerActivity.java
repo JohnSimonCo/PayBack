@@ -3,7 +3,6 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -31,6 +30,7 @@ import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.PeopleOrder;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.base.BaseActivity;
 import com.johnsimon.payback.ui.dialog.PeopleDetailDialogFragment;
 import com.johnsimon.payback.ui.dialog.PersonPickerDialogFragment;
 import com.johnsimon.payback.util.ColorPalette;
@@ -252,7 +252,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void sort(Activity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
+	private void sort(BaseActivity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
 		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
@@ -369,9 +369,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             @Override
             public void onCommit() {
-				//TODO might not be needed
-                //adapter.notifyDataSetChanged();
-
                 storage.commit();
             }
         });

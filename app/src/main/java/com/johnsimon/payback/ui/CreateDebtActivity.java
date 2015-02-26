@@ -3,7 +3,6 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
@@ -17,11 +16,9 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.internal.widget.TintEditText;
-import android.support.v7.internal.widget.TintSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -32,9 +29,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -50,7 +45,6 @@ import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.adapter.CreateSpinnerAdapter;
@@ -71,7 +65,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 public class CreateDebtActivity extends DataActivity {
@@ -185,12 +178,12 @@ public class CreateDebtActivity extends DataActivity {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
-                new Handler().postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mainScrollView.smoothScrollTo(0, mainScrollView.getBottom());
-                        }
-                    }, 200);
+                    }
+                }, 200);
                 }
             }
         });
@@ -438,7 +431,14 @@ public class CreateDebtActivity extends DataActivity {
 			floatLabelAmountEditText.requestFocus();
 		}
 	}
-	//TODO WORK
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    //TODO WORK
     private void updateDate(boolean anim) {
 		if (usingCustomDate) {
 

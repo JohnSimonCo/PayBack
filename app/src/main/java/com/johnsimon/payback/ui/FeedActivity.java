@@ -57,7 +57,6 @@ import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
@@ -117,7 +116,7 @@ public class FeedActivity extends DataActivity implements
 		Resource.init(getApplicationContext());
 		if (Resource.isFirstRun(storage.getPreferences())) {
 			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
+			welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
 		}
 
 		setContentView(R.layout.activity_feed);
@@ -244,14 +243,11 @@ public class FeedActivity extends DataActivity implements
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
 
-
-        Runnable r = new Runnable() {
+        handler.postDelayed(new Runnable() {
             public void run() {
                 feedFragment.adapter.animate = false;
             }
-        };
-
-        new Handler().postDelayed(r, 200);
+        }, 200);
 
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
 
@@ -528,6 +524,8 @@ public class FeedActivity extends DataActivity implements
         if (bp != null) {
             bp.release();
         }
+
+        handler.removeCallbacksAndMessages(null);
 
         super.onDestroy();
     }

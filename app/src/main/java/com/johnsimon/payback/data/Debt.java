@@ -8,8 +8,6 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.util.Resource;
 
-import org.apache.http.impl.cookie.BasicMaxAgeHandler;
-
 import java.util.ArrayList;
 import java.util.UUID;
 

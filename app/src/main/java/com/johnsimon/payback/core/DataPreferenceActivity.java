@@ -3,10 +3,8 @@ package com.johnsimon.payback.core;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
@@ -14,11 +12,11 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
-import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.ui.base.BasePreferenceActivity;
 import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.Undo;
 
-public class DataPreferenceActivity extends PreferenceActivity implements DataActivityInterface {
+public class DataPreferenceActivity extends BasePreferenceActivity implements DataActivityInterface {
 
 	protected Storage storage;
 	public AppData data;

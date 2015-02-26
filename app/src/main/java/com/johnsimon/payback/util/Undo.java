@@ -1,9 +1,9 @@
 package com.johnsimon.payback.util;
 
-import android.app.Activity;
 import android.os.Handler;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.ui.base.BaseActivity;
 import com.williammora.snackbar.Snackbar;
 
 public class Undo {
@@ -12,7 +12,7 @@ public class Undo {
 
 	private static QueuedAction queuedAction = null;
 
-	public static void executeAction(Activity context, int textId, final UndoableAction action) {
+	public static void executeAction(BaseActivity activity, int textId, final UndoableAction action) {
         completeAction();
 		queuedAction = new QueuedAction(action);
 
@@ -24,13 +24,14 @@ public class Undo {
                 cancelAction();
 			}
 		};
+
 		queuedAction.handler = handler;
 		queuedAction.runnable = runnable;
 
-		Snackbar snackbar = Snackbar.with(context.getApplicationContext());
-		snackbar.text(context.getString(textId))
-			.actionLabel(context.getString(R.string.undo))
-			.actionColor(context.getResources().getColor(R.color.undo_color))
+		Snackbar snackbar = Snackbar.with(activity.getApplicationContext());
+		snackbar.text(activity.getString(textId))
+			.actionLabel(activity.getString(R.string.undo))
+			.actionColor(activity.getResources().getColor(R.color.undo_color))
 			.duration(DURATION)
 			.eventListener(new Snackbar.EventListener() {
 				@Override
@@ -51,9 +52,10 @@ public class Undo {
                     cancelAction();
 				}
 			})
-			.show(context);
+			.show(activity);
 
 		queuedAction.snackbar = snackbar;
+        activity.queuedActions.add(queuedAction);
 	}
 
     private static void cancelAction() {
@@ -70,8 +72,7 @@ public class Undo {
         }
 	}
 
-
-	private static class QueuedAction {
+	public static class QueuedAction {
 		public UndoableAction action;
 		public Snackbar snackbar;
 		public Handler handler;

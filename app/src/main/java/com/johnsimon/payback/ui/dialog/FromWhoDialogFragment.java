@@ -24,11 +24,10 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
 	public FromWhoSelected completeCallback = null;
 	private AlertDialog alertDialog;
-	private ImageButton from_who_clear;
+    private AutoCompleteTextView actv;
+    private ImageButton from_who_clear;
 
-	public final static String KEY_NAME = "FROM_WHO_LEY_NAME";
-
-	private AutoCompleteTextView actv;
+    public final static String KEY_NAME = "FROM_WHO_LEY_NAME";
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -127,15 +126,12 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
         actv.setAdapter(adapter);
 
-        Handler handler = new Handler() {
-            public void handleMessage(Message msg) {
-                ((AutoCompleteTextView) msg.obj).setAdapter(adapter);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                actv.setAdapter(adapter);
             }
-        };
-
-        Message msg = handler.obtainMessage();
-        msg.obj = actv;
-        handler.sendMessageDelayed(msg, 200);
+        }, 200);
 
         actv.setSelection(actv.getText().length());
 	}
@@ -145,7 +141,13 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
 	}
 
-	private void disableButton(Button btn) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    private void disableButton(Button btn) {
 		btn.setTextColor(getResources().getColor(R.color.green_disabled));
 		btn.setOnClickListener(null);
 		btn.setClickable(false);

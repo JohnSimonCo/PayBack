@@ -1,19 +1,15 @@
 package com.johnsimon.payback.core;
 
-import android.app.Fragment;
 import android.os.Bundle;
 
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
-import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.User;
-import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.base.BaseFragment;
 
-public abstract class DataFragment extends Fragment {
+public abstract class DataFragment extends BaseFragment {
 	protected Storage storage;
 	public AppData data;
 	public User user;

@@ -39,4 +39,5 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.6.3.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.+@aar'
+    compile 'com.badoo.mobile:android-weak-handler:1.0'
 }
