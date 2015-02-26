@@ -525,8 +525,6 @@ public class FeedActivity extends DataActivity implements
             bp.release();
         }
 
-        handler.removeCallbacksAndMessages(null);
-
         super.onDestroy();
     }
 

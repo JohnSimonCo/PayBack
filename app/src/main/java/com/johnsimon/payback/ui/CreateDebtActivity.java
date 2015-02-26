@@ -432,12 +432,6 @@ public class CreateDebtActivity extends DataActivity {
 		}
 	}
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
-    }
-
     //TODO WORK
     private void updateDate(boolean anim) {
 		if (usingCustomDate) {

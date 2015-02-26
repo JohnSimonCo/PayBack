@@ -141,12 +141,6 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
 	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
-    }
-
     private void disableButton(Button btn) {
 		btn.setTextColor(getResources().getColor(R.color.green_disabled));
 		btn.setOnClickListener(null);

@@ -97,12 +97,6 @@ public class PaidBackDialogFragment extends BaseDialogFragment {
 		return alertDialog;
 	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
-    }
-
     public interface CompleteCallback {
 		public void onComplete(Debt debt);
 	}
