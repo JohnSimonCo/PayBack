@@ -83,6 +83,7 @@
         android:layout_height="@dimen/fab_size"
         android:layout_width="@dimen/fab_size"
         android:layout_gravity="top|right"
-        layout="@layout/feed_fab"    />
+        layout="@layout/feed_fab"
+        android:id="@+id/people_manager_fab_container" />
 
 </FrameLayout>
