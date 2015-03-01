@@ -1,6 +1,7 @@
 package com.johnsimon.payback.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,7 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 		}
 
 		holder.textView.setText(calendarOptionItem.text);
-		if (calendarOptionItem.secondaryText != null && dropdown) {
+		if (!TextUtils.isEmpty(calendarOptionItem.secondaryText) && dropdown) {
 			holder.secondaryTextView.setText(calendarOptionItem.secondaryText);
 			holder.secondaryTextView.setVisibility(View.VISIBLE);
 		} else {

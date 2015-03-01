@@ -406,6 +406,10 @@ public class NavigationDrawerFragment extends DataFragment {
         }
     }
 
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(mDrawerListView);
+    }
+
 	public void updateBalance() {
 		headerPlus.setText("+ " + data.preferences.getCurrency().render(data.totalPlus()));
 		headerMinus.setText("- " + data.preferences.getCurrency().render(data.totalMinus()));

@@ -566,7 +566,6 @@ public class CreateDebtActivity extends DataActivity {
         target.set(Calendar.DAY_OF_MONTH, day);
 
         return simpleDateFormat.format(target.getTime());
-
     }
 
     @Override

@@ -346,7 +346,15 @@ public class FeedActivity extends DataActivity implements
 
 		switch (v.getId()) {
 			case R.id.navigation_drawer_footer_people:
-				startActivity(new Intent(this, PeopleManagerActivity.class));
+
+                navigationDrawerFragment.closeDrawer();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(FeedActivity.this, PeopleManagerActivity.class));
+                    }
+                }, 200);
 				break;
 			case R.id.navigation_drawer_footer_settings:
 				startActivity(new Intent(this, SettingsActivity.class));
