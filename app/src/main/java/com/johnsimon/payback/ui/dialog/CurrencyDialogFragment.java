@@ -51,6 +51,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
     private TintSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
+	private final static float DISPLAY_VALUE = 2400.5f;
+
 	private String currencyDisplay = "";
 	private String currencyCode = "";
 
@@ -236,9 +238,9 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
         boolean same = currencyCode.equals(currencyDisplay);
         if (same) {
-            welcome_currency_preview.setText(cur.render(240.5f));
+            welcome_currency_preview.setText(cur.render(DISPLAY_VALUE));
         } else {
-            welcome_currency_preview.setText(cur.render(240.5f) + " (" + currencyCode + ")");
+            welcome_currency_preview.setText(cur.render(DISPLAY_VALUE) + " (" + currencyCode + ")");
         }
 
 		welcome_select_currency.setText(getString(R.string.currency) + " (" + currencyCode + ")");
