@@ -1,5 +1,7 @@
 package com.johnsimon.payback.data;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.BuildConfig;
@@ -7,6 +9,7 @@ import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
 
@@ -144,26 +147,30 @@ public class AppData {
         return null;
     }
 
-    public void merge(Person from, Person to) {
+    public void merge(Context context, Person from, Person to) {
         for(Debt debt : debts) {
             if(debt.getOwner() == from) {
                 debt.setOwner(to);
             }
         }
-        delete(from);
+        delete(context, from);
     }
 
-    public void delete(Person person) {
-        deleteDebts(person);
+    public void delete(Context context, Person person) {
+        deleteDebts(context, person);
         deleted.add(person.id);
 		peopleOrder.remove(person.id);
 		touchPeopleOrder();
 		people.remove(person);
     }
-    public void delete(Debt debt) {
+    public void delete(Context context, Debt debt) {
         deleted.add(debt.id);
         debts.remove(debt);
-    }
+
+		if(debt.getRemindDate() != null) {
+			Alarm.cancelAlarm(context, debt);
+		}
+	}
 
     public void add(Debt debt) {
         debts.add(debt);
@@ -178,11 +185,11 @@ public class AppData {
 		touchPeopleOrder();
 	}
 
-    private void deleteDebts(Person person) {
+    private void deleteDebts(Context context, Person person) {
         ArrayList<Debt> debts = feed(person);
 
         for(Debt debt : debts) {
-            delete(debt);
+            delete(context, debt);
         }
     }
 
@@ -190,8 +197,8 @@ public class AppData {
         debt.setOwner(person);
     }
 
-    public void sync(Person person, DebtSendable[] debts) {
-        deleteDebts(person);
+    public void sync(Context context, Person person, DebtSendable[] debts) {
+        deleteDebts(context, person);
         for(DebtSendable debt : debts) {
             add(debt.extract(person));
         }

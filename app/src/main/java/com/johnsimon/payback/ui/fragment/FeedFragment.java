@@ -1,6 +1,7 @@
 package com.johnsimon.payback.ui.fragment;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -272,7 +273,9 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 	public void onDelete(final Debt debt) {
 		final int index = FeedActivity.feed.indexOf(debt);
 
-        new MaterialDialog.Builder(getActivity())
+		final Activity activity = getActivity();
+
+        new MaterialDialog.Builder(activity)
 			.content(R.string.delete_entry)
 			.positiveText(R.string.delete)
 			.negativeText(R.string.cancel)
@@ -300,7 +303,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 
 						@Override
 						public void onCommit() {
-							data.delete(debt);
+							data.delete(activity, debt);
 							storage.commit();
 						}
 					});

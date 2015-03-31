@@ -486,7 +486,7 @@ public class FeedActivity extends DataActivity implements
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-                                    data.sync(person, debts);
+                                    data.sync(FeedActivity.this, person, debts);
                                     commitBeam();
                                     dialog.dismiss();
                                 }

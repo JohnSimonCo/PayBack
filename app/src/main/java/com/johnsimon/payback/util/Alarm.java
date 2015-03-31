@@ -38,12 +38,13 @@ public class Alarm  {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
+	/*
     public static boolean hasAlarm (Context context, Debt debt) {
         Intent intentAlarm = new Intent(context, AlarmReceiver.class);
         intentAlarm.putExtra(ALARM_ID, debt.id);
 
 		return PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_NO_CREATE) != null;
-    }
+    }*/
 
     public static void cancelAlarm(Context context, Debt debt) {
         Intent intent = new Intent(context, AlarmReceiver.class);
@@ -100,8 +101,10 @@ public class Alarm  {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 notificationManager.notify(debt.id.hashCode(), builder.build());
-            }
-        };
+
+				//Do not remind again
+				debt.setRemindDate(null);
+    }};
 
         private NotificationCompat.Action getPayBackAction(UUID id) {
             Intent payBackIntent = new Intent(context, NotificationEventReceiver.class);
@@ -119,17 +122,11 @@ public class Alarm  {
             remindLaterIntent.setAction(NotificationEventReceiver.ACTION_REMIND_LATER);
             remindLaterIntent.putExtra(Alarm.ALARM_ID, id);
 
-			if (Resource.isLOrAbove()) {
+			int icon = Resource.isLOrAbove() ? R.drawable.ic_material_reminder_finger_dark : R.drawable.ic_material_reminder_finger_light;
+
 				return new NotificationCompat.Action(
-						R.drawable.ic_material_reminder_finger_dark,
-						context.getString(R.string.notif_remind_later),
+						icon, context.getString(R.string.notif_remind_later),
 						PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-			} else {
-				return new NotificationCompat.Action(
-						R.drawable.ic_material_reminder_finger_light,
-						context.getString(R.string.notif_remind_later),
-						PendingIntent.getBroadcast(context, 0, remindLaterIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-			}
         }
 
         private PendingIntent getDetailPendingIntent(UUID id) {
@@ -142,11 +139,8 @@ public class Alarm  {
         }
 
         private String getContentText(Debt debt, AppData data) {
-            if (debt.getAmount() > 0) {
-                return context.getString(R.string.notif_they_owe, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getAmount()));
-            } else {
-                return context.getString(R.string.notif_you_owe, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getAmount()));
-            }
+			int format = debt.getAmount() > 0 ? R.string.notif_they_owe : R.string.notif_you_owe;
+			return context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getAmount()));
         }
     }
 
@@ -199,6 +193,7 @@ public class Alarm  {
                         break;
 
                     case ACTION_REMIND_LATER:
+						//TODO göra så att man kan välja när remindern ska gå
 						debt.setRemindDate(System.currentTimeMillis() + Resource.ONE_DAY);
 						Alarm.addAlarm(context, debt);
                         break;

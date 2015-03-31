@@ -52,7 +52,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
     private TintSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
-	private final static float DISPLAY_VALUE = 2400.5f;
+	private final static float DISPLAY_VALUE =  2400.5f;
 
 	private String currencyDisplay = "";
 	private String currencyCode = "";

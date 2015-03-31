@@ -12,6 +12,7 @@ public class AlarmScheduler {
 	private Subscription<AppData> dataSubscription;
 	private Context context;
 
+	//TODO inte göra om hela processen varje ny aktivitetsstart
 	public AlarmScheduler(Context context, Subscription<AppData> dataSubscription) {
 		this.context = context;
 		this.dataSubscription = dataSubscription;
@@ -30,7 +31,7 @@ public class AlarmScheduler {
 		@Override
 		public void onCalled(AppData data) {
 			for(Debt debt : data.debts) {
-				if(debt.getRemindDate() != null && !Alarm.hasAlarm(context, debt)) {
+				if(debt.getRemindDate() != null) {
 					Alarm.addAlarm(context, debt);
 				}
 			}

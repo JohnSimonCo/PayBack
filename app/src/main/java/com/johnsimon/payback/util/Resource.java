@@ -142,7 +142,7 @@ public class Resource {
 
     public static CharSequence getRelativeTimeString(Context context, long timestamp) {
         long now = System.currentTimeMillis();
-        return (now - timestamp < 60000)
+        return (now - timestamp) < 60000
                 ? context.getString(R.string.justnow)
                 : DateUtils.getRelativeTimeSpanString(
 					timestamp,

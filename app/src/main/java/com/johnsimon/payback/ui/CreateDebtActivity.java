@@ -619,10 +619,10 @@ public class CreateDebtActivity extends DataActivity {
 
             if (v.isActivated()) {
                 Debt debt = saveDebt(
-                        floatLabelNameAutoCompleteTextView.getText().toString().trim(),
-                        radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
-                        Float.parseFloat(floatLabelAmountEditText.getText().toString()),
-                        floatLabelNoteEditText.getText().toString().trim()
+					floatLabelNameAutoCompleteTextView.getText().toString().trim(),
+					radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
+					Float.parseFloat(floatLabelAmountEditText.getText().toString()),
+					floatLabelNoteEditText.getText().toString().trim()
                 );
 
                 if (usingCustomDate) {

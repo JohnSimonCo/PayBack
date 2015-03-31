@@ -342,7 +342,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             @Override
             public void onCommit() {
-                data.delete(person);
+                data.delete(PeopleManagerActivity.this, person);
                 storage.commit();
             }
         });
@@ -383,7 +383,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         adapter.notifyDataSetChanged();
         adapter.updateEmptyViewVisibility();
 
-        data.merge(person, other);
+        data.merge(this, person, other);
         storage.commit();
     }
 }
