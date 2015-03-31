@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.johnsimon.payback.util.Resource;
 
 public class CurrencyConverter {
 
@@ -24,7 +25,7 @@ public class CurrencyConverter {
                     convertCallback.onCurrencyConverted(0, false);
                     return;
                 }
-                ConvertResult convertResult = new Gson().fromJson(response, ConvertResult.class);
+                ConvertResult convertResult = Resource.gson.fromJson(response, ConvertResult.class);
                 convertCallback.onCurrencyConverted(convertResult.getRate().doubleValue(), true);
             }
         }, new Response.ErrorListener() {

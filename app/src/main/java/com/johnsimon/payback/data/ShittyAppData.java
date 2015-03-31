@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.preferences.Preference;
 import com.johnsimon.payback.preferences.Preferences;
+import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,7 +23,7 @@ public class ShittyAppData {
 
 	public static AppData fromJson(String JSON) {
 		try {
-			AppData data = new Gson().fromJson(JSON, AppData.class);
+			AppData data = Resource.gson.fromJson(JSON, AppData.class);
 
 			if(data.debts.size() > 0) {
 				if(data.debts.get(0).ownerId == null) {
@@ -38,7 +39,7 @@ public class ShittyAppData {
 
 			return data;
 		} catch (Exception e) {
-			return new Gson().fromJson(JSON, ShittyAppData.class).cleanse();
+			return Resource.gson.fromJson(JSON, ShittyAppData.class).cleanse();
 		}
 	}
 

@@ -8,6 +8,7 @@ import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.ColorPalette;
+import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -347,6 +348,6 @@ public class AppData {
 	}
 
     public static String toJson(AppData data) {
-        return new Gson().toJson(data, AppData.class);
+        return Resource.gson.toJson(data, AppData.class);
     }
 }

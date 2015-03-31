@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.google.gson.Gson;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivityInterface;
@@ -60,6 +61,8 @@ public class Resource {
     public static boolean isFull = false;
 
     private static boolean isInitialized = false;
+
+	public static Gson gson = new Gson();
 
     public static void init(Context context) {
         if (isInitialized) return;
