@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
@@ -283,10 +284,18 @@ public class CreateDebtActivity extends DataActivity {
         public void onClick(View v) {
 
             if (v.isActivated()) {
+                float amount;
+                try {
+                    amount = Float.parseFloat(floatLabelAmountEditText.getText().toString().replace(',', '.'));
+                } catch (NumberFormatException ex) {
+                    Toast.makeText(CreateDebtActivity.this, R.string.number_format_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Person person = saveDebt(
                         floatLabelNameAutoCompleteTextView.getText().toString().trim(),
                         radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
-                        Float.parseFloat(floatLabelAmountEditText.getText().toString()),
+                        amount,
                         floatLabelNoteEditText.getText().toString().trim()
                 );
 
