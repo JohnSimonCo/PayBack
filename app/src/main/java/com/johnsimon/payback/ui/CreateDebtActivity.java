@@ -77,6 +77,7 @@ public class CreateDebtActivity extends DataActivity {
 	public final static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
 
     public final static String KEY_CALENDAR = "KEY_CALENDAR";
+    public final static String KEY_ADDED_CALENDAR = "KEY_ADDED_CALENDAR";
 
 	private TintEditText floatLabelAmountEditText;
 	private TintEditText floatLabelNoteEditText;
@@ -98,6 +99,9 @@ public class CreateDebtActivity extends DataActivity {
 
     private Calendar reminderCalendar;
 	private boolean usingCustomDate = false;
+
+    private Calendar addedCalendar;
+    private boolean usingCustomAdded = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -669,6 +673,19 @@ public class CreateDebtActivity extends DataActivity {
 		}
 	};
 
+    private DatePickerDialog.OnDateSetListener dateAddedSetCallback = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            //TODO cont
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, monthOfYear);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            addedCalendar = cal;
+            usingCustomAdded = true;
+        }
+    };
+
 	public Debt saveDebt(String name, boolean iOwe, float amount, String note) {
 		if(iOwe) {
 			amount = -amount;
@@ -686,10 +703,16 @@ public class CreateDebtActivity extends DataActivity {
 				? editingDebt.getOwner()
 				: data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 
+            if (usingCustomAdded && addedCalendar != null) {
+                editingDebt.changeDate(addedCalendar.getTimeInMillis());
+            }
+
 			editingDebt.edit(person, amount, note);
 
             debt = editingDebt;
 		}
+
+        //TODO set debt.timestamp
 
 		storage.commit();
 		return debt;
@@ -769,6 +792,17 @@ public class CreateDebtActivity extends DataActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        } else if (id == R.id.action_create_date) {
+            Calendar preset;
+
+            if (usingCustomAdded) {
+                preset = addedCalendar;
+            } else {
+                preset = Calendar.getInstance();
+            }
+            DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateAddedSetCallback, preset.get(Calendar.YEAR), preset.get(Calendar.MONTH), preset.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
                 if (Resource.isLOrAbove()) {
@@ -825,12 +859,19 @@ public class CreateDebtActivity extends DataActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-		long time = savedInstanceState.getLong(KEY_CALENDAR);
-		if (time != 0) {
+        long time = savedInstanceState.getLong(KEY_CALENDAR, 0);
+        long timeAdded = savedInstanceState.getLong(KEY_ADDED_CALENDAR, 0);
+
+        if (time != 0) {
 			reminderCalendar.setTimeInMillis(time);
 			usingCustomDate = true;
 			updateDate(false);
 		}
+
+        if (timeAdded != 0) {
+            addedCalendar.setTimeInMillis(timeAdded);
+            usingCustomAdded = true;
+        }
     }
 
     @Override
@@ -839,5 +880,8 @@ public class CreateDebtActivity extends DataActivity {
 		if (reminderCalendar != null) {
 			outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
 		}
+        if (addedCalendar != null) {
+            outState.putLong(KEY_ADDED_CALENDAR, addedCalendar.getTimeInMillis());
+        }
     }
 }

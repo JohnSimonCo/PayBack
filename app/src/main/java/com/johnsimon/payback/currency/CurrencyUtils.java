@@ -387,6 +387,8 @@ public class CurrencyUtils {
             { "ZWD", "Z$" },
     };
 
+    public static String[] allCurrenciesWithPrioritizedAsDisplay;
+
     public static String[][] getAllCurrencies() {
         return list;
     }
@@ -395,13 +397,13 @@ public class CurrencyUtils {
         return listPrioritized;
     }
 
-    public static String[] getAllCurrenciesWithPrioritizedAsDisplay() {
+    public static void generateAllCurrenciesWithPrioritizedAsDisplay() {
         String[] result = new String[listPrioritized.length];
         for (int i = 0; i < listPrioritized.length; i++) {
             result[i] = listPrioritized[i][0] + (listPrioritized[i][0].equals(listPrioritized[i][1]) ? "" : " (" + listPrioritized[i][1] + ")");
         }
 
-        return result;
+        allCurrenciesWithPrioritizedAsDisplay = result;
     }
 
     public static UserCurrency guessUserCurrency() {

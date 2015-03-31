@@ -42,7 +42,7 @@ public class WidgetViewsFactory extends DataWidgetViewsFactory {
         if (debt.getOwner().hasImage()) {
             row.setImageViewUri(R.id.list_widget_avatar, Uri.parse(debt.getOwner().link.photoURI));
         } else {
-        //    row.setImageViewBitmap(R.id.list_widget_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ColorPalette.getInstance(this), debt.getOwner().paletteIndex)));
+            //row.setImageViewBitmap(R.id.list_widget_avatar, Resource.drawableToBitmap(new AvatarPlaceholderDrawable(ColorPalette.getInstance(this), debt.getOwner().paletteIndex)));
             row.setViewVisibility(R.id.list_widget_avatar_letter, View.VISIBLE);
             row.setTextViewText(R.id.list_widget_avatar_letter, debt.getOwner().getAvatarLetter());
         }

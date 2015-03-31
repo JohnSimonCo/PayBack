@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
@@ -129,18 +130,20 @@ public class CurrencyDialogFragment extends DataDialogFragment {
         }
 
         rootView.findViewById(R.id.welcome_cancel).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				alertDialog.dismiss();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+		CurrencyUtils.generateAllCurrenciesWithPrioritizedAsDisplay();
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new MaterialDialog.Builder(getActivity())
 						.title(R.string.select_currency)
-						.items(CurrencyUtils.getAllCurrenciesWithPrioritizedAsDisplay())
+						.items(CurrencyUtils.allCurrenciesWithPrioritizedAsDisplay)
 						.itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog materialDialog, View view, int which, CharSequence charSequence) {

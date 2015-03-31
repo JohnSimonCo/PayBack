@@ -126,6 +126,7 @@
     <string name="even_out">Even out</string>
     <string name="evened_out">Evened out</string>
     <string name="currency_show_trailing_zeros">Show trailing zeros</string>
+    <string name="set_date">Set date</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

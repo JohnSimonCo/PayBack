@@ -32,7 +32,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public String note;
 
 	@SerializedName("timestamp")
-	public final long timestamp;
+	public long timestamp;
 
 	@SerializedName("paidBack")
 	public boolean paidBack;
@@ -146,6 +146,10 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 	}
 
+	public void changeDate(long time) {
+		touch();
+		this.timestamp = time;
+	}
 
 	public int getColor() {
 		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
