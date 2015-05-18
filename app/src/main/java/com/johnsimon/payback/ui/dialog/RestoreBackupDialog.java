@@ -19,6 +19,7 @@ public class RestoreBackupDialog {
 					.content("Wanna restore from it???")
 					.positiveText("Yes i am")
 					.negativeText("No, sure")
+					.cancelable(false)
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override
 						public void onPositive(MaterialDialog dialog) {
@@ -32,7 +33,7 @@ public class RestoreBackupDialog {
 						public void onNegative(MaterialDialog dialog) {
 							p.fire(false);
 						}
-					});
+					}).show();
 		} else {
 			p.fire(false);
 		}
