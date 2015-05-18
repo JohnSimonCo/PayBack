@@ -11,7 +11,7 @@ import com.johnsimon.payback.util.FileManager;
 public class RestoreBackupDialog {
 
 	public static Promise<Boolean> attemptRestore(Context context, final Storage storage) {
-		Promise<Boolean> p = new Promise<>();
+		final Promise<Boolean> p = new Promise<>();
 		final FileManager.ReadResult result = FileManager.read();
 		if(result.success) {
 			new MaterialDialog.Builder(context)
@@ -27,7 +27,14 @@ public class RestoreBackupDialog {
 							
 							p.fire(true);
 						}
+
+						@Override
+						public void onNegative(MaterialDialog dialog) {
+							p.fire(false);
+						}
 					});
+		} else {
+			p.fire(false);
 		}
 		return p;
 	}
