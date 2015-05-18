@@ -58,6 +58,7 @@ import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -599,12 +600,14 @@ public class FeedActivity extends DataActivity implements
         paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
             @Override
             public void onComplete(Debt nothing) {
-                final HashSet<UUID> wasPaidBack = new HashSet<>();
+                final HashSet<Debt> wasPaidBack = new HashSet<>();
+				final HashMap<Debt, Long> remindDates = new HashMap<>();
 
                 for(Debt debt: feed) {
                     if (debt.isPaidBack()) {
-                        wasPaidBack.add(debt.id);
+                        wasPaidBack.add(debt);
                     }
+					remindDates.put(debt, debt.getRemindDate());
                 }
 
                 Undo.executeAction(FeedActivity.this, R.string.evened_out, new Undo.UndoableAction() {
@@ -612,6 +615,10 @@ public class FeedActivity extends DataActivity implements
                     public void onDisplay() {
                         for(Debt debt: feed) {
                             debt.setPaidBack(true);
+							if(debt.getRemindDate() != null) {
+								Alarm.cancelAlarm(FeedActivity.this, debt);
+								debt.setRemindDate(null);
+							}
                         }
                         feedFragment.adapter.notifyDataSetChanged();
                         feedFragment.feedChangeCallback.onFeedChange();
@@ -620,8 +627,12 @@ public class FeedActivity extends DataActivity implements
                     @Override
                     public void onRevert() {
                         for(Debt debt: feed) {
-                            debt.setPaidBack(wasPaidBack.contains(debt.id));
-                        }
+                            debt.setPaidBack(wasPaidBack.contains(debt));
+                        	debt.setRemindDate(remindDates.get(debt));
+							if(debt.getRemindDate() != null) {
+								Alarm.addAlarm(FeedActivity.this, debt);
+							}
+						}
                         feedFragment.adapter.notifyDataSetChanged();
                         feedFragment.feedChangeCallback.onFeedChange();
                     }

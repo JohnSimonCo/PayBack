@@ -34,8 +34,8 @@ public class Alarm  {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-		//TODO ENABLE alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+		alarmManager.set(AlarmManager.RTC_WAKEUP, debt.getRemindDate(), PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+		//alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, PendingIntent.getBroadcast(context, debt.getIntegerId(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
 	/*
@@ -188,12 +188,10 @@ public class Alarm  {
 
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
-                        //TODO SHOW NOTIFICATION IF DEBT IS PAID BACK?
                         debt.setPaidBack(true);
                         break;
 
                     case ACTION_REMIND_LATER:
-						//TODO göra så att man kan välja när remindern ska gå
 						debt.setRemindDate(System.currentTimeMillis() + Resource.ONE_DAY);
 						Alarm.addAlarm(context, debt);
                         break;

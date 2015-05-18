@@ -38,6 +38,7 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.ui.CreateDebtActivity;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.shamanland.fab.FloatingActionButton;
@@ -197,6 +198,9 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
     @Override
 	public void onPaidBack(Debt debt) {
 		debt.setPaidBack(!debt.isPaidBack());
+        if(debt.isPaidBack() && debt.getRemindDate() != null) {
+            Alarm.cancelAlarm(getActivity(), debt);
+        }
         storage.commit();
 		adapter.notifyDataSetChanged();
         feedChangeCallback.onFeedChange();
