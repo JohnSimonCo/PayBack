@@ -18,11 +18,13 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 
 	private ArrayList<CreateSpinnerAdapter.CalendarOptionItem> list;
 	private Context context;
+	private boolean extra;
 
-	public CreateSpinnerAdapter(Context context, int resourceId, ArrayList<CreateSpinnerAdapter.CalendarOptionItem> list) {
+	public CreateSpinnerAdapter(Context context, int resourceId, ArrayList<CreateSpinnerAdapter.CalendarOptionItem> list, boolean extraInformation) {
 		super(context, resourceId, list);
 		this.list = list;
 		this.context = context;
+		this.extra = extraInformation;
 	}
 
 	@Override
@@ -53,7 +55,7 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 		}
 
 		holder.textView.setText(calendarOptionItem.text);
-		if (!TextUtils.isEmpty(calendarOptionItem.secondaryText) && dropdown) {
+		if ((!TextUtils.isEmpty(calendarOptionItem.secondaryText) && dropdown) || extra) {
 			holder.secondaryTextView.setText(calendarOptionItem.secondaryText);
 			holder.secondaryTextView.setVisibility(View.VISIBLE);
 		} else {

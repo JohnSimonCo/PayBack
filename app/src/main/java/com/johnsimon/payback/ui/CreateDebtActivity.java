@@ -222,8 +222,8 @@ public class CreateDebtActivity extends DataActivity {
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM, null));
 		}};
 
-        CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList);
-		CreateSpinnerAdapter timeAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, timeList);
+        CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList, false);
+		CreateSpinnerAdapter timeAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, timeList, true);
 
         reminderDayButton = (Button) findViewById(R.id.create_button_day);
         reminderTimeButton = (Button) findViewById(R.id.create_button_time);
@@ -254,7 +254,7 @@ public class CreateDebtActivity extends DataActivity {
         popupWindowDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (timeList.get(position).calendarFlag) {
+                switch (dayList.get(position).calendarFlag) {
                     case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
                         Calendar nowToday = Calendar.getInstance();
                         nowToday.setTimeInMillis(nowToday.getTimeInMillis() + Resource.ONE_DAY);
@@ -277,10 +277,18 @@ public class CreateDebtActivity extends DataActivity {
                         break;
 
                     case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
-                        DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateSetCallback, reminderCalendar.get(Calendar.YEAR), reminderCalendar.get(Calendar.MONTH), reminderCalendar.get(Calendar.DAY_OF_MONTH));
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                CreateDebtActivity.this,
+                                dateSetCallback,
+                                reminderCalendar.get(Calendar.YEAR),
+                                reminderCalendar.get(Calendar.MONTH),
+                                reminderCalendar.get(Calendar.DAY_OF_MONTH));
                         datePickerDialog.show();
                         break;
                 }
+
+                popupWindowDay.dismiss();
+
             }
         });
 
@@ -317,6 +325,9 @@ public class CreateDebtActivity extends DataActivity {
                         timePickerDialog.show();
                         break;
                 }
+
+                popupWindowTime.dismiss();
+
             }
         });
 
@@ -558,7 +569,7 @@ public class CreateDebtActivity extends DataActivity {
             return getString(R.string.tomorrow);
         }
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("LL-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd");
 
         Calendar target = Calendar.getInstance();
         target.set(Calendar.YEAR, year);
@@ -578,7 +589,6 @@ public class CreateDebtActivity extends DataActivity {
         ));
     }
 
-    //TODO kanske går att göra bättre...
 	private String getTimeString(int hour, int minute, boolean simplify) {
 
         if (minute == 0 && simplify) {
@@ -671,7 +681,6 @@ public class CreateDebtActivity extends DataActivity {
     private DatePickerDialog.OnDateSetListener dateAddedSetCallback = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            //TODO cont
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, monthOfYear);

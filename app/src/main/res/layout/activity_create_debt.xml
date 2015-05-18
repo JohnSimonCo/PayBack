@@ -213,7 +213,7 @@
                             android:layout_marginLeft="@dimen/create_start_margin_reduced"
                             android:layout_marginStart="@dimen/create_start_margin_reduced"
                             android:id="@+id/create_button_day"
-                            android:layout_width="115dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"    />
 
                         <Button
@@ -222,7 +222,7 @@
                             android:textAllCaps="false"
                             android:background="?android:attr/selectableItemBackground"
                             android:id="@+id/create_button_time"
-                            android:layout_width="115dp"
+                            android:layout_width="135dp"
                             android:layout_height="wrap_content"    />
 
                     </LinearLayout>
