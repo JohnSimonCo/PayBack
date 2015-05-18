@@ -51,11 +51,12 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 	public FeedListAdapter adapter;
     public FrameLayout headerView;
 
-	public TextView totalDebtTextView;
-    public TextView feed_header_balance;
+	private TextView totalDebtTextView;
+    private TextView feed_header_balance;
     private ImageButton fab_l;
 
     public RecyclerView recyclerView;
+    public RecyclerView.LayoutManager layoutManager;
     private View emptyView;
 	public QuickReturnListViewOnScrollListener scrollListener;
 
@@ -74,7 +75,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
         recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
 		recyclerView.setHasFixedSize(true);
 
-		final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);
 
         headerView = (FrameLayout) rootView.findViewById(R.id.feed_list_header_master);
@@ -134,7 +135,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
         scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
                 headerView, -headerHeight, null, 0, headerImage);
         scrollListener.setCanSlideInIdleScrollState(false);
-        recyclerView.setOnScrollListener(scrollListener);
+        recyclerView.addOnScrollListener(scrollListener);
 
 		FeedActivity host = (FeedActivity) getActivity();
 		feedSubscription = host.feedSubscription;
@@ -273,7 +274,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
         detailDialogFragment.show(getFragmentManager(), "detail_screen");
     }
 
-	@Override
+    @Override
 	public void onDelete(final Debt debt) {
 		final int index = FeedActivity.feed.indexOf(debt);
 
@@ -365,7 +366,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
     }
 
     public interface OnFeedChangeCallback {
-        public void onFeedChange();
+        void onFeedChange();
     }
 
 }

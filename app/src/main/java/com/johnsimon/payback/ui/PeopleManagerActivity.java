@@ -94,7 +94,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 		recyclerView.addItemDecoration(dragSortRecycler);
 		recyclerView.addOnItemTouchListener(dragSortRecycler);
-		recyclerView.setOnScrollListener(dragSortRecycler.getScrollListener());
+		recyclerView.addOnScrollListener(dragSortRecycler.getScrollListener());
 
         final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
 		people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
