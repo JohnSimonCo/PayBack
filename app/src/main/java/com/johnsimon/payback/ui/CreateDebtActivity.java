@@ -18,7 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
-import android.support.v7.internal.widget.TintEditText;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -79,8 +79,8 @@ public class CreateDebtActivity extends DataActivity {
     public final static String KEY_CALENDAR = "KEY_CALENDAR";
     public final static String KEY_ADDED_CALENDAR = "KEY_ADDED_CALENDAR";
 
-	private TintEditText floatLabelAmountEditText;
-	private TintEditText floatLabelNoteEditText;
+	private AppCompatEditText floatLabelAmountEditText;
+	private AppCompatEditText floatLabelNoteEditText;
 	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
 	private FloatLabelLayout floatLabelLayout;
     private ImageButton create_fab_l;
@@ -132,8 +132,8 @@ public class CreateDebtActivity extends DataActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		floatLabelAmountEditText = (TintEditText) findViewById(R.id.create_edittext_amount);
-		floatLabelNoteEditText = (TintEditText) findViewById(R.id.create_edittext_note);
+		floatLabelAmountEditText = (AppCompatEditText) findViewById(R.id.create_edittext_amount);
+		floatLabelNoteEditText = (AppCompatEditText) findViewById(R.id.create_edittext_note);
 		floatLabelNameAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.create_edittext_name);
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));

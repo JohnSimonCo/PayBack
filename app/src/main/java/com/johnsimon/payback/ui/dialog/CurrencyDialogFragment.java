@@ -5,14 +5,13 @@ import android.app.Dialog;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.internal.widget.TintCheckBox;
-import android.support.v7.internal.widget.TintSpinner;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devspark.robototextview.widget.RobotoButton;
@@ -20,14 +19,6 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Currency;
-import java.util.List;
-import java.util.Set;
 
 public class CurrencyDialogFragment extends DataDialogFragment {
 
@@ -46,10 +37,10 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
-	private TintCheckBox custom_currency_check_after;
-    private TintCheckBox custom_currency_decimal_separator;
-    private TintCheckBox custom_currency_trailing_zeros;
-    private TintSpinner currency_thousand_separator;
+	private AppCompatCheckBox custom_currency_check_after;
+    private AppCompatCheckBox custom_currency_decimal_separator;
+    private AppCompatCheckBox custom_currency_trailing_zeros;
+    private AppCompatSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
 	private final static float DISPLAY_VALUE =  2400.5f;
@@ -102,10 +93,10 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		welcome_select_currency = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency);
 		welcome_select_currency_display = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency_display);
 
-		custom_currency_check_after = (TintCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
-        custom_currency_decimal_separator = (TintCheckBox) rootView.findViewById(R.id.custom_currency_decimal_separator);
-        custom_currency_trailing_zeros = (TintCheckBox) rootView.findViewById(R.id.custom_currency_trailing_zeros);
-		currency_thousand_separator = (TintSpinner) rootView.findViewById(R.id.currency_thousand_separator);
+		custom_currency_check_after = (AppCompatCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
+        custom_currency_decimal_separator = (AppCompatCheckBox) rootView.findViewById(R.id.custom_currency_decimal_separator);
+        custom_currency_trailing_zeros = (AppCompatCheckBox) rootView.findViewById(R.id.custom_currency_trailing_zeros);
+		currency_thousand_separator = (AppCompatSpinner) rootView.findViewById(R.id.currency_thousand_separator);
 
         welcome_currency_preview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
 

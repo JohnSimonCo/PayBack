@@ -1,7 +1,6 @@
 package com.johnsimon.payback.view;
 
 import android.content.Context;
-import android.support.v7.internal.widget.TintSpinner;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Spinner;

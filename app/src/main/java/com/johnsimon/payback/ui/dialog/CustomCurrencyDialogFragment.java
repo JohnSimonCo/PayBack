@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v7.internal.widget.TintRadioButton;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.support.v7.internal.widget.TintEditText;
+import android.support.v7.widget.AppCompatEditText;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.RequiredValidator;
@@ -22,7 +22,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 	public CustomCurrencySelectedCallback completeCallback;
 
-	private TintEditText customCurrencyEditText;
+	private AppCompatEditText customCurrencyEditText;
 	private AlertDialog alertDialog;
 
 	@Override
@@ -44,7 +44,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 			}
 		});
 
-		customCurrencyEditText = (TintEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
+		customCurrencyEditText = (AppCompatEditText) rootView.findViewById(R.id.custom_currency_dialog_edittext);
 		customCurrencyEditText.setTextColor(getResources().getColor(R.color.gray_text_dark));
 
 		if (TextUtils.isEmpty(customCurrencyEditText.getText().toString())) {
