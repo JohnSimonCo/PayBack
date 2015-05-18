@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.ui.FeedActivity;
 
 public class WelcomeNfcDialogFragment extends DialogFragment {
 
@@ -28,6 +29,7 @@ public class WelcomeNfcDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				alertDialog.dismiss();
+				//TODO KOLLA HÄR
 			}
 		});
 

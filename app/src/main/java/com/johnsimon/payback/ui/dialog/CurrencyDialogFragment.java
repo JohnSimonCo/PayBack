@@ -256,24 +256,26 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		@Override
 		public void onClick(View v) {
 
-			if (continueToNfc) {
-				WelcomeNfcDialogFragment welcomeNfcDialogFragment = new WelcomeNfcDialogFragment();
-				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
-			}
-
 			UserCurrency userCurrency = new UserCurrency(currencyCode, currencyDisplay, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition(), custom_currency_trailing_zeros.isChecked());
 
 			data.preferences.currency.setValue(userCurrency);
 			storage.commit();
 
-            currencySelectedCallback.onCurrencySelected();
+			currencySelectedCallback.onCurrencySelected();
 
 			alertDialog.dismiss();
+
+			if (continueToNfc) {
+				WelcomeNfcDialogFragment welcomeNfcDialogFragment = new WelcomeNfcDialogFragment();
+				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
+			} else {
+				//TODO KOLLA HÄR JOHN
+			}
 		}
 	};
 
     public interface CurrencySelectedCallback {
-        public void onCurrencySelected();
+        void onCurrencySelected();
     }
 
 }
