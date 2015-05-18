@@ -404,7 +404,7 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		navigationDrawerFragment.mDrawerToggle.syncState();
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override

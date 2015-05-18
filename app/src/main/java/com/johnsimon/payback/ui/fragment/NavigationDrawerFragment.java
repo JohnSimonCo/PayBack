@@ -465,6 +465,7 @@ public class NavigationDrawerFragment extends DataFragment {
                 }
             }
         };
+
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {

@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -36,7 +37,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -78,30 +78,28 @@ public class CreateDebtActivity extends DataActivity {
 
     public final static String KEY_CALENDAR = "KEY_CALENDAR";
     public final static String KEY_ADDED_CALENDAR = "KEY_ADDED_CALENDAR";
+    public final static String KEY_CHANGED_ADDED = "KEY_CHANGED_ADDED";
 
 	private AppCompatEditText floatLabelAmountEditText;
 	private AppCompatEditText floatLabelNoteEditText;
-	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
+	private AppCompatAutoCompleteTextView floatLabelNameAutoCompleteTextView;
 	private FloatLabelLayout floatLabelLayout;
     private ImageButton create_fab_l;
 	private Button reminderButton;
     private Button reminderDayButton;
     private Button reminderTimeButton;
 	private ImageButton clearReminderButton;
-
 	private RadioGroup radioGroup;
 
 	private RequiredValidator validator;
-
 	private Debt editingDebt = null;
-
     private TransitionDrawable transitionDrawable;
 
-    private Calendar reminderCalendar;
+    private Calendar reminderCalendar = Calendar.getInstance();
 	private boolean usingCustomDate = false;
 
-    private Calendar addedCalendar;
-    private boolean usingCustomAdded = false;
+    private Calendar addedCalendar = Calendar.getInstance();
+    private boolean changedAddedDate = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -134,7 +132,7 @@ public class CreateDebtActivity extends DataActivity {
 
 		floatLabelAmountEditText = (AppCompatEditText) findViewById(R.id.create_edittext_amount);
 		floatLabelNoteEditText = (AppCompatEditText) findViewById(R.id.create_edittext_note);
-		floatLabelNameAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.create_edittext_name);
+		floatLabelNameAutoCompleteTextView = (AppCompatAutoCompleteTextView) findViewById(R.id.create_edittext_name);
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
@@ -150,8 +148,6 @@ public class CreateDebtActivity extends DataActivity {
                 animateIn(toolbar, true);
                 animateIn(findViewById(R.id.create_lower_master), false);
             }
-
-            reminderCalendar = Calendar.getInstance();
         }
 
 		Resources res = getResources();
@@ -630,7 +626,6 @@ public class CreateDebtActivity extends DataActivity {
                     Alarm.addAlarm(CreateDebtActivity.this, debt);
                 }
 
-
                 finishAffinity();
                 final Intent intent = new Intent(getApplicationContext(), FeedActivity.class)
 						.putExtra(FeedActivity.ARG_FROM_CREATE, true);
@@ -682,7 +677,7 @@ public class CreateDebtActivity extends DataActivity {
             cal.set(Calendar.MONTH, monthOfYear);
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             addedCalendar = cal;
-            usingCustomAdded = true;
+            changedAddedDate = true;
         }
     };
 
@@ -698,12 +693,14 @@ public class CreateDebtActivity extends DataActivity {
 		if(editingDebt == null) {
 			Person person = data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 			data.addFirst(debt = new Debt(person, amount, note, data.preferences.getCurrency().id));
+
+            debt.changeDate(addedCalendar.getTimeInMillis());
 		} else {
 			Person person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()
 				: data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 
-            if (usingCustomAdded && addedCalendar != null) {
+            if (changedAddedDate) {
                 editingDebt.changeDate(addedCalendar.getTimeInMillis());
             }
 
@@ -711,9 +708,6 @@ public class CreateDebtActivity extends DataActivity {
 
             debt = editingDebt;
 		}
-
-        //TODO set debt.timestamp
-
 		storage.commit();
 		return debt;
 	}
@@ -793,14 +787,7 @@ public class CreateDebtActivity extends DataActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else if (id == R.id.action_create_date) {
-            Calendar preset;
-
-            if (usingCustomAdded) {
-                preset = addedCalendar;
-            } else {
-                preset = Calendar.getInstance();
-            }
-            DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateAddedSetCallback, preset.get(Calendar.YEAR), preset.get(Calendar.MONTH), preset.get(Calendar.DAY_OF_MONTH));
+            DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateAddedSetCallback, addedCalendar.get(Calendar.YEAR), addedCalendar.get(Calendar.MONTH), addedCalendar.get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
 
         } else if (id == android.R.id.home) {
@@ -868,20 +855,21 @@ public class CreateDebtActivity extends DataActivity {
 			updateDate(false);
 		}
 
-        if (timeAdded != 0) {
+        if (timeAdded > 0) {
             addedCalendar.setTimeInMillis(timeAdded);
-            usingCustomAdded = true;
         }
+
+        changedAddedDate = savedInstanceState.getBoolean(KEY_CHANGED_ADDED, false);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 		if (reminderCalendar != null) {
 			outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
 		}
-        if (addedCalendar != null) {
-            outState.putLong(KEY_ADDED_CALENDAR, addedCalendar.getTimeInMillis());
-        }
+
+        outState.putLong(KEY_ADDED_CALENDAR, addedCalendar.getTimeInMillis());
+        outState.putBoolean(KEY_CHANGED_ADDED, changedAddedDate);
     }
 }
