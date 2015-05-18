@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.ui.CreateDebtActivity;
 import com.johnsimon.payback.ui.FeedActivity;
 
 public class ListWidgetProvider extends AppWidgetProvider {
@@ -28,7 +29,16 @@ public class ListWidgetProvider extends AppWidgetProvider {
             Intent clickIntent = new Intent(context, FeedActivity.class);
             PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            Intent homeIntent = new Intent(context, FeedActivity.class);
+            PendingIntent homePI = PendingIntent.getActivity(context, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent addIntent = new Intent(context, CreateDebtActivity.class);
+            PendingIntent addPI = PendingIntent.getActivity(context, 0, addIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
             widget.setPendingIntentTemplate(R.id.feed_list_item_master, clickPI);
+
+            widget.setOnClickPendingIntent(R.id.widget_layout_title, homePI);
+            widget.setOnClickPendingIntent(R.id.widget_layout_add, addPI);
 
             appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
         }

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -249,7 +250,12 @@ public class Resource {
             return ((BitmapDrawable)drawable).getBitmap();
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
@@ -257,12 +263,34 @@ public class Resource {
         return bitmap;
     }
 
+    public static Bitmap roundBitmap(Bitmap sbmp, int radius) {
+        Bitmap output = Bitmap.createBitmap(sbmp.getWidth(),
+                sbmp.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
+
+        //paint.setAntiAlias(true);
+        //paint.setFilterBitmap(true);
+        //paint.setDither(true);
+        //canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(Color.parseColor("#ff0000"));
+        //canvas.drawCircle(sbmp.getWidth() / 2 + 0.7f, sbmp.getHeight() / 2 + 0.7f,
+        //       sbmp.getWidth() / 2 + 0.1f, paint);
+        canvas.drawCircle(0, 0, (float)Math.sqrt(2f)/1.999999995f/*.707f*/, paint);
+        //canvas.drawPaint(paint);
+        //paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        //canvas.drawBitmap(sbmp, rect, rect, paint);
+        return output;
+    }
+
     public static class AmountComparator implements Comparator<Debt> {
         @Override
         public int compare(Debt a, Debt b) {
-			if(a.isPaidBack()) {
-				if(b.isPaidBack()) {
-					return Math.round(b.getAbsoluteAmount() - a.getAbsoluteAmount());
+            if (a.isPaidBack()) {
+                if(b.isPaidBack()) {
+                    return Math.round(b.getAbsoluteAmount() - a.getAbsoluteAmount());
 				} else {
 					return 1;
 				}

@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"    />
 
         <ImageButton
+            android:id="@+id/widget_layout_add"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:background="?android:attr/selectableItemBackground"
