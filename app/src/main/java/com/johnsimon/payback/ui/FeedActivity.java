@@ -46,6 +46,7 @@ import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
+import com.johnsimon.payback.ui.dialog.RestoreBackupDialog;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
@@ -116,8 +117,16 @@ public class FeedActivity extends DataActivity implements
 
 		Resource.init(getApplicationContext());
 		if (Resource.isFirstRun(storage.getPreferences())) {
-			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-			welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+
+			RestoreBackupDialog.attemptRestore(this, storage).then(new Callback<Boolean>() {
+				@Override
+				public void onCalled(Boolean restored) {
+					if (!restored) {
+						WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+						welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+					}
+				}
+			});
 		}
 
 		setContentView(R.layout.activity_feed);
