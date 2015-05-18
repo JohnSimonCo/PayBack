@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "com.johnsimon.payback"
@@ -14,15 +14,16 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    packagingOptions {
-        exclude 'LICENSE.txt'
     }
 }
 
@@ -32,14 +33,14 @@ repositories {
 
 dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:recyclerview-v7:22.0.0'
     compile 'com.shamanland:fab:0.0.7'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.makeramen:roundedimageview:1.4.0'
     compile 'com.williammora:snackbar:1.4.0'
     compile 'com.anjlab.android.iab.v3:library:1.0.+@aar'
-    compile 'com.google.android.gms:play-services-drive:7.0.0'
+    compile 'com.google.android.gms:play-services-drive:7.3.0'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
     compile 'com.afollestad:material-dialogs:0.6.7.0'
     compile 'com.squareup.picasso:picasso:2.4.0'
