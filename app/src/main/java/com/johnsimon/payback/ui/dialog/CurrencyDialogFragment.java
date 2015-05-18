@@ -34,6 +34,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	public final static String CURRENCY_DECIMAL_SEPARATOR = "CURRENCY_DECIMAL_SEPARATOR";
 	public final static String CURRENCY_TRAILING_ZEROS = "CURRENCY_TRAILING_ZEROS";
 	public final static String CURRENCY_THOUSAND_SPINNER = "CURRENCY_THOUSAND_SPINNER";
+	public final static String KEY_FIRST_TIME = "KEY_FIRST_TIME";
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
@@ -50,6 +51,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 
 	private boolean continueToNfc = false;
     private boolean usingDefaults = true;
+	private boolean firstTime = false;
 
     public CurrencySelectedCallback currencySelectedCallback;
 
@@ -63,6 +65,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			continueToNfc = args.getBoolean(CONTINUE, false);
+			firstTime = args.getBoolean(KEY_FIRST_TIME, false);
 
 			if (args.getBoolean(SHOW_INFO_TEXT, false)) {
 				rootView.findViewById(R.id.currency_info_text).setVisibility(View.VISIBLE);
@@ -99,6 +102,8 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		currency_thousand_separator = (AppCompatSpinner) rootView.findViewById(R.id.currency_thousand_separator);
 
         welcome_currency_preview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
+
+		firstTime = savedInstanceState.getBoolean(KEY_FIRST_TIME, false);
 
 		if (savedInstanceState != null) {
 
@@ -249,6 +254,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
         outState.putBoolean(CURRENCY_CHECKBOX, custom_currency_check_after.isChecked());
         outState.putBoolean(CURRENCY_DECIMAL_SEPARATOR, custom_currency_decimal_separator.isChecked());
         outState.putBoolean(CURRENCY_TRAILING_ZEROS, custom_currency_trailing_zeros.isChecked());
+		outState.putBoolean(KEY_FIRST_TIME, firstTime);
 		outState.putInt(CURRENCY_THOUSAND_SPINNER, currency_thousand_separator.getSelectedItemPosition());
 	}
 

@@ -43,6 +43,7 @@ public class WelcomeDialogFragment extends DataDialogFragment {
 			args.putBoolean(CurrencyDialogFragment.CONTINUE, true);
 			args.putBoolean(CurrencyDialogFragment.SHOW_INFO_TEXT, true);
 			args.putBoolean(CurrencyDialogFragment.CANCELABLE, false);
+			args.putBoolean(CurrencyDialogFragment.KEY_FIRST_TIME, true);
 
             fragment.currencySelectedCallback = (FeedActivity) getActivity();
 
