@@ -32,13 +32,15 @@ public class ShareStringGenerator {
 				currentDebts.add(debt);
 			}
 		}
+		builder.append("\n");
 
 		if(currentDebts.size() > 0) {
-			builder.append("\n\n");
+			builder.append("\n");
 			builder.append("Current debts");
 			builder.append(":\n");
 
 			for(Debt debt : currentDebts) {
+				builder.append("\u2022 ");
 				generateDebtShareString(context, debt, currency, builder);
 				builder.append("\n");
 			}
@@ -50,12 +52,13 @@ public class ShareStringGenerator {
 			builder.append(":\n");
 
 			for(Debt debt : paidBackDebts) {
+				builder.append("\u2022 ");
 				generateDebtShareString(context, debt, currency, builder);
 				builder.append("\n");
 			}
 		}
 
-		return builder.toString();
+		return builder.toString().trim();
 	}
 	public static String generateDebtShareString(Context context, Debt debt, UserCurrency currency) {
 		StringBuilder builder = new StringBuilder();
@@ -80,8 +83,9 @@ public class ShareStringGenerator {
 			builder.append(context.getString(R.string.debt_incash));
 		} else {
 			builder.append(context.getString(R.string.debt_for));
-			builder.append(" ");
+			builder.append(" \"");
 			builder.append(debt.getNote());
+			builder.append("\"");
 		}
 
 		builder.append(" ");
