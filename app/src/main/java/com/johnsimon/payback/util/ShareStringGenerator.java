@@ -34,7 +34,7 @@ public class ShareStringGenerator {
 		}
 
 		if(currentDebts.size() > 0) {
-			builder.append("\n");
+			builder.append("\n\n");
 			builder.append("Current debts");
 			builder.append(":\n");
 
