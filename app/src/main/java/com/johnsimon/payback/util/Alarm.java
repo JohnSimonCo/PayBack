@@ -19,6 +19,8 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.storage.LocalStorage;
+import com.johnsimon.payback.storage.Storage;
+import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.FeedActivity;
 
 import java.util.Calendar;
@@ -63,6 +65,8 @@ public class Alarm  {
         private Context context;
         private Intent intent;
 
+		Storage storage;
+
 		public AlarmReceiver() {
 		}
 
@@ -72,8 +76,8 @@ public class Alarm  {
             this.context = context;
             this.intent = intent;
 
-            LocalStorage localStorage = new LocalStorage(context);
-            localStorage.subscription.listen(dataLoadedCallback);
+			storage = StorageManager.getStorage(context);
+			storage.subscription.listen(dataLoadedCallback);
         }
 
         private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
@@ -104,6 +108,7 @@ public class Alarm  {
 
 				//Do not remind again
 				debt.setRemindDate(null);
+				storage.commit();
     }};
 
         private NotificationCompat.Action getPayBackAction(UUID id) {
@@ -150,9 +155,9 @@ public class Alarm  {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			LocalStorage localStorage = new LocalStorage(context);
-			scheduler = new AlarmScheduler(context, localStorage.subscription);
-			localStorage.subscription.listen(this);
+			Storage storage = StorageManager.getStorage(context);
+			scheduler = new AlarmScheduler(context, storage.subscription);
+			storage.subscription.listen(this);
 		}
 
 		@Override

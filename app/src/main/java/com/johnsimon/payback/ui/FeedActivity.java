@@ -214,6 +214,11 @@ public class FeedActivity extends DataActivity implements
 		} else if (intent.getExtras() != null && intent.getExtras().get(Alarm.ALARM_ID) != null) {
             //TODO TEST
             Debt debt = data.findDebt((UUID) intent.getExtras().get(Alarm.ALARM_ID));
+
+			if(debt == null) {
+				return;
+			}
+
             person = debt.getOwner();
             feed = data.feed(person);
             feedSubscription.broadcast(feed);
