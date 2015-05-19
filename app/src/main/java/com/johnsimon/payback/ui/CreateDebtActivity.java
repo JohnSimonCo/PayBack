@@ -16,7 +16,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
@@ -433,6 +432,12 @@ public class CreateDebtActivity extends DataActivity {
 		if (intent.hasExtra(ARG_ID)) {
 			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));
 
+            usingCustomDate = editingDebt.getRemindDate() != null;
+            if (usingCustomDate) {
+                reminderCalendar.setTimeInMillis(editingDebt.getRemindDate());
+                updateDate(false);
+            }
+
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.getOwner().getName());
 
 			floatLabelAmountEditText.setText(new DecimalFormat("###.###").format(editingDebt.getAbsoluteAmount()));
@@ -450,7 +455,6 @@ public class CreateDebtActivity extends DataActivity {
 		}
 	}
 
-    //TODO WORK
     private void updateDate(boolean anim) {
 		if (usingCustomDate) {
 
@@ -660,7 +664,6 @@ public class CreateDebtActivity extends DataActivity {
         }
     };
 
-	//TODO CONT
 	private TimePickerDialog.OnTimeSetListener timeSetCallback = new TimePickerDialog.OnTimeSetListener() {
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -720,7 +723,17 @@ public class CreateDebtActivity extends DataActivity {
 
             debt = editingDebt;
 		}
+
+        if (usingCustomDate) {
+            debt.setRemindDate(reminderCalendar.getTimeInMillis());
+        } else {
+            debt.setRemindDate(null);
+        }
+
 		storage.commit();
+
+        //TODO CONT
+
 		return debt;
 	}
 

@@ -153,6 +153,9 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 
 		feedSubscription.listen(onFeedCallback);
 		feedLinkedNotification.listen(onFeedLinkedCallback);
+
+        Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+
 	}
 
 	@Override
