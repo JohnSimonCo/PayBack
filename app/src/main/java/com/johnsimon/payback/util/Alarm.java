@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.johnsimon.payback.R;
@@ -166,7 +167,7 @@ public class Alarm  {
 		}
 	}
 
-    private static class NotificationEventReceiver extends BroadcastReceiver {
+    public static class NotificationEventReceiver extends BroadcastReceiver {
 
         public final static String ACTION_PAY_BACK = "ACTION_PAY_BACK";
         public final static String ACTION_REMIND_LATER = "ACTION_REMIND_LATER";
@@ -174,14 +175,16 @@ public class Alarm  {
         private Context context;
         private Intent intent;
 
+        private Storage storage;
+
         @Override
         public void onReceive(Context context, Intent intent) {
 
             this.context = context;
             this.intent = intent;
 
-            LocalStorage localStorage = new LocalStorage(context);
-            localStorage.subscription.listen(dataLoadedCallback);
+            storage = StorageManager.getStorage(context);
+            storage.subscription.listen(dataLoadedCallback);
         }
 
         private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
@@ -194,6 +197,16 @@ public class Alarm  {
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
 						debt.payback();
+
+                        storage.commit();
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                                .setSmallIcon(R.drawable.ic_stat_negative)
+                                .setContent(new RemoteViews(context.getPackageName(), R.layout.paid_back_notification));
+
+                        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.notify(debt.id.hashCode(), builder.build());
+
                         break;
 
                     case ACTION_REMIND_LATER:

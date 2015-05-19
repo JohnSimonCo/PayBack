@@ -473,7 +473,7 @@ public class CreateDebtActivity extends DataActivity {
 
                 reminderButton.setVisibility(View.VISIBLE);
 
-                Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, android.R.anim.fade_out);
+                Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_out_fast);
 
                 fadeOut.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -485,7 +485,7 @@ public class CreateDebtActivity extends DataActivity {
                     public void onAnimationEnd(Animation animation) {
                         reminderButton.setVisibility(View.GONE);
 
-                        Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, android.R.anim.fade_in);
+                        Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_in_fast);
 
                         clearReminderButton.setVisibility(View.VISIBLE);
                         reminderDayButton.setVisibility(View.VISIBLE);
@@ -518,7 +518,7 @@ public class CreateDebtActivity extends DataActivity {
                 reminderDayButton.setVisibility(View.VISIBLE);
                 reminderTimeButton.setVisibility(View.VISIBLE);
 
-                Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, android.R.anim.fade_out);
+                Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_out_fast);
 
                 fadeOut.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -533,7 +533,7 @@ public class CreateDebtActivity extends DataActivity {
                         reminderDayButton.setVisibility(View.GONE);
                         reminderTimeButton.setVisibility(View.GONE);
 
-                        Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, android.R.anim.fade_in);
+                        Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_in_fast);
 
                         reminderButton.setVisibility(View.VISIBLE);
                         reminderButton.startAnimation(fadeIn);
@@ -580,7 +580,7 @@ public class CreateDebtActivity extends DataActivity {
             return getString(R.string.tomorrow);
         }
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd");
+        SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
 
         Calendar target = Calendar.getInstance();
         target.set(Calendar.YEAR, year);

@@ -90,7 +90,22 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textColor="#999999"
+        android:text="NOTE HERE"
         android:textSize="18sp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="6dp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:id="@+id/dialog_paid_back_date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="#aaa"
+        android:visibility="gone"
+        android:text="NOTE HERE"
+        android:textSize="16sp"
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
         android:paddingTop="6dp"/>

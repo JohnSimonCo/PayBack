@@ -22,6 +22,9 @@ import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class DebtDetailDialogFragment extends DataDialogFragment implements PaidBackDialogFragment.CompleteCallback {
 
     public static Debt debtAccessible = null;
@@ -55,6 +58,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         if (debt.isPaidBack()) {
             dialog_custom_confirm.setText(R.string.undo_pay_back);
             dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
+
+            TextView dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
+            dialog_paid_back_date.setVisibility(View.VISIBLE);
+
+            SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
+
+            Calendar target = Calendar.getInstance();
+            target.setTimeInMillis(debt.getDatePaidBack());
+
+            dialog_paid_back_date.setText(getString(R.string.paid_back_when, simpleDateFormat.format(target.getTime())));
         }
 
         //This is the share button
