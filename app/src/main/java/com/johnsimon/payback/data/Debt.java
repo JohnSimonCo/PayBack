@@ -37,6 +37,9 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	@SerializedName("paidBack")
 	public boolean paidBack;
 
+	@SerializedName("datePaidBack")
+	public Long datePaidBack;
+
 	@SerializedName("currencyId")
 	public String currencyId;
 
@@ -46,7 +49,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public transient Person owner;
 
 
-	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
+	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, Long datePaidBack, String currency) {
 		super(touched);
 
 		this.id = id;
@@ -55,10 +58,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 		this.timestamp = timestamp;
 		this.paidBack = paidBack;
+		this.datePaidBack = datePaidBack;
 		this.currencyId = currency;
 	}
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
+    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, Long datePaidBack, String currency) {
 		super(touched);
 
         this.id = id;
@@ -68,11 +72,12 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
         this.note = note;
         this.timestamp = timestamp;
         this.paidBack = paidBack;
+		this.datePaidBack = datePaidBack;
 		this.currencyId = currency;
     }
 
 	private Debt(Person owner, float amount, String note, long time, String currencyId) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false, currencyId);
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, null, currencyId);
 	}
 
 	//Used when creating new
@@ -125,6 +130,16 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		return paidBack;
 	}
 
+	public void payback() {
+		setPaidBack(true);
+		setDatePaidBack(System.currentTimeMillis());
+	}
+
+	public void unpayback() {
+		setPaidBack(false);
+		setDatePaidBack(null);
+	}
+
 	public void setPaidBack(boolean isPaidBack) {
 		touch();
 		this.paidBack = isPaidBack;
@@ -149,6 +164,15 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public void changeDate(long time) {
 		touch();
 		this.timestamp = time;
+	}
+
+	public void setDatePaidBack(Long datePaidBack) {
+		touch();
+		this.datePaidBack = datePaidBack;
+	}
+
+	public Long getDatePaidBack() {
+		return datePaidBack;
 	}
 
 	public int getColor() {

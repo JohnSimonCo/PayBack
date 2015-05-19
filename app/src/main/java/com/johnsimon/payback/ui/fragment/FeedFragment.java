@@ -202,8 +202,14 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 
     @Override
 	public void onPaidBack(Debt debt) {
-		debt.setPaidBack(!debt.isPaidBack());
-        if(debt.isPaidBack() && debt.getRemindDate() != null) {
+        boolean payback = !debt.isPaidBack();
+
+        if(payback) {
+            debt.payback();
+        } else {
+            debt.unpayback();
+        }
+        if(payback && debt.getRemindDate() != null) {
             Alarm.cancelAlarm(getActivity(), debt);
         }
         storage.commit();

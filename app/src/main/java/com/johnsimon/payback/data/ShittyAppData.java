@@ -53,7 +53,7 @@ public class ShittyAppData {
 		ArrayList<Debt> debts = new ArrayList<>();
 
 		for(ShittyDebt shittyDebt : this.debts) {
-			debts.add(new Debt(shittyDebt.ownerId, shittyDebt.amount, shittyDebt.note, shittyDebt.id, shittyDebt.timestamp, shittyDebt.touched, shittyDebt.paidback, shittyDebt.currencyId));
+			debts.add(new Debt(shittyDebt.ownerId, shittyDebt.amount, shittyDebt.note, shittyDebt.id, shittyDebt.timestamp, shittyDebt.touched, shittyDebt.paidback, null, shittyDebt.currencyId));
 		}
 
 

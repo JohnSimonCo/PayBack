@@ -420,9 +420,11 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	private String generateShareString() {
-		StringBuilder sb = new StringBuilder();
-		//TODO JOHN HÄR
-		return sb.toString();
+		StringBuilder builder = new StringBuilder();
+		//TODO JOHN HAR
+		builder.append("test");
+
+		return builder.toString();
 	}
 
 	public void purchaseFullVersion() {
@@ -637,19 +639,24 @@ public class FeedActivity extends DataActivity implements
             public void onComplete(Debt nothing) {
                 final HashSet<Debt> wasPaidBack = new HashSet<>();
 				final HashMap<Debt, Long> remindDates = new HashMap<>();
+				final HashMap<Debt, Long> paidBackDates = new HashMap<>();
 
                 for(Debt debt: feed) {
                     if (debt.isPaidBack()) {
                         wasPaidBack.add(debt);
                     }
 					remindDates.put(debt, debt.getRemindDate());
+					paidBackDates.put(debt, debt.getDatePaidBack());
                 }
 
                 Undo.executeAction(FeedActivity.this, R.string.evened_out, new Undo.UndoableAction() {
                     @Override
                     public void onDisplay() {
                         for(Debt debt: feed) {
-                            debt.setPaidBack(true);
+							if(debt.getDatePaidBack() == null) {
+								debt.payback();
+							}
+
 							if(debt.getRemindDate() != null) {
 								Alarm.cancelAlarm(FeedActivity.this, debt);
 								debt.setRemindDate(null);
@@ -663,6 +670,7 @@ public class FeedActivity extends DataActivity implements
                     public void onRevert() {
                         for(Debt debt: feed) {
                             debt.setPaidBack(wasPaidBack.contains(debt));
+							debt.setDatePaidBack(paidBackDates.get(debt));
                         	debt.setRemindDate(remindDates.get(debt));
 							if(debt.getRemindDate() != null) {
 								Alarm.addAlarm(FeedActivity.this, debt);

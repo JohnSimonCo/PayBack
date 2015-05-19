@@ -19,8 +19,11 @@ public class DebtSendable {
 	@SerializedName("timestamp")
 	public long timestamp;
 
-	@SerializedName("isPaidBack")
-	public boolean isPaidBack;
+	@SerializedName("paidBack")
+	public boolean paidBack;
+
+	@SerializedName("datePaidBack")
+	public Long datePaidBack;
 
 	@SerializedName("currency")
 	public String currency;
@@ -30,12 +33,13 @@ public class DebtSendable {
         this.amount = debt.getAmount();
 		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
-		this.isPaidBack = debt.isPaidBack();
+		this.paidBack = debt.isPaidBack();
+		this.datePaidBack = debt.datePaidBack;
 		this.currency = debt.currencyId;
 	}
 
 	public Debt extract(Person person) {
 		//Reverse amount
-		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), isPaidBack, currency);
+		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), paidBack, datePaidBack, currency);
 	}
 }

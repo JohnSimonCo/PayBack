@@ -193,7 +193,7 @@ public class Alarm  {
 
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
-                        debt.setPaidBack(true);
+						debt.payback();
                         break;
 
                     case ACTION_REMIND_LATER:
