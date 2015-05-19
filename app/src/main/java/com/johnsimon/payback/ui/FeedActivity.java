@@ -1,7 +1,5 @@
 package com.johnsimon.payback.ui;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -9,16 +7,12 @@ import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.PathInterpolator;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -31,8 +25,6 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.core.DataActivity;
-import com.johnsimon.payback.currency.CurrencyConverter;
-import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.data.Person;
@@ -43,7 +35,6 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
-import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
 import com.johnsimon.payback.ui.dialog.RestoreBackupDialog;
@@ -54,6 +45,7 @@ import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
@@ -347,7 +339,8 @@ public class FeedActivity extends DataActivity implements
 			case R.id.feed_menu_share:
 				Intent shareIntent = new Intent();
 				shareIntent.setAction(Intent.ACTION_SEND);
-				shareIntent.putExtra(Intent.EXTRA_TEXT, generateShareString());
+				shareIntent.putExtra(Intent.EXTRA_TEXT, ShareStringGenerator.generateDebtSummary(
+						getApplicationContext(), feed, data.preferences.getCurrency()));
 				shareIntent.setType("text/plain");
 				startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
 				break;
@@ -419,13 +412,7 @@ public class FeedActivity extends DataActivity implements
 		}
 	}
 
-	private String generateShareString() {
-		StringBuilder builder = new StringBuilder();
-		//TODO JOHN HAR
-		builder.append("test");
 
-		return builder.toString();
-	}
 
 	public void purchaseFullVersion() {
 		bpInitialized.thenUnique(billingInitializedCallback);
@@ -653,7 +640,7 @@ public class FeedActivity extends DataActivity implements
                     @Override
                     public void onDisplay() {
                         for(Debt debt: feed) {
-							if(debt.getDatePaidBack() == null) {
+							if(!debt.isPaidBack()) {
 								debt.payback();
 							}
 

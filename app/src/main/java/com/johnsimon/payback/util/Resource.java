@@ -40,8 +40,14 @@ import com.johnsimon.payback.storage.StorageManager;
 import com.makeramen.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Currency;
+import java.util.Date;
+import java.util.Locale;
 
 public class Resource {
     private final static int MAX_ACTIONS = 20;
@@ -284,6 +290,8 @@ public class Resource {
         //canvas.drawBitmap(sbmp, rect, rect, paint);
         return output;
     }
+
+    public static SimpleDateFormat monthDateFormat = new SimpleDateFormat("MMM d", Locale.getDefault());
 
     public static class AmountComparator implements Comparator<Debt> {
         @Override

@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.ShareStringGenerator;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -201,17 +202,8 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context context, UserCurrency userCurrency) {
-		String shareText = this.amount < 0
-			? context.getString(R.string.ioweyou)
-			: context.getString(R.string.youoweme);
-
-		shareText += " " + userCurrency.render(this);
-		if (!TextUtils.isEmpty(this.note)) {
-			shareText += " " + context.getString(R.string.debt_for) + " " +  this.note;
-		}
-
-		return shareText;
+	public String getShareString(Context context, UserCurrency currency) {
+		return ShareStringGenerator.generateDebtShareString(context, this, currency);
 	}
 
     @Override

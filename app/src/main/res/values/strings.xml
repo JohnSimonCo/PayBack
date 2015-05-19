@@ -38,8 +38,12 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="ioweyou">I owe you</string>
+    <string name="iowedyou">I owed you</string>
     <string name="youoweme">You owe me</string>
+    <string name="youowedme">You owed me</string>
+    <string name="a_total_of">a total of</string>
     <string name="debt_for">for</string>
+    <string name="debt_incash">in cash</string>
     <string name="bytime">Latest</string>
     <string name="byamount">By amount</string>
     <string name="clear">Clear</string>
