@@ -2,6 +2,7 @@ package com.johnsimon.payback.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 
 import com.johnsimon.payback.util.ColorPalette;
@@ -27,7 +28,6 @@ public class AvatarPlaceholderDrawable extends Drawable {
 	@Override
 	public int getOpacity() {
 		return 0;
-		//return PixelFormat.OPAQUE;
 	}
 
 }

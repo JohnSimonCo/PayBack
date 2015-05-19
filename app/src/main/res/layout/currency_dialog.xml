@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content" />
 
             <android.support.v7.widget.AppCompatCheckBox
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:paddingStart="4dp"
                 android:id="@+id/custom_currency_check_after"
                 android:textSize="16sp"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content" />
 
             <android.support.v7.widget.AppCompatCheckBox
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:paddingStart="4dp"
                 android:id="@+id/custom_currency_decimal_separator"
                 android:textSize="16sp"
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content" />
 
             <android.support.v7.widget.AppCompatCheckBox
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:paddingStart="4dp"
                 android:id="@+id/custom_currency_trailing_zeros"
                 android:textSize="16sp"
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"/>
 
                 <android.support.v7.widget.AppCompatSpinner
-                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:textSize="16sp"
                     android:entries="@array/thousand_seperator_list"
                     android:id="@+id/currency_thousand_separator"

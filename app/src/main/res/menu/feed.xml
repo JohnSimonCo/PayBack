@@ -31,6 +31,11 @@
 
     <item
         app:showAsAction="never"
+        android:id="@+id/feed_menu_share"
+        android:title="@string/share_single"    />
+
+    <item
+        app:showAsAction="never"
         android:id="@+id/feed_menu_pay_back"
         android:title="@string/pay_with_swish"    />
 

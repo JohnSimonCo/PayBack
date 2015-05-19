@@ -33,6 +33,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
             PendingIntent homePI = PendingIntent.getActivity(context, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent addIntent = new Intent(context, CreateDebtActivity.class);
+            addIntent.putExtra(CreateDebtActivity.KEY_NO_FAB_ANIM, true);
+            addIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent addPI = PendingIntent.getActivity(context, 0, addIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             widget.setPendingIntentTemplate(R.id.feed_list_item_master, clickPI);

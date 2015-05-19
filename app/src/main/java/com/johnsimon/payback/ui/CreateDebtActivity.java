@@ -79,6 +79,7 @@ public class CreateDebtActivity extends DataActivity {
     public final static String KEY_CALENDAR = "KEY_CALENDAR";
     public final static String KEY_ADDED_CALENDAR = "KEY_ADDED_CALENDAR";
     public final static String KEY_CHANGED_ADDED = "KEY_CHANGED_ADDED";
+    public final static String KEY_NO_FAB_ANIM = "KEY_NO_FAB_ANIM";
 
 	private AppCompatEditText floatLabelAmountEditText;
 	private AppCompatEditText floatLabelNoteEditText;
@@ -231,6 +232,9 @@ public class CreateDebtActivity extends DataActivity {
         final ListPopupWindow popupWindowDay = new ListPopupWindow(this);
         final ListPopupWindow popupWindowTime = new ListPopupWindow(this);
 
+        popupWindowDay.setContentWidth(Resource.getPx(140, getResources()));
+        popupWindowTime.setContentWidth(Resource.getPx(170, getResources()));
+
         popupWindowDay.setAnchorView(reminderDayButton);
         popupWindowTime.setAnchorView(reminderTimeButton);
 
@@ -356,8 +360,11 @@ public class CreateDebtActivity extends DataActivity {
 
         if (Resource.isLOrAbove()) {
             create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
-            create_fab_l.setBackground(transitionDrawable);
-            transitionDrawable.startTransition(200);
+
+            if (!getIntent().getBooleanExtra(KEY_NO_FAB_ANIM, false)) {
+                create_fab_l.setBackground(transitionDrawable);
+                transitionDrawable.startTransition(200);
+            }
 
             create_fab_l.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
@@ -603,7 +610,7 @@ public class CreateDebtActivity extends DataActivity {
             }
         }
 
-		if (DateFormat.is24HourFormat(this)) {
+		if (!DateFormat.is24HourFormat(this)) {
             return hour + ":" + addTrailingZero(minute) + (hour <= 12 ? " AM" : " PM");
 		}
 
@@ -611,11 +618,7 @@ public class CreateDebtActivity extends DataActivity {
 	}
 
     private String addTrailingZero(int i) {
-        if (i < 10) {
-            return "0" + i;
-        } else {
-            return Integer.toString(i);
-        }
+        return i < 10 ? "0" + i : Integer.toString(i);
     }
 
     private View.OnClickListener fabClickListener = new View.OnClickListener() {

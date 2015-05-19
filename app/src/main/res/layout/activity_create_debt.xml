@@ -23,9 +23,9 @@
                 android:paddingBottom="24dp"
                 android:id="@+id/create_toolbar"
                 android:orientation="vertical"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetRight="@dimen/create_right_margin_small"
                 app:contentInsetLeft="@dimen/create_start_margin_small"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:minHeight="?attr/actionBarSize"
                 android:background="@color/primary_color"
@@ -92,7 +92,7 @@
                             android:layout_height="wrap_content">
 
                             <android.support.v7.widget.AppCompatRadioButton
-                                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
                                 android:id="@+id/create_radio_they_owe"
                                 android:textSize="18dp"
                                 android:checked="true"
@@ -103,7 +103,7 @@
                                 android:layout_height="36dp" />
 
                             <android.support.v7.widget.AppCompatRadioButton
-                                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
                                 android:id="@+id/create_radio_i_owe"
                                 android:textSize="18dp"
                                 android:textColor="@android:color/white"
@@ -122,7 +122,7 @@
                             android:layout_height="wrap_content">
 
                             <android.support.v7.widget.AppCompatEditText
-                                app:theme="@style/ThemeOverlay.AppCompat.Light"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
                                 style="@style/Widget.AppCompat.EditText"
                                 android:imeOptions="flagNoExtractUi"
                                 android:singleLine="true"
@@ -159,7 +159,7 @@
                     android:layout_height="wrap_content">
 
                     <android.support.v7.widget.AppCompatEditText
-                        app:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
                         android:imeOptions="flagNoExtractUi"
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="3"
@@ -213,7 +213,7 @@
                             android:layout_marginLeft="@dimen/create_start_margin_reduced"
                             android:layout_marginStart="@dimen/create_start_margin_reduced"
                             android:id="@+id/create_button_day"
-                            android:layout_width="100dp"
+                            android:layout_width="105dp"
                             android:layout_height="wrap_content"    />
 
                         <Button
@@ -222,7 +222,7 @@
                             android:textAllCaps="false"
                             android:background="?android:attr/selectableItemBackground"
                             android:id="@+id/create_button_time"
-                            android:layout_width="135dp"
+                            android:layout_width="132dp"
                             android:layout_height="wrap_content"    />
 
                     </LinearLayout>

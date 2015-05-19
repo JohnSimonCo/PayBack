@@ -284,6 +284,7 @@ public class FeedActivity extends DataActivity implements
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
         MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+		MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
 
         if (attemptCheckFilterAmount) {
             filterAmount.setChecked(true);
@@ -296,6 +297,12 @@ public class FeedActivity extends DataActivity implements
         }
 
         sort();
+
+		if (isAll()) {
+			menuShare.setVisible(false);
+		} else {
+			menuShare.setVisible(feed.size() != 0);
+		}
 
 		if (isAll()) {
 			fullMenuPay.setVisible(false);
