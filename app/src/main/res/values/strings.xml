@@ -15,7 +15,6 @@
     <string name="i_owe">I owe</string>
     <string name="amount">Amount</string>
     <string name="share">Share via</string>
-    <string name="share_single">Share</string>
     <string name="note">Note</string>
     <string name="paid_back_exclamation">Paid back!</string>
     <string name="paid_back">Paid back</string>
@@ -128,6 +127,7 @@
     <string name="evened_out">Evened out</string>
     <string name="currency_show_trailing_zeros">Show trailing zeros</string>
     <string name="set_date">Set date</string>
+    <string name="share_debt_summary">Share debt summary</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

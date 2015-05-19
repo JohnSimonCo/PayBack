@@ -339,6 +339,14 @@ public class FeedActivity extends DataActivity implements
                 onEvenOut();
                 break;
 
+			case R.id.feed_menu_share:
+				Intent shareIntent = new Intent();
+				shareIntent.setAction(Intent.ACTION_SEND);
+				shareIntent.putExtra(Intent.EXTRA_TEXT, generateShareString());
+				shareIntent.setType("text/plain");
+				startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+				break;
+
 		}
 
 		return result;
@@ -404,6 +412,12 @@ public class FeedActivity extends DataActivity implements
                         .show();
                 break;
 		}
+	}
+
+	private String generateShareString() {
+		StringBuilder sb = new StringBuilder();
+		//TODO JOHN HÄR
+		return sb.toString();
 	}
 
 	public void purchaseFullVersion() {

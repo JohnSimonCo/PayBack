@@ -32,7 +32,7 @@
     <item
         app:showAsAction="never"
         android:id="@+id/feed_menu_share"
-        android:title="@string/share_single"    />
+        android:title="@string/share_debt_summary"    />
 
     <item
         app:showAsAction="never"
