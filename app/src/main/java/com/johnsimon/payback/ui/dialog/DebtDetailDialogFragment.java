@@ -59,15 +59,17 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
             dialog_custom_confirm.setText(R.string.undo_pay_back);
             dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
 
-            TextView dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
-            dialog_paid_back_date.setVisibility(View.VISIBLE);
+            if (debt.getDatePaidBack() != null) {
+                TextView dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
+                dialog_paid_back_date.setVisibility(View.VISIBLE);
 
-            SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
+                SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
 
-            Calendar target = Calendar.getInstance();
-            target.setTimeInMillis(debt.getDatePaidBack());
+                Calendar target = Calendar.getInstance();
+                target.setTimeInMillis(debt.getDatePaidBack());
 
-            dialog_paid_back_date.setText(getString(R.string.paid_back_when, simpleDateFormat.format(target.getTime())));
+                dialog_paid_back_date.setText(getString(R.string.paid_back_when, simpleDateFormat.format(target.getTime())));
+            }
         }
 
         //This is the share button
