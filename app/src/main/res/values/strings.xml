@@ -208,4 +208,21 @@
     <string name="night">Night</string>
     <string name="pick_time">Pick a time…</string>
 
+    <string-array name="weekdays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="remind_later_options">
+        <item>In an hour</item>
+        <item>Tomorrow</item>
+        <item>Next %1s</item>
+        <item>Pick a date and time</item>
+    </string-array>
+
 </resources>

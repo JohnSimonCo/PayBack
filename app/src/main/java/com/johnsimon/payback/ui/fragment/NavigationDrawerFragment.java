@@ -244,45 +244,24 @@ public class NavigationDrawerFragment extends DataFragment {
             ObjectAnimator alphaM = ObjectAnimator.ofFloat(headerMinus, "alpha", 0f);
             ObjectAnimator transY = ObjectAnimator.ofFloat(headerName, "translationY", 0f);
 
-            rotation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            animY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            animX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            scaleX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            scaleY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            alphaP.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            alphaM.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            transY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            ObjectAnimator[] objectAnimators = new ObjectAnimator[]{rotation, animY, animX, scaleX, scaleY, alphaP, alphaM, transY};
 
             if (Resource.isLOrAbove()) {
                 PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
-                rotation.setInterpolator(pathInterpolator);
-                animY.setInterpolator(pathInterpolator);
-                animX.setInterpolator(pathInterpolator);
-                scaleX.setInterpolator(pathInterpolator);
-                scaleY.setInterpolator(pathInterpolator);
-                alphaP.setInterpolator(pathInterpolator);
-                alphaM.setInterpolator(pathInterpolator);
-                transY.setInterpolator(pathInterpolator);
+                for (ObjectAnimator animator : objectAnimators) {
+                    animator.setInterpolator(pathInterpolator);
+                }
             } else {
                 DecelerateInterpolator pathInterpolator = new DecelerateInterpolator();
-                rotation.setInterpolator(pathInterpolator);
-                animY.setInterpolator(pathInterpolator);
-                animX.setInterpolator(pathInterpolator);
-                scaleX.setInterpolator(pathInterpolator);
-                scaleY.setInterpolator(pathInterpolator);
-                alphaP.setInterpolator(pathInterpolator);
-                alphaM.setInterpolator(pathInterpolator);
-                transY.setInterpolator(pathInterpolator);
+                for (ObjectAnimator animator : objectAnimators) {
+                    animator.setInterpolator(pathInterpolator);
+                }
             }
 
-            rotation.start();
-            animY.start();
-            animX.start();
-            scaleX.start();
-            scaleY.start();
-            alphaP.start();
-            alphaM.start();
-            transY.start();
+            for (ObjectAnimator animator : objectAnimators) {
+                animator.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+                animator.start();
+            }
 
 			alphaM.addListener(new Animator.AnimatorListener() {
 				@Override
@@ -336,45 +315,25 @@ public class NavigationDrawerFragment extends DataFragment {
             ObjectAnimator alphaM = ObjectAnimator.ofFloat(headerMinus, "alpha", 1f);
             ObjectAnimator transY = ObjectAnimator.ofFloat(headerName, "translationY", Resource.getPx(6, getResources()));
 
-            rotation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            animY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            animX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            scaleX.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            scaleY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            alphaP.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            alphaM.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
-            transY.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+
+            ObjectAnimator[] objectAnimators = new ObjectAnimator[]{rotation, animY, animX, scaleX, scaleY, alphaP, alphaM, transY};
 
             if (Resource.isLOrAbove()) {
                 PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
-                rotation.setInterpolator(pathInterpolator);
-                animY.setInterpolator(pathInterpolator);
-                animX.setInterpolator(pathInterpolator);
-                scaleX.setInterpolator(pathInterpolator);
-                scaleY.setInterpolator(pathInterpolator);
-                alphaP.setInterpolator(pathInterpolator);
-                alphaM.setInterpolator(pathInterpolator);
-                transY.setInterpolator(pathInterpolator);
+                for (ObjectAnimator animator : objectAnimators) {
+                    animator.setInterpolator(pathInterpolator);
+                }
             } else {
                 DecelerateInterpolator pathInterpolator = new DecelerateInterpolator();
-                rotation.setInterpolator(pathInterpolator);
-                animY.setInterpolator(pathInterpolator);
-                animX.setInterpolator(pathInterpolator);
-                scaleX.setInterpolator(pathInterpolator);
-                scaleY.setInterpolator(pathInterpolator);
-                alphaP.setInterpolator(pathInterpolator);
-                alphaM.setInterpolator(pathInterpolator);
-                transY.setInterpolator(pathInterpolator);
+                for (ObjectAnimator animator : objectAnimators) {
+                    animator.setInterpolator(pathInterpolator);
+                }
             }
 
-            rotation.start();
-            animY.start();
-            animX.start();
-            scaleX.start();
-            scaleY.start();
-            alphaP.start();
-            alphaM.start();
-            transY.start();
+            for (ObjectAnimator animator : objectAnimators) {
+                animator.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+                animator.start();
+            }
 
 			alphaM.addListener(new Animator.AnimatorListener() {
 				@Override

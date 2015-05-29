@@ -8,7 +8,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.ui.base.BaseActivity;
 
 public class Undo {
-	private final static int DURATION = 2500;
+	private final static int DURATION = 3500;
 
 	private static QueuedAction queuedAction = null;
 

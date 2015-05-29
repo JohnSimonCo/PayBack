@@ -53,7 +53,9 @@ public class Resource {
     private final static int MAX_ACTIONS = 20;
     private final static int MAX_FREE_DEBTS = 5;
 
-	public final static long ONE_DAY = 86400000;
+    public final static long ONE_WEEK = 604800000;
+    public final static long ONE_DAY = 86400000;
+    public final static long ONE_HOUR = 3600000;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
 	private final static String SAVE_KEY_ACTIONS = "SAVE_KEY_ACTIONS";

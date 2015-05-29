@@ -113,7 +113,7 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 	};
 
 	public interface CustomCurrencySelectedCallback {
-		public void onSelected(String currency);
+		void onSelected(String currency);
 	}
 
 }

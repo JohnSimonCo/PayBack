@@ -2,27 +2,36 @@ package com.johnsimon.payback.util;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
+import android.widget.DatePicker;
 import android.widget.RemoteViews;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
+import com.johnsimon.payback.currency.CurrencyUtils;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.ui.RemindLaterActivity;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -192,7 +201,9 @@ public class Alarm  {
             public void onCalled(AppData data) {
 
                 UUID id = (UUID) intent.getExtras().get(ALARM_ID);
-                Debt debt = data.findDebt(id);
+                final Debt debt = data.findDebt(id);
+
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
@@ -204,14 +215,17 @@ public class Alarm  {
                                 .setSmallIcon(R.drawable.ic_stat_negative)
                                 .setContent(new RemoteViews(context.getPackageName(), R.layout.paid_back_notification));
 
-                        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                         notificationManager.notify(debt.id.hashCode(), builder.build());
 
                         break;
 
                     case ACTION_REMIND_LATER:
-						debt.setRemindDate(System.currentTimeMillis() + Resource.ONE_DAY);
-						Alarm.addAlarm(context, debt);
+                        Intent remindLaterIntent = new Intent(context, RemindLaterActivity.class);
+                        remindLaterIntent.putExtra(RemindLaterActivity.KEY_DEBT_ID, debt.id.toString());
+                        remindLaterIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(remindLaterIntent);
+
+                        notificationManager.cancel(debt.id.hashCode());
                         break;
                 }
             }
