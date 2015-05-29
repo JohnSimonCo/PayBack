@@ -159,6 +159,9 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 	public void addTransactionWithoutCheck(float amount) {
 		touch();
+		if(transactions == null) {
+			transactions = new ArrayList<>();
+		}
 		transactions.add(new Transaction(amount, System.currentTimeMillis()));
 	}
 
