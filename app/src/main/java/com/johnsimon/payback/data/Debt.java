@@ -115,6 +115,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public void setAmount(float amount) {
 		touch();
 		this.amount = amount;
+		transactions.clear();
 	}
 
 	public String getNote() {
@@ -131,17 +132,17 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 	public boolean isPartlyPaidBack() {
-		return !isPaidBack() || transactions.size() > 0;
+		return !isPaidBack() && transactions != null && transactions.size() > 0;
 	}
 
 	public void payback() {
 		setPaidBack(true);
-		addTransaction(getRemainingDebt());
+		addTransactionWithoutCheck(getRemainingDebt());
 	}
 
 	public void unpayback() {
 		setPaidBack(false);
-		setDatePaidBack(null);
+		transactions.clear();
 	}
 
 	public void setPaidBack(boolean isPaidBack) {
@@ -150,6 +151,13 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 	public void addTransaction(float amount) {
+		addTransactionWithoutCheck(amount);
+
+		if(getPaidBackAmount() >= getAmount()) {
+			setPaidBack(true);
+		}
+	}
+	public void addTransactionWithoutCheck(float amount) {
 		touch();
 		transactions.add(new Transaction(amount, System.currentTimeMillis()));
 	}
@@ -159,11 +167,24 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 	public float getPaidBackAmount() {
+		if(transactions == null) return 0;
+
 		float sum = 0;
 		for(Transaction transaction : transactions) {
 			sum += transaction.amount;
 		}
 		return sum;
+	}
+
+	public Long getDatePaidBack() {
+		if(transactions == null) return null;
+
+		if(!isPaidBack() || transactions.size() < 1) {
+			return null;
+		} else {
+			//Return date of last transaction
+			return transactions.get(transactions.size() - 1).date;
+		}
 	}
 
 	public void setRemindDate(Long remindDate) {
@@ -226,6 +247,10 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		return id.hashCode();
 	}
 
+	public Debt copy() {
+		return new Debt(owner, amount, note, id, timestamp, touched, paidBack, new ArrayList<>(transactions), currencyId);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) return false;
@@ -238,8 +263,10 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 			&& amount == other.amount
 			&& Resource.nullEquals(note, other.note)
 			&& paidBack == other.paidBack
-			&& transactions.equals(other.transactions);
+			&& Resource.nullEquals(transactions, other.transactions);
 	}
+
+	//TODO could implement new syncWith to sync transaction histories adequately
 
 	@Override
 	public String toString() {
