@@ -317,13 +317,9 @@ public class AppData {
 			debt.linkOwner(data.people);
 		}
 
-		if(data.preferences == null) {
-			data.preferences = Preferences.defaultPreferences();
-		}
+        ensureNewFeatures(data);
 
-		if(data.peopleOrder == null) {
-			data.peopleOrder = new PeopleOrder(data.people);
-		}
+        data.debts.get(0).addTransaction(10);
 
 		if(BuildConfig.DEBUG) {
 			analyzeData(data);
@@ -331,6 +327,16 @@ public class AppData {
 
 		return data;
 
+    }
+
+    public static void ensureNewFeatures(AppData data) {
+        if(data.preferences == null) {
+            data.preferences = Preferences.defaultPreferences();
+        }
+
+        if(data.peopleOrder == null) {
+            data.peopleOrder = new PeopleOrder(data.people);
+        }
     }
 
 	public static void analyzeData(AppData data) {

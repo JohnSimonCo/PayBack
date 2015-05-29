@@ -91,6 +91,20 @@ public class DataSyncer {
         return array;
     }
 
+    public static <T extends Identifiable> ArrayList<T> union(ArrayList<T> a, ArrayList<T> b) {
+        ArrayList<T> array = new ArrayList<>();
+
+        array.addAll(a);
+        for(T item : b) {
+            T other = find(array, item.getId());
+            if(other == null) {
+                array.add(item);
+            }
+        }
+
+        return array;
+    }
+
 	private static PeopleOrder mergePeopleOrder(AppData a, AppData b) {
 		//lord has priority over peasant
 		PeopleOrder lord, peasant;

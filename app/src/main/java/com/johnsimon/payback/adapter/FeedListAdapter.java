@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.AnimationUtils;
@@ -69,23 +70,23 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 		final Debt debt = list.get(position);
 		Person owner = debt.getOwner();
 		Resources resources = activity.getResources();
+		UserCurrency currency = activity.data.preferences.getCurrency();
 
 		holder.person.setText(owner.getName());
-		holder.amount.setText(activity.data.preferences.getCurrency().render(debt));
+		holder.amount.setText(currency.render(debt));
 
 		holder.date.setText(" - " + Resource.getRelativeTimeString(activity, debt.timestamp));
 
 		Resource.createProfileImage(activity, owner, holder.avatar, holder.avatarLetter);
 
+		holder.avatar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 		if (debt.isPaidBack()) {
 			holder.person.setTextColor(activity.getResources().getColor(R.color.gray_text_very_light));
 			holder.note.setTextColor(activity.getResources().getColor(R.color.gray_oncolor_light));
 			holder.amount.setTextColor(activity.getResources().getColor(debt.getDisabledColor()));
 			holder.date.setTextColor(activity.getResources().getColor(R.color.gray_oncolor_light));
 
-			holder.avatar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			holder.avatar.setAlpha(0.5f);
-			holder.avatar.setLayerType(View.LAYER_TYPE_NONE, null);
 
 			holder.amountPaidBack.setVisibility(View.GONE);
 		} else {
@@ -93,14 +94,12 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			holder.note.setTextColor(activity.getResources().getColor(R.color.gray_text_light));
 			holder.date.setTextColor(activity.getResources().getColor(R.color.gray_text_very_light));
 
-			holder.avatar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-			holder.avatar.setAlpha(0.5f);
-			holder.avatar.setLayerType(View.LAYER_TYPE_NONE, null);
+			holder.avatar.setAlpha(1f);
 
 			if (debt.isPartlyPaidBack()) {
 				holder.amount.setTextColor(activity.getResources().getColor(debt.getDisabledColor()));
 				holder.amountPaidBack.setTextColor(activity.getResources().getColor(debt.getColor()));
-				holder.amountPaidBack.setText(debt.getRemainingDebt());
+				holder.amountPaidBack.setText(currency.render(debt.getRemainingDebt()));
 				holder.amountPaidBack.setVisibility(View.VISIBLE);
 			} else {
 				holder.amount.setTextColor(activity.getResources().getColor(debt.getColor()));
@@ -108,6 +107,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			}
 
 		}
+		holder.avatar.setLayerType(View.LAYER_TYPE_NONE, null);
 
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
