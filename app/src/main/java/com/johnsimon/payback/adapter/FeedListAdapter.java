@@ -31,6 +31,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
 		public TextView person;
 		public TextView amount;
+		public TextView amountPaidBack;
 		public TextView note;
 		public RoundedImageView avatar;
 		public TextView avatarLetter;
@@ -42,6 +43,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
 			this.person = (TextView) itemView.findViewById(R.id.list_item_person);
 			this.amount = (TextView) itemView.findViewById(R.id.list_item_amount);
+			this.amountPaidBack = (TextView) itemView.findViewById(R.id.list_item_amount_paid_back);
 			this.note = (TextView) itemView.findViewById(R.id.list_item_note);
 			this.avatar = (RoundedImageView) itemView.findViewById(R.id.list_item_avatar);
 			this.avatarLetter = (TextView) itemView.findViewById(R.id.list_item_avatar_letter);
@@ -79,18 +81,38 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			holder.person.setTextColor(activity.getResources().getColor(R.color.gray_text_very_light));
 			holder.note.setTextColor(activity.getResources().getColor(R.color.gray_oncolor_light));
 			holder.amount.setTextColor(activity.getResources().getColor(debt.getDisabledColor()));
+			holder.date.setTextColor(activity.getResources().getColor(R.color.gray_oncolor_light));
+
+			holder.avatar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			holder.avatar.setAlpha(0.5f);
+			holder.avatar.setLayerType(View.LAYER_TYPE_NONE, null);
+
+			holder.amountPaidBack.setVisibility(View.GONE);
 		} else {
 			holder.person.setTextColor(activity.getResources().getColor(R.color.gray_text_normal));
 			holder.note.setTextColor(activity.getResources().getColor(R.color.gray_text_light));
-			holder.amount.setTextColor(activity.getResources().getColor(debt.getColor()));
-			holder.avatar.setAlpha(1f);
+			holder.date.setTextColor(activity.getResources().getColor(R.color.gray_text_very_light));
+
+			holder.avatar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			holder.avatar.setAlpha(0.5f);
+			holder.avatar.setLayerType(View.LAYER_TYPE_NONE, null);
+
+			if (debt.isPartlyPaidBack()) {
+				holder.amount.setTextColor(activity.getResources().getColor(debt.getDisabledColor()));
+				holder.amountPaidBack.setTextColor(activity.getResources().getColor(debt.getColor()));
+				holder.amountPaidBack.setText(debt.getRemainingDebt());
+				holder.amountPaidBack.setVisibility(View.VISIBLE);
+			} else {
+				holder.amount.setTextColor(activity.getResources().getColor(debt.getColor()));
+				holder.amountPaidBack.setVisibility(View.GONE);
+			}
+
 		}
 
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                itemClickCallback.onItemClick(v, position, debt);
+				itemClickCallback.onItemClick(v, position, debt);
 			}
 		});
 
@@ -102,8 +124,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				int widthTextView2 = measureTextWidthTextView(holder.date);
 				if (holder.note.getWidth() + widthTextView2 > holder.detailContainer.getWidth()) {
 					holder.note.setMaxWidth(holder.note.getWidth() - widthTextView2);
-                    holder.note.setEllipsize(TextUtils.TruncateAt.END);
-                    holder.note.setHorizontallyScrolling(true);
+					holder.note.setEllipsize(TextUtils.TruncateAt.END);
+					holder.note.setHorizontallyScrolling(true);
 				}
 			}
 		});
