@@ -96,7 +96,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
 			holder.avatar.setAlpha(1f);
 
-			if (debt.isPartlyPaidBack()) {
+			if (debt.isPartiallyPaidBack()) {
 				holder.amount.setTextColor(activity.getResources().getColor(debt.getDisabledColor()));
 				holder.amountPaidBack.setTextColor(activity.getResources().getColor(debt.getColor()));
 				holder.amountPaidBack.setText(currency.render(debt.getRemainingDebt()));

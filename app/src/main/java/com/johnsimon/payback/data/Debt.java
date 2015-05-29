@@ -131,8 +131,8 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		return paidBack;
 	}
 
-	public boolean isPartlyPaidBack() {
-		return !isPaidBack() && transactions != null && transactions.size() > 0;
+	public boolean isPartiallyPaidBack() {
+		return !isPaidBack() && hasTransactions();
 	}
 
 	public void payback() {
@@ -165,8 +165,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		transactions.add(new Transaction(amount, System.currentTimeMillis()));
 	}
 
+	public float getRemainingAbsoluteDebt() {
+		return (getAbsoluteAmount() - getPaidBackAmount());
+	}
 	public float getRemainingDebt() {
-		return (getAbsoluteAmount() - getPaidBackAmount()) * Math.signum(getAmount());
+		return getRemainingAbsoluteDebt() * Math.signum(getAmount());
 	}
 
 	public float getPaidBackAmount() {
@@ -186,7 +189,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 			return null;
 		} else {
 			//Return date of last transaction
-			return transactions.get(transactions.size() - 1).date;
+			return getLastTransaction().date;
 		}
 	}
 
@@ -197,6 +200,19 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 
 	public Long getRemindDate() {
 		return remindDate;
+	}
+
+
+	public ArrayList<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public Transaction getLastTransaction() {
+		return transactions.get(transactions.size() - 1);
+	}
+
+	public boolean hasTransactions() {
+		return transactions != null && transactions.size() > 0;
 	}
 
 	public void edit(Person owner, float amount, String note) {

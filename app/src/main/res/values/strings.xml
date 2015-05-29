@@ -41,8 +41,6 @@
     <string name="iowedyou">I owed you</string>
     <string name="youoweme">You owe me</string>
     <string name="youowedme">You owed me</string>
-    <string name="a_total_of">a total of</string>
-    <string name="debt_for">for</string>
     <string name="debt_incash">in cash</string>
     <string name="bytime">Latest</string>
     <string name="byamount">By amount</string>
@@ -181,6 +179,21 @@
     <string name="notif_remind_later">Remind later</string>
     <string name="notif_they_owe">%1$s owes you %2$s</string>
     <string name="notif_you_owe">You owe %1$s %2$s</string>
+
+    <!-- Debt summary -->
+    <string name="debtsummary_headerformat">%1$s a total of %2$s</string>
+    <string name="debtsummary_currentdebts">Current debts</string>
+    <string name="debtsummary_partialdebts">Partially paid back debts</string>
+    <string name="debtsummary_paidbackdebts">Paid back debts</string>
+    <string name="debtsummary_history_header">History</string>
+    <string name="debtsummary_history_entryformat">%1$s on %2$s</string>
+
+    <!-- Debt share string -->
+    <string name="debtshare_fulldebtformat">full debt %1$s</string>
+    <string name="debtshare_noteformat">for \"%1$s\"</string>
+    <string name="debtshare_dateformat">since %1$s</string>
+    <string name="debtshare_partialformat">paid back %1$s on %2$s</string>
+    <string name="debtshare_paidbackformat">"paid back on %1$s</string>
 
     <string-array name="thousand_seperator_list">
         <item>None</item>

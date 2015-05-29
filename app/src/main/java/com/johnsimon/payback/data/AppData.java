@@ -319,6 +319,7 @@ public class AppData {
 
         ensureNewFeatures(data);
 
+        //TODO remove
         data.debts.get(1).amount += 10;
         data.debts.get(1).addTransaction(10);
 

@@ -6,6 +6,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.data.Transaction;
 
 import java.util.ArrayList;
 
@@ -15,58 +16,70 @@ public class ShareStringGenerator {
 
 		float total = AppData.total(debts);
 		if(total != 0) {
-			builder.append(total > 0 ? context.getString(R.string.youoweme) : context.getString(R.string.ioweyou));
-			builder.append(" ");
-			builder.append(context.getString(R.string.a_total_of));
-			builder.append(" ");
-			builder.append(currency.render(total));
+			builder.append(String.format(context.getString(R.string.debtsummary_headerformat),
+					total > 0 ? context.getString(R.string.youoweme) : context.getString(R.string.ioweyou),
+					currency.render(total)));
 		} else {
 			builder.append(context.getString(R.string.even));
 		}
+		builder.append("\n");
 
-		ArrayList<Debt> currentDebts = new ArrayList<>(), paidBackDebts = new ArrayList<>();
+		ArrayList<Debt> currentDebts = new ArrayList<>(), partialDebts = new ArrayList<>(), paidBackDebts = new ArrayList<>();
+
 		for(Debt debt : debts) {
 			if(debt.isPaidBack()) {
 				paidBackDebts.add(debt);
+			} else if(debt.isPartiallyPaidBack()) {
+				partialDebts.add(debt);
 			} else {
 				currentDebts.add(debt);
 			}
 		}
-		builder.append("\n");
 
-		if(currentDebts.size() > 0) {
-			builder.append("\n");
-			builder.append("Current debts");
-			builder.append(":\n");
-
-			for(Debt debt : currentDebts) {
-				builder.append("\u2022 ");
-				generateDebtShareString(context, debt, currency, builder);
-				builder.append("\n");
-			}
-		}
-
-		if(paidBackDebts.size() > 0) {
-			builder.append("\n");
-			builder.append("Paid back debts");
-			builder.append(":\n");
-
-			for(Debt debt : paidBackDebts) {
-				builder.append("\u2022 ");
-				generateDebtShareString(context, debt, currency, builder);
-				builder.append("\n");
-			}
-		}
+		generateDebtList(context, currency, currentDebts, context.getString(R.string.debtsummary_currentdebts), false, builder);
+		generateDebtList(context, currency, partialDebts, context.getString(R.string.debtsummary_partialdebts), true, builder);
+		generateDebtList(context, currency, paidBackDebts, context.getString(R.string.debtsummary_paidbackdebts), false, builder);
 
 		return builder.toString().trim();
 	}
+
+	private static void generateDebtList(Context context, UserCurrency currency, ArrayList<Debt> debts, String title, boolean includeHistory, StringBuilder builder) {
+		if(debts.size() > 0) {
+			builder.append("\n");
+			builder.append(title);
+			builder.append(":\n");
+
+			for(Debt debt : debts) {
+				builder.append("\u2022 ");
+				generateDebtShareString(context, debt, currency, false, builder);
+				builder.append("\n");
+
+				if(includeHistory) {
+					builder.append("\t");
+					builder.append(context.getString(R.string.debtsummary_history_header));
+					builder.append(":\n");
+
+					for(Transaction transaction : debt.getTransactions()) {
+						builder.append("\t");
+						builder.append(String.format(context.getString(R.string.debtsummary_history_entryformat),
+								currency.render(transaction.amount),
+								Resource.monthDateFormat.format(transaction.date)));
+						builder.append("\n");
+					}
+				}
+			}
+		}
+	}
+
 	public static String generateDebtShareString(Context context, Debt debt, UserCurrency currency) {
 		StringBuilder builder = new StringBuilder();
-		generateDebtShareString(context, debt, currency, builder);
+		generateDebtShareString(context, debt, currency, true, builder);
 		return builder.toString();
 	}
 
-	public static void generateDebtShareString(Context context, Debt debt, UserCurrency currency, StringBuilder builder) {
+	public static void generateDebtShareString(Context context, Debt debt, UserCurrency currency, boolean fullVersion, StringBuilder builder) {
+		boolean partiallyPaidBack = debt.isPartiallyPaidBack();
+
 		builder.append(debt.amount < 0
 				? debt.isPaidBack()
 					? context.getString(R.string.iowedyou)
@@ -76,42 +89,55 @@ public class ShareStringGenerator {
 					: context.getString(R.string.youoweme));
 
 		builder.append(" ");
-		builder.append(currency.render(debt));
+		builder.append(currency.render(partiallyPaidBack ? debt.getRemainingAbsoluteDebt() : debt.getAmount()));
 		builder.append(" ");
+
+		if(partiallyPaidBack) {
+			builder.append("(");
+			builder.append(String.format(context.getString(R.string.debtshare_fulldebtformat),
+					currency.render(debt.getAmount())));
+			builder.append(") ");
+		}
 
 		if(debt.getNote() == null) {
 			builder.append(context.getString(R.string.debt_incash));
 		} else {
-			builder.append(context.getString(R.string.debt_for));
-			builder.append(" \"");
-			builder.append(debt.getNote());
-			builder.append("\"");
+			builder.append(String.format(context.getString(R.string.debtshare_noteformat),
+					debt.getNote()));
 		}
 
 		builder.append(" ");
-		builder.append("since");
-		builder.append(" ");
-		builder.append(Resource.monthDateFormat.format(debt.timestamp));
+		builder.append(String.format(context.getString(R.string.debtshare_dateformat),
+				Resource.monthDateFormat.format(debt.timestamp)));
 
-		Long datePaidBack = debt.getDatePaidBack();
-		if(datePaidBack != null) {
+		if(debt.hasTransactions() && debt.isPaidBack() || (fullVersion && partiallyPaidBack)) {
+			Transaction transaction = debt.getLastTransaction();
 			builder.append(" (");
-			builder.append("paid back");
-			builder.append(" ");
-			builder.append(Resource.monthDateFormat.format(datePaidBack));
+			if(partiallyPaidBack) {
+				builder.append(String.format(context.getString(R.string.debtshare_partialformat),
+						currency.render(debt.getPaidBackAmount()),
+						Resource.monthDateFormat.format(transaction.date)));
+
+			} else {
+				builder.append(String.format(context.getString(R.string.debtshare_paidbackformat),
+						Resource.monthDateFormat.format(transaction.date)));
+			}
 			builder.append(")");
 		}
-
 	}
 	/*
-	I owe you a total of 200kr			(You owe me)
+	I owe you a total of £ 84.85
 
 	Current debts:
-	I owe you 200kr for Vodka since 16 jan
-	You owe me 100kr in cash
+	• I owe you £ 100 in cash since Feb 9
+	• You owe me £ 15.15 for "Milk at the grocery store" since Feb 9
+
+	Partially paid back debts:
+	• You owed me £ 1 234 for "Vodka" since Feb 10 (paid back $200 on May 19)
 
 	Paid back debts:
-	I owed you 250kr for Glass since 20 mar (paid back 20 jan)
-	You owed me 300kr for Bajs
+	• You owed me £ 1 234 for "Vodka" since Feb 10 (paid back on May 19)
+	• I owed you £ 15.5 in cash since Feb 9 (on May 19)
+	• You owed me £ 15 in cash since Feb 9
 	* */
 }
