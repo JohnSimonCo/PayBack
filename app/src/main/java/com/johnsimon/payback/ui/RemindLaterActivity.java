@@ -2,8 +2,9 @@ package com.johnsimon.payback.ui;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -15,7 +16,9 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Resource;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 public class RemindLaterActivity extends DataActivity {
@@ -24,6 +27,8 @@ public class RemindLaterActivity extends DataActivity {
 
     private Calendar remindLaterCalendar = Calendar.getInstance();
     private Debt debt;
+    private boolean hasFinishedFirst = false;
+    private boolean hasFinishedDate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +42,60 @@ public class RemindLaterActivity extends DataActivity {
         debt = data.findDebt(UUID.fromString(getIntent().getStringExtra(KEY_DEBT_ID)));
 
         final Calendar now = Calendar.getInstance();
+        final Calendar future = Calendar.getInstance();
 
         String[] remindLaterOptions = getResources().getStringArray((R.array.remind_later_options));
-        String[] weekdays = getResources().getStringArray((R.array.weekdays));
-        remindLaterOptions[2] = String.format(remindLaterOptions[2], weekdays[now.get(Calendar.DAY_OF_WEEK)]);
+
+        String day;
+
+        switch (now.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.MONDAY:
+                day = getString(R.string.monday);
+                break;
+            case Calendar.TUESDAY:
+                day = getString(R.string.tuesday);
+                break;
+            case Calendar.WEDNESDAY:
+                day = getString(R.string.wednesday);
+                break;
+            case Calendar.THURSDAY:
+                day = getString(R.string.thursday);
+                break;
+            case Calendar.FRIDAY:
+                day = getString(R.string.friday);
+                break;
+            case Calendar.SATURDAY:
+                day = getString(R.string.saturday);
+                break;
+            case Calendar.SUNDAY:
+                day = getString(R.string.sunday);
+                break;
+            default:
+                day = getString(R.string.monday);
+                break;
+        }
+
+        remindLaterOptions[2] = String.format(remindLaterOptions[2], day);
+
+        remindLaterOptions[1] += (" (" + DateFormat.getTimeInstance(DateFormat.SHORT).format(future.getTime()) + ")");
+        remindLaterOptions[2] += (" (" + DateFormat.getTimeInstance(DateFormat.SHORT).format(future.getTime()) + ")");
+
+        future.setTimeInMillis(future.getTimeInMillis() + Resource.ONE_HOUR);
+
+        remindLaterOptions[0] += (" (" + DateFormat.getTimeInstance(DateFormat.SHORT).format(future.getTime()) + ")");
+
 
         new MaterialDialog.Builder(this)
-                .title(R.string.select_currency)
+                .title(R.string.notif_remind_later)
                 .items(remindLaterOptions)
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        if (!hasFinishedFirst) {
+                            finish();
+                        }
+                    }
+                })
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog materialDialog, View view, int which, CharSequence charSequence) {
@@ -78,12 +129,22 @@ public class RemindLaterActivity extends DataActivity {
 
                                 datePickerDialog.show();
 
+                                hasFinishedFirst = true;
+
+                                datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialogInterface) {
+                                        if (!hasFinishedDate) {
+                                            finish();
+                                        }
+                                    }
+                                });
+
                                 break;
 
                         }
                     }
                 })
-                .positiveText(R.string.select)
                 .show();
     }
 
@@ -99,9 +160,18 @@ public class RemindLaterActivity extends DataActivity {
                     timeSetListener,
                     remindLaterCalendar.get(Calendar.HOUR_OF_DAY),
                     remindLaterCalendar.get(Calendar.MINUTE),
-                    DateFormat.is24HourFormat(RemindLaterActivity.this));
+                    android.text.format.DateFormat.is24HourFormat(RemindLaterActivity.this));
+
+            hasFinishedDate = true;
 
             timePickerDialog.show();
+
+            timePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    finish();
+                }
+            });
         }
     };
 

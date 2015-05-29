@@ -51,6 +51,7 @@ import com.johnsimon.payback.util.Undo;
 
 import junit.framework.Assert;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -183,6 +184,10 @@ public class FeedActivity extends DataActivity implements
 		navigationDrawerFragment.adapter.notifyDataSetChanged();
 
 		feedSubscription.broadcast(feed);
+
+		Intent intent = new Intent(this, RemindLaterActivity.class);
+		intent.putExtra(RemindLaterActivity.KEY_DEBT_ID, feed.get(0).id.toString());
+		startActivity(intent);
 
         //TODO REMOVE
         //LocalStorage.test(this, data);

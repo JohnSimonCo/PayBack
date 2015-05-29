@@ -25,7 +25,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +59,7 @@ import com.johnsimon.payback.view.FloatLabelLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -176,15 +176,15 @@ public class CreateDebtActivity extends DataActivity {
         mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
 
         floatLabelNoteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (hasFocus) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mainScrollView.smoothScrollTo(0, mainScrollView.getBottom());
-                    }
-                }, 200);
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainScrollView.smoothScrollTo(0, mainScrollView.getBottom());
+                        }
+                    }, 200);
                 }
             }
         });
@@ -214,13 +214,43 @@ public class CreateDebtActivity extends DataActivity {
 			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_date), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM, null));
 		}};
 
+        final Calendar morning = Calendar.getInstance();
+        final Calendar afternoon = Calendar.getInstance();
+        final Calendar evening = Calendar.getInstance();
+        final Calendar night = Calendar.getInstance();
+
+        morning.set(Calendar.HOUR_OF_DAY, 9);
+        afternoon.set(Calendar.HOUR_OF_DAY, 13);
+        evening.set(Calendar.HOUR_OF_DAY, 17);
+        night.set(Calendar.HOUR_OF_DAY, 20);
+
+        morning.set(Calendar.MINUTE, 0);
+        afternoon.set(Calendar.MINUTE, 0);
+        evening.set(Calendar.MINUTE, 0);
+        night.set(Calendar.MINUTE, 0);
 
 		final ArrayList<CreateSpinnerAdapter.CalendarOptionItem> timeList = new ArrayList<CreateSpinnerAdapter.CalendarOptionItem>() {{
-			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.morning), getTimeString(9, 0, false), CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING, null));
-			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.afternoon), getTimeString(13, 0, false), CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON, null));
-			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.evening), getTimeString(17, 0, false), CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING, null));
-			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.night), getTimeString(20, 0, false), CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT, null));
-			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM, null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(
+                    getString(R.string.morning),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(morning.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.afternoon),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(afternoon.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.evening),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(evening.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.night),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(night.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time),
+                    null,
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM,
+                    null));
 		}};
 
         CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList, false);
@@ -325,7 +355,7 @@ public class CreateDebtActivity extends DataActivity {
                         break;
 
                     case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(CreateDebtActivity.this));
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), android.text.format.DateFormat.is24HourFormat(CreateDebtActivity.this));
                         timePickerDialog.show();
                         break;
                 }
@@ -403,7 +433,7 @@ public class CreateDebtActivity extends DataActivity {
             }, new ValidatorListener() {
                 @Override
                 public void onValid() {
-                    if (floatLabelAmountEditText.getText().equals("0")) return;
+                    if (floatLabelAmountEditText.getText().toString().equals("0")) return;
                     create_fab.setActivated(true);
                     create_fab.setAlpha(1f);
                 }
@@ -464,11 +494,9 @@ public class CreateDebtActivity extends DataActivity {
             int year = reminderCalendar.get(Calendar.YEAR);
             int month = reminderCalendar.get(Calendar.MONTH);
             int day = reminderCalendar.get(Calendar.DAY_OF_MONTH);
-            int hour = reminderCalendar.get(Calendar.HOUR_OF_DAY);
-            int minute = reminderCalendar.get(Calendar.MINUTE);
 
             reminderDayButton.setText(getDayString(year, month, day, now));
-            reminderTimeButton.setText(getTimeString(hour, minute, true));
+            reminderTimeButton.setText(DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(reminderCalendar.getTime()));
 
             if (anim) {
 
@@ -599,31 +627,6 @@ public class CreateDebtActivity extends DataActivity {
                 R.id.autocomplete_list_item_title,
                 data.getAllNames()
         ));
-    }
-
-	private String getTimeString(int hour, int minute, boolean simplify) {
-
-        if (minute == 0 && simplify) {
-            if (hour == 9) {
-                return getString(R.string.morning);
-            } else if (hour == 13) {
-                return getString(R.string.afternoon);
-            } else if (hour == 17) {
-                return getString(R.string.evening);
-            } else if (hour == 20) {
-                return getString(R.string.night);
-            }
-        }
-
-		if (!DateFormat.is24HourFormat(this)) {
-            return hour + ":" + addTrailingZero(minute) + (hour <= 12 ? " AM" : " PM");
-		}
-
-        return hour + ":" + addTrailingZero(minute);
-	}
-
-    private String addTrailingZero(int i) {
-        return i < 10 ? "0" + i : Integer.toString(i);
     }
 
     private View.OnClickListener fabClickListener = new View.OnClickListener() {

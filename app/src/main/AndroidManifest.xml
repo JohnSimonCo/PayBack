@@ -68,6 +68,7 @@
             android:theme="@style/AppThemeParent"
             android:label="@string/title_activity_people_manager"   />
         <activity
+            android:label=""
             android:name=".ui.RemindLaterActivity"
             android:theme="@style/Theme.Transparent"    />
 
