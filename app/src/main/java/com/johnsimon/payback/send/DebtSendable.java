@@ -3,7 +3,9 @@ package com.johnsimon.payback.send;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.Transaction;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class DebtSendable {
@@ -22,8 +24,8 @@ public class DebtSendable {
 	@SerializedName("paidBack")
 	public boolean paidBack;
 
-	@SerializedName("datePaidBack")
-	public Long datePaidBack;
+	@SerializedName("transactions")
+	public ArrayList<Transaction> transactions;
 
 	@SerializedName("currency")
 	public String currency;
@@ -34,12 +36,12 @@ public class DebtSendable {
 		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
 		this.paidBack = debt.isPaidBack();
-		this.datePaidBack = debt.datePaidBack;
+		this.transactions = debt.transactions;
 		this.currency = debt.currencyId;
 	}
 
 	public Debt extract(Person person) {
 		//Reverse amount
-		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), paidBack, datePaidBack, currency);
+		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), paidBack, transactions, currency);
 	}
 }
