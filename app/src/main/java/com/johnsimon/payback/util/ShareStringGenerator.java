@@ -93,11 +93,12 @@ public class ShareStringGenerator {
 		builder.append(" ");
 		builder.append(Resource.monthDateFormat.format(debt.timestamp));
 
-		if(debt.getDatePaidBack() != null) {
+		Long datePaidBack = debt.getDatePaidBack();
+		if(datePaidBack != null) {
 			builder.append(" (");
 			builder.append("paid back");
 			builder.append(" ");
-			builder.append(Resource.monthDateFormat.format(debt.getDatePaidBack()));
+			builder.append(Resource.monthDateFormat.format(datePaidBack));
 			builder.append(")");
 		}
 
