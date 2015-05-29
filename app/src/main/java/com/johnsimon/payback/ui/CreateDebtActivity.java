@@ -17,6 +17,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -58,7 +59,6 @@ import com.johnsimon.payback.util.ValidatorListener;
 import com.johnsimon.payback.view.FloatLabelLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
-import com.williammora.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -90,6 +90,7 @@ public class CreateDebtActivity extends DataActivity {
     private Button reminderTimeButton;
 	private ImageButton clearReminderButton;
 	private RadioGroup radioGroup;
+    private ScrollView mainScrollView;
 
 	private RequiredValidator validator;
 	private Debt editingDebt = null;
@@ -172,7 +173,7 @@ public class CreateDebtActivity extends DataActivity {
 			clearEditText.setVisibility(View.GONE);
 		}
 
-        final ScrollView mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
+        mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
 
         floatLabelNoteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
         @Override
@@ -655,9 +656,8 @@ public class CreateDebtActivity extends DataActivity {
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
                 }
             } else {
-                Snackbar.with(getApplicationContext())
-                        .text(getString(R.string.create_fab_error))
-                        .show(CreateDebtActivity.this);
+
+                Snackbar.make(mainScrollView, R.string.create_fab_error, Snackbar.LENGTH_SHORT).show();
 
                 Resource.hideKeyboard(CreateDebtActivity.this);
             }

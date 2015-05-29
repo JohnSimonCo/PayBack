@@ -52,6 +52,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     private int sortAzX;
     private int sortAzY;
 
+    private View masterLayout;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         }
 
         setContentView(R.layout.activity_people_manager);
+
+        masterLayout = findViewById(R.id.people_manager_master);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -253,7 +257,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 	}
 
 	private void sort(BaseActivity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
-		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
+		Undo.executeAction(self, R.string.sort_list, null, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
                 adapter.people = result.people;
@@ -325,7 +329,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     public void onDelete(final Person person) {
         final int listIndex = adapter.people.indexOf(person);
 
-        Undo.executeAction(PeopleManagerActivity.this, R.string.deleted_person, new Undo.UndoableAction() {
+        Undo.executeAction(PeopleManagerActivity.this, R.string.deleted_person, masterLayout, new Undo.UndoableAction() {
             @Override
             public void onDisplay() {
                 adapter.people.remove(listIndex);
@@ -352,7 +356,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     public void onRename(final Person person, final String name) {
         final String oldName = person.getName();
 
-        Undo.executeAction(PeopleManagerActivity.this, R.string.renamed_person, new Undo.UndoableAction() {
+        Undo.executeAction(PeopleManagerActivity.this, R.string.renamed_person, masterLayout, new Undo.UndoableAction() {
             @Override
             public void onDisplay() {
                 person.setName(name);

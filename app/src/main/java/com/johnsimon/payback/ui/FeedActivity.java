@@ -65,6 +65,7 @@ public class FeedActivity extends DataActivity implements
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
 	public Toolbar toolbar;
+	public DrawerLayout masterLayout;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
@@ -103,7 +104,7 @@ public class FeedActivity extends DataActivity implements
 
         if (Resource.isLOrAbove()) {
             setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
-                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+					R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
 
         }
 
@@ -131,7 +132,7 @@ public class FeedActivity extends DataActivity implements
 		// Set up the drawer.
 		navigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout)
+				masterLayout = (DrawerLayout) findViewById(R.id.drawer_layout)
 		);
 
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -636,7 +637,7 @@ public class FeedActivity extends DataActivity implements
 					paidBackDates.put(debt, debt.getDatePaidBack());
                 }
 
-                Undo.executeAction(FeedActivity.this, R.string.evened_out, new Undo.UndoableAction() {
+                Undo.executeAction(FeedActivity.this, R.string.evened_out, masterLayout, new Undo.UndoableAction() {
                     @Override
                     public void onDisplay() {
                         for(Debt debt: feed) {

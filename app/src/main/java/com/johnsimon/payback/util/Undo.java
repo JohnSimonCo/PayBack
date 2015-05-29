@@ -1,18 +1,18 @@
 package com.johnsimon.payback.util;
 
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.ui.base.BaseActivity;
-import com.williammora.snackbar.Snackbar;
 
 public class Undo {
 	private final static int DURATION = 2500;
-	private final static int DELAY = 600;
 
 	private static QueuedAction queuedAction = null;
 
-	public static void executeAction(BaseActivity activity, int textId, final UndoableAction action) {
+	public static void executeAction(BaseActivity activity, int textId, final View baseView, final UndoableAction action) {
         completeAction();
 		queuedAction = new QueuedAction(action);
 
@@ -28,31 +28,19 @@ public class Undo {
 		queuedAction.handler = handler;
 		queuedAction.runnable = runnable;
 
-		Snackbar snackbar = Snackbar.with(activity.getApplicationContext());
-		snackbar.text(activity.getString(textId))
-			.actionLabel(activity.getString(R.string.undo))
-			.actionColor(activity.getResources().getColor(R.color.undo_color))
-			.duration(DURATION)
-			.eventListener(new Snackbar.EventListener() {
-				@Override
-				public void onShow(int i) {
-					action.onDisplay();
-					handler.postDelayed(runnable, DURATION + DELAY);
-				}
+		Snackbar snackbar = Snackbar.make(baseView, textId, DURATION).setAction(R.string.undo, new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				action.onRevert();
+				handler.removeCallbacks(runnable);
+				cancelAction();
+			}
+		});
 
-				@Override
-				public void onDismiss(int i) {
-				}
-			})
-			.actionListener(new Snackbar.ActionClickListener() {
-				@Override
-				public void onActionClicked() {
-					action.onRevert();
-					handler.removeCallbacks(runnable);
-                    cancelAction();
-				}
-			})
-			.show(activity);
+		snackbar.show();
+
+		action.onDisplay();
+		handler.postDelayed(runnable, DURATION);
 
 		queuedAction.snackbar = snackbar;
         activity.queuedActions.add(queuedAction);
@@ -84,8 +72,8 @@ public class Undo {
 	}
 
 	public interface UndoableAction {
-		public void onDisplay();
-		public void onRevert();
-		public void onCommit();
+		void onDisplay();
+		void onRevert();
+		void onCommit();
 	}
 }

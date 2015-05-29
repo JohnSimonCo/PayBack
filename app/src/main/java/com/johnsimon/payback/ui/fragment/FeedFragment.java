@@ -295,8 +295,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 				@Override
 				public void onPositive(MaterialDialog dialog) {
 					super.onPositive(dialog);
-
-					Undo.executeAction(getBaseActivity(), R.string.deleted_debt, new Undo.UndoableAction() {
+					Undo.executeAction(getBaseActivity(), R.string.deleted_debt, getView(), new Undo.UndoableAction() {
 						@Override
 						public void onDisplay() {
 							FeedActivity.feed.remove(index);

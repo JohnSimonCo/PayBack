@@ -16,9 +16,11 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -33,7 +35,6 @@ import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.williammora.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -140,7 +141,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                     storage.commit(AppData.fromJson(result.content));
                                     storage.emit();
 
-                                    Snackbar.with(SettingsActivity.this).text(SettingsActivity.this.getString(R.string.restore_success)).show(SettingsActivity.this);
+                                    Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
 
                                     dialog.dismiss();
                                 }
@@ -330,9 +331,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                     case R.id.menu_settings_remove_backup:
 
                         if (FileManager.removeFile()) {
-                            Snackbar.with(SettingsActivity.this)
-                                    .text(getString(R.string.backup_removed_success))
-                                    .show(SettingsActivity.this);
+                            Snackbar.make(masterView, R.string.backup_removed_success, Snackbar.LENGTH_SHORT).show();
                         }
 
                         updateBackupStatus(true);
@@ -359,9 +358,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 	}
 
 	private void snackbar(String text) {
-		Snackbar.with(this)
-				.text(text)
-				.show(this);
+        Snackbar.make(masterView, text, Snackbar.LENGTH_SHORT).show();
 	}
 
     private void updateBackupStatus(boolean clearFirst) {
