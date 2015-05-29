@@ -153,7 +153,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public void addTransaction(float amount) {
 		addTransactionWithoutCheck(amount);
 
-		if(getPaidBackAmount() >= getAmount()) {
+		if(!isPaidBack() && getPaidBackAmount() >= getAmount()) {
 			setPaidBack(true);
 		}
 	}

@@ -298,7 +298,7 @@ public class AppData {
 		peopleOrderTouched = System.currentTimeMillis();
 	}
 
-	public boolean isEven(ArrayList<Debt> debts) {
+	public static boolean isEven(ArrayList<Debt> debts) {
 		return total(debts) == 0;
 	}
 
@@ -319,7 +319,7 @@ public class AppData {
 
         ensureNewFeatures(data);
 
-        data.debts.get(0).addTransaction(10);
+        data.debts.get(1).addTransaction(10);
 
 		if(BuildConfig.DEBUG) {
 			analyzeData(data);
