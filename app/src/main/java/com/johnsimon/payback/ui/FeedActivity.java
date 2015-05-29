@@ -185,10 +185,6 @@ public class FeedActivity extends DataActivity implements
 
 		feedSubscription.broadcast(feed);
 
-		Intent intent = new Intent(this, RemindLaterActivity.class);
-		intent.putExtra(RemindLaterActivity.KEY_DEBT_ID, feed.get(0).id.toString());
-		startActivity(intent);
-
         //TODO REMOVE
         //LocalStorage.test(this, data);
     }

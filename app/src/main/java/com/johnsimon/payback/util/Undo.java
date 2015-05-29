@@ -28,7 +28,7 @@ public class Undo {
 		queuedAction.handler = handler;
 		queuedAction.runnable = runnable;
 
-		Snackbar snackbar = Snackbar.make(baseView, textId, DURATION).setAction(R.string.undo, new View.OnClickListener() {
+		Snackbar snackbar = Snackbar.make(baseView, textId, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				action.onRevert();

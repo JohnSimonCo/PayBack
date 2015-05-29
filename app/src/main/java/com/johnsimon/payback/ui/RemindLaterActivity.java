@@ -1,8 +1,12 @@
 package com.johnsimon.payback.ui;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -30,9 +34,16 @@ public class RemindLaterActivity extends DataActivity {
     private boolean hasFinishedFirst = false;
     private boolean hasFinishedDate = false;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Resource.isLOrAbove()) {
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
+                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+        }
+
     }
 
     @Override
