@@ -166,8 +166,6 @@ public class NavigationDrawerFragment extends DataFragment {
 
     @Override
     protected void onDataReceived() {
-        adapter.setItems(data.peopleOrdered());
-        adapter.notifyDataSetChanged();
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         setSelectedPerson(FeedActivity.person);

@@ -319,6 +319,7 @@ public class AppData {
 
         ensureNewFeatures(data);
 
+        data.debts.get(1).amount += 10;
         data.debts.get(1).addTransaction(10);
 
 		if(BuildConfig.DEBUG) {

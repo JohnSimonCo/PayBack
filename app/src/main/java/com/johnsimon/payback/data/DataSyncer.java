@@ -31,6 +31,10 @@ public class DataSyncer {
             people = sync(a.people, b.people);
             debts = sync(a.debts, b.debts);
 
+            for(Debt debt : debts) {
+                debt.linkOwner(people);
+            }
+
 			peopleOrder = mergePeopleOrder(a, b);
 
         } else if(!a.peopleOrder.equals(b.peopleOrder)) {

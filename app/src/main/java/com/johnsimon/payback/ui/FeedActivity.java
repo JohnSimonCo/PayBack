@@ -177,25 +177,12 @@ public class FeedActivity extends DataActivity implements
             feed = data.feed(person);
         }
         sort();
-		feedSubscription.broadcast(feed);
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
-		for(Debt debt : data.debts) {
-			Assert.assertEquals(true, data.people.contains(debt.getOwner()));
-			boolean itemExists = navigationDrawerFragment.adapter.items.size() < 1;
-			for(NavigationDrawerItem item : navigationDrawerFragment.adapter.items) {
-				if(item.type == NavigationDrawerItem.Type.Person) {
-					if(item.owner == debt.getOwner()) {
-						itemExists = true;
-					}
-				}
-			}
-			try {
-				Assert.assertEquals(true, itemExists);
-			} catch (AssertionError e) {
-				//TODO fixa det här, snälla
-				int i = 0;
-			}
-		}
+
+		navigationDrawerFragment.adapter.setItems(data.peopleOrdered());
+		navigationDrawerFragment.adapter.notifyDataSetChanged();
+
+		feedSubscription.broadcast(feed);
 
         //TODO REMOVE
         //LocalStorage.test(this, data);
