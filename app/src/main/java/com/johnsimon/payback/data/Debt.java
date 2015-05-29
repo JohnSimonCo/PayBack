@@ -1,7 +1,6 @@
 package com.johnsimon.payback.data;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
@@ -12,7 +11,7 @@ import com.johnsimon.payback.util.ShareStringGenerator;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Debt extends SyncedData<Debt> implements Identifiable{
+public class Debt extends SyncedData<Debt> implements Identifiable {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
@@ -38,8 +37,8 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	@SerializedName("paidBack")
 	public boolean paidBack;
 
-	@SerializedName("datePaidBack")
-	public Long datePaidBack;
+	@SerializedName("transactions")
+	public ArrayList<Transaction> transactions;
 
 	@SerializedName("currencyId")
 	public String currencyId;
@@ -50,7 +49,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public transient Person owner;
 
 
-	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, Long datePaidBack, String currency) {
+	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Transaction> transactions, String currency) {
 		super(touched);
 
 		this.id = id;
@@ -59,11 +58,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 		this.timestamp = timestamp;
 		this.paidBack = paidBack;
-		this.datePaidBack = datePaidBack;
+		this.transactions = transactions;
 		this.currencyId = currency;
 	}
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, Long datePaidBack, String currency) {
+    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Transaction> transactions, String currency) {
 		super(touched);
 
         this.id = id;
@@ -73,12 +72,12 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
         this.note = note;
         this.timestamp = timestamp;
         this.paidBack = paidBack;
-		this.datePaidBack = datePaidBack;
+		this.transactions = transactions;
 		this.currencyId = currency;
     }
 
 	private Debt(Person owner, float amount, String note, long time, String currencyId) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false, null, currencyId);
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, new ArrayList<Transaction>(), currencyId);
 	}
 
 	//Used when creating new
@@ -131,9 +130,13 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		return paidBack;
 	}
 
+	public boolean isPartlyPaidBack() {
+		return !isPaidBack() || transactions.size() > 0;
+	}
+
 	public void payback() {
 		setPaidBack(true);
-		setDatePaidBack(System.currentTimeMillis());
+		addTransaction(getRemainingDebt());
 	}
 
 	public void unpayback() {
@@ -144,6 +147,23 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public void setPaidBack(boolean isPaidBack) {
 		touch();
 		this.paidBack = isPaidBack;
+	}
+
+	public void addTransaction(float amount) {
+		touch();
+		transactions.add(new Transaction(amount, System.currentTimeMillis()));
+	}
+
+	public float getRemainingDebt() {
+		return (getAbsoluteAmount() - getPaidBackAmount()) * Math.signum(getAmount());
+	}
+
+	public float getPaidBackAmount() {
+		float sum = 0;
+		for(Transaction transaction : transactions) {
+			sum += transaction.amount;
+		}
+		return sum;
 	}
 
 	public void setRemindDate(Long remindDate) {
@@ -165,15 +185,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public void changeDate(long time) {
 		touch();
 		this.timestamp = time;
-	}
-
-	public void setDatePaidBack(Long datePaidBack) {
-		touch();
-		this.datePaidBack = datePaidBack;
-	}
-
-	public Long getDatePaidBack() {
-		return datePaidBack;
 	}
 
 	public int getColor() {
@@ -226,7 +237,8 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 			&& owner.id.equals(other.owner.id)
 			&& amount == other.amount
 			&& Resource.nullEquals(note, other.note)
-			&& paidBack == other.paidBack;
+			&& paidBack == other.paidBack
+			&& transactions.equals(other.transactions);
 	}
 
 	@Override
