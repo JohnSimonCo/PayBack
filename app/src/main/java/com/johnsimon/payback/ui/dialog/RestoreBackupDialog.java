@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui.dialog;
 import android.content.Context;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.Storage;
@@ -15,10 +16,10 @@ public class RestoreBackupDialog {
 		final FileManager.ReadResult result = FileManager.read();
 		if(result.success) {
 			new MaterialDialog.Builder(context)
-					.title("You got a file bro")
-					.content("Wanna restore from it???")
-					.positiveText("Yes i am")
-					.negativeText("No, sure")
+					.title(R.string.restoredialog_title)
+					.content(R.string.restoredialog_content)
+					.positiveText(R.string.restore)
+					.negativeText(R.string.cancel)
 					.cancelable(false)
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override

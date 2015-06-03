@@ -120,7 +120,6 @@
     <string name="disable_cloud_sync_title">Disable cloud sync</string>
     <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
     <string name="disable_cloud_sync_affirmative">Disable</string>
-    <string name="restore_single">Restore</string>
     <string name="remove_backup">Remove backup</string>
     <string name="backup_removed_success">Backup removed successfully</string>
     <string name="no_backup_available">No backup available</string>
@@ -194,6 +193,10 @@
     <string name="debtshare_dateformat">since %1$s</string>
     <string name="debtshare_partialformat">paid back %1$s on %2$s</string>
     <string name="debtshare_paidbackformat">"paid back on %1$s</string>
+
+    <string name="restoredialog_title">Restore backup</string>
+    <string name="restoredialog_content">There is a saved backup available. Do you wish to restore from it?</string>
+    <string name="restore">Restore</string>
 
     <string-array name="thousand_seperator_list">
         <item>None</item>

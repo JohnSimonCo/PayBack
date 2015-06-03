@@ -6,7 +6,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
-import com.johnsimon.payback.data.Transaction;
+import com.johnsimon.payback.data.Payment;
 
 import java.util.ArrayList;
 
@@ -59,11 +59,11 @@ public class ShareStringGenerator {
 					builder.append(context.getString(R.string.debtsummary_history_header));
 					builder.append(":\n");
 
-					for(Transaction transaction : debt.getTransactions()) {
+					for(Payment payment : debt.getPayments()) {
 						builder.append("\t");
 						builder.append(String.format(context.getString(R.string.debtsummary_history_entryformat),
-								currency.render(transaction.amount),
-								Resource.monthDateFormat.format(transaction.date)));
+								currency.render(payment.amount),
+								Resource.monthDateFormat.format(payment.date)));
 						builder.append("\n");
 					}
 				}
@@ -110,17 +110,17 @@ public class ShareStringGenerator {
 		builder.append(String.format(context.getString(R.string.debtshare_dateformat),
 				Resource.monthDateFormat.format(debt.timestamp)));
 
-		if(debt.hasTransactions() && debt.isPaidBack() || (fullVersion && partiallyPaidBack)) {
-			Transaction transaction = debt.getLastTransaction();
+		if(debt.hasPayment() && debt.isPaidBack() || (fullVersion && partiallyPaidBack)) {
+			Payment payment = debt.getLastPayment();
 			builder.append(" (");
 			if(partiallyPaidBack) {
 				builder.append(String.format(context.getString(R.string.debtshare_partialformat),
 						currency.render(debt.getPaidBackAmount()),
-						Resource.monthDateFormat.format(transaction.date)));
+						Resource.monthDateFormat.format(payment.date)));
 
 			} else {
 				builder.append(String.format(context.getString(R.string.debtshare_paidbackformat),
-						Resource.monthDateFormat.format(transaction.date)));
+						Resource.monthDateFormat.format(payment.date)));
 			}
 			builder.append(")");
 		}

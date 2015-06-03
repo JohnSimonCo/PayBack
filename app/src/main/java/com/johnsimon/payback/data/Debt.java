@@ -1,6 +1,7 @@
 package com.johnsimon.payback.data;
 
 import android.content.Context;
+import android.widget.RelativeLayout;
 
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
@@ -37,8 +38,8 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	@SerializedName("paidBack")
 	public boolean paidBack;
 
-	@SerializedName("transactions")
-	public ArrayList<Transaction> transactions;
+	@SerializedName("payments")
+	public ArrayList<Payment> payments;
 
 	@SerializedName("currencyId")
 	public String currencyId;
@@ -49,7 +50,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public transient Person owner;
 
 
-	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Transaction> transactions, String currency) {
+	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
 		super(touched);
 
 		this.id = id;
@@ -58,11 +59,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		this.note = note;
 		this.timestamp = timestamp;
 		this.paidBack = paidBack;
-		this.transactions = transactions;
+		this.payments = payments;
 		this.currencyId = currency;
 	}
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Transaction> transactions, String currency) {
+    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
 		super(touched);
 
         this.id = id;
@@ -72,12 +73,12 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
         this.note = note;
         this.timestamp = timestamp;
         this.paidBack = paidBack;
-		this.transactions = transactions;
+		this.payments = payments;
 		this.currencyId = currency;
     }
 
 	private Debt(Person owner, float amount, String note, long time, String currencyId) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false, new ArrayList<Transaction>(), currencyId);
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, new ArrayList<Payment>(), currencyId);
 	}
 
 	//Used when creating new
@@ -115,7 +116,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public void setAmount(float amount) {
 		touch();
 		this.amount = amount;
-		transactions.clear();
+		payments.clear();
 	}
 
 	public String getNote() {
@@ -132,17 +133,17 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 	public boolean isPartiallyPaidBack() {
-		return !isPaidBack() && hasTransactions();
+		return !isPaidBack() && hasPayment();
 	}
 
 	public void payback() {
 		setPaidBack(true);
-		addTransactionWithoutCheck(getRemainingDebt());
+		addPaymentWithoutCheck(getRemainingDebt());
 	}
 
 	public void unpayback() {
 		setPaidBack(false);
-		transactions.clear();
+		payments.clear();
 	}
 
 	public void setPaidBack(boolean isPaidBack) {
@@ -150,19 +151,19 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		this.paidBack = isPaidBack;
 	}
 
-	public void addTransaction(float amount) {
-		addTransactionWithoutCheck(amount);
+	public void addPayment(float amount) {
+		addPaymentWithoutCheck(amount);
 
 		if(!isPaidBack() && getPaidBackAmount() >= getAmount()) {
 			setPaidBack(true);
 		}
 	}
-	public void addTransactionWithoutCheck(float amount) {
+	public void addPaymentWithoutCheck(float amount) {
 		touch();
-		if(transactions == null) {
-			transactions = new ArrayList<>();
+		if(payments == null) {
+			payments = new ArrayList<>();
 		}
-		transactions.add(new Transaction(amount, System.currentTimeMillis()));
+		payments.add(new Payment(amount, System.currentTimeMillis()));
 	}
 
 	public float getRemainingAbsoluteDebt() {
@@ -173,23 +174,23 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 	public float getPaidBackAmount() {
-		if(transactions == null) return 0;
+		if(payments == null) return 0;
 
 		float sum = 0;
-		for(Transaction transaction : transactions) {
-			sum += transaction.amount;
+		for(Payment payment : payments) {
+			sum += payment.amount;
 		}
 		return sum;
 	}
 
 	public Long getDatePaidBack() {
-		if(transactions == null) return null;
+		if(payments == null) return null;
 
-		if(!isPaidBack() || transactions.size() < 1) {
+		if(!isPaidBack() || payments.size() < 1) {
 			return null;
 		} else {
 			//Return date of last transaction
-			return getLastTransaction().date;
+			return getLastPayment().date;
 		}
 	}
 
@@ -203,16 +204,16 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 
-	public ArrayList<Transaction> getTransactions() {
-		return transactions;
+	public ArrayList<Payment> getPayments() {
+		return payments;
 	}
 
-	public Transaction getLastTransaction() {
-		return transactions.get(transactions.size() - 1);
+	public Payment getLastPayment() {
+		return payments.get(payments.size() - 1);
 	}
 
-	public boolean hasTransactions() {
-		return transactions != null && transactions.size() > 0;
+	public boolean hasPayment() {
+		return payments != null && payments.size() > 0;
 	}
 
 	public void edit(Person owner, float amount, String note) {
@@ -267,7 +268,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 
 	public Debt copy() {
-		return new Debt(owner, amount, note, id, timestamp, touched, paidBack, new ArrayList<>(transactions), currencyId);
+		return new Debt(owner, amount, note, id, timestamp, touched, paidBack, new ArrayList<>(payments), currencyId);
 	}
 
 	@Override
@@ -282,10 +283,10 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 			&& amount == other.amount
 			&& Resource.nullEquals(note, other.note)
 			&& paidBack == other.paidBack
-			&& Resource.nullEquals(transactions, other.transactions);
+			&& Resource.nullEquals(payments, other.payments);
 	}
 
-	//TODO could implement new syncWith to sync transaction histories adequately
+	//TODO could implement new syncWith to sync payments histories adequately
 
 	@Override
 	public String toString() {
