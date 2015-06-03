@@ -139,7 +139,7 @@
             style="@style/FlatButton"
             app:typeface="roboto_medium"
             android:text="@string/pay_back"
-            android:id="@+id/dialog_custom_confirm"
+            android:id="@+id/dialog_custom_payback"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"

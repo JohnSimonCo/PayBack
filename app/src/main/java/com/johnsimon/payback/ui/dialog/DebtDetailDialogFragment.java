@@ -30,8 +30,7 @@ import java.util.Calendar;
 
 public class DebtDetailDialogFragment extends DataDialogFragment {
 
-    public static Debt debtAccessible = null;
-    private static Debt debt = null;
+    public static Debt debt = null;
 
     public Callback callback = null;
     public AlertDialog alertDialog;
@@ -41,7 +40,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
     public static DebtDetailDialogFragment newInstance(Debt debt) {
         DebtDetailDialogFragment.debt = debt;
-        DebtDetailDialogFragment.debtAccessible = debt;
 
         return new DebtDetailDialogFragment();
     }
@@ -55,13 +53,13 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
         final View rootView = inflater.inflate(R.layout.detail_dialog, null);
 
-        Button dialog_custom_confirm = (Button) rootView.findViewById(R.id.dialog_custom_confirm);
+        Button dialog_custom_payback = (Button) rootView.findViewById(R.id.dialog_custom_payback);
         Button dialog_custom_send = (Button) rootView.findViewById(R.id.dialog_custom_send);
         Button dialog_custom_payment = (Button) rootView.findViewById(R.id.dialog_custom_payment);
 
         if (debt.isPaidBack()) {
-            dialog_custom_confirm.setText(R.string.undo_pay_back);
-            dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
+            dialog_custom_payback.setText(R.string.undo_pay_back);
+            dialog_custom_payback.setTextColor(getResources().getColor(R.color.red));
 
             dialog_custom_payment.setVisibility(View.GONE);
 
@@ -79,7 +77,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
             }
         }
 
-        //This is the share button
         dialog_custom_send.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -91,25 +88,25 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 			}
 		});
 
-        dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        dialog_custom_payback.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 				boolean payback = !debt.isPaidBack();
-				if(payback) {
+				if (payback) {
 					debt.payback();
 				} else {
 					debt.unpayback();
 				}
 
-				if(payback && debt.getRemindDate() != null) {
+				if (payback && debt.getRemindDate() != null) {
 					Alarm.cancelAlarm(getActivity(), debt);
 					debt.setRemindDate(null);
 				}
 
 				storage.commit();
 				displayPaybackAnimation();
-            }
-        });
+			}
+		});
 
 		dialog_custom_payment.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -264,7 +261,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		debtAccessible = null;
+		debt = null;
 	}
 
 	public interface Callback {
