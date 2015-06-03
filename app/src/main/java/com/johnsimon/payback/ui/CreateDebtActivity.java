@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
 
@@ -55,7 +57,6 @@ import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
-import com.johnsimon.payback.view.FloatLabelLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.shamanland.fab.FloatingActionButton;
 
@@ -83,7 +84,6 @@ public class CreateDebtActivity extends DataActivity {
 	private AppCompatEditText floatLabelAmountEditText;
 	private AppCompatEditText floatLabelNoteEditText;
 	private AppCompatAutoCompleteTextView floatLabelNameAutoCompleteTextView;
-	private FloatLabelLayout floatLabelLayout;
     private ImageButton create_fab_l;
 	private Button reminderButton;
     private Button reminderDayButton;
@@ -91,6 +91,8 @@ public class CreateDebtActivity extends DataActivity {
 	private ImageButton clearReminderButton;
 	private RadioGroup radioGroup;
     private ScrollView mainScrollView;
+    private TextInputLayout float_label_layout_amount;
+    private RelativeLayout create_master;
 
 	private RequiredValidator validator;
 	private Debt editingDebt = null;
@@ -134,17 +136,16 @@ public class CreateDebtActivity extends DataActivity {
 		floatLabelAmountEditText = (AppCompatEditText) findViewById(R.id.create_edittext_amount);
 		floatLabelNoteEditText = (AppCompatEditText) findViewById(R.id.create_edittext_note);
 		floatLabelNameAutoCompleteTextView = (AppCompatAutoCompleteTextView) findViewById(R.id.create_edittext_name);
+        float_label_layout_amount = (TextInputLayout) findViewById(R.id.float_label_layout_amount);
+        create_master = (RelativeLayout) findViewById(R.id.create_master);
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
-        floatLabelLayout = (FloatLabelLayout) findViewById(R.id.float_label_layout_amount);
 		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
         if (savedInstanceState == null) {
-            ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
-
             if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
                 animateIn(toolbar, true);
                 animateIn(findViewById(R.id.create_lower_master), false);
@@ -457,8 +458,8 @@ public class CreateDebtActivity extends DataActivity {
 		Intent intent = getIntent();
 
 		String currencyText = getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency().getDisplayName() + ")";
-		floatLabelLayout.setHint(currencyText);
 		floatLabelAmountEditText.setHint(currencyText);
+        float_label_layout_amount.setHint(currencyText);
 
 		if (intent.hasExtra(ARG_ID)) {
 			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));
@@ -659,8 +660,7 @@ public class CreateDebtActivity extends DataActivity {
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
                 }
             } else {
-
-                Snackbar.make(mainScrollView, R.string.create_fab_error, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(create_master, R.string.create_fab_error, Snackbar.LENGTH_SHORT).show();
 
                 Resource.hideKeyboard(CreateDebtActivity.this);
             }
@@ -734,8 +734,6 @@ public class CreateDebtActivity extends DataActivity {
         }
 
 		storage.commit();
-
-        //TODO CONT
 
 		return debt;
 	}
