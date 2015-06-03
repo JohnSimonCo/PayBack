@@ -9,6 +9,6 @@
 
     <dimen name="create_right_margin">108dp</dimen>
     <dimen name="create_right_margin_small">108dp</dimen>
-    <dimen name="fab_create_right_margin">84dp</dimen>
+    <dimen name="fab_create_right_margin">64dp</dimen>
 
 </resources>

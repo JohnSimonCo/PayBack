@@ -16,16 +16,16 @@
 
     <dimen name="feed_list_item_extra_margin">48dp</dimen>
     <dimen name="feed_left_margin">80dp</dimen>
-    <dimen name="fab_right_margin">20dp</dimen>
+    <dimen name="fab_right_margin">6dp</dimen>
 
     <dimen name="create_start_margin">116dp</dimen>
     <dimen name="create_start_margin_small">56dp</dimen>
 
     <dimen name="create_right_margin">62dp</dimen>
     <dimen name="create_right_margin_small">62dp</dimen>
-    <dimen name="fab_create_right_margin">38dp</dimen>
+    <dimen name="fab_create_right_margin">22dp</dimen>
 
-    <dimen name="create_fab_top_margin">205dp</dimen>
+    <dimen name="create_fab_top_margin">180dp</dimen>
 
     <dimen name="feed_avatar_full_size">48dp</dimen>
     <dimen name="feed_avatar_size">44dp</dimen>
@@ -35,7 +35,7 @@
     <dimen name="feed_name_size">22sp</dimen>
     <dimen name="feed_info_size">16sp</dimen>
 
-    <dimen name="feed_fab_bottom_margin">4dp</dimen>
+    <dimen name="feed_fab_bottom_margin">-8dp</dimen>
 
     <dimen name="side_margin">80dp</dimen>
 

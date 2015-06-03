@@ -112,26 +112,21 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 			int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
 
-			if (Resource.isLOrAbove()) {
-				FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.people_fab);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.people_fab);
 
+            if (Resource.isLOrAbove()) {
 				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
 				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - Math.round(getResources().getDimension(R.dimen.fab_size) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
 
 				fab.setLayoutParams(params);
-
-				fab.setOnClickListener(fabClickListener);
 			} else {
-				FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.feed_fab);
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
+                params.setMargins(0, actionBarHeight + Resource.getPx(28, getResources()) - Resource.getPx(28, getResources()), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
 
-				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
-				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - (Resource.getPx(56, getResources()) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
-
-				fab.setLayoutParams(params);
-
-				fab.setOnClickListener(fabClickListener);
-			}
-		}
+                fab.setLayoutParams(params);
+            }
+            fab.setOnClickListener(fabClickListener);
+        }
 
 		setupTreeObserver();
 
