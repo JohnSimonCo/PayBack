@@ -80,10 +80,17 @@
 
     </LinearLayout>
 
-    <include
-        android:layout_height="@dimen/fab_size"
-        android:layout_width="@dimen/fab_size"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/people_fab"
+        app:fabSize="normal"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/accent_color"
+        app:rippleColor="#66ffffff"
         android:layout_gravity="top|right"
-        layout="@layout/feed_fab"   />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_content_new"    />
 
 </FrameLayout>

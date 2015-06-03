@@ -45,6 +45,7 @@
                         android:layout_height="wrap_content">
 
                         <android.support.design.widget.TextInputLayout
+                            app:hintTextAppearance="@style/TextAppearance.TextInputLayout.Hint"
                             android:id="@+id/float_label_layout_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -113,6 +114,7 @@
                         </RadioGroup>
 
                         <android.support.design.widget.TextInputLayout
+                            app:hintTextAppearance="@style/TextAppearance.TextInputLayout.Hint"
                             android:id="@+id/float_label_layout_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -234,17 +236,22 @@
 
         </LinearLayout>
 
-
-
-        <include
-            layout="@layout/create_fab"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/create_fab"
+            app:fabSize="normal"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:backgroundTint="@android:color/white"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/create_fab_top_margin"
             android:layout_marginEnd="@dimen/fab_create_right_margin"
             android:layout_marginRight="@dimen/fab_create_right_margin"
-            android:layout_width="@dimen/fab_size"
-            android:layout_height="@dimen/fab_size"    />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check"    />
+
 
     </RelativeLayout>
 </ScrollView>

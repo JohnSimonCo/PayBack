@@ -51,23 +51,6 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 			disableButton(dialogCustomCurrencyConfirm);
 		}
 
-		customCurrencyEditText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updatePreview();
-			}
-		});
-
 		new RequiredValidator(new EditText[] {customCurrencyEditText}, new ValidatorListener() {
 			@Override
 			public void onValid() {
@@ -84,10 +67,6 @@ public class CustomCurrencyDialogFragment extends DialogFragment {
 
 		alertDialog = builder.create();
 		return alertDialog;
-	}
-
-	private void updatePreview() {
-
 	}
 
 	private void disableButton(Button btn) {

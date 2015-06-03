@@ -32,7 +32,7 @@
     <dimen name="navigation_drawer_padding">18dp</dimen>
 
     <dimen name="feed_list_item_extra_margin">0dp</dimen>
-    <dimen name="create_fab_top_margin">196dp</dimen>
+    <dimen name="create_fab_top_margin">170dp</dimen>
     <dimen name="fab_size">72dp</dimen>
 
     <dimen name="feed_avatar_full_size">40dp</dimen>

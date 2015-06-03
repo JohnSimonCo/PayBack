@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +21,6 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,13 +38,10 @@ import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.johnsimon.payback.view.DragSortRecycler;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener, PeopleDetailDialogFragment.PeopleDetailCallbacks {
-
-	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 	private PeopleListAdapter adapter;
     private RecyclerView recyclerView;
@@ -116,7 +113,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 			int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
 
 			if (Resource.isLOrAbove()) {
-				ImageButton fab = (ImageButton) findViewById(R.id.feed_fab_l);
+				FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.people_fab);
 
 				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
 				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - Math.round(getResources().getDimension(R.dimen.fab_size) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);

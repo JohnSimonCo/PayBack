@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnType;
@@ -42,19 +42,17 @@ import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
-import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class FeedFragment extends DataFragment implements FeedListAdapter.OnItemClickListener, DebtDetailDialogFragment.Callback {
-	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
 
 	public FeedListAdapter adapter;
     public FrameLayout headerView;
 
 	private TextView totalDebtTextView;
     private TextView feed_header_balance;
-    private ImageButton fab_l;
+    private FloatingActionButton feed_fab;
 
     public RecyclerView recyclerView;
     public RecyclerView.LayoutManager layoutManager;
@@ -84,24 +82,13 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
 
-        //FAB is different on L
+        feed_fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
+        feed_fab.setOnClickListener(fabClickListener);
+
         if (Resource.isLOrAbove()) {
-            fab_l = (ImageButton) headerView.findViewById(R.id.feed_fab_l);
-
-            fab_l.setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, fab_l.getWidth(), fab_l.getHeight());
-                }
-            });
-
-            fab_l.setClipToOutline(true);
-
-            fab_l.setOnClickListener(fabClickListener);
-        } else {
-            FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
-            fab.setOnClickListener(fabClickListener);
+            feed_fab.setTransitionName("fab");
         }
+
 
         final ImageView emptyViewImage = (ImageView) rootView.findViewById(R.id.feed_list_empty_view_image);
         emptyView = rootView.findViewById(R.id.feed_list_empty_view);
@@ -358,7 +345,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 				.putExtra(CreateDebtActivity.ARG_ID, debt.id);
 
         if (Resource.isLOrAbove()) {
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), fab_l, "fab");
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), feed_fab, "fab");
 
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {

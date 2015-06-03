@@ -2,21 +2,21 @@ package com.johnsimon.payback.ui;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.graphics.Outline;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -58,7 +59,6 @@ import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.shamanland.fab.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -84,7 +84,6 @@ public class CreateDebtActivity extends DataActivity {
 	private AppCompatEditText floatLabelAmountEditText;
 	private AppCompatEditText floatLabelNoteEditText;
 	private AppCompatAutoCompleteTextView floatLabelNameAutoCompleteTextView;
-    private ImageButton create_fab_l;
 	private Button reminderButton;
     private Button reminderDayButton;
     private Button reminderTimeButton;
@@ -93,10 +92,10 @@ public class CreateDebtActivity extends DataActivity {
     private ScrollView mainScrollView;
     private TextInputLayout float_label_layout_amount;
     private RelativeLayout create_master;
+    private FloatingActionButton create_fab;
 
 	private RequiredValidator validator;
 	private Debt editingDebt = null;
-    private TransitionDrawable transitionDrawable;
 
     private Calendar reminderCalendar = Calendar.getInstance();
 	private boolean usingCustomDate = false;
@@ -118,11 +117,6 @@ public class CreateDebtActivity extends DataActivity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setTintColor(getResources().getColor(R.color.primary_color));
-
-            Drawable[] drawables = new Drawable[2];
-            drawables[0] = new ColorDrawable(getResources().getColor(R.color.accent_color));
-            drawables[1] = new ColorDrawable(getResources().getColor(android.R.color.white));
-            transitionDrawable = new TransitionDrawable(drawables);
         } else {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
@@ -389,65 +383,32 @@ public class CreateDebtActivity extends DataActivity {
             }
         });
 
-        if (Resource.isLOrAbove()) {
-            create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
+        create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 
-            if (!getIntent().getBooleanExtra(KEY_NO_FAB_ANIM, false)) {
-                create_fab_l.setBackground(transitionDrawable);
-                transitionDrawable.startTransition(200);
+        if (Resource.isLOrAbove() && !getIntent().getBooleanExtra(KEY_NO_FAB_ANIM, false)) {
+            create_fab.setTransitionName("fab");
+            animateInFab();
+        }
+
+        create_fab.setOnClickListener(fabClickListener);
+
+        validator = new RequiredValidator(new EditText[] {
+                floatLabelNameAutoCompleteTextView,
+                floatLabelAmountEditText
+        }, new ValidatorListener() {
+            @Override
+            public void onValid() {
+                if (floatLabelAmountEditText.getText().toString().equals("0")) return;
+                create_fab.setActivated(true);
+                create_fab.setAlpha(1f);
             }
 
-            create_fab_l.setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, create_fab_l.getWidth(), create_fab_l.getHeight());
-                }
-            });
-
-            create_fab_l.setClipToOutline(true);
-
-            validator = new RequiredValidator(new EditText[] {
-                    floatLabelNameAutoCompleteTextView,
-                    floatLabelAmountEditText
-            }, new ValidatorListener() {
-                @Override
-                public void onValid() {
-                    if (floatLabelAmountEditText.getText().toString().equals("0")) return;
-                    create_fab_l.setActivated(true);
-                    create_fab_l.setAlpha(1f);
-                }
-
-                @Override
-                public void onInvalid() {
-                    create_fab_l.setActivated(false);
-                    create_fab_l.setAlpha(0.6f);
-                }
-            });
-
-            create_fab_l.setOnClickListener(fabClickListener);
-        } else {
-            final FloatingActionButton create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
-
-            validator = new RequiredValidator(new EditText[] {
-                    floatLabelNameAutoCompleteTextView,
-                    floatLabelAmountEditText
-            }, new ValidatorListener() {
-                @Override
-                public void onValid() {
-                    if (floatLabelAmountEditText.getText().toString().equals("0")) return;
-                    create_fab.setActivated(true);
-                    create_fab.setAlpha(1f);
-                }
-
-                @Override
-                public void onInvalid() {
-                    create_fab.setActivated(false);
-                    create_fab.setAlpha(0.6f);
-                }
-            });
-
-            create_fab.setOnClickListener(fabClickListener);
-        }
+            @Override
+            public void onInvalid() {
+                create_fab.setActivated(false);
+                create_fab.setAlpha(0.6f);
+            }
+        });
 
 		updateDate(false);
 
@@ -819,12 +780,12 @@ public class CreateDebtActivity extends DataActivity {
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
                 if (Resource.isLOrAbove()) {
-                    transitionDrawable.reverseTransition(600);
-                    create_fab_l.animate()
+                    animateOutFab();
+                    create_fab.animate()
                             .alpha(1f)
                             .setDuration(600)
                             .start();
-					create_fab_l.setImageResource(R.drawable.ic_action_content_new);
+					create_fab.setImageResource(R.drawable.ic_action_content_new);
 
                     finishAfterTransition();
                 } else {
@@ -851,12 +812,12 @@ public class CreateDebtActivity extends DataActivity {
     @Override
 	public void onBackPressed() {
         if (Resource.isLOrAbove()) {
-            transitionDrawable.reverseTransition(600);
-			create_fab_l.animate()
+            animateOutFab();
+			create_fab.animate()
 					.alpha(1f)
 					.setDuration(600)
 					.start();
-			create_fab_l.setImageResource(R.drawable.ic_action_content_new);
+			create_fab.setImageResource(R.drawable.ic_action_content_new);
             finishAfterTransition();
         } else {
             finish();
@@ -868,6 +829,62 @@ public class CreateDebtActivity extends DataActivity {
 		super.onNewIntent(intent);
 		Log.i("my_app", "New intent with flags " + intent.getFlags());
 	}
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void animateInFab() {
+        if (Resource.isLOrAbove()) {
+            final int colorWhite = getResources().getColor(android.R.color.white);
+            final int colorOrange = getResources().getColor(R.color.accent_color);
+
+            ViewPropertyAnimator vpa = create_fab.animate();
+            vpa.setDuration(200);
+            vpa.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int color = Resource.mixTwoColors(colorWhite, colorOrange, valueAnimator.getAnimatedFraction());
+
+                    ColorStateList a = new ColorStateList(new int[][]{
+                            new int[]{android.R.attr.state_pressed},
+                            new int[]{}
+                    }, new int[] {
+                            color,
+                            color
+                    });
+                    create_fab.setBackgroundTintList(a);
+                }
+            });
+
+            vpa.start();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void animateOutFab() {
+        if (Resource.isLOrAbove()) {
+            final int colorWhite = getResources().getColor(android.R.color.white);
+            final int colorOrange = getResources().getColor(R.color.accent_color);
+
+            ViewPropertyAnimator vpa = create_fab.animate();
+            vpa.setDuration(600);
+            vpa.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int color = Resource.mixTwoColors(colorOrange, colorWhite, valueAnimator.getAnimatedFraction());
+
+                    ColorStateList a = new ColorStateList(new int[][]{
+                            new int[]{android.R.attr.state_pressed},
+                            new int[]{}
+                    }, new int[] {
+                            color,
+                            color
+                    });
+                    create_fab.setBackgroundTintList(a);
+                }
+            });
+
+            vpa.start();
+        }
+    }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
