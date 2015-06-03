@@ -52,7 +52,7 @@ public class UserCurrency {
 		return render(debt.getAmount());
 	}
 
-	public String render(float amount) {
+	public String render(double amount) {
 		if(format == null) format = createFormat();
 
 		return format.format(Math.abs(amount));

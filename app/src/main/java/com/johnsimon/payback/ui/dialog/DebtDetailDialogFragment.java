@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +14,13 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
+import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
-import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
@@ -25,7 +28,7 @@ import com.makeramen.RoundedImageView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class DebtDetailDialogFragment extends DataDialogFragment implements PaidBackDialogFragment.CompleteCallback {
+public class DebtDetailDialogFragment extends DataDialogFragment {
 
     public static Debt debtAccessible = null;
     private static Debt debt = null;
@@ -53,13 +56,15 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         final View rootView = inflater.inflate(R.layout.detail_dialog, null);
 
         Button dialog_custom_confirm = (Button) rootView.findViewById(R.id.dialog_custom_confirm);
-        Button dialog_custom_cancel = (Button) rootView.findViewById(R.id.dialog_custom_cancel);
+        Button dialog_custom_send = (Button) rootView.findViewById(R.id.dialog_custom_send);
+        Button dialog_custom_payment = (Button) rootView.findViewById(R.id.dialog_custom_payment);
 
         if (debt.isPaidBack()) {
             dialog_custom_confirm.setText(R.string.undo_pay_back);
             dialog_custom_confirm.setTextColor(getResources().getColor(R.color.red));
 
-            //TODO change this
+            dialog_custom_payment.setVisibility(View.GONE);
+
             Long datePaidBack = debt.getDatePaidBack();
             if (datePaidBack != null) {
                 TextView dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
@@ -75,35 +80,68 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         }
 
         //This is the share button
-        dialog_custom_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
-                sendIntent.setType("text/plain");
-                startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences.getCurrency()) : getString(R.string.share)));
-            }
-        });
+        dialog_custom_send.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent sendIntent = new Intent();
+				sendIntent.setAction(Intent.ACTION_SEND);
+				sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
+				sendIntent.setType("text/plain");
+				startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences.getCurrency()) : getString(R.string.share)));
+			}
+		});
 
-        final DebtDetailDialogFragment self = this;
         dialog_custom_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+				boolean payback = !debt.isPaidBack();
+				if(payback) {
+					debt.payback();
+				} else {
+					debt.unpayback();
+				}
 
-                PaidBackDialogFragment paidBackDialogFragment;
+				if(payback && debt.getRemindDate() != null) {
+					Alarm.cancelAlarm(getActivity(), debt);
+					debt.setRemindDate(null);
+				}
 
-                if (debt.isPaidBack()) {
-                    paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.UNDO_PAY_BACK, debt, false);
-                } else {
-                    paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, debt, false);
-                }
-                paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
-                paidBackDialogFragment.completeCallback = self;
-
-                alertDialog.dismiss();
+				storage.commit();
+				displayPaybackAnimation();
             }
         });
+
+		dialog_custom_payment.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				NumberPickerBuilder builder = new NumberPickerBuilder()
+						.setLabelText(data.preferences.getCurrency().getDisplayName())
+						.setFragmentManager(((AppCompatActivity) getActivity()).getSupportFragmentManager())
+						.setStyleResId(R.style.BetterPickersDialogFragment_CustomLight)
+						.setPlusMinusVisibility(View.INVISIBLE)
+						.setMaxNumber((int) Math.ceil(debt.getRemainingAbsoluteDebt()));
+
+
+				builder.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandler() {
+					@Override
+					public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
+						debt.addPayment(fullNumber);
+						storage.commit();
+
+						if(debt.isPaidBack()) {
+							displayPaybackAnimation();
+						} else {
+							if (callback != null) {
+								callback.onRefresh();
+							}
+							alertDialog.dismiss();
+						}
+					}
+				});
+
+				builder.show();
+			}
+		});
 
         dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
 
@@ -175,7 +213,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
                                 return true;
 
 							case R.id.detail_dialog_pay_back:
-                                SwishLauncher.startSwish(getActivity(), debt.getAmount(), debt.getOwner());
+                                SwishLauncher.startSwish(getActivity(), debt.getRemainingAbsoluteDebt(), debt.getOwner());
 								return true;
 
                             default:
@@ -199,16 +237,28 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
         return alertDialog;
     }
 
+	public void displayPaybackAnimation() {
+		PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(
+				debt.isPaidBack() ? PaidBackDialogFragment.PAY_BACK : PaidBackDialogFragment.UNDO_PAY_BACK, false);
+
+		paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
+		paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
+			@Override
+			public void onComplete() {
+				if (callback != null) {
+					callback.onRefresh();
+				}
+			}
+		};
+
+		alertDialog.dismiss();
+	}
+
 	@Override
 	protected void onDataReceived() {
-		if (debt.getAmount() < 0) {
-			//negative
-			dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
-			dialog_custom_amount.setTextColor(getResources().getColor(debt.getColor()));
-		} else {
-			dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
-			dialog_custom_amount.setTextColor(getResources().getColor(R.color.green_strong));
-		}
+		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
+		dialog_custom_amount.setTextColor(getResources().getColor(
+				debt.getAmount() < 0 ? debt.getColor() : R.color.green_strong));
 	}
 
 	@Override
@@ -217,18 +267,11 @@ public class DebtDetailDialogFragment extends DataDialogFragment implements Paid
 		debtAccessible = null;
 	}
 
-    @Override
-    public void onComplete(Debt _debt) {
-        if (callback != null) {
-            callback.onPaidBack(_debt);
-        }
-    }
-
 	public interface Callback {
-		public void onPaidBack(Debt debt);
-		public void onDelete(Debt debt);
-		public void onEdit(Debt debt);
-		public void onMove(Debt debt, Person person);
+		void onRefresh();
+		void onDelete(Debt debt);
+		void onEdit(Debt debt);
+		void onMove(Debt debt, Person person);
 	}
 
     public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {

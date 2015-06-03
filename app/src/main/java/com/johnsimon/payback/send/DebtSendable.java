@@ -13,7 +13,7 @@ public class DebtSendable {
 	public UUID id;
 
 	@SerializedName("amount")
-	public float amount;
+	public double amount;
 
 	@SerializedName("note")
 	public String note;

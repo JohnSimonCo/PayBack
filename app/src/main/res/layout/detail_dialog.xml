@@ -121,8 +121,18 @@
             style="@style/FlatButton"
             app:typeface="roboto_medium"
             android:text="@string/send"
-            android:id="@+id/dialog_custom_cancel"
+            android:id="@+id/dialog_custom_send"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
+            android:text="@string/add_payment"
+            android:id="@+id/dialog_custom_payment"
+            android:layout_width="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:layout_height="wrap_content"/>
 
         <com.devspark.robototextview.widget.RobotoButton

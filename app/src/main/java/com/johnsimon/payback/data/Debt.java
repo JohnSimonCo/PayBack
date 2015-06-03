@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
+import com.johnsimon.payback.ui.MaterialPreferenceActivity;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 
@@ -27,7 +28,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public UUID ownerId;
 
 	@SerializedName("amount")
-	public float amount;
+	public double amount;
 
 	@SerializedName("note")
 	public String note;
@@ -50,7 +51,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public transient Person owner;
 
 
-	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
+	public Debt(UUID ownerId, double amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
 		super(touched);
 
 		this.id = id;
@@ -63,7 +64,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		this.currencyId = currency;
 	}
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
+    public Debt(Person owner, double amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
 		super(touched);
 
         this.id = id;
@@ -77,12 +78,12 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		this.currencyId = currency;
     }
 
-	private Debt(Person owner, float amount, String note, long time, String currencyId) {
+	private Debt(Person owner, double amount, String note, long time, String currencyId) {
         this(owner, amount, note, UUID.randomUUID(), time, time, false, new ArrayList<Payment>(), currencyId);
 	}
 
 	//Used when creating new
-	public Debt(Person owner, float amount, String note, String currencyId) {
+	public Debt(Person owner, double amount, String note, String currencyId) {
 		this(owner, amount, note, System.currentTimeMillis(), currencyId);
 	}
 
@@ -105,11 +106,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
         touch();
 	}
 
-	public float getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public float getAbsoluteAmount() {
+	public double getAbsoluteAmount() {
 		return Math.abs(amount);
 	}
 
@@ -143,7 +144,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 
 	public void unpayback() {
 		setPaidBack(false);
-		payments.clear();
+		if(payments != null) {
+			payments.clear();
+		} else {
+			payments = new ArrayList<>();
+		}
 	}
 
 	public void setPaidBack(boolean isPaidBack) {
@@ -151,14 +156,17 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		this.paidBack = isPaidBack;
 	}
 
-	public void addPayment(float amount) {
-		addPaymentWithoutCheck(amount);
+	//Returns whether or not the debts is paid back
+	public void addPayment(double amount) {
+		double remaining = getRemainingAbsoluteDebt(), payment = Math.min(amount, remaining);
 
-		if(!isPaidBack() && getPaidBackAmount() >= getAmount()) {
+		addPaymentWithoutCheck(payment);
+
+		if(remaining - payment <= 0) {
 			setPaidBack(true);
 		}
 	}
-	public void addPaymentWithoutCheck(float amount) {
+	public void addPaymentWithoutCheck(double amount) {
 		touch();
 		if(payments == null) {
 			payments = new ArrayList<>();
@@ -166,14 +174,14 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		payments.add(new Payment(amount, System.currentTimeMillis()));
 	}
 
-	public float getRemainingAbsoluteDebt() {
+	public double getRemainingAbsoluteDebt() {
 		return (getAbsoluteAmount() - getPaidBackAmount());
 	}
-	public float getRemainingDebt() {
+	public double getRemainingDebt() {
 		return getRemainingAbsoluteDebt() * Math.signum(getAmount());
 	}
 
-	public float getPaidBackAmount() {
+	public double getPaidBackAmount() {
 		if(payments == null) return 0;
 
 		float sum = 0;

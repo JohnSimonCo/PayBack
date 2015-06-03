@@ -4,10 +4,10 @@ import java.util.UUID;
 
 public class Payment implements Identifiable {
 	public UUID id;
-	public float amount;
+	public double amount;
 	public long date;
 
-	public Payment(float amount, Long date) {
+	public Payment(double amount, Long date) {
 		this.id = UUID.randomUUID();
 		this.amount = amount;
 		this.date = date;

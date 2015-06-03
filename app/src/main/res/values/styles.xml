@@ -97,6 +97,19 @@
         <item name="android:textColor">@color/sb__text_color</item>
     </style>
 
+    <style name="BetterPickersDialogFragment.CustomLight">
+        <item name="bpDialogBackground">@drawable/dialog_full_holo_light</item>
+        <item name="bpTitleColor">@color/dialog_text_color_holo_light</item>
+        <item name="bpTextColor">@color/dialog_text_color_holo_light</item>
+        <item name="bpDeleteIcon">@drawable/ic_backspace_light</item>
+        <item name="bpCheckIcon">@drawable/ic_check_light</item>
+        <item name="bpKeyBackground">@drawable/betterpicker_selector</item>
+        <item name="bpButtonBackground">@drawable/betterpicker_selector</item>
+        <item name="bpTitleDividerColor">@color/default_keyboard_indicator_color_dark</item>
+        <item name="bpDividerColor">@color/default_divider_color_light</item>
+        <item name="bpKeyboardIndicatorColor">@color/default_keyboard_indicator_color_light</item>
+    </style>
+
 
     <!-- Material API 21 Compability styles -->
     <style name="FlatButton">

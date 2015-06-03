@@ -92,7 +92,7 @@ public class AppData {
         float total = 0;
         for(Debt debt : debts) {
             if(!debt.isPaidBack()) {
-                total += debt.getAmount();
+                total += debt.getRemainingDebt();
             }
         }
         return total;
@@ -102,7 +102,7 @@ public class AppData {
         float sum = 0;
         for (Debt debt : debts) {
             if (!debt.isPaidBack() && debt.getAmount() > 0) {
-                sum += debt.getAmount();
+                sum += debt.getRemainingAbsoluteDebt();
             }
         }
         return sum;
@@ -112,7 +112,7 @@ public class AppData {
         float sum = 0;
         for (Debt debt : debts) {
             if (!debt.isPaidBack() && debt.getAmount() < 0) {
-                sum += debt.getAmount();
+                sum += debt.getRemainingAbsoluteDebt();
             }
         }
         return sum;

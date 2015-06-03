@@ -628,11 +628,11 @@ public class FeedActivity extends DataActivity implements
 
         PaidBackDialogFragment paidBackDialogFragment;
 
-        paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, null, true);
+        paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, true);
         paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "evened_out_dialog");
         paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
             @Override
-            public void onComplete(Debt nothing) {
+            public void onComplete() {
 				final ArrayList<Debt> oldDebts = new ArrayList<>();
 
                 for(Debt debt: feed) {

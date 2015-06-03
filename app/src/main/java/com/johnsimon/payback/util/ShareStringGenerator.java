@@ -40,32 +40,33 @@ public class ShareStringGenerator {
 		generateDebtList(context, currency, partialDebts, context.getString(R.string.debtsummary_partialdebts), true, builder);
 		generateDebtList(context, currency, paidBackDebts, context.getString(R.string.debtsummary_paidbackdebts), false, builder);
 
+		//Trim the string: just in case
 		return builder.toString().trim();
 	}
 
 	private static void generateDebtList(Context context, UserCurrency currency, ArrayList<Debt> debts, String title, boolean includeHistory, StringBuilder builder) {
-		if(debts.size() > 0) {
+		if(debts.size() <= 0) return;
+		
+		builder.append("\n");
+		builder.append(title);
+		builder.append(":\n");
+
+		for(Debt debt : debts) {
+			builder.append("\u2022 ");
+			generateDebtShareString(context, debt, currency, false, builder);
 			builder.append("\n");
-			builder.append(title);
-			builder.append(":\n");
 
-			for(Debt debt : debts) {
-				builder.append("\u2022 ");
-				generateDebtShareString(context, debt, currency, false, builder);
-				builder.append("\n");
+			if(includeHistory) {
+				builder.append("\t");
+				builder.append(context.getString(R.string.debtsummary_history_header));
+				builder.append(":\n");
 
-				if(includeHistory) {
+				for(Payment payment : debt.getPayments()) {
 					builder.append("\t");
-					builder.append(context.getString(R.string.debtsummary_history_header));
-					builder.append(":\n");
-
-					for(Payment payment : debt.getPayments()) {
-						builder.append("\t");
-						builder.append(String.format(context.getString(R.string.debtsummary_history_entryformat),
-								currency.render(payment.amount),
-								Resource.monthDateFormat.format(payment.date)));
-						builder.append("\n");
-					}
+					builder.append(String.format(context.getString(R.string.debtsummary_history_entryformat),
+							currency.render(payment.amount),
+							Resource.monthDateFormat.format(payment.date)));
+					builder.append("\n");
 				}
 			}
 		}

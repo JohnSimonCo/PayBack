@@ -19,12 +19,10 @@ public class PaidBackDialogFragment extends BaseDialogFragment {
 	public final static int UNDO_PAY_BACK = 1;
 
 	private static boolean payBack = false;
-	private static Debt debt;
     private static boolean evenOut;
 
-	public static PaidBackDialogFragment newInstance(int flag, Debt _debt, boolean _evenOut) {
+	public static PaidBackDialogFragment newInstance(int flag, boolean _evenOut) {
 		payBack = flag == PAY_BACK;
-		debt = _debt;
         evenOut = _evenOut;
 		return new PaidBackDialogFragment();
 	}
@@ -89,7 +87,7 @@ public class PaidBackDialogFragment extends BaseDialogFragment {
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				completeCallback.onComplete(debt);
+				completeCallback.onComplete();
 				alertDialog.dismiss();
 			}
 		}, 1000);
@@ -98,7 +96,7 @@ public class PaidBackDialogFragment extends BaseDialogFragment {
 	}
 
     public interface CompleteCallback {
-		public void onComplete(Debt debt);
+		void onComplete();
 	}
 
 }
