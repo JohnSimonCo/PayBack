@@ -257,7 +257,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 	}
 
 	private void sort(BaseActivity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
-		Undo.executeAction(self, R.string.sort_list, null, new Undo.UndoableAction() {
+		Undo.executeAction(self, R.string.sort_list, masterLayout, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
                 adapter.people = result.people;
