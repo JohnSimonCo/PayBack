@@ -27,10 +27,12 @@ import com.makeramen.RoundedImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class DebtDetailDialogFragment extends DataDialogFragment {
 
-    public static Debt debt = null;
+    public static UUID debtId = null;
+    public static Debt exposedDebt = null;
 
     public Callback callback = null;
     public AlertDialog alertDialog;
@@ -38,8 +40,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
 	private TextView dialog_custom_amount;
 
-    public static DebtDetailDialogFragment newInstance(Debt debt) {
-        DebtDetailDialogFragment.debt = debt;
+    public static DebtDetailDialogFragment newInstance(UUID debtId) {
+        DebtDetailDialogFragment.debtId = debtId;
 
         return new DebtDetailDialogFragment();
     }
@@ -80,6 +82,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         dialog_custom_send.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+                Debt debt = getDebt();
+
 				Intent sendIntent = new Intent();
 				sendIntent.setAction(Intent.ACTION_SEND);
 				sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
@@ -236,7 +240,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
 	public void displayPaybackAnimation() {
 		PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(
-				debt.isPaidBack() ? PaidBackDialogFragment.PAY_BACK : PaidBackDialogFragment.UNDO_PAY_BACK, false);
+				getDebt().isPaidBack() ? PaidBackDialogFragment.PAY_BACK : PaidBackDialogFragment.UNDO_PAY_BACK, false);
 
 		paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
 		paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
@@ -253,15 +257,22 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
 	@Override
 	protected void onDataReceived() {
+        Debt debt = getDebt();
+        exposedDebt = debt;
+
 		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
 		dialog_custom_amount.setTextColor(getResources().getColor(
 				debt.getAmount() < 0 ? debt.getColor() : R.color.green_strong));
 	}
 
+    public Debt getDebt() {
+        return data.findDebt(debtId);
+    }
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		debt = null;
+		debtId = null;
 	}
 
 	public interface Callback {
@@ -275,7 +286,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         @Override
         public void onSelected(String name) {
             if (callback != null) {
-                callback.onMove(debt, data.findPersonByName(name));
+                callback.onMove(getDebt(), data.findPersonByName(name));
             }
         }
     };
