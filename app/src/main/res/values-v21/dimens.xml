@@ -6,4 +6,7 @@
     <dimen name="feed_fab_bottom_margin">14dp</dimen>
     <dimen name="create_fab_top_margin">197dp</dimen>
 
+    <dimen name="fab_right_margin">8dp</dimen>
+    <dimen name="fab_create_right_margin">8dp</dimen>
+
 </resources>

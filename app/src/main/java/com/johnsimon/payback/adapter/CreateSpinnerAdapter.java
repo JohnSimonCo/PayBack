@@ -92,13 +92,13 @@ public class CreateSpinnerAdapter extends ArrayAdapter<CreateSpinnerAdapter.Cale
 
 	public static class CalendarOptionItem {
 
-		public final static int FLAG_CALENDAR_CUSTOM = -1;
-		public final static int FLAG_CALENDAR_TODAY = 1;
-		public final static int FLAG_CALENDAR_TOMORROW = 2;
-		public final static int FLAG_CALENDAR_MORNING = 3;
-		public final static int FLAG_CALENDAR_AFTERNOON = 4;
-		public final static int FLAG_CALENDAR_EVENING = 5;
-		public final static int FLAG_CALENDAR_NIGHT = 6;
+		public final static int FLAG_CALENDAR_CUSTOM = 		-1;
+		public final static int FLAG_CALENDAR_TODAY = 		1;
+		public final static int FLAG_CALENDAR_TOMORROW = 	2;
+		public final static int FLAG_CALENDAR_MORNING = 	3;
+		public final static int FLAG_CALENDAR_AFTERNOON = 	4;
+		public final static int FLAG_CALENDAR_EVENING = 	5;
+		public final static int FLAG_CALENDAR_NIGHT = 		6;
 
 		public String text;
 		public String secondaryText;

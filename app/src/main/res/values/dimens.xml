@@ -13,7 +13,7 @@
     <dimen name="fab_bottom_margin">-36dp</dimen>
     <dimen name="feed_image_gradient_bottom_margin">40dp</dimen>
     <dimen name="base_padding">16dp</dimen>
-    <dimen name="fab_right_margin">0dp</dimen>
+    <dimen name="fab_right_margin">-8dp</dimen>
     <dimen name="list_header_height">176dp</dimen>
     <dimen name="list_header_height_full">180dp</dimen>
     <dimen name="list_header_image_height">140dp</dimen>

@@ -286,7 +286,7 @@ public class CreateDebtActivity extends DataActivity {
                 switch (dayList.get(position).calendarFlag) {
                     case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
                         Calendar nowToday = Calendar.getInstance();
-                        nowToday.setTimeInMillis(nowToday.getTimeInMillis() + Resource.ONE_DAY);
+                        nowToday.setTimeInMillis(nowToday.getTimeInMillis());
 
                         reminderCalendar.set(Calendar.YEAR, nowToday.get(Calendar.YEAR));
                         reminderCalendar.set(Calendar.MONTH, nowToday.get(Calendar.MONTH));
