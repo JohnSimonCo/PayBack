@@ -37,6 +37,7 @@ public class Undo {
 			}
 		});
 
+		snackbar.setActionTextColor(activity.getResources().getColor(R.color.accent_color));
 		snackbar.show();
 
 		action.onDisplay();

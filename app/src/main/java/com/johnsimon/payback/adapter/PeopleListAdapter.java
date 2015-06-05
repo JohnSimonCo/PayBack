@@ -1,9 +1,11 @@
 package com.johnsimon.payback.adapter;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
@@ -21,6 +23,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 	private View emptyView;
     private AppData data;
     private TextView managerTitle;
+	private ImageView people_manager_empty_image;
     public ArrayList<Person> people;
 
 	public PeopleListClickListener clickListener = null;
@@ -41,7 +44,6 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 			this.avatarLetter =(TextView) _itemView.findViewById(R.id.people_list_item_avatar_letter);
 			this.debtsCount =(TextView) _itemView.findViewById(R.id.people_list_item_debts);
 			this.itemView = _itemView;
-
 		}
 	}
 
@@ -51,6 +53,8 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
         this.data = data;
         this.managerTitle = managerTitle;
 		this.people = _people;
+
+		this.people_manager_empty_image = (ImageView) emptyView.findViewById(R.id.people_manager_empty_image);
 	}
 
 	@Override
@@ -60,7 +64,6 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 
 	@Override
 	public void onBindViewHolder(PeopleListAdapter.ViewHolder holder, final int position) {
-
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -93,8 +96,18 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 
 		if (people.size() == 0) {
 			emptyView.setVisibility(View.VISIBLE);
+			people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
+			people_manager_empty_image.post(new Runnable() {
+				@Override
+				public void run() {
+					AnimationDrawable frameAnimation = (AnimationDrawable) people_manager_empty_image.getBackground();
+					frameAnimation.start();
+				}
+			});
 		} else {
 			emptyView.setVisibility(View.GONE);
+			people_manager_empty_image.setBackground(null);
+
 		}
 	}
 
@@ -119,7 +132,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 	}
 
 	public interface PeopleListClickListener {
-		public void onListItemClick(int position);
+		void onListItemClick(int position);
 	}
 
 }

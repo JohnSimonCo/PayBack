@@ -842,15 +842,7 @@ public class CreateDebtActivity extends DataActivity {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     int color = Resource.mixTwoColors(colorWhite, colorOrange, valueAnimator.getAnimatedFraction());
-
-                    ColorStateList a = new ColorStateList(new int[][]{
-                            new int[]{android.R.attr.state_pressed},
-                            new int[]{}
-                    }, new int[] {
-                            color,
-                            color
-                    });
-                    create_fab.setBackgroundTintList(a);
+                    create_fab.setBackgroundTintList(ColorStateList.valueOf(color));
                 }
             });
 
@@ -870,15 +862,7 @@ public class CreateDebtActivity extends DataActivity {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     int color = Resource.mixTwoColors(colorOrange, colorWhite, valueAnimator.getAnimatedFraction());
-
-                    ColorStateList a = new ColorStateList(new int[][]{
-                            new int[]{android.R.attr.state_pressed},
-                            new int[]{}
-                    }, new int[] {
-                            color,
-                            color
-                    });
-                    create_fab.setBackgroundTintList(a);
+                    create_fab.setBackgroundTintList(ColorStateList.valueOf(color));
                 }
             });
 

@@ -81,7 +81,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		recyclerView = (RecyclerView) findViewById(R.id.people_recycler_view);
 
 		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager( new LinearLayoutManager(this));
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setItemAnimator(null);
 
 		DragSortRecycler dragSortRecycler = new DragSortRecycler();
@@ -96,16 +96,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		recyclerView.addItemDecoration(dragSortRecycler);
 		recyclerView.addOnItemTouchListener(dragSortRecycler);
 		recyclerView.addOnScrollListener(dragSortRecycler.getScrollListener());
-
-        final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
-		people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
-		people_manager_empty_image.post(new Runnable() {
-            @Override
-            public void run() {
-                AnimationDrawable frameAnimation = (AnimationDrawable) people_manager_empty_image.getBackground();
-                frameAnimation.start();
-            }
-        });
 
 		TypedValue tv = new TypedValue();
 		if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
@@ -129,7 +119,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         }
 
 		setupTreeObserver();
-
     }
 
 	@Override
