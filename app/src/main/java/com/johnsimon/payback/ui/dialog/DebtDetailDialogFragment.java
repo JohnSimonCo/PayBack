@@ -31,17 +31,25 @@ import java.util.UUID;
 
 public class DebtDetailDialogFragment extends DataDialogFragment {
 
-    public static UUID debtId = null;
-    public static Debt exposedDebt = null;
+    public static Debt debt = null;
 
     public Callback callback = null;
-    public AlertDialog alertDialog;
+    private Button dialog_custom_payback;
+    private Button dialog_custom_send;
+    private Button dialog_custom_payment;
+    private TextView dialog_paid_back_date;
+    private TextView dialog_custom_title;
+    private TextView dialog_custom_content;
+    private ImageButton detailDialogOverflow;
+    private RoundedImageView avatar;
+    private TextView avatarLetter;
+    private TextView dialog_custom_amount;
+
     public MenuItem detailMenuPay;
+    public AlertDialog alertDialog;
 
-	private TextView dialog_custom_amount;
-
-    public static DebtDetailDialogFragment newInstance(UUID debtId) {
-        DebtDetailDialogFragment.debtId = debtId;
+    public static DebtDetailDialogFragment newInstance(Debt debt) {
+        DebtDetailDialogFragment.debt = debt;
 
         return new DebtDetailDialogFragment();
     }
@@ -55,99 +63,37 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
         final View rootView = inflater.inflate(R.layout.detail_dialog, null);
 
-        Button dialog_custom_payback = (Button) rootView.findViewById(R.id.dialog_custom_payback);
-        Button dialog_custom_send = (Button) rootView.findViewById(R.id.dialog_custom_send);
-        Button dialog_custom_payment = (Button) rootView.findViewById(R.id.dialog_custom_payment);
-
-        if (debt.isPaidBack()) {
-            dialog_custom_payback.setText(R.string.undo_pay_back);
-            dialog_custom_payback.setTextColor(getResources().getColor(R.color.red));
-
-            dialog_custom_payment.setVisibility(View.GONE);
-
-            Long datePaidBack = debt.getDatePaidBack();
-            if (datePaidBack != null) {
-                TextView dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
-                dialog_paid_back_date.setVisibility(View.VISIBLE);
-
-                SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
-
-                Calendar target = Calendar.getInstance();
-                target.setTimeInMillis(datePaidBack);
-
-                dialog_paid_back_date.setText(getString(R.string.paid_back_when, simpleDateFormat.format(target.getTime())));
-            }
-        }
-
-        dialog_custom_send.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-                Debt debt = getDebt();
-
-				Intent sendIntent = new Intent();
-				sendIntent.setAction(Intent.ACTION_SEND);
-				sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
-				sendIntent.setType("text/plain");
-				startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences.getCurrency()) : getString(R.string.share)));
-			}
-		});
-
-        dialog_custom_payback.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				boolean payback = !debt.isPaidBack();
-				if (payback) {
-					debt.payback();
-				} else {
-					debt.unpayback();
-				}
-
-				if (payback && debt.getRemindDate() != null) {
-					Alarm.cancelAlarm(getActivity(), debt);
-					debt.setRemindDate(null);
-				}
-
-				storage.commit();
-				displayPaybackAnimation();
-			}
-		});
-
-		dialog_custom_payment.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				NumberPickerBuilder builder = new NumberPickerBuilder()
-						.setLabelText(data.preferences.getCurrency().getDisplayName())
-						.setFragmentManager(((AppCompatActivity) getActivity()).getSupportFragmentManager())
-						.setStyleResId(R.style.BetterPickersDialogFragment_CustomLight)
-						.setPlusMinusVisibility(View.INVISIBLE)
-						.setMaxNumber((int) Math.ceil(debt.getRemainingAbsoluteDebt()));
-
-
-				builder.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandler() {
-					@Override
-					public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
-						debt.addPayment(fullNumber);
-						storage.commit();
-
-						if(debt.isPaidBack()) {
-							displayPaybackAnimation();
-						} else {
-							if (callback != null) {
-								callback.onRefresh();
-							}
-							alertDialog.dismiss();
-						}
-					}
-				});
-
-				builder.show();
-			}
-		});
+        dialog_custom_payback = (Button) rootView.findViewById(R.id.dialog_custom_payback);
+        dialog_custom_send = (Button) rootView.findViewById(R.id.dialog_custom_send);
+        dialog_custom_payment = (Button) rootView.findViewById(R.id.dialog_custom_payment);
 
         dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
+        dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
 
-        TextView dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
-        TextView dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
+        dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
+        dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
+
+        detailDialogOverflow = (ImageButton) rootView.findViewById(R.id.detail_dialog_overflow);
+
+        avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
+        avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
+
+        builder.setView(rootView);
+
+        alertDialog = builder.create();
+
+        return alertDialog;
+    }
+
+	@Override
+	protected void onDataReceived() {
+        DebtDetailDialogFragment.debt = data.findDebt(debt.id);
+
+        Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
+
+		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
+		dialog_custom_amount.setTextColor(getResources().getColor(
+                debt.getAmount() < 0 ? debt.getColor() : R.color.green_strong));
 
         dialog_custom_title.setText(debt.getOwner().getName());
 
@@ -157,7 +103,95 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
             dialog_custom_content.setText(debt.getNote());
         }
 
-        ImageButton detailDialogOverflow = (ImageButton) rootView.findViewById(R.id.detail_dialog_overflow);
+        if (debt.isPaidBack()) {
+            dialog_custom_payback.setText(R.string.undo_pay_back);
+            dialog_custom_payback.setTextColor(getResources().getColor(R.color.red));
+
+            dialog_custom_payment.setVisibility(View.GONE);
+
+            Long datePaidBack = debt.getDatePaidBack();
+            if (datePaidBack != null) {
+                dialog_paid_back_date.setVisibility(View.VISIBLE);
+
+                SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
+
+                Calendar target = Calendar.getInstance();
+                target.setTimeInMillis(datePaidBack);
+
+                dialog_paid_back_date.setText(getString(R.string.paid_back_when, simpleDateFormat.format(target.getTime())));
+            }
+        } else {
+            dialog_custom_payback.setText(R.string.pay_back);
+            dialog_custom_payback.setTextColor(getResources().getColor(R.color.button_color));
+
+            dialog_custom_payment.setVisibility(View.VISIBLE);
+
+            dialog_paid_back_date.setVisibility(View.GONE);
+        }
+
+        dialog_custom_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, debt.getShareString(getActivity(), data.preferences.getCurrency()));
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, Resource.isLOrAbove() ? debt.getShareString(getActivity(), data.preferences.getCurrency()) : getString(R.string.share)));
+            }
+        });
+
+        dialog_custom_payback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean payback = !debt.isPaidBack();
+                if (payback) {
+                    debt.payback();
+                } else {
+                    debt.unpayback();
+                }
+
+                if (payback && debt.getRemindDate() != null) {
+                    Alarm.cancelAlarm(getActivity(), debt);
+                    debt.setRemindDate(null);
+                }
+
+                storage.commit();
+                displayPaybackAnimation();
+            }
+        });
+
+        dialog_custom_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NumberPickerBuilder builder = new NumberPickerBuilder()
+                        .setLabelText(data.preferences.getCurrency().getDisplayName())
+                        .setFragmentManager(((AppCompatActivity) getActivity()).getSupportFragmentManager())
+                        .setStyleResId(R.style.BetterPickersDialogFragment_CustomLight)
+                        .setPlusMinusVisibility(View.INVISIBLE)
+                        .setMaxNumber((int) Math.ceil(debt.getRemainingAbsoluteDebt()));
+
+
+                builder.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandler() {
+                    @Override
+                    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
+                        debt.addPayment(fullNumber);
+                        storage.commit();
+
+                        if (debt.isPaidBack()) {
+                            displayPaybackAnimation();
+                        } else {
+                            if (callback != null) {
+                                callback.onRefresh();
+                            }
+                            alertDialog.dismiss();
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
         detailDialogOverflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,18 +238,18 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 args.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
                                 personPickerDialogFragment.setArguments(args);
 
-								FragmentManager fm = getFragmentManager();
-								if (fm != null) {
-									personPickerDialogFragment.show(fm, "person_dialog");
-									personPickerDialogFragment.completeCallback = changePersonCallback;
-								}
+                                FragmentManager fm = getFragmentManager();
+                                if (fm != null) {
+                                    personPickerDialogFragment.show(fm, "person_dialog");
+                                    personPickerDialogFragment.completeCallback = changePersonCallback;
+                                }
 
                                 alertDialog.dismiss();
                                 return true;
 
-							case R.id.detail_dialog_pay_back:
+                            case R.id.detail_dialog_pay_back:
                                 SwishLauncher.startSwish(getActivity(), debt.getRemainingAbsoluteDebt(), debt.getOwner());
-								return true;
+                                return true;
 
                             default:
                                 return false;
@@ -225,55 +259,24 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                 popupMenu.show();
             }
         });
+	}
 
-        RoundedImageView avatar = (RoundedImageView) rootView.findViewById(R.id.detail_dialog_avatar);
-        TextView avatarLetter = (TextView) rootView.findViewById(R.id.detail_dialog_avatar_letter);
+    public void displayPaybackAnimation() {
+        PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(
+                debt.isPaidBack() ? PaidBackDialogFragment.PAY_BACK : PaidBackDialogFragment.UNDO_PAY_BACK, false);
 
-        Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
+        paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
+        paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
+            @Override
+            public void onComplete() {
+                if (callback != null) {
+                    callback.onRefresh();
+                }
+            }
+        };
 
-        builder.setView(rootView);
-
-        alertDialog = builder.create();
-
-        return alertDialog;
+        alertDialog.dismiss();
     }
-
-	public void displayPaybackAnimation() {
-		PaidBackDialogFragment paidBackDialogFragment = PaidBackDialogFragment.newInstance(
-				getDebt().isPaidBack() ? PaidBackDialogFragment.PAY_BACK : PaidBackDialogFragment.UNDO_PAY_BACK, false);
-
-		paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "paid_back_dialog");
-		paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
-			@Override
-			public void onComplete() {
-				if (callback != null) {
-					callback.onRefresh();
-				}
-			}
-		};
-
-		alertDialog.dismiss();
-	}
-
-	@Override
-	protected void onDataReceived() {
-        Debt debt = getDebt();
-        exposedDebt = debt;
-
-		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
-		dialog_custom_amount.setTextColor(getResources().getColor(
-				debt.getAmount() < 0 ? debt.getColor() : R.color.green_strong));
-	}
-
-    public Debt getDebt() {
-        return data.findDebt(debtId);
-    }
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		debtId = null;
-	}
 
 	public interface Callback {
 		void onRefresh();
@@ -286,7 +289,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         @Override
         public void onSelected(String name) {
             if (callback != null) {
-                callback.onMove(getDebt(), data.findPersonByName(name));
+                callback.onMove(debt, data.findPersonByName(name));
             }
         }
     };

@@ -28,8 +28,8 @@ public class Beamer implements NfcAdapter.CreateNdefMessageCallback {
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
-		if(DebtDetailDialogFragment.exposedDebt != null) {
-			return createMessage(new Debt[] {DebtDetailDialogFragment.exposedDebt}, false);
+		if(DebtDetailDialogFragment.debt != null) {
+			return createMessage(new Debt[] {DebtDetailDialogFragment.debt}, false);
 		} else if(!FeedActivity.isAll()) {
 			return createMessage(FeedActivity.feed.toArray(new Debt[FeedActivity.feed.size()]), true);
 		} else {
