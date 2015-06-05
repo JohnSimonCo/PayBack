@@ -194,15 +194,15 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 	}
 
     public void displayTotalDebt(Resources resources) {
-		float debt = AppData.total(FeedActivity.feed);
+		float total = AppData.total(FeedActivity.feed);
 
-        if (debt == 0) {
+        if (total == 0) {
             feed_header_balance.setVisibility(View.GONE);
         } else {
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
+		totalDebtTextView.setText(Debt.totalString(total, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {

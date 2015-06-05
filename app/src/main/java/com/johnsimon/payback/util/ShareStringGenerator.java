@@ -125,6 +125,7 @@ public class ShareStringGenerator {
 			}
 			builder.append(")");
 		}
+
 	}
 	/*
 	I owe you a total of £ 84.85
