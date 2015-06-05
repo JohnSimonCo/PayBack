@@ -48,4 +48,6 @@
 
     <dimen name="people_fab_margin_right">0dp</dimen>
 
+    <dimen name="people_offset">0dp</dimen>
+
 </resources>

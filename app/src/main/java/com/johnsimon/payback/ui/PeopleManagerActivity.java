@@ -112,7 +112,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 			} else {
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
                 params.setMargins(0, actionBarHeight + Resource.getPx(28, getResources()) - Resource.getPx(28, getResources()),
-                        (int) (getResources().getDimension(R.dimen.fab_right_margin)), 0);
+                        (int) (getResources().getDimension(R.dimen.fab_right_margin)) - (int) (getResources().getDimension(R.dimen.people_offset)), 0);
 
                 fab.setLayoutParams(params);
             }

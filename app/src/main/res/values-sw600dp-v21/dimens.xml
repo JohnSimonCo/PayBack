@@ -7,4 +7,8 @@
     <dimen name="fab_right_margin">22dp</dimen>
     <dimen name="create_right_margin_small">96dp</dimen>
 
+    <dimen name="fab_create_right_margin">22dp</dimen>
+
+    <dimen name="people_offset">2dp</dimen>
+
 </resources>
