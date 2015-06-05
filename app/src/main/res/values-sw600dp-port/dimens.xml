@@ -21,9 +21,9 @@
     <dimen name="create_start_margin">116dp</dimen>
     <dimen name="create_start_margin_small">56dp</dimen>
 
-    <dimen name="create_right_margin">62dp</dimen>
+    <dimen name="create_right_margin">95dp</dimen>
     <dimen name="create_right_margin_small">62dp</dimen>
-    <dimen name="fab_create_right_margin">22dp</dimen>
+    <dimen name="fab_create_right_margin">6dp</dimen>
 
     <dimen name="create_fab_top_margin">180dp</dimen>
 

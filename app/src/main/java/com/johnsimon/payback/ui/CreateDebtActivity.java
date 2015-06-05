@@ -87,6 +87,7 @@ public class CreateDebtActivity extends DataActivity {
 	private Button reminderButton;
     private Button reminderDayButton;
     private Button reminderTimeButton;
+    private View reminderDivider;
 	private ImageButton clearReminderButton;
 	private RadioGroup radioGroup;
     private ScrollView mainScrollView;
@@ -253,6 +254,7 @@ public class CreateDebtActivity extends DataActivity {
 
         reminderDayButton = (Button) findViewById(R.id.create_button_day);
         reminderTimeButton = (Button) findViewById(R.id.create_button_time);
+        reminderDivider = findViewById(R.id.create_button_divider);
 
         final ListPopupWindow popupWindowDay = new ListPopupWindow(this);
         final ListPopupWindow popupWindowTime = new ListPopupWindow(this);
@@ -481,10 +483,12 @@ public class CreateDebtActivity extends DataActivity {
                         clearReminderButton.setVisibility(View.VISIBLE);
                         reminderDayButton.setVisibility(View.VISIBLE);
                         reminderTimeButton.setVisibility(View.VISIBLE);
+                        reminderDivider.setVisibility(View.VISIBLE);
 
                         clearReminderButton.startAnimation(fadeIn);
                         reminderDayButton.startAnimation(fadeIn);
                         reminderTimeButton.startAnimation(fadeIn);
+                        reminderDivider.startAnimation(fadeIn);
                     }
 
                     @Override
@@ -500,6 +504,7 @@ public class CreateDebtActivity extends DataActivity {
                 clearReminderButton.setVisibility(View.VISIBLE);
                 reminderDayButton.setVisibility(View.VISIBLE);
                 reminderTimeButton.setVisibility(View.VISIBLE);
+                reminderDivider.setVisibility(View.VISIBLE);
             }
 		} else {
 
@@ -508,6 +513,7 @@ public class CreateDebtActivity extends DataActivity {
                 clearReminderButton.setVisibility(View.VISIBLE);
                 reminderDayButton.setVisibility(View.VISIBLE);
                 reminderTimeButton.setVisibility(View.VISIBLE);
+                reminderDivider.setVisibility(View.VISIBLE);
 
                 Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_out_fast);
 
@@ -523,6 +529,7 @@ public class CreateDebtActivity extends DataActivity {
                         clearReminderButton.setVisibility(View.GONE);
                         reminderDayButton.setVisibility(View.GONE);
                         reminderTimeButton.setVisibility(View.GONE);
+                        reminderDivider.setVisibility(View.GONE);
 
                         Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_in_fast);
 
@@ -540,12 +547,14 @@ public class CreateDebtActivity extends DataActivity {
                 clearReminderButton.startAnimation(fadeOut);
                 reminderDayButton.startAnimation(fadeOut);
                 reminderTimeButton.startAnimation(fadeOut);
+                reminderDivider.startAnimation(fadeOut);
 
             } else {
                 reminderButton.setVisibility(View.VISIBLE);
                 clearReminderButton.setVisibility(View.GONE);
                 reminderDayButton.setVisibility(View.GONE);
                 reminderTimeButton.setVisibility(View.GONE);
+                reminderDivider.setVisibility(View.GONE);
             }
 
 		}
