@@ -2,6 +2,8 @@ package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
@@ -216,7 +218,6 @@ public class FeedActivity extends DataActivity implements
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 			beamer.processIntent(intent);
 		} else if (intent.getExtras() != null && intent.getExtras().get(Alarm.ALARM_ID) != null) {
-            //TODO TEST
             Debt debt = data.findDebt((UUID) intent.getExtras().get(Alarm.ALARM_ID));
 
 			if(debt == null) {
@@ -229,6 +230,10 @@ public class FeedActivity extends DataActivity implements
             onFeedChange();
 
             feedFragment.showDetail(debt);
+
+			NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.cancel(debt.id.hashCode());
+
         }
     }
 
