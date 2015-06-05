@@ -277,6 +277,15 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         alertDialog.dismiss();
     }
 
+	public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
+		@Override
+		public void onSelected(String name) {
+			if (callback != null) {
+				callback.onMove(debt, data.findPersonByName(name));
+			}
+		}
+	};
+
 	public interface Callback {
 		void onRefresh();
 		void onDelete(Debt debt);
@@ -284,12 +293,5 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 		void onMove(Debt debt, Person person);
 	}
 
-    public PersonPickerDialogFragment.PersonSelectedCallback changePersonCallback = new PersonPickerDialogFragment.PersonSelectedCallback() {
-        @Override
-        public void onSelected(String name) {
-            if (callback != null) {
-                callback.onMove(debt, data.findPersonByName(name));
-            }
-        }
-    };
+
 }

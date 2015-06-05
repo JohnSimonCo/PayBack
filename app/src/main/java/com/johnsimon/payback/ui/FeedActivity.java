@@ -28,6 +28,7 @@ import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
+import com.johnsimon.payback.data.DebtState;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
@@ -57,6 +58,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
@@ -633,11 +636,11 @@ public class FeedActivity extends DataActivity implements
         paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
             @Override
             public void onComplete() {
-				final ArrayList<Debt> oldDebts = new ArrayList<>();
+				final ArrayList<DebtState> oldState = new ArrayList<>();
 
-                for(Debt debt: feed) {
-					oldDebts.add(debt.copy());
-                }
+				for(Debt debt : feed) {
+					oldState.add(new DebtState(debt));
+				}
 
                 Undo.executeAction(FeedActivity.this, R.string.evened_out, masterLayout, new Undo.UndoableAction() {
                     @Override
@@ -658,9 +661,10 @@ public class FeedActivity extends DataActivity implements
 
 					@Override
 					public void onRevert() {
-						feed.clear();
-						feed.addAll(oldDebts);
-						for (Debt debt : feed) {
+						for (int i = 0; i < feed.size(); i++) {
+							Debt debt = feed.get(i);
+							oldState.get(i).restore(debt);
+
 							if (debt.getRemindDate() != null) {
 								Alarm.addAlarm(FeedActivity.this, debt);
 							}

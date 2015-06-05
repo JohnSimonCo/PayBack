@@ -275,10 +275,6 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		return id.hashCode();
 	}
 
-	public Debt copy() {
-		return new Debt(owner, amount, note, id, timestamp, touched, paidBack, new ArrayList<>(payments), currencyId);
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) return false;
