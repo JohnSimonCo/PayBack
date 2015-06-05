@@ -20,7 +20,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -187,7 +186,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 currencyDialogFragment.currencySelectedCallback = new CurrencyDialogFragment.CurrencySelectedCallback() {
                     @Override
                     public void onCurrencySelected() {
-                        pref_currency.setSummary(data.preferences.getCurrency().render());
+                        pref_currency.setSummary(data.preferences.getCurrency().renderSelf());
                     }
                 };
 
@@ -389,7 +388,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		bindPreferenceSummaryToValue(pref_background);
 		bindPreferenceSummaryToValue(pref_currency);
 
-		pref_currency.setSummary(data.preferences.getCurrency().render());
+		pref_currency.setSummary(data.preferences.getCurrency().renderSelf());
 		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
 
 	}

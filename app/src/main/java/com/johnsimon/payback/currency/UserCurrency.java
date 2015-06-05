@@ -40,7 +40,7 @@ public class UserCurrency {
 		return displayName == null ? id : displayName;
 	}
 
-	public String render() {
+	public String renderSelf() {
 		String output = this.id;
 		if(displayName != null && !displayName.equals(id)) {
 			output += " (" + displayName + ")";

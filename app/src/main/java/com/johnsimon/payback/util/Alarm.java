@@ -2,38 +2,26 @@ package com.johnsimon.payback.util;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.View;
-import android.widget.DatePicker;
 import android.widget.RemoteViews;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.currency.CurrencyUtils;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
-import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.RemindLaterActivity;
 
-import java.util.Calendar;
 import java.util.UUID;
 
 public class Alarm  {
@@ -155,7 +143,7 @@ public class Alarm  {
 
         private String getContentText(Debt debt, AppData data) {
 			int format = debt.getAmount() > 0 ? R.string.notif_they_owe : R.string.notif_you_owe;
-			return context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getAmount()));
+			return context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getRemainingAbsoluteDebt()));
         }
     }
 
@@ -196,26 +184,37 @@ public class Alarm  {
             storage.subscription.listen(dataLoadedCallback);
         }
 
+		private final static int REMOVE_PAIDBACK_NOTIFICATION_DELAY = 5000;
         private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
             @Override
             public void onCalled(AppData data) {
+				storage.subscription.unregister(this);
 
                 UUID id = (UUID) intent.getExtras().get(ALARM_ID);
                 final Debt debt = data.findDebt(id);
 
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
 						debt.payback();
 
                         storage.commit();
+						storage.emit();
 
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_stat_negative)
                                 .setContent(new RemoteViews(context.getPackageName(), R.layout.paid_back_notification));
 
                         notificationManager.notify(debt.id.hashCode(), builder.build());
+
+						final Handler handler = new Handler();
+						handler.postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								notificationManager.cancel(debt.id.hashCode());
+							}
+						}, REMOVE_PAIDBACK_NOTIFICATION_DELAY);
 
                         break;
 
