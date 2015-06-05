@@ -320,16 +320,16 @@ public class Resource {
         @Override
         public int compare(Debt a, Debt b) {
             if (a.isPaidBack()) {
-                if(b.isPaidBack()) {
-                    return (int) Math.round(b.getAbsoluteAmount() - a.getAbsoluteAmount());
-				} else {
+                if(!b.isPaidBack()) {
+					//Only a is
 					return 1;
 				}
 			} else if(b.isPaidBack()) {
+				//Only b is
 				return -1;
-			} else {
-				return (int) Math.round(b.getAbsoluteAmount() - a.getAbsoluteAmount());
 			}
+			//Both or none is
+			return (int) Math.round(b.getRemainingAbsoluteDebt() - a.getRemainingAbsoluteDebt());
         }
     }
 
@@ -339,6 +339,7 @@ public class Resource {
             return Math.round(debt2.timestamp - debt1.timestamp);
         }
     }
+
 
 	public static class AlphabeticalStringComparator implements Comparator<String> {
 		@Override
