@@ -129,7 +129,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                     new MaterialDialog.Builder(SettingsActivity.this)
                             .title(R.string.pref_restore_data)
                             .content(R.string.pref_restore_data_description)
-                            .positiveText(R.string.restore_single)
+                            .positiveText(R.string.restore)
                             .negativeText(R.string.cancel)
                             .callback(new MaterialDialog.ButtonCallback() {
                                 @Override
@@ -217,7 +217,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
         Resource.checkFull(bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", null));
         if (!Resource.isFull) {
-            pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
+            pref_cloud_sync.setSummary(R.string.not_full_version);
             pref_cloud_sync.setEnabled(false);
         } else {
 			pref_cloud_sync.setChecked(StorageManager.isDrive(this));

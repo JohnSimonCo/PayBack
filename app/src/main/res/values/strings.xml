@@ -140,8 +140,6 @@
     <string name="author_icon">Jovie Brett Bardoles</string>
     <string name="lib_riv">RoundedImageView</string>
     <string name="author_riv">Vince Mi</string>
-    <string name="lib_fab">Floating Action Button</string>
-    <string name="author_fab">Faiz Malkani</string>
     <string name="lib_gson">GSON</string>
     <string name="author_gson">Google</string>
     <string name="lib_pic">Picasso</string>
@@ -150,8 +148,6 @@
     <string name="author_dsr">Emile Belanger</string>
     <string name="lib_qr">QuickReturn</string>
     <string name="author_qr">Etienne Lawlor</string>
-    <string name="lib_snb">Snackbar</string>
-    <string name="author_snb">William Mora</string>
     <string name="lib_md">Material Dialogs</string>
     <string name="author_md">Aidan Follestad</string>
     <string name="lib_rbm">Android-RobotoTextView</string>
