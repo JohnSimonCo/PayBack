@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -41,7 +40,7 @@ import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
-import com.johnsimon.payback.ui.dialog.RestoreBackupDialog;
+import com.johnsimon.payback.ui.dialog.InitialRestoreBackupDialog;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
@@ -54,15 +53,8 @@ import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
-import junit.framework.Assert;
-
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
@@ -121,7 +113,7 @@ public class FeedActivity extends DataActivity implements
 		Resource.init(getApplicationContext());
 		if (Resource.isFirstRun(storage.getPreferences())) {
 
-			RestoreBackupDialog.attemptRestore(this, storage).then(new Callback<Boolean>() {
+			InitialRestoreBackupDialog.attemptRestore(this, storage).then(new Callback<Boolean>() {
 				@Override
 				public void onCalled(Boolean restored) {
 					if (!restored) {
@@ -193,7 +185,6 @@ public class FeedActivity extends DataActivity implements
 		feedSubscription.broadcast(feed);
 
 		BackupManager.fetchBackups();
-		BackupManager.clearBackups();
 		BackupManager.createBackup(Resource.gson.toJson(data), true);
 		BackupManager.fetchBackups();
 

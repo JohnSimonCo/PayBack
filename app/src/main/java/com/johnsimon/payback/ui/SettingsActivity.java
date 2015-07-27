@@ -137,7 +137,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                     super.onPositive(dialog);
 
                                     FeedActivity.goToAll();
-                                    storage.commit(AppData.fromJson(result.content));
+                            //TODO 777        storage.commit(AppData.fromJson(result.content));
                                     storage.emit();
 
                                     Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
@@ -346,27 +346,25 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     }
 
-<<<<<<< HEAD
-	private void displayWriteResult(BackupManager.WriteResult result) {
-=======
-    //TODO REPLACE "" with date
     private String getRestoreSummary() {
-        if (FileManager.hasFile()) {
-            return String.format(getString(R.string.pref_backup_last), "");
+        BackupManager.ReadResult<BackupManager.Backup[]> backups = BackupManager.fetchBackups();
+
+        if (backups != null && backups.data.length > 0) {
+            //TODO REPLACE FILENAME WITH DATE
+            return String.format(getString(R.string.pref_backup_last), backups.data[0].fileName);
         } else {
             return null;
         }
     }
 
-	private void displayWriteResult(FileManager.WriteResult result) {
->>>>>>> origin/dev
-		snackbar(result.success
+	private void displayWriteResult(BackupManager.WriteResult result) {
+        snackbar(result.success
 				? getString(R.string.save_success_start, BackupManager.simpleFilePath)
 				: getString(R.string.save_fail));
 	}
 
 	private void displayReadError(BackupManager.ReadResult result) {
-		snackbar(getString(result.error == BackupManager.ReadResult.ERROR_NO_FILE ? R.string.no_file : R.string.read_failed));
+		snackbar(getString(result.error == BackupManager.ReadError.NoFile ? R.string.no_file : R.string.read_failed));
 	}
 
 	private void snackbar(String text) {

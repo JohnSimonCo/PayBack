@@ -9,7 +9,7 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.BackupManager;
 
-public class RestoreBackupDialog {
+public class InitialRestoreBackupDialog {
 
 	public static Promise<Boolean> attemptRestore(Context context, final Storage storage) {
 		final Promise<Boolean> p = new Promise<>();
@@ -24,7 +24,7 @@ public class RestoreBackupDialog {
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override
 						public void onPositive(MaterialDialog dialog) {
-							storage.commit(AppData.fromJson(result.content));
+					//TODO 777		storage.commit(AppData.fromJson(result.content));
 							storage.emit();
 							
 							p.fire(true);
