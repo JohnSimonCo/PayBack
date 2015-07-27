@@ -168,7 +168,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             pref_export_data.setEnabled(true);
             pref_import_data.setEnabled(true);
             pref_export_data.setSummary(null);
-            pref_import_data.setSummary(null);
+            pref_import_data.setSummary(getRestoreSummary());
         }
 
         pref_currency = findPreference("pref_currency");
@@ -346,6 +346,15 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     }
 
+    //TODO REPLACE "" with date
+    private String getRestoreSummary() {
+        if (FileManager.hasFile()) {
+            return String.format(getString(R.string.pref_backup_last), "");
+        } else {
+            return null;
+        }
+    }
+
 	private void displayWriteResult(FileManager.WriteResult result) {
 		snackbar(result.success
 				? getString(R.string.save_success_start, FileManager.simpleFilePath)
@@ -378,7 +387,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         } else {
             if (Resource.isFull) {
                 pref_import_data.setEnabled(true);
-                pref_import_data.setSummary(null);
+                pref_import_data.setSummary(getRestoreSummary());
             }
         }
     }
