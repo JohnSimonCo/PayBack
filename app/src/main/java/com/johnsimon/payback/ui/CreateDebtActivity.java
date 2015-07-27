@@ -42,6 +42,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -126,7 +127,9 @@ public class CreateDebtActivity extends DataActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
 		floatLabelAmountEditText = (AppCompatEditText) findViewById(R.id.create_edittext_amount);
 		floatLabelNoteEditText = (AppCompatEditText) findViewById(R.id.create_edittext_note);
@@ -421,11 +424,13 @@ public class CreateDebtActivity extends DataActivity {
 		Intent intent = getIntent();
 
 		String currencyText = getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency().getDisplayName() + ")";
-		floatLabelAmountEditText.setHint(currencyText);
         float_label_layout_amount.setHint(currencyText);
 
 		if (intent.hasExtra(ARG_ID)) {
 			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));
+            if (editingDebt.isPaidBack()) {
+                findViewById(R.id.reminder_layout).setVisibility(View.GONE);
+            }
 
             usingCustomDate = editingDebt.getRemindDate() != null;
             if (usingCustomDate) {

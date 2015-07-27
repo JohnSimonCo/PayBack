@@ -5,15 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.NotificationCallback;
-import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.Promise;
-import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.ui.FeedActivity;
-import com.johnsimon.payback.ui.SettingsActivity;
 
 public class StorageManager {
 	public final static String PREFERENCE_STORAGE_TYPE = "STORAGE_TYPE";
@@ -24,7 +18,6 @@ public class StorageManager {
 	private static Storage storage = null;
 
 	public static DriveLoginManager loginManager = null;
-
 
 	public static LocalStorage getLocalStorage(Context context) {
 		if(localStorage == null) {

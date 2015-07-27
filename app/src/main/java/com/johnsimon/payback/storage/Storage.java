@@ -1,9 +1,7 @@
 package com.johnsimon.payback.storage;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;

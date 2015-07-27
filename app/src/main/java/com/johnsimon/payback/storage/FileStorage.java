@@ -13,7 +13,7 @@ public class FileStorage extends ExternalStorage {
 			sync(AppData.fromJson((String) result.data));
 		} else {
 			switch(result.error) {
-				case BackupManager.ReadResult.ERROR_NO_FILE:
+				case NoFile:
 					break;
 				default:
 					error("Unknown read error", null);
