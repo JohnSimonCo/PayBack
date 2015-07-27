@@ -82,7 +82,15 @@ public class BackupManager {
 			return new ReadResult(ReadError.Unknown);
 		}
 	}
+	public static Long lastBackupDate() {
+		return null;
+	}
+	public static Boolean hasBackups() {
+		ArrayList<Backup> backups = new ArrayList<>();
+		return getFiles().length > 0;
+	}
 
+	@Deprecated
 	public static WriteResult write(String JSON) {
 		/*
 		if(!isExternalStorageWritable()) {
@@ -116,6 +124,7 @@ public class BackupManager {
 		}
 	}
 
+	@Deprecated
 	public static ReadResult<String> read() {
 		/*if(!isExternalStorageReadable()) {
 			show(activity, R.string.library_roundedimageview_licenseId);
@@ -138,10 +147,12 @@ public class BackupManager {
 		}
 	}
 
+	@Deprecated
 	public static boolean hasFile() {
 		return getFile().exists();
 	}
 
+	@Deprecated
 	public static boolean removeFile() {
 		File file = getFile();
 		return file.exists() && file.delete();
@@ -151,6 +162,7 @@ public class BackupManager {
 		return new File(Environment.getExternalStoragePublicDirectory(parentDir), dirName);
 	}
 
+	@Deprecated
 	private static File getFile() {
 		return new File(getDir(), manualBackupFileName);
 	}
@@ -210,5 +222,12 @@ public class BackupManager {
 	public class Backup {
 		public String fileName;
 		private File file;
+
+		public void remove() {
+
+		}
+		public String read() {
+			return null;
+		}
 	}
 }
