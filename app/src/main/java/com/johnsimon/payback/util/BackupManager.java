@@ -79,7 +79,7 @@ public class BackupManager {
 		}/* catch(FileNotFoundException e) {
 			return new ReadResult(ReadError.NoFile);
 		}*/ catch(Exception e) {
-			return new ReadResult(ReadError.Unknown);
+			return new ReadResult<>(ReadError.Unknown);
 		}
 	}
 	public static Long lastBackupDate() {
