@@ -31,7 +31,7 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
-import com.johnsimon.payback.util.FileManager;
+import com.johnsimon.payback.util.BackupManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -86,7 +86,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                if (FileManager.hasFile()) {
+                if (BackupManager.hasFile()) {
                     new MaterialDialog.Builder(SettingsActivity.this)
                             .title(R.string.pref_backup_confirm)
                             .content(R.string.pref_backup_confirm_text)
@@ -96,7 +96,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-									displayWriteResult(FileManager.write(data.save()));
+									displayWriteResult(BackupManager.write(data.save()));
                                     updateBackupStatus(true);
 
                                     dialog.dismiss();
@@ -110,7 +110,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                             })
                             .show();
                 } else {
-					displayWriteResult(FileManager.write(data.save()));
+					displayWriteResult(BackupManager.write(data.save()));
                     updateBackupStatus(true);
                 }
 
@@ -123,7 +123,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-				final FileManager.ReadResult result = FileManager.read();
+				final BackupManager.ReadResult result = BackupManager.read();
 
                 if(result.success) {
                     new MaterialDialog.Builder(SettingsActivity.this)
@@ -329,7 +329,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 switch (item.getItemId()) {
                     case R.id.menu_settings_remove_backup:
 
-                        if (FileManager.removeFile()) {
+                        if (BackupManager.removeFile()) {
                             Snackbar.make(masterView, R.string.backup_removed_success, Snackbar.LENGTH_SHORT).show();
                         }
 
@@ -346,14 +346,14 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     }
 
-	private void displayWriteResult(FileManager.WriteResult result) {
+	private void displayWriteResult(BackupManager.WriteResult result) {
 		snackbar(result.success
-				? getString(R.string.save_success_start, FileManager.simpleFilePath)
+				? getString(R.string.save_success_start, BackupManager.simpleFilePath)
 				: getString(R.string.save_fail));
 	}
 
-	private void displayReadError(FileManager.ReadResult result) {
-		snackbar(getString(result.error == FileManager.ReadResult.ERROR_NO_FILE ? R.string.no_file : R.string.read_failed));
+	private void displayReadError(BackupManager.ReadResult result) {
+		snackbar(getString(result.error == BackupManager.ReadResult.ERROR_NO_FILE ? R.string.no_file : R.string.read_failed));
 	}
 
 	private void snackbar(String text) {
@@ -368,7 +368,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
         _toolbar.inflateMenu(R.menu.settings_menu);
 
-        if (!FileManager.hasFile()) {
+        if (!BackupManager.hasFile()) {
             MenuItem removeBackup = _toolbar.getMenu().findItem(R.id.menu_settings_remove_backup);
             removeBackup.setVisible(false);
             if (Resource.isFull) {

@@ -7,13 +7,13 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.util.FileManager;
+import com.johnsimon.payback.util.BackupManager;
 
 public class RestoreBackupDialog {
 
 	public static Promise<Boolean> attemptRestore(Context context, final Storage storage) {
 		final Promise<Boolean> p = new Promise<>();
-		final FileManager.ReadResult result = FileManager.read();
+		final BackupManager.ReadResult result = BackupManager.read();
 		if(result.success) {
 			new MaterialDialog.Builder(context)
 					.title(R.string.restoredialog_title)

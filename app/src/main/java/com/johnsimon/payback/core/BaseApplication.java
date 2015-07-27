@@ -1,7 +1,6 @@
 package com.johnsimon.payback.core;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.johnsimon.payback.BuildConfig;
 import com.squareup.leakcanary.LeakCanary;

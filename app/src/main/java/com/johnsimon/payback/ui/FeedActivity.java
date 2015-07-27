@@ -46,6 +46,7 @@ import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.BackupManager;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
@@ -190,6 +191,11 @@ public class FeedActivity extends DataActivity implements
 		navigationDrawerFragment.adapter.notifyDataSetChanged();
 
 		feedSubscription.broadcast(feed);
+
+		BackupManager.fetchBackups();
+		BackupManager.clearBackups();
+		BackupManager.createBackup(Resource.gson.toJson(data), true);
+		BackupManager.fetchBackups();
 
         //TODO REMOVE
         //LocalStorage.test(this, data);

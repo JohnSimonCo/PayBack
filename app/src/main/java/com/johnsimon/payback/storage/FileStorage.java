@@ -1,19 +1,19 @@
 package com.johnsimon.payback.storage;
 
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.util.FileManager;
+import com.johnsimon.payback.util.BackupManager;
 
 public class FileStorage extends ExternalStorage {
 	public FileStorage(final LocalStorage localStorage) {
 		super(localStorage);
 
-		FileManager.ReadResult result = FileManager.read();
+		BackupManager.ReadResult result = BackupManager.read();
 
 		if(result.success) {
-			sync(AppData.fromJson(result.content));
+			sync(AppData.fromJson((String) result.data));
 		} else {
 			switch(result.error) {
-				case FileManager.ReadResult.ERROR_NO_FILE:
+				case BackupManager.ReadResult.ERROR_NO_FILE:
 					break;
 				default:
 					error("Unknown read error", null);
@@ -24,7 +24,7 @@ public class FileStorage extends ExternalStorage {
 
 	@Override
 	protected void commitExternally(String JSON) {
-		FileManager.WriteResult result = FileManager.write(JSON);
+		BackupManager.WriteResult result = BackupManager.write(JSON);
 
 		if(result.success) {
 			show("Successfully commited to file");
