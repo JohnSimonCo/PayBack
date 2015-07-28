@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
 import android.support.design.widget.Snackbar;
@@ -21,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -38,7 +38,6 @@ import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.Arrays;
-import java.util.List;
 
 //TODO SET BACKGROUND PREF VALUE ONDATARECIEVED TO AVOID BACKUP/RESTORE FUCKUP
 
@@ -53,6 +52,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 	private Preference pref_cloud_sync_account;
     private Preference pref_import_data;
     private SwitchPreference pref_cloud_sync;
+    private SwitchPreference pref_auto_backup;
 
     private BillingProcessor bp;
 
@@ -128,16 +128,21 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         });
 
         if (Resource.isFull) {
+            pref_auto_backup.setEnabled(true);
             pref_export_data.setEnabled(true);
             pref_import_data.setEnabled(true);
             pref_export_data.setSummary(null);
             pref_import_data.setSummary(getRestoreSummary());
         } else {
+            pref_auto_backup.setEnabled(false);
+            pref_auto_backup.setChecked(false);
             pref_export_data.setEnabled(false);
             pref_import_data.setEnabled(false);
             pref_export_data.setSummary(R.string.not_full_version);
             pref_import_data.setSummary(R.string.not_full_version);
         }
+
+        pref_auto_backup = (SwitchPreference) findPreference("pref_auto_backup");
 
         pref_currency = findPreference("pref_currency");
 
@@ -317,8 +322,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO CONT menu
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        return true;
     }
 
     private String getRestoreSummary() {
