@@ -86,34 +86,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                if (BackupManager.hasFile()) {
-                    new MaterialDialog.Builder(SettingsActivity.this)
-                            .title(R.string.pref_backup_confirm)
-                            .content(R.string.pref_backup_confirm_text)
-                            .positiveText(R.string.pref_backup_confirm_single)
-                            .negativeText(R.string.cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    super.onPositive(dialog);
-									displayWriteResult(BackupManager.write(data.save()));
-                                    updateBackupStatus(true);
-
-                                    dialog.dismiss();
-                                }
-
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    super.onNegative(dialog);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                } else {
-					displayWriteResult(BackupManager.write(data.save()));
-                    updateBackupStatus(true);
-                }
-
+                BackupManager.createBackup(data.save(), false);
+                updateBackupStatus(true);
 				return true;
 			}
 		});
@@ -137,7 +111,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                     super.onPositive(dialog);
 
                                     FeedActivity.goToAll();
-                            //TODO 777        storage.commit(AppData.fromJson(result.content));
+                                    storage.commit(AppData.fromJson(result.content));
                                     storage.emit();
 
                                     Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
