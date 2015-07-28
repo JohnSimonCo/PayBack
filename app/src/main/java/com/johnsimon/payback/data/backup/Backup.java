@@ -1,6 +1,8 @@
 package com.johnsimon.payback.data.backup;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.text.format.DateFormat;
 
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.util.ReadResult;
@@ -79,12 +81,17 @@ public class Backup {
 		}
 	}
 
-	public String generateString(Resources resources) {
-		return resources.getString(type.resourceString) + " - " + generateDateString();
+	public String generateString(Context context, Resources resources) {
+		return resources.getString(type.resourceString) + " - " + generateDateString(context);
 	}
 
-	public String generateDateString() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault());
+	public String generateDateString(Context context) {
+		SimpleDateFormat format;
+		if (DateFormat.is24HourFormat(context)) {
+			format = new SimpleDateFormat("yyyy/MM/dd kk:mm", Locale.getDefault());
+		} else {
+			format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault());
+		}
 		return format.format(date);
 	}
 

@@ -19,6 +19,7 @@ import android.preference.SwitchPreference;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,8 +43,6 @@ import java.util.List;
 //TODO SET BACKGROUND PREF VALUE ONDATARECIEVED TO AVOID BACKUP/RESTORE FUCKUP
 
 public class SettingsActivity extends MaterialPreferenceActivity implements BillingProcessor.IBillingHandler {
-
-    private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
     public Preference pref_currency;
 
@@ -298,11 +297,35 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        _toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.menu_settings_rate) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:John+Simon+Co")));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:John+Simon+Co")));
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //TODO CONT menu
+        return super.onCreateOptionsMenu(menu);
+    }
+
     private String getRestoreSummary() {
         Backup latest = BackupManager.latestBackup();
 
         if (latest != null) {
-            return String.format(getString(R.string.pref_backup_last), latest.generateDateString());
+            return String.format(getString(R.string.pref_backup_last), latest.generateDateString(this));
         } else {
             return null;
         }
@@ -370,13 +393,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
-    /**
-     * Determines whether the simplified settings UI should be shown. This is
-     * true if this is forced via {@link #ALWAYS_SIMPLE_PREFS}, or the device
-     * doesn't have newer APIs like {@link PreferenceFragment}, or the device
-     * doesn't have an extra-large screen. In these cases, a single-pane
-     * "simplified" settings UI should be shown.
-     */
     private static boolean isSimplePreferences(Resources resources) {
         return !isXLargeTablet(resources);
     }

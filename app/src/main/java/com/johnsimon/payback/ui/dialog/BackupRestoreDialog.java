@@ -23,7 +23,7 @@ public class BackupRestoreDialog {
         String[] backupNames = new String[backups.length];
 
         for (int i = 0; i < backups.length; i++) {
-            backupNames[i] = backups[i].generateString(activity.getResources());
+            backupNames[i] = backups[i].generateString(activity, activity.getResources());
         }
 
         new MaterialDialog.Builder(activity)
