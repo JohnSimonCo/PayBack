@@ -186,6 +186,7 @@ public class FeedActivity extends DataActivity implements
 
 		BackupManager.hasBackups();
 		BackupManager.fetchBackups();
+		BackupManager.lastBackup();
 		BackupManager.createBackup(Resource.gson.toJson(data), true);
 		BackupManager.fetchBackups();
 
