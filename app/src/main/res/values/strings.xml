@@ -167,7 +167,7 @@
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
     <string name="pref_backup_data">Backup data to storage</string>
-    <string name="pref_restore_backup">Restore backup</string>
+    <string name="pref_manage_backups">Manage backups</string>
     <string name="pref_restore_data">Restore data from backup</string>
     <string name="pref_restore_data_description">Are you sure you want to restore from this backup? This will overwrite all current data.</string>
     <string name="pref_backup_confirm">Overwrite backup</string>

@@ -28,9 +28,9 @@ public class AutoBackuper {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, nextBackupDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
 	}
 
-	public static void performBackup(String JSON) {
+	public static void performBackup(String JSON, Backup.Type type) {
 		removeTodaysPreviousBackup();
-		boolean success = BackupManager.createBackup(JSON, true);
+		boolean success = BackupManager.createBackup(JSON, type);
 		if(!success) {
 			Log.d("AutoBackuper", "Auto-backup failed");
 		}
@@ -66,7 +66,7 @@ public class AutoBackuper {
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			String JSON = intent.getStringExtra(JSON_DATA_KEY);
-			AutoBackuper.performBackup(JSON);
+			AutoBackuper.performBackup(JSON, Backup.Type.Auto);
 		}
 	}
 }

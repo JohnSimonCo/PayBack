@@ -87,7 +87,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                BackupManager.createBackup(data.save(), false);
+                BackupManager.createBackup(data.save(), Backup.Type.Manual);
                 updateBackupStatus(true);
 				return true;
 			}

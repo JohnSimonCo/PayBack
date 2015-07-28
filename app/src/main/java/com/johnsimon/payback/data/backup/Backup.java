@@ -27,7 +27,7 @@ public class Backup {
 		if(fileName.equals("data.json")) { // Old file name (Implemented 28/07-15)
 			this.auto = false;
 			this.date = new Date();
-			file.renameTo(new File(file.getParentFile(), BackupManager.generateFileName(auto)));
+			file.renameTo(new File(file.getParentFile(), BackupManager.generateFileName(Type.Manual)));
 		} else {
 			String[] parts = fileName.split(" ");
 			String backupType = parts[0], date = parts[1];
@@ -61,12 +61,16 @@ public class Backup {
 	}
 
 	public String generateDateString() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault());
 		return format.format(date);
 	}
 
 	public enum ReadError {
 		FileNotFound, Unknown
+	}
+
+	public enum Type {
+		Manual, Auto, Wipe
 	}
 
 }

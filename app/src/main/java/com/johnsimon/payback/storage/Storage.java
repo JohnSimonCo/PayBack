@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.backup.AutoBackuper;
+import com.johnsimon.payback.data.backup.Backup;
 
 public abstract class Storage {
     public Subscription<AppData> subscription = new Subscription<>();
@@ -28,7 +29,7 @@ public abstract class Storage {
 
 	public void wipe(Context context) {
 		String JSON = data.save();
-		AutoBackuper.performBackup(JSON);
+		AutoBackuper.performBackup(JSON, Backup.Type.Wipe);
 
 		commit(context, AppData.defaultAppData());
 		emit();

@@ -27,7 +27,7 @@ public class BackupRestoreDialog {
         }
 
         new MaterialDialog.Builder(activity)
-                .title(R.string.pref_restore_backup)
+                .title(R.string.pref_manage_backups)
                 .items(backupNames)
                 .cancelListener(new DialogInterface.OnCancelListener() {
                     @Override
