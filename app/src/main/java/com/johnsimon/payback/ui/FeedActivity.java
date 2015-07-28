@@ -184,11 +184,14 @@ public class FeedActivity extends DataActivity implements
 
 		feedSubscription.broadcast(feed);
 
-		BackupManager.hasBackups();
-		BackupManager.fetchBackups();
-		BackupManager.lastBackup();
+		boolean has = BackupManager.hasBackups();
+		BackupManager.ReadResult<BackupManager.Backup[]> backups = BackupManager.fetchBackups();
+		Long latestDate = BackupManager.latestBackupDate();
+		BackupManager.Backup latestBackup = BackupManager.latestBackup();
+		String content = latestBackup.read();
+		latestBackup.remove();
 		BackupManager.createBackup(Resource.gson.toJson(data), true);
-		BackupManager.fetchBackups();
+		BackupManager.ReadResult<BackupManager.Backup[]> backups2 = BackupManager.fetchBackups();
 
         //TODO REMOVE
         //LocalStorage.test(this, data);

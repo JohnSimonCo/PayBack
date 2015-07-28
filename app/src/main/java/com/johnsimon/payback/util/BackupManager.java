@@ -1,5 +1,6 @@
 package com.johnsimon.payback.util;
 
+import android.content.res.Resources;
 import android.os.Environment;
 
 import java.io.BufferedReader;
@@ -9,6 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class BackupManager {
@@ -18,7 +21,7 @@ public class BackupManager {
 	private final static String autoBackupFileName = "Auto-backup";
 	private final static String manualBackupFileName = "Backup";
 	private final static String fileExtension = "json";
-	public final static String simpleFilePath = parentDir + File.pathSeparator + dirName;
+	private final static String simpleFilePath = parentDir + File.pathSeparator + dirName;
 
 	public static WriteResult createBackup(String JSON, Boolean autoBackup) {
 		/*
@@ -81,11 +84,22 @@ public class BackupManager {
 			return new ReadResult<>(ReadError.Unknown);
 		}
 	}
-	public static Long lastBackupDate() {
+	public static Long latestBackupDate() {
 		return null;
 	}
-	public static Backup lastBackup() {
-		return null;
+	public static Backup latestBackup() {
+		ReadResult<Backup[]> result = fetchBackups();
+		if(!result.isSuccess()) {
+			return null;
+		}
+		Backup[] backups = result.data;
+		Collections.sort(new ArrayList<Backup>(backups), new Comparator<Backup>() {
+			@Override
+			public int compare(Backup a, Backup b) {
+				return a.fileName.compareTo(b.fileName);
+			}
+		});
+		return backups[0];
 	}
 	public static Boolean hasBackups() {
 		ArrayList<Backup> backups = new ArrayList<>();
@@ -173,6 +187,8 @@ public class BackupManager {
 		return dir.listFiles();
 	}
 
+
+
 	/* Checks if external storage is available for read and write
 	private static boolean isExternalStorageWritable() {
 		String state = Environment.getExternalStorageState();
@@ -203,26 +219,25 @@ public class BackupManager {
 		Unknown, NoFile
 	}
 	public static class ReadResult<T> {
-		public boolean success;
-		public ReadError error;
+		public ReadError error = null;
 		public T data;
 
-		private ReadResult(boolean success) {
-			this.success = success;
-		}
-
 		public ReadResult(T data) {
-			this(true);
 			this.data = data;
 		}
 
 		public ReadResult(ReadError error) {
-			this(false);
 			this.error = error;
+		}
+
+		public boolean isSuccess() {
+			return error == null;
 		}
 	}
 	public class Backup {
-		public String fileName;
+		public boolean auto;
+		public Long date;
+
 		private File file;
 
 		public void remove() {
@@ -230,6 +245,11 @@ public class BackupManager {
 		}
 		public String read() {
 			return null;
+		}
+
+		public String generateString(Resources resources) {
+			//TODO implement
+			return "";
 		}
 	}
 }
