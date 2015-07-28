@@ -290,26 +290,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			}
 		});
 
-        _toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.menu_settings_remove_backup:
-
-                        if (BackupManager.removeFile()) {
-                            Snackbar.make(masterView, R.string.backup_removed_success, Snackbar.LENGTH_SHORT).show();
-                        }
-
-                        updateBackupStatus(true);
-
-                        break;
-                }
-
-                return true;
-            }
-        });
-
         updateBackupStatus(false);
 
     }
