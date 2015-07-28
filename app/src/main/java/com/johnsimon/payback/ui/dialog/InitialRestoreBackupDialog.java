@@ -24,7 +24,7 @@ public class InitialRestoreBackupDialog {
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override
 						public void onPositive(MaterialDialog dialog) {
-					//TODO 777		storage.commit(AppData.fromJson(result.content));
+							storage.commit(AppData.fromJson(result.content));
 							storage.emit();
 							
 							p.fire(true);
