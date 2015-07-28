@@ -32,6 +32,7 @@ import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
+import com.johnsimon.payback.util.Backup;
 import com.johnsimon.payback.util.BackupManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -98,10 +99,10 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage).then(new Callback<Boolean>() {
+                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
                     @Override
-                    public void onCalled(Boolean restored) {
-                        if (restored) {
+                    public void onCalled(BackupRestoreDialog.RestoreResult result) {
+                        if (result == BackupRestoreDialog.RestoreResult.Success) {
                             FeedActivity.goToAll();
                             Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
                         }
@@ -300,7 +301,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     private String getRestoreSummary() {
 
-        BackupManager.Backup latest = BackupManager.latestBackup();
+        Backup latest = BackupManager.latestBackup();
 
         if (latest != null) {
             return String.format(getString(R.string.pref_backup_last), latest.generateDateString());
@@ -315,8 +316,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 				: getString(R.string.save_fail));
 	}
 
-	private void displayReadError(BackupManager.ReadResult result) {
-		snackbar(getString(result.error == BackupManager.ReadError.NoFile ? R.string.no_file : R.string.read_failed));
+	private void displayReadError(Backup.ReadError result) {
+		snackbar(getString(result == Backup.ReadError.FileNotFound ? R.string.no_file : R.string.read_failed));
 	}
 
 	private void snackbar(String text) {

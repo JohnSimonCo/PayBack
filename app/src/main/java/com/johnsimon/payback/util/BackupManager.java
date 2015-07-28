@@ -5,23 +5,23 @@ import android.os.Environment;
 
 import com.johnsimon.payback.R;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.List;
 
 public class BackupManager {
 
 	private final static String parentDir = Resource.isKkOrAbove() ? Environment.DIRECTORY_DOCUMENTS : "Documents";
 	private final static String dirName = "PayBack";
-	private final static String autoBackupFileName = "Auto-backup";
+	public final static String autoBackupFileName = "Auto-backup";
 	private final static String manualBackupFileName = "Backup";
 	private final static String fileExtension = "json";
 	private final static String simpleFilePath = parentDir + File.pathSeparator + dirName;
@@ -58,51 +58,48 @@ public class BackupManager {
 			return new WriteResult(false);
 		}
 	}
+
+	public static SimpleDateFormat getFormatter() {
+		return new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
+	}
 	private static String generateFileName(Boolean autoBackup) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
+		SimpleDateFormat formatter = getFormatter();
 		Date now = new Date();
 		String dateString = formatter.format(now);
 		String fileName = autoBackup ? autoBackupFileName : manualBackupFileName;
 		return fileName + " " + dateString + File.separator + fileExtension;
 	}
-	public static ReadResult<Backup[]> fetchBackups() {
-		ArrayList<Backup> backups = new ArrayList<>();
-		StringBuilder builder = new StringBuilder();
+	public static ReadResult<Backup[], ReadError> fetchBackups() {
 		try {
 			File[] files = getFiles();
-/*
-			BufferedReader reader = new BufferedReader(new FileReader(getFile()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
+			Backup[] backups = new Backup[files.length];
+			for(int i = 0; i < files.length; i++) {
+				backups[i] = new Backup(files[i]);
 			}
-			reader.close();
-*/			for(File file: files) {
-
-			}
-			return new ReadResult<>(backups.toArray(new Backup[backups.size()]));
+			return ReadResult.success(backups);
 		}/* catch(FileNotFoundException e) {
 			return new ReadResult(ReadError.NoFile);
-		}*/ catch(Exception e) {
-			return new ReadResult<>(ReadError.Unknown);
+		}*/ catch(ParseException e) {
+			return ReadResult.error(ReadError.Parse);
 		}
 	}
-	public static Long latestBackupDate() {
-		return null;
+	public static Date latestBackupDate() {
+		Backup latestBackup = latestBackup();
+		return latestBackup != null ? latestBackup.date : null;
 	}
 	public static Backup latestBackup() {
-		ReadResult<Backup[]> result = fetchBackups();
-		if(!result.isSuccess()) {
+		ReadResult<Backup[], ReadError> result = fetchBackups();
+		if(!result.isSuccess() || result.data.length < 1) {
 			return null;
 		}
-		Backup[] backups = result.data;
-		Collections.sort(new ArrayList<Backup>(backups), new Comparator<Backup>() {
+		List<Backup> backups = Arrays.asList(result.data);
+		Collections.sort(backups, new Comparator<Backup>() {
 			@Override
 			public int compare(Backup a, Backup b) {
-				return a.fileName.compareTo(b.fileName);
+				return a.date.compareTo(b.date);
 			}
 		});
-		return backups[0];
+		return backups.get(0);
 	}
 	public static Boolean hasBackups() {
 		ArrayList<Backup> backups = new ArrayList<>();
@@ -140,29 +137,6 @@ public class BackupManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new WriteResult(false);
-		}
-	}
-
-	@Deprecated
-	public static ReadResult<String> read() {
-		/*if(!isExternalStorageReadable()) {
-			show(activity, R.string.library_roundedimageview_licenseId);
-			return null;
-		}*/
-
-		StringBuilder builder = new StringBuilder();
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(getFile()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
-			}
-			reader.close();
-			return new ReadResult<>(builder.toString());
-		} catch(FileNotFoundException e) {
-			return new ReadResult(ReadError.NoFile);
-		} catch(Exception e) {
-			return new ReadResult(ReadError.Unknown);
 		}
 	}
 
@@ -218,46 +192,8 @@ public class BackupManager {
 			this.success = success;
 		}
 	}
+
 	public enum ReadError {
-		Unknown, NoFile
-	}
-	public static class ReadResult<T> {
-		public ReadError error = null;
-		public T data;
-
-		public ReadResult(T data) {
-			this.data = data;
-		}
-
-		public ReadResult(ReadError error) {
-			this.error = error;
-		}
-
-		public boolean isSuccess() {
-			return error == null;
-		}
-	}
-	public class Backup {
-		public boolean auto;
-		public Long date;
-
-		private File file;
-
-		public void remove() {
-
-		}
-		public String read() {
-			return null;
-		}
-
-		public String generateString(Resources resources) {
-
-			return resources.getString(auto ? R.string.autobackup : R.string.backup) + " - " + generateDateString();
-		}
-
-		public String generateDateString() {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
-			return format.format(new Date(date));
-		}
+		Parse
 	}
 }

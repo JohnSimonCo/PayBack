@@ -14,8 +14,8 @@ import com.johnsimon.payback.util.BackupManager;
 
 public class InitialRestoreBackupDialog {
 
-	public static Promise<Boolean> attemptRestore(final Activity activity, final Storage storage) {
-		final Promise<Boolean> p = new Promise<>();
+	public static Promise<BackupRestoreDialog.RestoreResult> attemptRestore(final Activity activity, final Storage storage) {
+		final Promise<BackupRestoreDialog.RestoreResult> p = new Promise<>();
 
 		if (BackupManager.hasBackups()) {
 
@@ -27,28 +27,28 @@ public class InitialRestoreBackupDialog {
 					.cancelListener(new DialogInterface.OnCancelListener() {
 						@Override
 						public void onCancel(DialogInterface dialogInterface) {
-							p.fire(false);
+							p.fire(BackupRestoreDialog.RestoreResult.Canceled);
 						}
 					})
 					.cancelable(false)
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override
 						public void onPositive(MaterialDialog dialog) {
-							BackupRestoreDialog.attemptRestore(activity, storage).then(new Callback<Boolean>() {
+							BackupRestoreDialog.attemptRestore(activity, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 								@Override
-								public void onCalled(Boolean restored) {
-									p.fire(restored);
+								public void onCalled(BackupRestoreDialog.RestoreResult result) {
+									p.fire(result);
 								}
 							});
 						}
 
 						@Override
 						public void onNegative(MaterialDialog dialog) {
-							p.fire(false);
+							p.fire(BackupRestoreDialog.RestoreResult.Canceled);
 						}
 					}).show();
 		} else {
-			p.fire(false);
+			p.fire(BackupRestoreDialog.RestoreResult.NoBackups);
 		}
 		return p;
 	}

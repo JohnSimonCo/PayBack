@@ -37,6 +37,7 @@ import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
+import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
@@ -113,10 +114,11 @@ public class FeedActivity extends DataActivity implements
 		Resource.init(getApplicationContext());
 		if (Resource.isFirstRun(storage.getPreferences())) {
 
-			InitialRestoreBackupDialog.attemptRestore(this, storage).then(new Callback<Boolean>() {
+			InitialRestoreBackupDialog.attemptRestore(this, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 				@Override
-				public void onCalled(Boolean restored) {
-					if (!restored) {
+				public void onCalled(BackupRestoreDialog.RestoreResult result) {
+					//TODO show error???
+					if (result != BackupRestoreDialog.RestoreResult.Success) {
 						WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
 						welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
 					}
@@ -184,14 +186,14 @@ public class FeedActivity extends DataActivity implements
 
 		feedSubscription.broadcast(feed);
 
-		boolean has = BackupManager.hasBackups();
+		/*boolean has = BackupManager.hasBackups();
 		BackupManager.ReadResult<BackupManager.Backup[]> backups = BackupManager.fetchBackups();
 		Long latestDate = BackupManager.latestBackupDate();
 		BackupManager.Backup latestBackup = BackupManager.latestBackup();
 		String content = latestBackup.read();
 		latestBackup.remove();
 		BackupManager.createBackup(Resource.gson.toJson(data), true);
-		BackupManager.ReadResult<BackupManager.Backup[]> backups2 = BackupManager.fetchBackups();
+		BackupManager.ReadResult<BackupManager.Backup[]> backups2 = BackupManager.fetchBackups();*/
 
         //TODO REMOVE
         //LocalStorage.test(this, data);
