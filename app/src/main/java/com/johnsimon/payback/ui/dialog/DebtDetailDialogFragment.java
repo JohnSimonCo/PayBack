@@ -39,6 +39,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
     private TextView dialog_paid_back_date;
     private TextView dialog_custom_title;
     private TextView dialog_custom_content;
+    private TextView dialog_custom_amount_payment;
     private ImageButton detailDialogOverflow;
     private RoundedImageView avatar;
     private TextView avatarLetter;
@@ -66,6 +67,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         dialog_custom_payment = (Button) rootView.findViewById(R.id.dialog_custom_payment);
 
         dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
+        dialog_custom_amount_payment = (TextView) rootView.findViewById(R.id.dialog_custom_amount_payment);
         dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
 
         dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
@@ -90,8 +92,20 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
 
 		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
+        dialog_custom_amount.setTextColor(debt.getColor());
+
 		dialog_custom_amount.setTextColor(getResources().getColor(
                 debt.getAmount() < 0 ? debt.getColor() : R.color.green_strong));
+
+        if (debt.isPartiallyPaidBack()) {
+            dialog_custom_amount_payment.setVisibility(View.VISIBLE);
+            dialog_custom_amount_payment.setTextColor(getResources().getColor(
+                    debt.getAmount() < 0 ? debt.getColor() : R.color.green_strong));
+            dialog_custom_amount_payment.setText(data.preferences.getCurrency().render(debt.getRemainingDebt()));
+            dialog_custom_amount.setTextColor(getResources().getColor(debt.getDisabledColor()));
+        } else {
+            dialog_custom_amount_payment.setVisibility(View.GONE);
+        }
 
         dialog_custom_title.setText(debt.getOwner().getName());
 

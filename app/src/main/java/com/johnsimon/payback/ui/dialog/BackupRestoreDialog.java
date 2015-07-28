@@ -8,9 +8,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.backup.Backup;
 import com.johnsimon.payback.data.backup.BackupManager;
+import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.util.ReadResult;
 
 public class BackupRestoreDialog {
@@ -39,48 +39,48 @@ public class BackupRestoreDialog {
 
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, final int which, CharSequence text) {
-                        new MaterialDialog.Builder(activity)
-                                .title(R.string.restoredialog_title)
-                                .content(R.string.pref_restore_data_description)
-                                .positiveText(R.string.restore)
-                                .negativeText(R.string.cancel)
-                                .callback(new MaterialDialog.ButtonCallback() {
-                                    @Override
-                                    public void onPositive(MaterialDialog dialog) {
-                                        super.onPositive(dialog);
 
-                                        if (showRemove) {
-                                            new MaterialDialog.Builder(activity)
-                                                    .items(new String[]{activity.getString(R.string.restore), activity.getString(R.string.delete)})
-                                                    .itemsCallback(new MaterialDialog.ListCallback() {
-                                                        @Override
-                                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                                            if (which == 0) {
-                                                                ReadResult<String, Backup.ReadError> result = backups[which].read();
-                                                                if (result.isSuccess()) {
-                                                                    storage.commit(activity, AppData.fromJson(result.data));
-                                                                    storage.emit();
+                        if (showRemove) {
+                            new MaterialDialog.Builder(activity)
+                                    .items(new String[]{activity.getString(R.string.restore), activity.getString(R.string.delete)})
+                                    .itemsCallback(new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int restoreDeleteWhich, CharSequence text) {
+                                            if (restoreDeleteWhich == 0) {
+                                                ReadResult<String, Backup.ReadError> result = backups[which].read();
+                                                if (result.isSuccess()) {
+                                                    storage.commit(activity, AppData.fromJson(result.data));
+                                                    storage.emit();
 
-                                                                    promise.fire(RestoreResult.Success);
-                                                                } else {
-                                                                    if (result.error == Backup.ReadError.FileNotFound) {
-                                                                        promise.fire(RestoreResult.FileNotFound);
-                                                                    } else {
-                                                                        promise.fire(RestoreResult.Unknown);
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (backups[which].remove()) {
-                                                                    promise.fire(RestoreResult.Deleted);
-                                                                } else {
-                                                                    promise.fire(RestoreResult.DeleteFailed);
-                                                                }
-                                                            }
-                                                        }
+                                                    promise.fire(RestoreResult.Success);
+                                                } else {
+                                                    if (result.error == Backup.ReadError.FileNotFound) {
+                                                        promise.fire(RestoreResult.FileNotFound);
+                                                    } else {
+                                                        promise.fire(RestoreResult.Unknown);
+                                                    }
+                                                }
+                                            } else {
+                                                if (backups[which].remove()) {
+                                                    promise.fire(RestoreResult.Deleted);
+                                                } else {
+                                                    promise.fire(RestoreResult.DeleteFailed);
+                                                }
+                                            }
+                                        }
 
-                                                    })
-                                                    .show();
-                                        } else {
+                                    })
+                                    .show();
+                        } else {
+                            new MaterialDialog.Builder(activity)
+                                    .title(R.string.restoredialog_title)
+                                    .content(R.string.pref_restore_data_description)
+                                    .positiveText(R.string.restore)
+                                    .negativeText(R.string.cancel)
+                                    .callback(new MaterialDialog.ButtonCallback() {
+                                        @Override
+                                        public void onPositive(MaterialDialog dialog) {
+                                            super.onPositive(dialog);
                                             ReadResult<String, Backup.ReadError> result = backups[which].read();
                                             if (result.isSuccess()) {
                                                 storage.commit(activity, AppData.fromJson(result.data));
@@ -94,19 +94,17 @@ public class BackupRestoreDialog {
                                                     promise.fire(RestoreResult.Unknown);
                                                 }
                                             }
+                                            dialog.cancel();
                                         }
 
-
-                                        dialog.cancel();
-                                    }
-
-                                    @Override
-                                    public void onNegative(MaterialDialog dialog) {
-                                        super.onNegative(dialog);
-                                        promise.fire(RestoreResult.Canceled);
-                                        dialog.cancel();
-                                    }
-                                }).show();
+                                        @Override
+                                        public void onNegative(MaterialDialog dialog) {
+                                            super.onNegative(dialog);
+                                            promise.fire(RestoreResult.Canceled);
+                                            dialog.cancel();
+                                        }
+                                    }).show();
+                        }
                     }
                 }).show();
 
