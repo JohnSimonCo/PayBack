@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.johnsimon.payback.util.ReadResult;
@@ -19,7 +20,9 @@ public class AutoBackuper {
 	private static long nextBackupDate() {
 		return System.currentTimeMillis() + FIVE_MINUTES;
 	}
-	public static void scheduleBackup(Context context, String JSON) {
+	public static void scheduleBackup(Context context, SharedPreferences preferences, String JSON) {
+		//TODO CONT
+		if(preferences.get)
 		Intent intentAlarm = new Intent(context, AlarmReceiver.class);
 		intentAlarm.putExtra(JSON_DATA_KEY, JSON);
 
@@ -50,8 +53,7 @@ public class AutoBackuper {
 			backupCalendar.setTime(backup.date);
 
 			//On the same day
-			if(nowCalendar.get(Calendar.YEAR) == backupCalendar.get(Calendar.YEAR) &&
-					nowCalendar.get(Calendar.DAY_OF_YEAR) == backupCalendar.get(Calendar.DAY_OF_YEAR)) {
+			if(nowCalendar.get(Calendar.YEAR) == backupCalendar.get(Calendar.YEAR) && nowCalendar.get(Calendar.DAY_OF_YEAR) == backupCalendar.get(Calendar.DAY_OF_YEAR)) {
 
 				backup.remove();
 				//This should be the only auto-backup today so we can stop searching
@@ -61,6 +63,11 @@ public class AutoBackuper {
 
 	}
 
+	public static void enable() {
+
+	}
+	public static void disable() {
+	}
 	public static class AlarmReceiver extends BroadcastReceiver {
 
 		@Override

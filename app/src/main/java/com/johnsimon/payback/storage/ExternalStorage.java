@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataSyncer;
+import com.johnsimon.payback.data.backup.AutoBackuper;
 
 public abstract class ExternalStorage extends Storage {
 
@@ -54,6 +55,11 @@ public abstract class ExternalStorage extends Storage {
 			commit(context, data);
 			emit(data);
 		}
+	}
+
+	@Override
+	public void sheduleBackup(Context context, String JSON) {
+		AutoBackuper.scheduleBackup(context, localStorage.getPreferences(), JSON);
 	}
 
 	@Override

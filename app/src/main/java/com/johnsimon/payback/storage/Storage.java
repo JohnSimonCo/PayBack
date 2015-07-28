@@ -38,9 +38,11 @@ public abstract class Storage {
 	public void commit(Context context) {
 		String JSON = data.save();
 
-		AutoBackuper.scheduleBackup(context, JSON);
-
 		commit(JSON);
+	}
+
+	public void sheduleBackup(Context context, String json) {
+
 	}
 
     public void commit(Context context, AppData data) {
