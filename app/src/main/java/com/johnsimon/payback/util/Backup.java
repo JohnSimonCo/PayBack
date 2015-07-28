@@ -18,10 +18,17 @@ public class Backup {
 	public Backup(File file) throws ParseException {
 		this.file = file;
 		String fileName = file.getName();
-		String[] parts = fileName.split(" ");
-		String backupType = parts[0], date = parts[1];
-		this.auto = backupType.equals(BackupManager.autoBackupFileName);
-		this.date = BackupManager.getFormatter().parse(date);
+
+		if(fileName.equals("data.json")) { // Old file name (Implemented 28/07-15)
+			this.auto = false;
+			this.date = new Date();
+			file.renameTo(new File(file.getParentFile(), BackupManager.generateFileName(auto)));
+		} else {
+			String[] parts = fileName.split(" ");
+			String backupType = parts[0], date = parts[1];
+			this.auto = backupType.equals(BackupManager.autoBackupFileName);
+			this.date = BackupManager.getFormatter().parse(date);
+		}
 	}
 
 	public boolean remove() {

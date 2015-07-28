@@ -25,7 +25,8 @@ public class BackupManager {
 	public final static String autoBackupFileName = "Auto-backup";
 	private final static String manualBackupFileName = "Backup";
 	private final static String fileExtension = "json";
-	private final static String simpleFilePath = parentDir + File.pathSeparator + dirName;
+	//Used for display
+	public final static String simpleFilePath = parentDir + "/" + dirName;
 
 	public static WriteResult createBackup(String JSON, Boolean autoBackup) {
 		/*
@@ -63,7 +64,7 @@ public class BackupManager {
 	public static SimpleDateFormat getFormatter() {
 		return new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
 	}
-	private static String generateFileName(Boolean autoBackup) {
+	public static String generateFileName(Boolean autoBackup) {
 		SimpleDateFormat formatter = getFormatter();
 		Date now = new Date();
 		String dateString = formatter.format(now);
@@ -78,9 +79,7 @@ public class BackupManager {
 				backups[i] = new Backup(files[i]);
 			}
 			return ReadResult.success(backups);
-		}/* catch(FileNotFoundException e) {
-			return new ReadResult(ReadError.NoFile);
-		}*/ catch(ParseException e) {
+		} catch(ParseException e) {
 			return ReadResult.error(ReadError.Parse);
 		}
 	}
@@ -103,7 +102,6 @@ public class BackupManager {
 		return backups.get(0);
 	}
 	public static Boolean hasBackups() {
-		ArrayList<Backup> backups = new ArrayList<>();
 		return getFiles().length > 0;
 	}
 
