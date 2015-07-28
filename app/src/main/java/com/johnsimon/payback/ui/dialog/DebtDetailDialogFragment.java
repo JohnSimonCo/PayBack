@@ -27,7 +27,6 @@ import com.makeramen.RoundedImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.UUID;
 
 public class DebtDetailDialogFragment extends DataDialogFragment {
 
@@ -154,7 +153,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                     debt.setRemindDate(null);
                 }
 
-                storage.commit();
+                storage.commit(getActivity());
                 displayPaybackAnimation();
             }
         });
@@ -174,7 +173,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                     @Override
                     public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
                         debt.addPayment(fullNumber);
-                        storage.commit();
+                        storage.commit(getActivity());
 
                         if (debt.isPaidBack()) {
                             displayPaybackAnimation();

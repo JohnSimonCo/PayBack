@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,11 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +36,6 @@ import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.ui.CreateDebtActivity;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
-import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 
@@ -292,7 +288,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 						@Override
 						public void onCommit() {
 							data.delete(activity, debt);
-							storage.commit();
+							storage.commit(getActivity());
 						}
 					});
 
@@ -311,7 +307,7 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 	@Override
 	public void onMove(Debt debt, Person person) {
 		data.move(debt, person);
-		storage.commit();
+		storage.commit(getActivity());
 
 		if (!FeedActivity.isAll()) {
             int index = FeedActivity.feed.indexOf(debt);

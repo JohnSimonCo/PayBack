@@ -128,7 +128,7 @@ public class DriveStorage extends ExternalStorage {
 
             String JSON = result.getText();
 
-            sync(AppData.fromJson(JSON));
+            sync(client.getContext(), AppData.fromJson(JSON));
         }
     };
 

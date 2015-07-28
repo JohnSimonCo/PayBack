@@ -95,7 +95,7 @@ public class StorageManager {
 			@Override
 			public void onCalled(DriveLoginManager.LoginResult result) {
 				if(result.success) {
-					localStorage.wipe();
+					localStorage.wipe(activity);
 					driveStorage.emit(localStorage.data);
 					driveStorage.listen(loginManager.connectedPromise);
 

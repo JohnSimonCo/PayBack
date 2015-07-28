@@ -106,7 +106,7 @@ public class Alarm  {
 
 				//Do not remind again
 				debt.setRemindDate(null);
-				storage.commit();
+				storage.commit(context);
     }};
 
         private NotificationCompat.Action getPayBackAction(UUID id) {
@@ -199,7 +199,7 @@ public class Alarm  {
                     case ACTION_PAY_BACK:
 						debt.payback();
 
-                        storage.commit();
+                        storage.commit(context);
 						storage.emit();
 
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)

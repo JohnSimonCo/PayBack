@@ -8,7 +8,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.backup.BackupManager;
+import com.johnsimon.payback.data.backup.BackupManager;
 
 public class InitialRestoreBackupDialog {
 

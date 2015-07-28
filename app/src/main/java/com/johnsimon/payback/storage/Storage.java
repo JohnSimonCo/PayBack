@@ -1,10 +1,12 @@
 package com.johnsimon.payback.storage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.backup.AutoBackuper;
 
 public abstract class Storage {
     public Subscription<AppData> subscription = new Subscription<>();
@@ -24,18 +26,25 @@ public abstract class Storage {
 
     protected abstract void commit(String JSON);
 
-	public void wipe() {
-		commit(AppData.defaultAppData());
+	public void wipe(Context context) {
+		String JSON = data.save();
+		AutoBackuper.performBackup(JSON);
+
+		commit(context, AppData.defaultAppData());
 		emit();
 	}
 
-	public void commit() {
-		commit(data.save());
+	public void commit(Context context) {
+		String JSON = data.save();
+
+		AutoBackuper.sheduleBackup(context, JSON);
+
+		commit(JSON);
 	}
 
-    public void commit(AppData data) {
+    public void commit(Context context, AppData data) {
         this.data = data;
-		commit();
+		commit(context);
     }
 
 	public boolean isExternalStorage() {

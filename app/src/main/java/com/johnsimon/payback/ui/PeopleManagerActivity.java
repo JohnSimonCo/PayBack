@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,7 +20,6 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
@@ -161,7 +159,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
                     data.add(person);
                     DataLinker.link(person, data.contacts);
                     adapter.people.add(person);
-					storage.commit();
+					storage.commit(getApplicationContext());
 					adapter.notifyDataSetChanged();
                     adapter.updateEmptyViewVisibility();
 				}
@@ -256,7 +254,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 			public void onCommit() {
 				data.peopleOrder = result.order;
 				data.touchPeopleOrder();
-				storage.commit();
+				storage.commit(getApplicationContext());
 			}
 		});
 	}
@@ -303,7 +301,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             data.peopleOrder.reorder(from, to, toLast);
 			data.touchPeopleOrder();
-            storage.commit();
+            storage.commit(getApplicationContext());
         }
     }
 
@@ -329,7 +327,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
             @Override
             public void onCommit() {
                 data.delete(PeopleManagerActivity.this, person);
-                storage.commit();
+                storage.commit(getApplicationContext());
             }
         });
     }
@@ -355,7 +353,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             @Override
             public void onCommit() {
-                storage.commit();
+                storage.commit(getApplicationContext());
             }
         });
     }
@@ -370,6 +368,6 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         adapter.updateEmptyViewVisibility();
 
         data.merge(this, person, other);
-        storage.commit();
+        storage.commit(getApplicationContext());
     }
 }

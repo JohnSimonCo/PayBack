@@ -542,7 +542,7 @@ public class FeedActivity extends DataActivity implements
 		};
 	}
 	private void commitBeam() {
-        storage.commit();
+        storage.commit(this);
 
 		feed = data.feed(person);
 
@@ -674,7 +674,7 @@ public class FeedActivity extends DataActivity implements
 
 					@Override
 					public void onCommit() {
-						storage.commit();
+						storage.commit(getApplicationContext());
 					}
 				});
             }

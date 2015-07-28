@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,7 +29,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -42,7 +40,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -708,7 +705,7 @@ public class CreateDebtActivity extends DataActivity {
             debt.setRemindDate(null);
         }
 
-		storage.commit();
+		storage.commit(this);
 
 		return debt;
 	}

@@ -9,8 +9,8 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.backup.Backup;
-import com.johnsimon.payback.backup.BackupManager;
+import com.johnsimon.payback.data.backup.Backup;
+import com.johnsimon.payback.data.backup.BackupManager;
 import com.johnsimon.payback.util.ReadResult;
 
 public class BackupRestoreDialog {
@@ -58,7 +58,7 @@ public class BackupRestoreDialog {
                                                             if (which == 0) {
                                                                 ReadResult<String, Backup.ReadError> result = backups[which].read();
                                                                 if (result.isSuccess()) {
-                                                                    storage.commit(AppData.fromJson(result.data));
+                                                                    storage.commit(activity, AppData.fromJson(result.data));
                                                                     storage.emit();
 
                                                                     promise.fire(RestoreResult.Success);
@@ -83,7 +83,7 @@ public class BackupRestoreDialog {
                                         } else {
                                             ReadResult<String, Backup.ReadError> result = backups[which].read();
                                             if (result.isSuccess()) {
-                                                storage.commit(AppData.fromJson(result.data));
+                                                storage.commit(activity, AppData.fromJson(result.data));
                                                 storage.emit();
 
                                                 promise.fire(RestoreResult.Success);

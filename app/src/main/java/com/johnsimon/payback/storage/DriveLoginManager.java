@@ -14,7 +14,7 @@ import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.async.Promise;
 
 public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-	private final static int REQUEST_CODE_RESOLUTION = 14795;
+	private final static int REQUEST_CODE_RESOLUTION = 14795; // Looks pretty random to me
 
 	public final static String PREFERENCE_ACCOUNT_NAME = "ACCOUNT_NAME";
 

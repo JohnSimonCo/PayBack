@@ -31,8 +31,8 @@ import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
-import com.johnsimon.payback.backup.Backup;
-import com.johnsimon.payback.backup.BackupManager;
+import com.johnsimon.payback.data.backup.Backup;
+import com.johnsimon.payback.data.backup.BackupManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -275,7 +275,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 							public void onPositive(MaterialDialog dialog) {
 								super.onPositive(dialog);
 
-								storage.wipe();
+								storage.wipe(getApplicationContext());
 
 								dialog.dismiss();
 							}
@@ -294,7 +294,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                switch (item.getItemId()) {
+                /*switch (item.getItemId()) {
                     case R.id.menu_settings_remove_backup:
 
                         if (BackupManager.removeFile()) {
@@ -304,7 +304,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                         updateBackupStatus(true);
 
                         break;
-                }
+                }*/
 
                 return true;
             }
@@ -424,7 +424,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
 			if (preference.getKey().equals("pref_background")) {
 				data.preferences.background.setValue((String) value);
-				storage.commit();
+				storage.commit(getApplicationContext());
 
 				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
 

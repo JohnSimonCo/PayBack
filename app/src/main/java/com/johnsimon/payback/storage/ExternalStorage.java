@@ -1,5 +1,6 @@
 package com.johnsimon.payback.storage;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.johnsimon.payback.async.Callback;
@@ -44,13 +45,13 @@ public abstract class ExternalStorage extends Storage {
 
 	protected abstract void commitExternally(String JSON);
 
-	protected void sync(AppData externalData) {
+	protected void sync(Context context, AppData externalData) {
 		show("checking for external changes");
 		AppData data = new AppData();
 		if(DataSyncer.sync(localStorage.data, externalData, data)) {
 			show("found changes and synced");
 
-			commit(data);
+			commit(context, data);
 			emit(data);
 		}
 	}
