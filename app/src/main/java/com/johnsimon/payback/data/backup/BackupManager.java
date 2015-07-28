@@ -73,28 +73,29 @@ public class BackupManager {
 			for(int i = 0; i < files.length; i++) {
 				backups[i] = new Backup(files[i]);
 			}
+			Arrays.sort(backups, backupComparator);
 			return ReadResult.success(backups);
 		} catch(ParseException e) {
 			return ReadResult.error(ReadError.Parse);
 		}
 	}
+	private static Comparator<Backup> backupComparator = new Comparator<Backup>() {
+		@Override
+		public int compare(Backup a, Backup b) {
+			return b.date.compareTo(a.date);
+		}
+	};
 	public static Date latestBackupDate() {
 		Backup latestBackup = latestBackup();
 		return latestBackup != null ? latestBackup.date : null;
 	}
 	public static Backup latestBackup() {
 		ReadResult<Backup[], ReadError> result = fetchBackups();
-		if(!result.isSuccess() || result.data.length < 1) {
+		Backup[] backups = result.data;
+		if(!result.isSuccess() || backups.length < 1) {
 			return null;
 		}
-		List<Backup> backups = Arrays.asList(result.data);
-		Collections.sort(backups, new Comparator<Backup>() {
-			@Override
-			public int compare(Backup a, Backup b) {
-				return b.date.compareTo(a.date);
-			}
-		});
-		return backups.get(0);
+		return backups[0];
 	}
 	public static Boolean hasBackups() {
 		return getFiles().length > 0;

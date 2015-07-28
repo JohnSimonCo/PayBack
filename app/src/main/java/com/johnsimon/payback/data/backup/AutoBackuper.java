@@ -15,8 +15,7 @@ import java.util.Date;
 public class AutoBackuper {
 	public final static String JSON_DATA_KEY = "AUTO_BACKUP_ID";
 
-	//private final static long FIVE_MINUTES = 1000 * 60 * 5;
-	private final static long FIVE_MINUTES = 1000;
+	private final static long FIVE_MINUTES = 1000 * 60 * 5;
 	private static long nextBackupDate() {
 		return System.currentTimeMillis() + FIVE_MINUTES;
 	}
