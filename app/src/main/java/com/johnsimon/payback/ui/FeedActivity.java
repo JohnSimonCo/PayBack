@@ -190,16 +190,7 @@ public class FeedActivity extends DataActivity implements
 
 		feedSubscription.broadcast(feed);
 
-<<<<<<< HEAD
-		/*boolean has = BackupManager.hasBackups();
-		BackupManager.ReadResult<BackupManager.Backup[]> backups = BackupManager.fetchBackups();
-		Long latestDate = BackupManager.latestBackupDate();
-		BackupManager.Backup latestBackup = BackupManager.latestBackup();
-		String content = latestBackup.read();
-		latestBackup.remove();
-		BackupManager.createBackup(Resource.gson.toJson(data), true);
-		BackupManager.ReadResult<BackupManager.Backup[]> backups2 = BackupManager.fetchBackups();*/
-=======
+
 		boolean has = BackupManager.hasBackups();
 		ReadResult<Backup[], BackupManager.ReadError> backups = BackupManager.fetchBackups();
 		Date latestDate = BackupManager.latestBackupDate();
@@ -208,7 +199,6 @@ public class FeedActivity extends DataActivity implements
 		latestBackup.remove();
 		BackupManager.createBackup(Resource.gson.toJson(data), true);
 		ReadResult<Backup[], BackupManager.ReadError> backups2 = BackupManager.fetchBackups();
->>>>>>> origin/dev
 
         //TODO REMOVE
         //LocalStorage.test(this, data);
