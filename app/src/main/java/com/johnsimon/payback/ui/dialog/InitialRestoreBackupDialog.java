@@ -34,7 +34,7 @@ public class InitialRestoreBackupDialog {
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override
 						public void onPositive(MaterialDialog dialog) {
-							BackupRestoreDialog.attemptRestore(activity, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
+							BackupRestoreDialog.attemptRestore(activity, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 								@Override
 								public void onCalled(BackupRestoreDialog.RestoreResult result) {
 									p.fire(result);

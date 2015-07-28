@@ -121,7 +121,6 @@
     <string name="disable_cloud_sync_title">Disable cloud sync</string>
     <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
     <string name="disable_cloud_sync_affirmative">Disable</string>
-    <string name="remove_backup">Remove backup</string>
     <string name="backup_removed_success">Backup removed successfully</string>
     <string name="no_backup_available">No backup available</string>
     <string name="set_reminder">Set reminder</string>
@@ -134,6 +133,8 @@
     <string name="paid_back_when">Paid back %1$s</string>
     <string name="autobackup">Auto Backup</string>
     <string name="backup">Backup</string>
+    <string name="delete_failed">Delete failed</string>
+    <string name="delete_successful">Delete successful</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

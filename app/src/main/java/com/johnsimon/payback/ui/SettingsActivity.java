@@ -99,12 +99,28 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
+                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage, true).then(new Callback<BackupRestoreDialog.RestoreResult>() {
                     @Override
                     public void onCalled(BackupRestoreDialog.RestoreResult result) {
-                        if (result == BackupRestoreDialog.RestoreResult.Success) {
-                            FeedActivity.goToAll();
-                            Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
+                        switch(result) {
+                            case Success:
+                                FeedActivity.goToAll();
+                                snackbar(R.string.restore_success);
+                                break;
+                            case Deleted:
+                                snackbar(R.string.delete_successful);
+                                break;
+                            case FileNotFound:
+                                displayReadError(Backup.ReadError.FileNotFound);
+                                break;
+                            case Unknown:
+                                displayReadError(Backup.ReadError.Unknown);
+                                break;
+                            case DeleteFailed:
+                                snackbar(getString(R.string.delete_failed));
+                                break;
+                            default:
+                                break;
                         }
                     }
                 });
@@ -320,21 +336,19 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		snackbar(getString(result == Backup.ReadError.FileNotFound ? R.string.no_file : R.string.read_failed));
 	}
 
+    private void snackbar(int id) {
+        snackbar(getString(id));
+    }
+
 	private void snackbar(String text) {
         Snackbar.make(masterView, text, Snackbar.LENGTH_SHORT).show();
 	}
 
     private void updateBackupStatus(boolean clearFirst) {
 
-        if (clearFirst) {
-            _toolbar.getMenu().clear();
-        }
-
         _toolbar.inflateMenu(R.menu.settings_menu);
 
-        if (!BackupManager.hasFile()) {
-            MenuItem removeBackup = _toolbar.getMenu().findItem(R.id.menu_settings_remove_backup);
-            removeBackup.setVisible(false);
+        if (!BackupManager.hasBackups()) {
             if (Resource.isFull) {
                 pref_import_data.setEnabled(false);
                 pref_import_data.setSummary(R.string.no_backup_available);
@@ -399,10 +413,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         }
     }
 
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {

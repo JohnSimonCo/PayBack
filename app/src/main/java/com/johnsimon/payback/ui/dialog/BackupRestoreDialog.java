@@ -15,7 +15,7 @@ import com.johnsimon.payback.util.ReadResult;
 
 public class BackupRestoreDialog {
 
-    public static Promise<RestoreResult> attemptRestore(final Activity activity, final Storage storage) {
+    public static Promise<RestoreResult> attemptRestore(final Activity activity, final Storage storage, final boolean showRemove) {
 
         final Promise<RestoreResult> promise = new Promise<>();
 
@@ -49,19 +49,53 @@ public class BackupRestoreDialog {
                                     public void onPositive(MaterialDialog dialog) {
                                         super.onPositive(dialog);
 
-                                        ReadResult<String, Backup.ReadError> result = backups[which].read();
-                                        if (result.isSuccess()) {
-                                            storage.commit(AppData.fromJson(result.data));
-                                            storage.emit();
+                                        if (showRemove) {
+                                            new MaterialDialog.Builder(activity)
+                                                    .items(new String[]{activity.getString(R.string.restore), activity.getString(R.string.delete)})
+                                                    .itemsCallback(new MaterialDialog.ListCallback() {
+                                                        @Override
+                                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                                            if (which == 0) {
+                                                                ReadResult<String, Backup.ReadError> result = backups[which].read();
+                                                                if (result.isSuccess()) {
+                                                                    storage.commit(AppData.fromJson(result.data));
+                                                                    storage.emit();
 
-                                            promise.fire(RestoreResult.Success);
+                                                                    promise.fire(RestoreResult.Success);
+                                                                } else {
+                                                                    if (result.error == Backup.ReadError.FileNotFound) {
+                                                                        promise.fire(RestoreResult.FileNotFound);
+                                                                    } else {
+                                                                        promise.fire(RestoreResult.Unknown);
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                if (backups[which].remove()) {
+                                                                    promise.fire(RestoreResult.Deleted);
+                                                                } else {
+                                                                    promise.fire(RestoreResult.DeleteFailed);
+                                                                }
+                                                            }
+                                                        }
+
+                                                    })
+                                                    .show();
                                         } else {
-                                            if (result.error == Backup.ReadError.FileNotFound) {
-                                                promise.fire(RestoreResult.FileNotFound);
+                                            ReadResult<String, Backup.ReadError> result = backups[which].read();
+                                            if (result.isSuccess()) {
+                                                storage.commit(AppData.fromJson(result.data));
+                                                storage.emit();
+
+                                                promise.fire(RestoreResult.Success);
                                             } else {
-                                                promise.fire(RestoreResult.Unknown);
+                                                if (result.error == Backup.ReadError.FileNotFound) {
+                                                    promise.fire(RestoreResult.FileNotFound);
+                                                } else {
+                                                    promise.fire(RestoreResult.Unknown);
+                                                }
                                             }
                                         }
+
 
                                         dialog.cancel();
                                     }
@@ -80,7 +114,7 @@ public class BackupRestoreDialog {
     }
 
     public enum RestoreResult {
-        Success, Canceled, FileNotFound, Unknown, NoBackups
+        Success, Canceled, FileNotFound, Unknown, NoBackups, Deleted, DeleteFailed
     }
 
 }

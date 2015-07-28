@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_settings_remove_backup"
-        android:title="@string/remove_backup"
-        app:showAsAction="never"    />
-
-    <item
         android:visible="false"
         android:id="@+id/menu_settings_rate"
         android:title="@string/rate_title"
