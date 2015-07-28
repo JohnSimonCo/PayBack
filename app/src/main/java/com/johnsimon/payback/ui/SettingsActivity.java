@@ -27,13 +27,12 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
-import com.johnsimon.payback.util.Backup;
-import com.johnsimon.payback.util.BackupManager;
+import com.johnsimon.payback.backup.Backup;
+import com.johnsimon.payback.backup.BackupManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 

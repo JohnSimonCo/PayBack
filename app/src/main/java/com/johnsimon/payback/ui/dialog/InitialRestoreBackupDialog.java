@@ -1,16 +1,14 @@
 package com.johnsimon.payback.ui.dialog;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Promise;
-import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.util.BackupManager;
+import com.johnsimon.payback.backup.BackupManager;
 
 public class InitialRestoreBackupDialog {
 

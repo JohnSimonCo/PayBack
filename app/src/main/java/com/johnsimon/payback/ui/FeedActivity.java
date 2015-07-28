@@ -10,7 +10,6 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -47,11 +46,8 @@ import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Alarm;
-import com.johnsimon.payback.util.Backup;
-import com.johnsimon.payback.util.BackupManager;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
-import com.johnsimon.payback.util.ReadResult;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
@@ -59,7 +55,6 @@ import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
@@ -189,16 +184,6 @@ public class FeedActivity extends DataActivity implements
 		navigationDrawerFragment.adapter.notifyDataSetChanged();
 
 		feedSubscription.broadcast(feed);
-
-
-		boolean has = BackupManager.hasBackups();
-		ReadResult<Backup[], BackupManager.ReadError> backups = BackupManager.fetchBackups();
-		Date latestDate = BackupManager.latestBackupDate();
-		Backup latestBackup = BackupManager.latestBackup();
-		ReadResult<String, Backup.ReadError> result = latestBackup.read();
-		latestBackup.remove();
-		BackupManager.createBackup(Resource.gson.toJson(data), true);
-		ReadResult<Backup[], BackupManager.ReadError> backups2 = BackupManager.fetchBackups();
 
         //TODO REMOVE
         //LocalStorage.test(this, data);

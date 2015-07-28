@@ -1,20 +1,18 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.backup;
 
-import android.content.res.Resources;
 import android.os.Environment;
 
-import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.ReadResult;
+import com.johnsimon.payback.util.Resource;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
 import java.util.List;
 
 public class BackupManager {
@@ -27,7 +25,7 @@ public class BackupManager {
 	//Used for display
 	public final static String simpleFilePath = parentDir + "/" + dirName;
 
-	public static WriteResult createBackup(String JSON, Boolean autoBackup) {
+	public static boolean createBackup(String JSON, Boolean autoBackup) {
 		/*
 		if(!isExternalStorageWritable()) {
 			show(activity, R.string.library_roundedimageview_licenseId);
@@ -53,10 +51,10 @@ public class BackupManager {
 			writer.write(JSON);
 			writer.close();
 
-			return new WriteResult(true);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new WriteResult(false);
+			return false;
 		}
 	}
 
@@ -68,7 +66,7 @@ public class BackupManager {
 		Date now = new Date();
 		String dateString = formatter.format(now);
 		String fileName = autoBackup ? autoBackupFileName : manualBackupFileName;
-		return fileName + " " + dateString + File.separator + fileExtension;
+		return fileName + " " + dateString + "." + fileExtension;
 	}
 	public static ReadResult<Backup[], ReadError> fetchBackups() {
 		try {
@@ -104,59 +102,10 @@ public class BackupManager {
 		return getFiles().length > 0;
 	}
 
-	@Deprecated
-	public static WriteResult write(String JSON) {
-		/*
-		if(!isExternalStorageWritable()) {
-			show(activity, R.string.library_roundedimageview_licenseId);
-			return;
-		}*/
-
-		try {
-			File dir = getDir(), file = new File(dir, manualBackupFileName);
-
-			if(!dir.exists()) {
-				if(!dir.mkdirs()) {
-					throw new UnknownError("dir.mkdirs() failed");
-				}
-			}
-
-			if(!file.exists()) {
-				if(!file.createNewFile()) {
-					throw new UnknownError("file.createNewFile() failed");
-				}
-			}
-
-			FileWriter writer = new FileWriter(file);
-			writer.write(JSON);
-			writer.close();
-
-			return new WriteResult(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new WriteResult(false);
-		}
-	}
-
-	@Deprecated
-	public static boolean hasFile() {
-		return getFile().exists();
-	}
-
-	@Deprecated
-	public static boolean removeFile() {
-		File file = getFile();
-		return file.exists() && file.delete();
-	}
-
 	private static File getDir() {
 		return new File(Environment.getExternalStoragePublicDirectory(parentDir), dirName);
 	}
 
-	@Deprecated
-	private static File getFile() {
-		return new File(getDir(), manualBackupFileName);
-	}
 	private static File[] getFiles() {
 		File dir = getDir();
 		return dir.listFiles();

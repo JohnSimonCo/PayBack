@@ -9,8 +9,8 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.Storage;
-import com.johnsimon.payback.util.Backup;
-import com.johnsimon.payback.util.BackupManager;
+import com.johnsimon.payback.backup.Backup;
+import com.johnsimon.payback.backup.BackupManager;
 import com.johnsimon.payback.util.ReadResult;
 
 public class BackupRestoreDialog {

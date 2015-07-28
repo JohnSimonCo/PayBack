@@ -1,8 +1,5 @@
 package com.johnsimon.payback.storage;
 
-import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.util.BackupManager;
-
 /*
 public class FileStorage extends ExternalStorage {
 

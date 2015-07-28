@@ -1,8 +1,9 @@
-package com.johnsimon.payback.util;
+package com.johnsimon.payback.backup;
 
 import android.content.res.Resources;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.util.ReadResult;
 
 import java.io.BufferedReader;
 import java.io.File;
