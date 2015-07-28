@@ -21,11 +21,12 @@ public class BackupManager {
 	private final static String dirName = "PayBack";
 	public final static String autoBackupFileName = "Auto-backup";
 	private final static String manualBackupFileName = "Backup";
+	private final static String wipeBackupFileName = "Wipe-backup";
 	private final static String fileExtension = "json";
 	//Used for display
 	public final static String simpleFilePath = parentDir + "/" + dirName;
 
-	public static boolean createBackup(String JSON, Boolean autoBackup) {
+	public static boolean createBackup(String JSON, Backup.Type backupType) {
 		/*
 		if(!isExternalStorageWritable()) {
 			show(activity, R.string.library_roundedimageview_licenseId);
@@ -33,7 +34,7 @@ public class BackupManager {
 		}*/
 
 		try {
-			File dir = getDir(), file = new File(dir, generateFileName(autoBackup));
+			File dir = getDir(), file = new File(dir, generateFileName(backupType));
 
 			if(!dir.exists()) {
 				if(!dir.mkdirs()) {
@@ -61,11 +62,25 @@ public class BackupManager {
 	public static SimpleDateFormat getFormatter() {
 		return new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
 	}
-	public static String generateFileName(Boolean autoBackup) {
+	public static String generateFileName(Backup.Type backupType) {
 		SimpleDateFormat formatter = getFormatter();
 		Date now = new Date();
 		String dateString = formatter.format(now);
-		String fileName = autoBackup ? autoBackupFileName : manualBackupFileName;
+
+		String fileName = "";
+
+		switch (backupType) {
+			case Manual:
+				fileName = manualBackupFileName;
+				break;
+			case Auto:
+				fileName = autoBackupFileName;
+				break;
+			case Wipe:
+				fileName = wipeBackupFileName;
+				break;
+		}
+
 		return fileName + " " + dateString + "." + fileExtension;
 	}
 	public static ReadResult<Backup[], ReadError> fetchBackups() {
@@ -93,7 +108,7 @@ public class BackupManager {
 		Collections.sort(backups, new Comparator<Backup>() {
 			@Override
 			public int compare(Backup a, Backup b) {
-				return a.date.compareTo(b.date);
+				return b.date.compareTo(a.date);
 			}
 		});
 		return backups.get(0);

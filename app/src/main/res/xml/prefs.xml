@@ -45,7 +45,7 @@
             android:key="pref_export_data"  />
 
         <Preference
-            android:title="@string/pref_restore_data"
+            android:title="@string/pref_manage_backups"
             android:key="pref_import_data"  />
 
     </PreferenceCategory>

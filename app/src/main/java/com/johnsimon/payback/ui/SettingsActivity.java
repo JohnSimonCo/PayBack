@@ -87,8 +87,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                BackupManager.createBackup(data.save(), false);
-                updateBackupStatus(true);
+                BackupManager.createBackup(data.save(), Backup.Type.Manual);
+                updateBackupStatus();
 				return true;
 			}
 		});
@@ -108,6 +108,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 break;
                             case Deleted:
                                 snackbar(R.string.delete_successful);
+                                updateBackupStatus();
                                 break;
                             case FileNotFound:
                                 displayReadError(Backup.ReadError.FileNotFound);
@@ -127,16 +128,16 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             }
         });
 
-        if (!Resource.isFull) {
-            pref_export_data.setEnabled(false);
-            pref_import_data.setEnabled(false);
-            pref_export_data.setSummary(R.string.not_full_version);
-            pref_import_data.setSummary(R.string.not_full_version);
-        } else {
+        if (Resource.isFull) {
             pref_export_data.setEnabled(true);
             pref_import_data.setEnabled(true);
             pref_export_data.setSummary(null);
             pref_import_data.setSummary(getRestoreSummary());
+        } else {
+            pref_export_data.setEnabled(false);
+            pref_import_data.setEnabled(false);
+            pref_export_data.setSummary(R.string.not_full_version);
+            pref_import_data.setSummary(R.string.not_full_version);
         }
 
         pref_currency = findPreference("pref_currency");
@@ -263,19 +264,22 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		Preference pref_wipe_data = findPreference("pref_wipe_data");
 		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				new MaterialDialog.Builder(SettingsActivity.this)
-						.cancelable(true)
-						.title(R.string.wipe_data)
-						.content(Resource.isFull ? R.string.wipe_data_confirm_full : R.string.wipe_data_confirm_free)
-						.positiveText(R.string.wipe)
-						.negativeText(R.string.cancel)
-						.callback(new MaterialDialog.ButtonCallback() {
-							@Override
-							public void onPositive(MaterialDialog dialog) {
-								super.onPositive(dialog);
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(SettingsActivity.this)
+                        .cancelable(true)
+                        .title(R.string.wipe_data)
+                        .content(Resource.isFull ? R.string.wipe_data_confirm_full : R.string.wipe_data_confirm_free)
+                        .positiveText(R.string.wipe)
+                        .negativeText(R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
 
-								storage.wipe();
+                                BackupManager.createBackup(data.save(), Backup.Type.Wipe);
+                                updateBackupStatus();
+
+                                storage.wipe();
 
 								dialog.dismiss();
 							}
@@ -290,12 +294,11 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			}
 		});
 
-        updateBackupStatus(false);
+        updateBackupStatus();
 
     }
 
     private String getRestoreSummary() {
-
         Backup latest = BackupManager.latestBackup();
 
         if (latest != null) {
@@ -323,10 +326,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         Snackbar.make(masterView, text, Snackbar.LENGTH_SHORT).show();
 	}
 
-    private void updateBackupStatus(boolean clearFirst) {
-
-        _toolbar.inflateMenu(R.menu.settings_menu);
-
+    private void updateBackupStatus() {
         if (!BackupManager.hasBackups()) {
             if (Resource.isFull) {
                 pref_import_data.setEnabled(false);
