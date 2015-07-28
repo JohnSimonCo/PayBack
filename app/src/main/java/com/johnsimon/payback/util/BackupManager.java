@@ -3,6 +3,8 @@ package com.johnsimon.payback.util;
 import android.content.res.Resources;
 import android.os.Environment;
 
+import com.johnsimon.payback.R;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 public class BackupManager {
 
@@ -248,8 +251,13 @@ public class BackupManager {
 		}
 
 		public String generateString(Resources resources) {
-			//TODO implement
-			return "";
+
+			return resources.getString(auto ? R.string.autobackup : R.string.backup) + " - " + generateDateString();
+		}
+
+		public String generateDateString() {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
+			return format.format(new Date(date));
 		}
 	}
 }

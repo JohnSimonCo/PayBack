@@ -30,6 +30,7 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.util.BackupManager;
 import com.johnsimon.payback.util.Resource;
@@ -97,38 +98,15 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-				final BackupManager.ReadResult result = BackupManager.read();
-
-                if(result.success) {
-                    new MaterialDialog.Builder(SettingsActivity.this)
-                            .title(R.string.pref_restore_data)
-                            .content(R.string.pref_restore_data_description)
-                            .positiveText(R.string.restore)
-                            .negativeText(R.string.cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    super.onPositive(dialog);
-
-                                    FeedActivity.goToAll();
-                                    storage.commit(AppData.fromJson(result.content));
-                                    storage.emit();
-
-                                    Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
-
-                                    dialog.dismiss();
-                                }
-
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    super.onNegative(dialog);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                } else {
-					displayReadError(result);
-				}
+                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage).then(new Callback<Boolean>() {
+                    @Override
+                    public void onCalled(Boolean restored) {
+                        if (restored) {
+                            FeedActivity.goToAll();
+                            Snackbar.make(masterView, R.string.restore_success, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 return true;
             }
         });
@@ -321,11 +299,11 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
     }
 
     private String getRestoreSummary() {
-        BackupManager.ReadResult<BackupManager.Backup[]> backups = BackupManager.fetchBackups();
 
-        if (backups != null && backups.data.length > 0) {
-            //TODO REPLACE FILENAME WITH DATE
-            return String.format(getString(R.string.pref_backup_last), backups.data[0].fileName);
+        BackupManager.Backup latest = BackupManager.latestBackup();
+
+        if (latest != null) {
+            return String.format(getString(R.string.pref_backup_last), latest.generateDateString());
         } else {
             return null;
         }
