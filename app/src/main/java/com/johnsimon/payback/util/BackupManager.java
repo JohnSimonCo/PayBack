@@ -61,7 +61,6 @@ public class BackupManager {
 	}
 	public static ReadResult<Backup[]> fetchBackups() {
 		ArrayList<Backup> backups = new ArrayList<>();
-
 		StringBuilder builder = new StringBuilder();
 		try {
 			File[] files = getFiles();
@@ -83,6 +82,9 @@ public class BackupManager {
 		}
 	}
 	public static Long lastBackupDate() {
+		return null;
+	}
+	public static Backup lastBackup() {
 		return null;
 	}
 	public static Boolean hasBackups() {
