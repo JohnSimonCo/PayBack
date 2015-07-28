@@ -19,9 +19,6 @@ public class BackupManager {
 
 	private final static String parentDir = Resource.isKkOrAbove() ? Environment.DIRECTORY_DOCUMENTS : "Documents";
 	private final static String dirName = "PayBack";
-	public final static String autoBackupFileName = "Auto-backup";
-	private final static String manualBackupFileName = "Backup";
-	private final static String wipeBackupFileName = "Wipe-backup";
 	private final static String fileExtension = "json";
 	//Used for display
 	public final static String simpleFilePath = parentDir + "/" + dirName;
@@ -67,21 +64,7 @@ public class BackupManager {
 		Date now = new Date();
 		String dateString = formatter.format(now);
 
-		String fileName = "";
-
-		switch (backupType) {
-			case Manual:
-				fileName = manualBackupFileName;
-				break;
-			case Auto:
-				fileName = autoBackupFileName;
-				break;
-			case Wipe:
-				fileName = wipeBackupFileName;
-				break;
-		}
-
-		return fileName + " " + dateString + "." + fileExtension;
+		return backupType.typeString + " " + dateString + "." + fileExtension;
 	}
 	public static ReadResult<Backup[], ReadError> fetchBackups() {
 		try {

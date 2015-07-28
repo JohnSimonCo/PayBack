@@ -15,7 +15,30 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Backup {
-	public boolean auto;
+	public enum Type {
+		Manual("Backup", 	R.string.backup),
+		Auto("Auto-backup", R.string.autobackup),
+		Wipe("Wipe-backup", R.string.wipebackup);
+
+		public String typeString;
+		public int resourceString;
+
+		Type(String typeString, int resourceString) {
+			this.typeString = typeString;
+			this.resourceString = resourceString;
+		}
+
+		public static Type fromTypeString(String typeString) {
+			for(Type type: Type.values()) {
+				if(type.typeString.equals(typeString)) {
+					return type;
+				}
+			}
+			return Manual;
+		}
+	}
+
+	public Type type;
 	public Date date;
 
 	private File file;
@@ -25,13 +48,13 @@ public class Backup {
 		String fileName = file.getName();
 
 		if(fileName.equals("data.json")) { // Old file name (Implemented 28/07-15)
-			this.auto = false;
+			this.type = Type.Manual;
 			this.date = new Date();
 			file.renameTo(new File(file.getParentFile(), BackupManager.generateFileName(Type.Manual)));
 		} else {
 			String[] parts = fileName.split(" ");
 			String backupType = parts[0], date = parts[1];
-			this.auto = backupType.equals(BackupManager.autoBackupFileName);
+			this.type = Type.fromTypeString(backupType);
 			this.date = BackupManager.getFormatter().parse(date);
 		}
 	}
@@ -57,7 +80,7 @@ public class Backup {
 	}
 
 	public String generateString(Resources resources) {
-		return resources.getString(auto ? R.string.autobackup : R.string.backup) + " - " + generateDateString();
+		return resources.getString(type.resourceString) + " - " + generateDateString();
 	}
 
 	public String generateDateString() {
@@ -67,10 +90,6 @@ public class Backup {
 
 	public enum ReadError {
 		FileNotFound, Unknown
-	}
-
-	public enum Type {
-		Manual, Auto, Wipe
 	}
 
 }

@@ -94,7 +94,7 @@
         <receiver android:name=".util.Alarm$AlarmReceiver">
         </receiver>
 
-        <receiver android:name=".data.backup.AutoBackuper$AlarmReciever">
+        <receiver android:name=".data.backup.AutoBackuper$AlarmReceiver">
         </receiver>
 
         <receiver

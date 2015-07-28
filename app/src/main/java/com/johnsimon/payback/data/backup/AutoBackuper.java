@@ -15,12 +15,13 @@ import java.util.Date;
 public class AutoBackuper {
 	public final static String JSON_DATA_KEY = "AUTO_BACKUP_ID";
 
-	private final static long FIVE_MINUTES = 1000 * 60 * 5;
+	//private final static long FIVE_MINUTES = 1000 * 60 * 5;
+	private final static long FIVE_MINUTES = 1000;
 	private static long nextBackupDate() {
 		return System.currentTimeMillis() + FIVE_MINUTES;
 	}
-	public static void sheduleBackup(Context context, String JSON) {
-		Intent intentAlarm = new Intent(context, AlarmReciever.class);
+	public static void scheduleBackup(Context context, String JSON) {
+		Intent intentAlarm = new Intent(context, AlarmReceiver.class);
 		intentAlarm.putExtra(JSON_DATA_KEY, JSON);
 
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -41,7 +42,7 @@ public class AutoBackuper {
 		if(!backups.isSuccess()) { return; }
 
 		for(Backup backup : backups.data) {
-			if(!backup.auto) {
+			if(backup.type != Backup.Type.Auto) {
 				continue;
 			}
 			Calendar nowCalendar = Calendar.getInstance();
@@ -61,7 +62,7 @@ public class AutoBackuper {
 
 	}
 
-	public static class AlarmReciever extends BroadcastReceiver {
+	public static class AlarmReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(final Context context, Intent intent) {
