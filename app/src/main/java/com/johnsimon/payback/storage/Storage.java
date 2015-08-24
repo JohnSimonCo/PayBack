@@ -42,7 +42,7 @@ public abstract class Storage {
 		sheduleBackup(context, JSON);
 	}
 
-	public void sheduleBackup(Context context, String json) {
+	protected void sheduleBackup(Context context, String json) {
 
 	}
 
