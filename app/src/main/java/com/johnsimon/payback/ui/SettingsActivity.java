@@ -54,6 +54,15 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
     private SwitchPreference pref_cloud_sync;
     private SwitchPreference pref_auto_backup;
 
+    public final static String PREFERENCE_CURRENCY = "pref_currency";
+    public final static String PREFERENCE_BACKGROUND = "pref_background";
+    public final static String PREFERENCE_CLOUD_SYNC = "pref_cloud_sync";
+    public final static String PREFERENCE_CLOUD_SYNC_ACCOUNT = "pref_cloud_sync_account";
+    public final static String PREFERENCE_WIPE_DATA = "pref_wipe_data";
+    public final static String PREFERENCE_EXPORT_DATA = "pref_export_data";
+    public final static String PREFERENCE_IMPORT_DATA = "pref_import_data";
+    public final static String PREFERENCE_AUTO_BACKUP = "pref_auto_backup";
+
     private BillingProcessor bp;
 
 	@Override
@@ -81,7 +90,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
 
-		Preference pref_export_data = findPreference("pref_export_data");
+		Preference pref_export_data = findPreference(PREFERENCE_EXPORT_DATA);
 		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -92,7 +101,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			}
 		});
 
-		pref_import_data = findPreference("pref_import_data");
+		pref_import_data = findPreference(PREFERENCE_IMPORT_DATA);
 		pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -142,9 +151,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             pref_import_data.setSummary(R.string.not_full_version);
         }
 
-        pref_auto_backup = (SwitchPreference) findPreference("pref_auto_backup");
+        pref_auto_backup = (SwitchPreference) findPreference(PREFERENCE_AUTO_BACKUP);
 
-        pref_currency = findPreference("pref_currency");
+        pref_currency = findPreference(PREFERENCE_CURRENCY);
 
         pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -169,9 +178,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             }
         });
 
-        pref_cloud_sync = (SwitchPreference) findPreference("pref_cloud_sync");
+        pref_cloud_sync = (SwitchPreference) findPreference(PREFERENCE_CLOUD_SYNC);
 
-		pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
+		pref_cloud_sync_account = findPreference(PREFERENCE_CLOUD_SYNC_ACCOUNT);
 		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, null));
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -263,9 +272,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             }
         });
 
-        pref_background = (ListPreference) findPreference("pref_background");
+        pref_background = (ListPreference) findPreference(PREFERENCE_BACKGROUND);
 
-		Preference pref_wipe_data = findPreference("pref_wipe_data");
+		Preference pref_wipe_data = findPreference(PREFERENCE_WIPE_DATA);
 		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -477,6 +486,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
     }
 
+    //TODO(SIMME) BEHÖVS?
     @Override
     protected void onStart() {
         super.onStart();
