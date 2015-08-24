@@ -47,7 +47,7 @@ public class BackupRestoreDialog {
                                     .itemsCallback(new MaterialDialog.ListCallback() {
                                         @Override
                                         public void onSelection(MaterialDialog dialog, View view, int restoreDeleteWhich, CharSequence text) {
-                                            if (restoreDeleteWhich == 0) {
+                                            if (restoreDeleteWhich == 0) /*Magic number AF*/ {
                                                 ReadResult<String, Backup.ReadError> result = backups[which].read();
                                                 if (result.isSuccess()) {
                                                     storage.commit(activity, AppData.fromJson(result.data));
