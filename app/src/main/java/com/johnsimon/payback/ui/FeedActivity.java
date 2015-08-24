@@ -111,19 +111,6 @@ public class FeedActivity extends DataActivity implements
         }
 
 		Resource.init(getApplicationContext());
-		if (Resource.isFirstRun(storage.getPreferences())) {
-
-			InitialRestoreBackupDialog.attemptRestore(this, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
-				@Override
-				public void onCalled(BackupRestoreDialog.RestoreResult result) {
-					//TODO(Simme) show error???
-					if (!result.isSuccess()) {
-						WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-						welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
-					}
-				}
-			});
-		}
 
 		setContentView(R.layout.activity_feed);
 
@@ -137,6 +124,19 @@ public class FeedActivity extends DataActivity implements
 				R.id.navigation_drawer,
 				masterLayout = (DrawerLayout) findViewById(R.id.drawer_layout)
 		);
+
+		if (Resource.isFirstRun(storage.getPreferences())) {
+
+			InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
+				@Override
+				public void onCalled(Boolean successful) {
+					if (!successful) {
+						WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+						welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+					}
+				}
+			});
+		}
 
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		beamer = new Beamer(this, this);

@@ -2,6 +2,8 @@ package com.johnsimon.payback.ui.dialog;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
@@ -12,8 +14,8 @@ import com.johnsimon.payback.data.backup.BackupManager;
 
 public class InitialRestoreBackupDialog {
 
-	public static Promise<BackupRestoreDialog.RestoreResult> attemptRestore(final Activity activity, final Storage storage) {
-		final Promise<BackupRestoreDialog.RestoreResult> p = new Promise<>();
+	public static Promise<Boolean> attemptRestore(final Activity activity, final Storage storage, final View masterView) {
+		final Promise<Boolean> p = new Promise<>();
 
 		if (BackupManager.hasBackups()) {
 
@@ -25,7 +27,7 @@ public class InitialRestoreBackupDialog {
 					.cancelListener(new DialogInterface.OnCancelListener() {
 						@Override
 						public void onCancel(DialogInterface dialogInterface) {
-							p.fire(BackupRestoreDialog.RestoreResult.Canceled);
+							p.fire(false);
 						}
 					})
 					.cancelable(false)
@@ -35,23 +37,22 @@ public class InitialRestoreBackupDialog {
 							BackupRestoreDialog.attemptRestore(activity, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 								@Override
 								public void onCalled(BackupRestoreDialog.RestoreResult result) {
-								if(result.isSuccess()) {
-									p.fire(true);
-								} else {
-									//TODO(Simme) CONT
-								}
-								p.fire(result);
+									p.fire(result.isSuccess());
+									if (result == BackupRestoreDialog.RestoreResult.Unknown ||
+											result == BackupRestoreDialog.RestoreResult.FileNotFound) {
+										Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
+									}
 								}
 							});
 						}
 
 						@Override
 						public void onNegative(MaterialDialog dialog) {
-							p.fire(BackupRestoreDialog.RestoreResult.Canceled);
+							p.fire(false);
 						}
 					}).show();
 		} else {
-			p.fire(BackupRestoreDialog.RestoreResult.NoBackups);
+			p.fire(false);
 		}
 		return p;
 	}
