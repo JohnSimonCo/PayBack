@@ -32,7 +32,7 @@ public class AutoBackuper {
 
 		alarmManager.set(AlarmManager.RTC_WAKEUP, nextBackupDate(), PendingIntent.getBroadcast(context, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
 
-		Log.e("AutoBackuper", "Sheduled auto-backup");
+		Log.d("AutoBackuper", "Sheduled auto-backup");
 	}
 
 	public static void performBackup(String JSON, Backup.Type type) {
@@ -59,7 +59,7 @@ public class AutoBackuper {
 			//On the same day
 			if(nowCalendar.get(Calendar.YEAR) == backupCalendar.get(Calendar.YEAR) && nowCalendar.get(Calendar.DAY_OF_YEAR) == backupCalendar.get(Calendar.DAY_OF_YEAR)) {
 
-				Log.e("AutoBackuper", "Removed todays previous backup");
+				Log.i("AutoBackuper", "Removed todays previous backup");
 				backup.remove();
 				//This should be the only auto-backup today so we can stop searching
 				break;

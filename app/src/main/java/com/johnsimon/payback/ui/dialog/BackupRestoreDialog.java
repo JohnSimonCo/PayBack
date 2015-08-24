@@ -2,6 +2,7 @@ package com.johnsimon.payback.ui.dialog;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.provider.ContactsContract;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -112,7 +113,10 @@ public class BackupRestoreDialog {
     }
 
     public enum RestoreResult {
-        Success, Canceled, FileNotFound, Unknown, NoBackups, Deleted, DeleteFailed
+        Success, Canceled, FileNotFound, Unknown, NoBackups, Deleted, DeleteFailed;
+        public boolean isSuccess() {
+            return this == Success;
+        }
     }
 
 }

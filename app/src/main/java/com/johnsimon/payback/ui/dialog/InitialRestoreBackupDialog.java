@@ -35,7 +35,12 @@ public class InitialRestoreBackupDialog {
 							BackupRestoreDialog.attemptRestore(activity, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 								@Override
 								public void onCalled(BackupRestoreDialog.RestoreResult result) {
-									p.fire(result);
+								if(result.isSuccess()) {
+									p.fire(true);
+								} else {
+									//TODO(Simme) CONT
+								}
+								p.fire(result);
 								}
 							});
 						}

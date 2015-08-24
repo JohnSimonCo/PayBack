@@ -486,7 +486,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
     }
 
-    //TODO(SIMME) BEHÖVS?
+    //TODO(SIMME) BEHÃ–VS?
     @Override
     protected void onStart() {
         super.onStart();
