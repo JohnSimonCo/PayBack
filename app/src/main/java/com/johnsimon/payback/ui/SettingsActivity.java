@@ -534,7 +534,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Resource.purchasedFull(this, bp);
+        Resource.purchasedFull(this, bp, masterView);
     }
 
 	@Override

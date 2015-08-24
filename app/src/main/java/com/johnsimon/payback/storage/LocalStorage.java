@@ -8,6 +8,7 @@ import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.backup.AutoBackuper;
 import com.johnsimon.payback.util.ColorPalette;
 
 import java.util.Random;
@@ -45,6 +46,11 @@ public class LocalStorage extends Storage {
 		for(int i = 0; i < 100; i++) {
             appData.add(new Debt(appData.people.get(r.nextInt(appData.people.size())), r.nextFloat() * 200, null, appData.preferences.getCurrency().id));
 		}
+	}
+
+	@Override
+	protected void sheduleBackup(Context context, String JSON) {
+		AutoBackuper.scheduleBackup(context, preferences, JSON);
 	}
 
 	@Override

@@ -136,6 +136,7 @@
     <string name="backup">Backup</string>
     <string name="delete_failed">Delete failed</string>
     <string name="delete_successful">Delete successful</string>
+    <string name="login_successful">Login successful!</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

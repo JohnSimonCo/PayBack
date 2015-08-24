@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.johnsimon.payback.ui.SettingsActivity;
 import com.johnsimon.payback.util.ReadResult;
+import com.johnsimon.payback.util.Resource;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -22,7 +23,7 @@ public class AutoBackuper {
 		return System.currentTimeMillis() + FIVE_MINUTES;
 	}
 	public static void scheduleBackup(Context context, SharedPreferences preferences, String JSON) {
-		boolean shouldAutoBackup = preferences.getBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, false);
+		boolean shouldAutoBackup = preferences.getBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, Resource.isFull);
 		if(!shouldAutoBackup) { return; }
 
 		Intent intentAlarm = new Intent(context, AlarmReceiver.class);

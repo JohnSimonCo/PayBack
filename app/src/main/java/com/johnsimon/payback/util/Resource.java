@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.StrictMode;
+import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
 import android.view.Display;
 import android.view.View;
@@ -32,10 +33,12 @@ import com.anjlab.android.iab.v3.BillingProcessor;
 import com.google.gson.Gson;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.SettingsActivity;
 import com.makeramen.RoundedImageView;
@@ -315,7 +318,7 @@ public class Resource {
         return output;
     }
 
-    public static void purchasedFull(Activity activity, BillingProcessor bp) {
+    public static void purchasedFull(Activity activity, BillingProcessor bp, View masterView) {
         Resource.checkFull(bp);
 
         if (!Resource.isFull) {
@@ -325,6 +328,7 @@ public class Resource {
         SharedPreferences preferences = StorageManager.getPreferences(activity);
         preferences.edit().putBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, true).apply();
 
+        //TODO Purshase skärm där man kan se alla features
         new MaterialDialog.Builder(activity)
                 .title(R.string.cloud_sync)
                 .content(R.string.cloud_sync_description_first)
@@ -335,6 +339,13 @@ public class Resource {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         dialog.dismiss();
+                        StorageManager.migrateToDrive(activity).then(result -> {
+                            if (result.success) {
+                                if (masterView != null) {
+                                    Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        });
                     }
 
                     @Override
@@ -353,14 +364,14 @@ public class Resource {
         public int compare(Debt a, Debt b) {
             if (a.isPaidBack()) {
                 if(!b.isPaidBack()) {
-					//Only a is
+					//Only a is paid back
 					return 1;
 				}
 			} else if(b.isPaidBack()) {
-				//Only b is
+				//Only b is paid back
 				return -1;
 			}
-			//Both or none is
+			//Both or none is paid back
 			return (int) Math.round(b.getRemainingAbsoluteDebt() - a.getRemainingAbsoluteDebt());
         }
     }
@@ -371,7 +382,6 @@ public class Resource {
             return Math.round(debt2.timestamp - debt1.timestamp);
         }
     }
-
 
 	public static class AlphabeticalStringComparator implements Comparator<String> {
 		@Override

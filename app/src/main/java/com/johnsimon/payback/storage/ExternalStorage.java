@@ -58,7 +58,7 @@ public abstract class ExternalStorage extends Storage {
 	}
 
 	@Override
-	public void sheduleBackup(Context context, String JSON) {
+	protected void sheduleBackup(Context context, String JSON) {
 		AutoBackuper.scheduleBackup(context, localStorage.getPreferences(), JSON);
 	}
 

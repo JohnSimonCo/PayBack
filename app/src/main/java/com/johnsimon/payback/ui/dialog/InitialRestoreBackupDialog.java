@@ -11,6 +11,7 @@ import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.backup.BackupManager;
+import com.johnsimon.payback.storage.StorageManager;
 
 public class InitialRestoreBackupDialog {
 
@@ -35,10 +36,11 @@ public class InitialRestoreBackupDialog {
 					public void onPositive(MaterialDialog dialog) {
 						BackupRestoreDialog.attemptRestore(activity, storage, false).then(result -> {
                             p.fire(result.isSuccess());
-                            if (result == BackupRestoreDialog.RestoreResult.Unknown ||
-                                    result == BackupRestoreDialog.RestoreResult.FileNotFound) {
-                                Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
-                            }
+							switch (result) {
+								case Unknown: case FileNotFound:
+									Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
+									break;
+							}
                         });
 					}
 
@@ -46,7 +48,11 @@ public class InitialRestoreBackupDialog {
 					public void onNeutral(MaterialDialog dialog) {
 						super.onNeutral(dialog);
 						p.fire(true);
-
+						StorageManager.migrateToDrive(activity).then(result -> {
+							if (result.success) {
+								Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
+							}
+						});
 					}
 
 					@Override
