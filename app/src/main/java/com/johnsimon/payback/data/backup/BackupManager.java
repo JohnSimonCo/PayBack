@@ -69,6 +69,9 @@ public class BackupManager {
 	public static ReadResult<Backup[], ReadError> fetchBackups() {
 		try {
 			File[] files = getFiles();
+			if (files == null) {
+				return ReadResult.error(ReadError.NoFiles);
+			}
 			Backup[] backups = new Backup[files.length];
 			for(int i = 0; i < files.length; i++) {
 				backups[i] = new Backup(files[i]);
@@ -98,7 +101,8 @@ public class BackupManager {
 		return backups[0];
 	}
 	public static Boolean hasBackups() {
-		return getFiles().length > 0;
+		File[] files = getFiles();
+		return files != null && files.length > 0;
 	}
 
 	private static File getDir() {
@@ -140,6 +144,6 @@ public class BackupManager {
 	}
 
 	public enum ReadError {
-		Parse
+		Parse, NoFiles
 	}
 }

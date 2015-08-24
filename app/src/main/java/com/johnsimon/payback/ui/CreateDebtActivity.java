@@ -448,7 +448,7 @@ public class CreateDebtActivity extends DataActivity {
 			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
 		} else if(intent.hasExtra(ARG_FROM_PERSON_NAME)) {
 			floatLabelNameAutoCompleteTextView.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
-			floatLabelAmountEditText.requestFocus();
+			radioGroup.requestFocus();
 		}
 	}
 
