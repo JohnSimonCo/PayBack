@@ -335,6 +335,8 @@ public class Resource {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
+                        //TODO Göra något åt det här...
+                        //r/shittyprogramming
                         dialog.dismiss();
                     }
 
