@@ -74,7 +74,7 @@ public class BackupRestoreDialog {
                                     .show();
                         } else {
                             new MaterialDialog.Builder(activity)
-                                    .title(R.string.restoredialog_title)
+                                    .title(R.string.restoredialog_title_both)
                                     .content(R.string.pref_restore_data_description)
                                     .positiveText(R.string.restore)
                                     .negativeText(R.string.cancel)
