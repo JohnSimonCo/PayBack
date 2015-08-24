@@ -39,6 +39,7 @@ public abstract class Storage {
 		String JSON = data.save();
 
 		commit(JSON);
+		sheduleBackup(context, JSON);
 	}
 
 	public void sheduleBackup(Context context, String json) {
