@@ -12,7 +12,7 @@ public class AlarmScheduler {
 	private Subscription<AppData> dataSubscription;
 	private Context context;
 
-	//TODO inte göra om hela processen varje ny aktivitetsstart
+	//TODO[PERF] inte göra om hela processen varje ny aktivitetsstart
 	public AlarmScheduler(Context context, Subscription<AppData> dataSubscription) {
 		this.context = context;
 		this.dataSubscription = dataSubscription;

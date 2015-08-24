@@ -197,8 +197,9 @@
     <string name="debtshare_partialformat">paid back %1$s on %2$s</string>
     <string name="debtshare_paidbackformat">"paid back on %1$s</string>
 
-    <string name="restoredialog_title">Restore backup</string>
-    <string name="restoredialog_content">There are backups saved on this device. Do you wish to restore from one of them?</string>
+    <string name="restoredialog_title_both">Restore data?</string>
+    <string name="restoredialog_content_both">There are backups saved on this device. Do you wish to restore from one of them or activate cloud sync?</string>
+    <string name="restoredialog_content_cloud"></string>
     <string name="restoredialog_select_backup">Select backup</string>
     <string name="restore">Restore</string>
 

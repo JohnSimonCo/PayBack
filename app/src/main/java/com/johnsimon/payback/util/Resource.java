@@ -37,6 +37,7 @@ import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.SettingsActivity;
 import com.makeramen.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -201,7 +202,7 @@ public class Resource {
         return a << ALPHA_CHANNEL | r << RED_CHANNEL | g << GREEN_CHANNEL | b << BLUE_CHANNEL;
     }
 
-	//TODO fördela
+	//TODO[Innan 1.3] fördela actionCompletes
 	public static void actionComplete(final Activity activity) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
@@ -312,6 +313,37 @@ public class Resource {
         //paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         //canvas.drawBitmap(sbmp, rect, rect, paint);
         return output;
+    }
+
+    public static void purchasedFull(Activity activity, BillingProcessor bp) {
+        Resource.checkFull(bp);
+
+        if (!Resource.isFull) {
+            return;
+        }
+
+        SharedPreferences preferences = StorageManager.getPreferences(activity);
+        preferences.edit().putBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, true).apply();
+
+        new MaterialDialog.Builder(activity)
+                .title(R.string.cloud_sync)
+                .content(R.string.cloud_sync_description_first)
+                .positiveText(R.string.activate)
+                .negativeText(R.string.not_now)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     public static SimpleDateFormat monthDateFormat = new SimpleDateFormat("MMM d", Locale.getDefault());

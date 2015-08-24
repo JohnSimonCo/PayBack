@@ -145,6 +145,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             pref_export_data.setSummary(null);
             pref_import_data.setSummary(getRestoreSummary());
         } else {
+            pref_auto_backup.setChecked(false);
             pref_auto_backup.setEnabled(false);
             pref_auto_backup.setChecked(false);
             pref_export_data.setEnabled(false);
@@ -533,31 +534,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Resource.checkFull(bp);
-
-        if (!Resource.isFull) {
-            return;
-        }
-
-        new MaterialDialog.Builder(this)
-                .title(R.string.cloud_sync)
-                .content(R.string.cloud_sync_description_first)
-                .positiveText(R.string.activate)
-                .negativeText(R.string.not_now)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        Resource.purchasedFull(this, bp);
     }
 
 	@Override
@@ -568,7 +545,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
 	@Override
     public void onPurchaseHistoryRestored() {
-
+        Resource.checkFull(bp);
     }
 
     @Override

@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -110,6 +111,8 @@ public class FeedActivity extends DataActivity implements
 
         }
 
+		bp.loadOwnedPurchasesFromGoogle();
+
 		Resource.init(getApplicationContext());
 
 		setContentView(R.layout.activity_feed);
@@ -127,15 +130,22 @@ public class FeedActivity extends DataActivity implements
 
 		if (Resource.isFirstRun(storage.getPreferences())) {
 
-			InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
-				@Override
-				public void onCalled(Boolean successful) {
-					if (!successful) {
-						WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-						welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+			if (Resource.isFull) {
+				InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
+					@Override
+					public void onCalled(Boolean successful) {
+						if (!successful) {
+							WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+							welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+						}
 					}
-				}
-			});
+				});
+			} else {
+				WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+				welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+			}
+
+
 		}
 
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -574,38 +584,12 @@ public class FeedActivity extends DataActivity implements
 
 	@Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Resource.checkFull(bp);
-
-		navigationDrawerFragment.footerUpgrade.setVisibility(View.GONE);
-
-        if (!Resource.isFull) {
-            return;
-        }
-
-        new MaterialDialog.Builder(this)
-                .title(R.string.cloud_sync)
-                .content(R.string.cloud_sync_description_first)
-                .positiveText(R.string.activate)
-                .negativeText(R.string.not_now)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-						StorageManager.migrateToDrive(FeedActivity.this);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        Resource.purchasedFull(this, bp);
     }
 
     @Override
     public void onPurchaseHistoryRestored() {
+		Resource.checkFull(bp);
     }
 
     @Override
