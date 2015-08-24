@@ -101,6 +101,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			}
 		});
 
+       // pref_auto_backup = findPreference(PREF)
+
 		pref_import_data = findPreference(PREFERENCE_IMPORT_DATA);
 		pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
