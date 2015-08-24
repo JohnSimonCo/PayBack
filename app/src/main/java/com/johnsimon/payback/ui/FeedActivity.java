@@ -103,15 +103,16 @@ public class FeedActivity extends DataActivity implements
 
         bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
 
-        Resource.checkFull(bp);
+		bp.loadOwnedPurchasesFromGoogle();
 
-        if (Resource.isLOrAbove()) {
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
+		Resource.checkFull(bp);
+
+		if (Resource.isLOrAbove()) {
+			setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
 					R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
 
-        }
+		}
 
-		bp.loadOwnedPurchasesFromGoogle();
 
 		Resource.init(getApplicationContext());
 

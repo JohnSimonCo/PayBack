@@ -17,41 +17,48 @@ public class InitialRestoreBackupDialog {
 	public static Promise<Boolean> attemptRestore(final Activity activity, final Storage storage, final View masterView) {
 		final Promise<Boolean> p = new Promise<>();
 
-		int title = BackupManager.hasBackups() ? R.string.restoredialog_title_both : R.string.cloud_sync;
-		if (BackupManager.hasBackups())
+		boolean hasBackups = BackupManager.hasBackups();
 
-		new MaterialDialog.Builder(activity)
-				.title(R.string.restoredialog_title)
-				.content(R.string.restoredialog_content)
-				.positiveText(R.string.restoredialog_select_backup)
+		int title = hasBackups ? R.string.restoredialog_title_both : R.string.cloud_sync;
+		int content = hasBackups ? R.string.restoredialog_content_both : R.string.restoredialog_content_cloud;
+		int positive = hasBackups ? R.string.restoredialog_select_backup : R.string.activate;
+
+		MaterialDialog.Builder builder = new MaterialDialog.Builder(activity)
+				.title(title)
+				.content(content)
+				.positiveText(positive)
 				.negativeText(R.string.cancel)
-				.cancelListener(new DialogInterface.OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialogInterface) {
-						p.fire(false);
-					}
-				})
+				.cancelListener(dialogInterface -> p.fire(false))
 				.cancelable(false)
 				.callback(new MaterialDialog.ButtonCallback() {
 					@Override
 					public void onPositive(MaterialDialog dialog) {
-						BackupRestoreDialog.attemptRestore(activity, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
-							@Override
-							public void onCalled(BackupRestoreDialog.RestoreResult result) {
-								p.fire(result.isSuccess());
-								if (result == BackupRestoreDialog.RestoreResult.Unknown ||
-										result == BackupRestoreDialog.RestoreResult.FileNotFound) {
-									Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
-								}
-							}
-						});
+						BackupRestoreDialog.attemptRestore(activity, storage, false).then(result -> {
+                            p.fire(result.isSuccess());
+                            if (result == BackupRestoreDialog.RestoreResult.Unknown ||
+                                    result == BackupRestoreDialog.RestoreResult.FileNotFound) {
+                                Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+					}
+
+					@Override
+					public void onNeutral(MaterialDialog dialog) {
+						super.onNeutral(dialog);
+						p.fire(true);
+
 					}
 
 					@Override
 					public void onNegative(MaterialDialog dialog) {
 						p.fire(false);
 					}
-				}).show();
+				});
+
+		if (hasBackups) {
+			builder.neutralText(R.string.cloud_sync);
+		}
+
 
 		return p;
 	}
