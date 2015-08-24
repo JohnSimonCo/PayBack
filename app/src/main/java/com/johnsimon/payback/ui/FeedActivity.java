@@ -116,10 +116,11 @@ public class FeedActivity extends DataActivity implements
 			InitialRestoreBackupDialog.attemptRestore(this, storage).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 				@Override
 				public void onCalled(BackupRestoreDialog.RestoreResult result) {
-				if (result.isSuccess()) {
-					WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-					welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
-				}
+					//TODO(Simme) show error???
+					if (!result.isSuccess()) {
+						WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+						welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+					}
 				}
 			});
 		}
