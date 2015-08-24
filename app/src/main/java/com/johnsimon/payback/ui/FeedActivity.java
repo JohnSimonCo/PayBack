@@ -132,12 +132,15 @@ public class FeedActivity extends DataActivity implements
 		if (Resource.isFirstRun(storage.getPreferences())) {
 
 			if (Resource.isFull) {
-				InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(successful -> {
-                    if (!successful) {
-                        WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-                        welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
-                    }
-                });
+				InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
+					@Override
+					public void onCalled(Boolean successful) {
+						if (!successful) {
+							WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+							welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+						}
+					}
+				});
 			} else {
 				WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
 				welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");

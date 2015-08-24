@@ -318,7 +318,7 @@ public class Resource {
         return output;
     }
 
-    public static void purchasedFull(Activity activity, BillingProcessor bp, View masterView) {
+    public static void purchasedFull(final Activity activity, BillingProcessor bp, final View masterView) {
         Resource.checkFull(bp);
 
         if (!Resource.isFull) {
@@ -339,13 +339,16 @@ public class Resource {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         dialog.dismiss();
-                        StorageManager.migrateToDrive(activity).then(result -> {
-                            if (result.success) {
-                                if (masterView != null) {
-                                    Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                        StorageManager.migrateToDrive(activity).then(new Callback<DriveLoginManager.LoginResult>() {
+							@Override
+							public void onCalled(DriveLoginManager.LoginResult result) {
+								if (result.success) {
+									if (masterView != null) {
+										Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
+									}
+								}
+							}
+						});
                     }
 
                     @Override

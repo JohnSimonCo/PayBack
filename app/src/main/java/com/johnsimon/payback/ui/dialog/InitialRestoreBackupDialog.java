@@ -9,6 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Promise;
+import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.backup.BackupManager;
 import com.johnsimon.payback.storage.StorageManager;
@@ -29,28 +30,39 @@ public class InitialRestoreBackupDialog {
 				.content(content)
 				.positiveText(positive)
 				.negativeText(R.string.cancel)
-				.cancelListener(dialogInterface -> p.fire(false))
+				.cancelListener(new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialogInterface) {
+						p.fire(false);
+					}
+				})
 				.cancelable(false)
 				.callback(new MaterialDialog.ButtonCallback() {
 					@Override
 					public void onPositive(MaterialDialog dialog) {
-						BackupRestoreDialog.attemptRestore(activity, storage, false).then(result -> {
-                            p.fire(result.isSuccess());
-							switch (result) {
-								case Unknown: case FileNotFound:
-									Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
-									break;
+						BackupRestoreDialog.attemptRestore(activity, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
+							@Override
+							public void onCalled(BackupRestoreDialog.RestoreResult result) {
+								p.fire(result.isSuccess());
+								switch (result) {
+									case Unknown: case FileNotFound:
+										Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
+										break;
+								}
 							}
-                        });
+						});
 					}
 
 					@Override
 					public void onNeutral(MaterialDialog dialog) {
 						super.onNeutral(dialog);
 						p.fire(true);
-						StorageManager.migrateToDrive(activity).then(result -> {
-							if (result.success) {
-								Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
+						StorageManager.migrateToDrive(activity).then(new Callback<DriveLoginManager.LoginResult>() {
+							@Override
+							public void onCalled(DriveLoginManager.LoginResult result) {
+								if (result.success) {
+									Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
+								}
 							}
 						});
 					}
