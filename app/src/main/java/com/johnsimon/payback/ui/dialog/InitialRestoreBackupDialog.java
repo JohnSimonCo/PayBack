@@ -39,9 +39,10 @@ public class InitialRestoreBackupDialog {
 							@Override
 							public void onCalled(BackupRestoreDialog.RestoreResult result) {
 								p.fire(result.isSuccess());
-								if (result == BackupRestoreDialog.RestoreResult.Unknown ||
-										result == BackupRestoreDialog.RestoreResult.FileNotFound) {
-									Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
+								switch (result) {
+									case Unknown: case FileNotFound:
+										Snackbar.make(masterView, R.string.read_failed, Snackbar.LENGTH_SHORT).show();
+										break;
 								}
 							}
 						});

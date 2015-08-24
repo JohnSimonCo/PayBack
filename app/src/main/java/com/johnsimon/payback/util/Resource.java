@@ -325,6 +325,7 @@ public class Resource {
         SharedPreferences preferences = StorageManager.getPreferences(activity);
         preferences.edit().putBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, true).apply();
 
+        //TODO Purshase skärm där man kan se alla features
         new MaterialDialog.Builder(activity)
                 .title(R.string.cloud_sync)
                 .content(R.string.cloud_sync_description_first)
@@ -353,14 +354,14 @@ public class Resource {
         public int compare(Debt a, Debt b) {
             if (a.isPaidBack()) {
                 if(!b.isPaidBack()) {
-					//Only a is
+					//Only a is paid back
 					return 1;
 				}
 			} else if(b.isPaidBack()) {
-				//Only b is
+				//Only b is paid back
 				return -1;
 			}
-			//Both or none is
+			//Both or none is paid back
 			return (int) Math.round(b.getRemainingAbsoluteDebt() - a.getRemainingAbsoluteDebt());
         }
     }
@@ -371,7 +372,6 @@ public class Resource {
             return Math.round(debt2.timestamp - debt1.timestamp);
         }
     }
-
 
 	public static class AlphabeticalStringComparator implements Comparator<String> {
 		@Override
