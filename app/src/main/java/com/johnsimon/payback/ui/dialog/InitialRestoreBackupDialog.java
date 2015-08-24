@@ -38,7 +38,7 @@ public class InitialRestoreBackupDialog {
 								if(result.isSuccess()) {
 									p.fire(true);
 								} else {
-									//TODO(Simme) CONT
+									//TODO(Simme) CONT8
 								}
 								p.fire(result);
 								}

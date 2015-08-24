@@ -201,7 +201,7 @@ public class Resource {
         return a << ALPHA_CHANNEL | r << RED_CHANNEL | g << GREEN_CHANNEL | b << BLUE_CHANNEL;
     }
 
-	//TODO fördela
+	//TODO[Innan 1.3] fördela actionCompletes
 	public static void actionComplete(final Activity activity) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;

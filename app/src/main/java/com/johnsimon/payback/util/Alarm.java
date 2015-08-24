@@ -84,7 +84,6 @@ public class Alarm  {
             public void onCalled(AppData data) {
                 UUID id = (UUID) intent.getExtras().get(ALARM_ID);
                 Debt debt = data.findDebt(id);
-                //TODO det här kanske kan ge fel i edge cases      if (debt == null) return;
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_stat_negative)
