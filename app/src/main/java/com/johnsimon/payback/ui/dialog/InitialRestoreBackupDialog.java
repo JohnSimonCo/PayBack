@@ -19,9 +19,9 @@ public class InitialRestoreBackupDialog {
 	public static Promise<Boolean> attemptRestore(final Activity activity, final Storage storage, final View masterView) {
 		final Promise<Boolean> p = new Promise<>();
 
-		boolean hasBackups = BackupManager.hasBackups();
+		final boolean hasBackups = BackupManager.hasBackups();
 
-		int title = hasBackups ? R.string.restoredialog_title_both : R.string.cloud_sync;
+		int title = R.string.restoredialog_title_welcome;
 		int content = hasBackups ? R.string.restoredialog_content_both : R.string.restoredialog_content_cloud;
 		int positive = hasBackups ? R.string.restoredialog_select_backup : R.string.activate;
 
@@ -40,9 +40,29 @@ public class InitialRestoreBackupDialog {
 				.callback(new MaterialDialog.ButtonCallback() {
 					@Override
 					public void onPositive(MaterialDialog dialog) {
-						BackupRestoreDialog.attemptRestore(activity, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
+						if(hasBackups) {
+							restoreFromBackup();
+						} else {
+							enableCloudSync();
+						}
+					}
+
+					@Override
+					public void onNeutral(MaterialDialog dialog) {
+						super.onNeutral(dialog);
+						enableCloudSync();
+					}
+
+					@Override
+					public void onNegative(MaterialDialog dialog) {
+						p.fire(false);
+					}
+
+					private void restoreFromBackup() {
+						BackupRestoreDialog.attemptRestore(activity, storage, true).then(new Callback<BackupRestoreDialog.RestoreResult>() {
 							@Override
 							public void onCalled(BackupRestoreDialog.RestoreResult result) {
+
 								p.fire(result.isSuccess());
 								switch (result) {
 									case Unknown: case FileNotFound:
@@ -53,9 +73,7 @@ public class InitialRestoreBackupDialog {
 						});
 					}
 
-					@Override
-					public void onNeutral(MaterialDialog dialog) {
-						super.onNeutral(dialog);
+					private void enableCloudSync() {
 						p.fire(true);
 						StorageManager.migrateToDrive(activity).then(new Callback<DriveLoginManager.LoginResult>() {
 							@Override
@@ -65,11 +83,6 @@ public class InitialRestoreBackupDialog {
 								}
 							}
 						});
-					}
-
-					@Override
-					public void onNegative(MaterialDialog dialog) {
-						p.fire(false);
 					}
 				});
 

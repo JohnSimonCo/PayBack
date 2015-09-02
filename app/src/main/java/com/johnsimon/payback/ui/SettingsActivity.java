@@ -112,7 +112,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage, true).then(new Callback<BackupRestoreDialog.RestoreResult>() {
+                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
                     @Override
                     public void onCalled(BackupRestoreDialog.RestoreResult result) {
                         switch(result) {

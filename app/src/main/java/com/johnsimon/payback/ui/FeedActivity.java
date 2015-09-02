@@ -179,6 +179,8 @@ public class FeedActivity extends DataActivity implements
         if (BuildConfig.DEBUG) {
 			Snackbar.make(masterLayout, "Debug build " + BuildConfig.VERSION_NAME, Snackbar.LENGTH_SHORT).show();
         }
+
+		Resource.purchasedFull(activit);
 	}
 
     @Override

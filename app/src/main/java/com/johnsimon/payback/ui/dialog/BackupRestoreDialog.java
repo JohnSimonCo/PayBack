@@ -16,11 +16,11 @@ import com.johnsimon.payback.util.ReadResult;
 
 public class BackupRestoreDialog {
 
-    public static Promise<RestoreResult> attemptRestore(final Activity activity, final Storage storage, final boolean showRemove) {
+    public static Promise<RestoreResult> attemptRestore(final Activity activity, final Storage storage, final boolean fromInitialDialog) {
 
         final Promise<RestoreResult> promise = new Promise<>();
 
-        //TODO(Simme) fetchBackup.isSuccess()
+        //TODO(Simme) fetchBackup.isSuccess() kan vara false
 
         final Backup[] backups =  BackupManager.fetchBackups().data;
         String[] backupNames = new String[backups.length];
@@ -43,7 +43,7 @@ public class BackupRestoreDialog {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, final int which, CharSequence text) {
 
-                        if (showRemove) {
+                        if (!fromInitialDialog) {
                             new MaterialDialog.Builder(activity)
                                     .items(new String[]{activity.getString(R.string.restore), activity.getString(R.string.delete)})
                                     .itemsCallback(new MaterialDialog.ListCallback() {
@@ -75,38 +75,20 @@ public class BackupRestoreDialog {
                                     })
                                     .show();
                         } else {
-                            new MaterialDialog.Builder(activity)
-                                    .title(R.string.restoredialog_title_both)
-                                    .content(R.string.pref_restore_data_description)
-                                    .positiveText(R.string.restore)
-                                    .negativeText(R.string.cancel)
-                                    .callback(new MaterialDialog.ButtonCallback() {
-                                        @Override
-                                        public void onPositive(MaterialDialog dialog) {
-                                            super.onPositive(dialog);
-                                            ReadResult<String, Backup.ReadError> result = backups[which].read();
-                                            if (result.isSuccess()) {
-                                                storage.commit(activity, AppData.fromJson(result.data));
-                                                storage.emit();
+                            ReadResult<String, Backup.ReadError> result = backups[which].read();
+                            if (result.isSuccess()) {
+                                storage.commit(activity, AppData.fromJson(result.data));
+                                storage.emit();
 
-                                                promise.fire(RestoreResult.Success);
-                                            } else {
-                                                if (result.error == Backup.ReadError.FileNotFound) {
-                                                    promise.fire(RestoreResult.FileNotFound);
-                                                } else {
-                                                    promise.fire(RestoreResult.Unknown);
-                                                }
-                                            }
-                                            dialog.cancel();
-                                        }
-
-                                        @Override
-                                        public void onNegative(MaterialDialog dialog) {
-                                            super.onNegative(dialog);
-                                            promise.fire(RestoreResult.Canceled);
-                                            dialog.cancel();
-                                        }
-                                    }).show();
+                                promise.fire(RestoreResult.Success);
+                            } else {
+                                if (result.error == Backup.ReadError.FileNotFound) {
+                                    promise.fire(RestoreResult.FileNotFound);
+                                } else {
+                                    promise.fire(RestoreResult.Unknown);
+                                }
+                            }
+                            dialog.cancel();
                         }
                     }
                 }).show();

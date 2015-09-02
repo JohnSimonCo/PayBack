@@ -176,7 +176,6 @@
     <string name="pref_backup_data">Backup data to storage</string>
     <string name="pref_manage_backups">Manage backups</string>
     <string name="pref_restore_data">Restore data from backup</string>
-    <string name="pref_restore_data_description">Are you sure you want to restore from this backup? This will overwrite all current data.</string>
     <string name="pref_backup_confirm">Overwrite backup</string>
     <string name="pref_backup_confirm_text">Are you sure you want to overwrite previously saved data? This cannot be undone.</string>
     <string name="pref_backup_confirm_single">Backup</string>
@@ -203,7 +202,8 @@
     <string name="debtshare_partialformat">paid back %1$s on %2$s</string>
     <string name="debtshare_paidbackformat">"paid back on %1$s</string>
 
-    <string name="restoredialog_title_both">Restore data?</string>
+    <string name="restoredialog_title_welcome">Welcome back!</string>
+    <string name="restoredialog_title">Restore data?</string>
     <string name="restoredialog_content_both">There are backups saved on this device. Do you wish to restore from one of them or activate cloud sync?</string>
     <string name="restoredialog_content_cloud">Do you wish to activate cloud sync?</string>
     <string name="restoredialog_select_backup">Select backup</string>
