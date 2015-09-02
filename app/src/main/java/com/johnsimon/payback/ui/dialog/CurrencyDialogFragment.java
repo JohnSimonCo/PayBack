@@ -273,7 +273,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	};
 
     public interface CurrencySelectedCallback {
-        public void onCurrencySelected();
+        void onCurrencySelected();
     }
 
 }

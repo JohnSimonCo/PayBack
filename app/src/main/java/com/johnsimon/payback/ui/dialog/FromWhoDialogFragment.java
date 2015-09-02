@@ -166,6 +166,6 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 	};
 
 	public interface FromWhoSelected {
-		public void onSelected(String name);
+		void onSelected(String name);
 	}
 }

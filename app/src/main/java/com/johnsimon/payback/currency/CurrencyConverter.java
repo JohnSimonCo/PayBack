@@ -39,7 +39,7 @@ public class CurrencyConverter {
     }
 
     public interface ConvertCallback {
-        public void onCurrencyConverted(double amount, boolean success);
+        void onCurrencyConverted(double amount, boolean success);
     }
 
 }

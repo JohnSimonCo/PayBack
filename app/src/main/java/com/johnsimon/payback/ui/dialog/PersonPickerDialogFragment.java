@@ -181,6 +181,6 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 	};
 
 	public interface PersonSelectedCallback {
-		public void onSelected(String name);
+		void onSelected(String name);
 	}
 }

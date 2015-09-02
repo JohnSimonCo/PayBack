@@ -311,7 +311,7 @@ public class FeedActivity extends DataActivity implements
 
         menu_even_out = menu.findItem(R.id.menu_even_out);
 
-        if (isAll() || data.isEven(feed)) {
+        if (isAll() || AppData.isEven(feed)) {
             menu_even_out.setVisible(false);
         }
 
