@@ -677,7 +677,6 @@ public class FeedActivity extends DataActivity implements
             }
         }
 
-
         feedFragment.displayTotalDebt(getResources());
     }
 }

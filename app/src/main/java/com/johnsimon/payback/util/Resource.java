@@ -103,12 +103,14 @@ public class Resource {
         Will return true if a preference with the key "FIRST_TIME"
         already exists.  */
     public static boolean isFirstRun(SharedPreferences preferences) {
+        return true;
+        /*
         if (preferences.getBoolean(SAVE_KEY_FIRST_RUN, true)) {
             preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
             return true;
         } else {
             return false;
-        }
+        }*/
     }
 
     public static String prefix(String prefix) {
