@@ -176,9 +176,6 @@
     <string name="pref_backup_data">Backup data to storage</string>
     <string name="pref_manage_backups">Manage backups</string>
     <string name="pref_restore_data">Restore data from backup</string>
-    <string name="pref_backup_confirm">Overwrite backup</string>
-    <string name="pref_backup_confirm_text">Are you sure you want to overwrite previously saved data? This cannot be undone.</string>
-    <string name="pref_backup_confirm_single">Backup</string>
     <string name="pref_backup_last">Last backup %1$s</string>
 
     <!-- Notifications -->
