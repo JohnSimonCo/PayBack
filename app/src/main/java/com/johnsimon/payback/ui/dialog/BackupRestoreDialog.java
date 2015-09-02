@@ -20,6 +20,8 @@ public class BackupRestoreDialog {
 
         final Promise<RestoreResult> promise = new Promise<>();
 
+        //TODO(Simme) fetchBackup.isSuccess()
+
         final Backup[] backups =  BackupManager.fetchBackups().data;
         String[] backupNames = new String[backups.length];
 

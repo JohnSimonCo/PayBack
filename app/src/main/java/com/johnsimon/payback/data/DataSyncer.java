@@ -1,8 +1,10 @@
 package com.johnsimon.payback.data;
 
 import com.johnsimon.payback.preferences.Preferences;
+import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.UUID;
@@ -10,6 +12,9 @@ import java.util.UUID;
 public class DataSyncer {
     public static boolean sync(AppData a, AppData b, AppData out) {
         boolean changed = false;
+
+        sortDebts(a.debts);
+        sortDebts(b.debts);
 
         ArrayList<Person> people = a.people;
         ArrayList<Debt> debts = a.debts;
@@ -30,6 +35,7 @@ public class DataSyncer {
 
             people = sync(a.people, b.people);
             debts = sync(a.debts, b.debts);
+            sortDebts(debts);
 
             for(Debt debt : debts) {
                 debt.linkOwner(people);
@@ -130,4 +136,8 @@ public class DataSyncer {
 
 		return lord;
 	}
+
+    private static void sortDebts(ArrayList<Debt> debts) {
+        Collections.sort(debts, new Resource.TimeComparator());
+    }
 }

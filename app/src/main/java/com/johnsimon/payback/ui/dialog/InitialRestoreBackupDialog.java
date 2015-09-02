@@ -77,6 +77,8 @@ public class InitialRestoreBackupDialog {
 			builder.neutralText(R.string.cloud_sync);
 		}
 
+		builder.build().show();
+
 
 		return p;
 	}
