@@ -359,49 +359,7 @@ public class Resource {
                 })
                 .show();
     }
-
-    public static void purchasedFullTest(final Activity activity, BillingProcessor bp, final View masterView) {
-        Resource.checkFull(bp);
-
-        if (!Resource.isFull) {
-            return;
-        }
-
-        SharedPreferences preferences = StorageManager.getPreferences(activity);
-        preferences.edit().putBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, true).apply();
-
-        //TODO Purshase skärm där man kan se alla features
-        new MaterialDialog.Builder(activity)
-                .title(R.string.cloud_sync)
-                .content(R.string.cloud_sync_description_first)
-                .positiveText(R.string.activate)
-                .negativeText(R.string.not_now)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        dialog.dismiss();
-                        StorageManager.migrateToDrive(activity).then(new Callback<DriveLoginManager.LoginResult>() {
-                            @Override
-                            public void onCalled(DriveLoginManager.LoginResult result) {
-                                if (result.success) {
-                                    if (masterView != null) {
-                                        Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
+    
     public static SimpleDateFormat monthDateFormat = new SimpleDateFormat("MMM d", Locale.getDefault());
 
     public static class AmountComparator implements Comparator<Debt> {
