@@ -135,7 +135,7 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:orientation="vertical"
-                android:tag="https://code.google.com/p/google-gson/"
+                android:tag="https://github.com/google/gson"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -300,6 +300,31 @@
                     app:fontFamily="roboto"
                     app:textWeight="medium"
                     android:text="@string/author_iab"
+                    style="@style/library_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:tag="https://github.com/derekbrameyer/android-betterpickers"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/library_title"
+                    android:text="@string/lib_bp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    app:fontFamily="roboto"
+                    app:textWeight="medium"
+                    android:text="@string/author_bp"
                     style="@style/library_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

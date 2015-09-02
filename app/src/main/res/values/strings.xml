@@ -139,6 +139,7 @@
     <string name="reminder_detail">Reminder set %1$s %2$s</string>
     <string name="backup_success">Backup successful</string>
     <string name="backup_failed">Backup failed</string>
+    <string name="number_format_error">Invalid number format</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -161,6 +162,8 @@
     <string name="author_rbm">Evgeny Shishkin</string>
     <string name="lib_iab">Android In-App Billing</string>
     <string name="author_iab">AnjLab</string>
+    <string name="lib_bp">BetterPickers</string>
+    <string name="author_bp">Derek Brameyer</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>

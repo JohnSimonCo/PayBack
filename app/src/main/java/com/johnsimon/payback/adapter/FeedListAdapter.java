@@ -107,6 +107,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 			}
 
 		}
+
 		holder.avatar.setLayerType(View.LAYER_TYPE_NONE, null);
 
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +116,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 				itemClickCallback.onItemClick(v, position, debt);
 			}
 		});
+
+
 
 		holder.note.setText(debt.getNote() == null ? resources.getString(R.string.cash) : debt.getNote());
 
@@ -154,14 +157,18 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
         list = feed;
     }
 
-	// Return the size of your dataset (invoked by the layout manager)
+	@Override
+	public int getItemViewType(int position) {
+		return 0;//list.get(position).isPartiallyPaidBack() ? 1 : 0;
+	}
+
 	@Override
 	public int getItemCount() {
 		return list.size();
 	}
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position, Debt debt);
+        void onItemClick(View view, int position, Debt debt);
     }
 
 }

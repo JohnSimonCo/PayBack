@@ -136,7 +136,6 @@ public class CreateDebtActivity extends DataActivity {
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
-		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
@@ -608,12 +607,22 @@ public class CreateDebtActivity extends DataActivity {
         public void onClick(View v) {
 
             if (v.isActivated()) {
+
+                float amount;
+
+                try {
+                    amount = Float.parseFloat(floatLabelAmountEditText.getText().toString());
+                } catch (Exception e) {
+                    //Weird formatting
+                    Snackbar.make(create_master, R.string.number_format_error, Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
                 Debt debt = saveDebt(
-					floatLabelNameAutoCompleteTextView.getText().toString().trim(),
-					radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
-					Float.parseFloat(floatLabelAmountEditText.getText().toString()),
-					floatLabelNoteEditText.getText().toString().trim()
-                );
+                        floatLabelNameAutoCompleteTextView.getText().toString().trim(),
+                        radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
+                        amount,
+                        floatLabelNoteEditText.getText().toString().trim());
 
                 if (usingCustomDate) {
                     debt.setRemindDate(reminderCalendar.getTimeInMillis());

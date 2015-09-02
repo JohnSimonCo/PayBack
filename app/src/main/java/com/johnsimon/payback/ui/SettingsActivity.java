@@ -493,28 +493,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
     }
 
-    //TODO(SIMME) BEHÖVS?
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (storage.isDriveStorage()) {
-
-        }
-
-		if(loginSubscription != null) {
-
-		}
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-		if(loginSubscription != null) {
-		}
-    }
-
 	Callback<String> onLoginCallback = new Callback<String>() {
 		@Override
 		public void onCalled(String name) {

@@ -14,8 +14,8 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;

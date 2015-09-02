@@ -122,6 +122,8 @@
                             <android.support.v7.widget.AppCompatEditText
                                 android:imeOptions="flagNoExtractUi"
                                 android:singleLine="true"
+                                android:inputType="numberSigned|numberDecimal|number"
+                                android:digits="0123456789.,"
                                 android:id="@+id/create_edittext_amount"
                                 android:textColorHint="@color/gray_oncolor_very_light"
                                 android:textColor="@android:color/white"
