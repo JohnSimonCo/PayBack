@@ -116,7 +116,6 @@
     <string name="save_fail">Failed to save file</string>
     <string name="no_file">No backup found</string>
     <string name="read_failed">Failed to read file</string>
-    <string name="save_success_start">File saved in \"%1$s\"</string>
     <string name="restore_success">Restore successful</string>
     <string name="disable_cloud_sync_title">Disable cloud sync</string>
     <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
@@ -137,6 +136,9 @@
     <string name="delete_failed">Delete failed</string>
     <string name="delete_successful">Delete successful</string>
     <string name="login_successful">Login successful!</string>
+    <string name="reminder_detail">Reminder set %1$s %2$s</string>
+    <string name="backup_success">Backup successful</string>
+    <string name="backup_failed">Backup failed</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

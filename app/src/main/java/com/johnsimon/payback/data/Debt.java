@@ -211,6 +211,9 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		return remindDate;
 	}
 
+	public boolean hasReminder() {
+		return remindDate != null;
+	}
 
 	public ArrayList<Payment> getPayments() {
 		return payments;

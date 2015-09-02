@@ -25,8 +25,10 @@ import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DebtDetailDialogFragment extends DataDialogFragment {
 
@@ -37,6 +39,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
     private Button dialog_custom_send;
     private Button dialog_custom_payment;
     private TextView dialog_paid_back_date;
+    private TextView dialog_reminder_date;
     private TextView dialog_custom_title;
     private TextView dialog_custom_content;
     private TextView dialog_custom_amount_payment;
@@ -69,6 +72,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
         dialog_custom_amount = (TextView) rootView.findViewById(R.id.dialog_custom_amount);
         dialog_custom_amount_payment = (TextView) rootView.findViewById(R.id.dialog_custom_amount_payment);
         dialog_paid_back_date = (TextView) rootView.findViewById(R.id.dialog_paid_back_date);
+        dialog_reminder_date = (TextView) rootView.findViewById(R.id.dialog_reminder_date);
 
         dialog_custom_title = (TextView) rootView.findViewById(R.id.dialog_custom_title);
         dialog_custom_content = (TextView) rootView.findViewById(R.id.dialog_custom_content);
@@ -113,6 +117,19 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
             dialog_custom_content.setText(R.string.cash);
         } else {
             dialog_custom_content.setText(debt.getNote());
+        }
+
+        if (debt.hasReminder()) {
+            dialog_reminder_date.setVisibility(View.VISIBLE);
+            Date remindDate = new Date(debt.getRemindDate());
+            SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
+            String time = DateFormat.getTimeInstance(
+                    DateFormat.SHORT).format(
+                    remindDate);
+
+            dialog_reminder_date.setText(String.format(getString(R.string.reminder_detail), simpleDateFormat.format(remindDate), time));
+        } else {
+            dialog_reminder_date.setVisibility(View.GONE);
         }
 
         if (debt.isPaidBack()) {
@@ -162,7 +179,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                     debt.unpayback();
                 }
 
-                if (payback && debt.getRemindDate() != null) {
+                if (payback && debt.hasReminder()) {
                     Alarm.cancelAlarm(getActivity(), debt);
                     debt.setRemindDate(null);
                 }

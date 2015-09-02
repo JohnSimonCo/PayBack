@@ -167,7 +167,7 @@ public class AppData {
         deleted.add(debt.id);
         debts.remove(debt);
 
-		if(debt.getRemindDate() != null) {
+		if(debt.hasReminder()) {
 			Alarm.cancelAlarm(context, debt);
 		}
 	}

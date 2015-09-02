@@ -429,7 +429,7 @@ public class CreateDebtActivity extends DataActivity {
                 findViewById(R.id.reminder_layout).setVisibility(View.GONE);
             }
 
-            usingCustomDate = editingDebt.getRemindDate() != null;
+            usingCustomDate = editingDebt.hasReminder();
             if (usingCustomDate) {
                 reminderCalendar.setTimeInMillis(editingDebt.getRemindDate());
                 updateDate(false);

@@ -31,7 +31,7 @@ public class AlarmScheduler {
 		@Override
 		public void onCalled(AppData data) {
 			for(Debt debt : data.debts) {
-				if(debt.getRemindDate() != null) {
+				if(debt.hasReminder()) {
 					Alarm.addAlarm(context, debt);
 				}
 			}
