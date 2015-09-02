@@ -30,7 +30,7 @@ public class AboutDialogFragment extends DialogFragment {
 		try {
 			String version = getActivity().getPackageManager()
 					.getPackageInfo(getActivity().getPackageName(), 0).versionName;
-			versionText.setText("v" + version);
+			versionText.setText(version);
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
 			versionText.setText("");
