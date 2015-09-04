@@ -352,12 +352,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         }
     }
 
-	private void displayWriteResult(BackupManager.WriteResult result) {
-        snackbar(result.success
-				? getString(R.string.save_success_start, BackupManager.simpleFilePath)
-				: getString(R.string.save_fail));
-	}
-
 	private void displayReadError(Backup.ReadError result) {
 		snackbar(getString(result == Backup.ReadError.FileNotFound ? R.string.no_file : R.string.read_failed));
 	}

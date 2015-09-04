@@ -20,6 +20,7 @@
     <string name="checkbox">Checkbox!</string>
     <string name="create_fab_error">Inserisci nome e ammontare</string>
     <string name="pay_back">Pay Back</string>
+    <string name="add_payment">Pagamento</string>
     <string name="send">Invia</string>
     <string name="about_title">Info</string>
     <string name="filter">Filtro</string>
@@ -37,8 +38,10 @@
     <string name="edit">Modifica</string>
     <string name="delete">Elimina</string>
     <string name="ioweyou">Ti devo</string>
+    <string name="iowedyou">Ti devo</string>
     <string name="youoweme">Mi devi</string>
-    <string name="debt_for">per</string>
+    <string name="youowedme">Mi devi</string>
+    <string name="debt_incash">in contanti</string>
     <string name="bytime">Per data</string>
     <string name="byamount">Per ammontare</string>
     <string name="clear">Svuota</string>
@@ -75,17 +78,17 @@
     <string name="overwrite_nfc_title">Sovrascrivi</string>
     <string name="overwrite_nfc_text">Sei sicuro di voler sovrascrivere tutti gli elementi da %1$s?</string>
     <string name="from_who_title">Da chi?</string>
-    <string name="nfc_error_all">Impossibile inviare elementi da "Tutti"</string>
+    <string name="nfc_error_all">Impossibile inviare elementi da \"Tutti\"</string>
     <string name="title_activity_people_manager">Persone</string>
     <string name="upgrade_title">Sblocca versione completa</string>
     <string name="upgrade_text">Acquista la versione completa di Pay Back per non avere il limite dei 5 debiti e per sincronizzare i vari dispositivi.</string>
     <string name="upgrade_confirm_text">Acquista</string>
     <string name="cloud_sync">Sincronizzazione Cloud</string>
     <string name="cloud_sync_description_first">Ti ringraziamo per l\'acquisto della versione completa di Pay Back! Attiva la sincronizzazione cloud per sincronizzare i debiti tra i tuoi dispositivi tramite Google Drive. Lo puoi fare in seguito dalle impostazioni.</string>
-    <string name="cloud_sync_description">Attiva la sincro cloud per sincronizzare i debiti tra i tuoi dispositivi tramite Google Drive.</string>
+    <string name="cloud_sync_description">Attiva il cloud per sincronizzare i debiti tra i tuoi dispositivi tramite Google Drive.</string>
     <string name="activate">Attiva</string>
     <string name="not_now">Non adesso</string>
-    <string name="cloud_sync_not_full">Richiede la versione completa</string>
+    <string name="not_full_version">Versione complete richiesta</string>
     <string name="upgrade_navigation_drawer">Sblocca versione completa</string>
     <string name="debt_free">Non hai debiti!</string>
     <string name="add_person">Aggiungi persona</string>
@@ -112,24 +115,37 @@
     <string name="save_fail">Impossibile salvare file</string>
     <string name="no_file">Nessun backup trovato</string>
     <string name="read_failed">Impossibile leggere file</string>
-    <string name="save_success_start">File salvato in "%1$s"</string>
     <string name="restore_success">Ripristino riuscito</string>
     <string name="disable_cloud_sync_title">Disattiva sincronizzazione cloud</string>
     <string name="disable_cloud_sync_content">Sei sicuro di voler disattivare la sincronizzazione cloud? Nessun dato verrà perso.</string>
     <string name="disable_cloud_sync_affirmative">Disattiva</string>
-    <string name="restore_single">Ripristina</string>
-    <string name="remove_backup">Rimuovi backup</string>
     <string name="backup_removed_success">Rimozione backup riuscita</string>
-    <string name="disabled_in_free">Non disponibile nella versione gratuita</string>
     <string name="no_backup_available">Nessun backup disponibile</string>
+    <string name="set_reminder">Imposta promemoria</string>
+    <string name="even_out">Pareggia</string>
+    <string name="evened_out">Pareggiato</string>
+    <string name="currency_show_trailing_zeros">Mostra gli zeri finali</string>
+    <string name="set_date">Imposta data</string>
+    <string name="share_debt_summary">Condivi riepilogo debiti</string>
+    <!-- "Paid back Aug 5" -->
+    <string name="paid_back_when">Restituito il %1$s</string>
+    <string name="autobackup">Backup Automatico</string>
+    <string name="wipebackup">Elimina Backup</string>
+    <string name="backup">Backup</string>
+    <string name="delete_failed">Eliminazione non riuscita</string>
+    <string name="delete_successful">Eliminazione riuscita</string>
+    <string name="login_successful">Accesso riuscito</string>
+    <string name="reminder_detail">Promemoria impostato al %1$s %2$s</string>
+    <string name="backup_success">Backup riuscito</string>
+    <string name="backup_failed">Backup fallito</string>
+    <string name="number_format_error">Formato numero non valido</string>
+    <!-- About -->
     <string name="lib_devdesign">Sviluppo e Progettazione</string>
     <string name="author_johnsimon">John Rapp Farnes\nSimon Halvdansson</string>
     <string name="lib_icon">Icona</string>
     <string name="author_icon">Jovie Brett Bardoles</string>
     <string name="lib_riv">RoundedImageView</string>
     <string name="author_riv">Vince Mi</string>
-    <string name="lib_fab">Floating Action Button</string>
-    <string name="author_fab">Faiz Malkani</string>
     <string name="lib_gson">GSON</string>
     <string name="author_gson">Google</string>
     <string name="lib_pic">Picasso</string>
@@ -138,14 +154,15 @@
     <string name="author_dsr">Emile Belanger</string>
     <string name="lib_qr">QuickReturn</string>
     <string name="author_qr">Etienne Lawlor</string>
-    <string name="lib_snb">Snackbar</string>
-    <string name="author_snb">William Mora</string>
     <string name="lib_md">Material Dialogs</string>
     <string name="author_md">Aidan Follestad</string>
     <string name="lib_rbm">Android-RobotoTextView</string>
     <string name="author_rbm">Evgeny Shishkin</string>
     <string name="lib_iab">Android In-App Billing</string>
     <string name="author_iab">AnjLab</string>
+    <string name="lib_bp">BetterPickers</string>
+    <string name="author_bp">Derek Brameyer</string>
+    <!-- Preferences -->
     <string name="pref_settings">Impostazioni</string>
     <string name="pref_general">Generali</string>
     <string name="pref_data">Dati</string>
@@ -154,12 +171,33 @@
     <string name="background">Sfondo</string>
     <string name="pref_cloud_sync">Sincronizza dispositivi</string>
     <string name="pref_backup_data">Backup dati in memoria</string>
-    <string name="pref_restore_data">Ripristino dati dalla memoria</string>
-    <string name="pref_restore_data_description">Sei sicuro di voler ripristinare i dati dalla memoria? Sovrascriverai i dati presenti.</string>
-    <string name="pref_backup_confirm">Sovrascrivi backup</string>
-    <string name="pref_backup_confirm_text">Sei sicuro di voler sovrascrivere i dati precedentemente salvati? Quest\'azione non potrà essere annullata.</string>
-    <string name="pref_backup_confirm_single">Backup</string>
-    <string name="set_reminder">Set reminder</string>
+    <string name="pref_manage_backups">Gestisci backup</string>
+    <string name="pref_restore_data">Ripristino dati dal file di backup</string>
+    <string name="pref_backup_last">Ultimo backup %1$s</string>
+    <!-- Notifications -->
+    <string name="notif_pay_back_reminder">Promemoria Pay Back</string>
+    <string name="notif_remind_later">Ricordamelo più tardi</string>
+    <string name="notif_they_owe">%1$s ti deve %2$s</string>
+    <string name="notif_you_owe">Devi a %1$s %2$s</string>
+    <!-- Debt summary -->
+    <string name="debtsummary_headerformat">%1$s un totale di %2$s</string>
+    <string name="debtsummary_currentdebts">Debiti attuali</string>
+    <string name="debtsummary_partialdebts">Debiti parzialmente restituiti</string>
+    <string name="debtsummary_paidbackdebts">Rimborsa i debiti</string>
+    <string name="debtsummary_history_header">Diario</string>
+    <string name="debtsummary_history_entryformat">%1$s su %2$s</string>
+    <!-- Debt share string -->
+    <string name="debtshare_fulldebtformat">debito totale %1$s</string>
+    <string name="debtshare_noteformat">per \"%1$s\"</string>
+    <string name="debtshare_dateformat">dal %1$s</string>
+    <string name="debtshare_partialformat">restituito %1$s su %2$s</string>
+    <string name="debtshare_paidbackformat">\"restituito il %1$s</string>
+    <string name="restoredialog_title_welcome">Bentornato!</string>
+    <string name="restoredialog_title">Vuoi ripristinare i dati?</string>
+    <string name="restoredialog_content_both">Ci sono dei file di backup salvati nel tuo dispositivo. Vuoi ripristinarne uno o attivare la sincronizzazione cloud?</string>
+    <string name="restoredialog_content_cloud">Vuoi attivare la sincronizzazione cloud?</string>
+    <string name="restoredialog_select_backup">Seleziona backup</string>
+    <string name="restore">Ripristina</string>
     <string-array name="thousand_seperator_list">
         <item>Nessuno</item>
         <item>Punto</item>
@@ -176,8 +214,25 @@
         <!--Do _NOT_ translate this-->
         <item>city</item>
     </string-array>
-
-
-    <string name="even_out">Italian placeholder</string>
-    <string name="evened_out">Italian placeholder</string>
+    <string name="today">Oggi</string>
+    <string name="tomorrow">Domani</string>
+    <string name="pick_date">Scegli una data...</string>
+    <string name="morning">Mattina</string>
+    <string name="afternoon">Pomeriggio</string>
+    <string name="evening">Sera</string>
+    <string name="night">Notte</string>
+    <string name="pick_time">Scegli un orario...</string>
+    <string name="monday">"Lunedì "</string>
+    <string name="tuesday">Martedì</string>
+    <string name="wednesday">Mercoledì</string>
+    <string name="thursday">Giovedì</string>
+    <string name="friday">Venerdì</string>
+    <string name="saturday">Sabato</string>
+    <string name="sunday">Domenica</string>
+    <string-array name="remind_later_options">
+        <item>tra un\'ora</item>
+        <item>Domani</item>
+        <item>Prossimo %1s</item>
+        <item>Scegli data e orario</item>
+    </string-array>
 </resources>
