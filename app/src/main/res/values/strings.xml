@@ -126,7 +126,6 @@
     <string name="set_reminder">Set reminder</string>
     <string name="even_out">Even out</string>
     <string name="evened_out">Evened out</string>
-    <string name="number_format_error">Invalid number format</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
