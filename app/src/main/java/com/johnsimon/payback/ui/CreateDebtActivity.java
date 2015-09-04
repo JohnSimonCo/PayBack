@@ -611,7 +611,7 @@ public class CreateDebtActivity extends DataActivity {
                 float amount;
 
                 try {
-                    amount = Float.parseFloat(floatLabelAmountEditText.getText().toString());
+                    amount = Float.parseFloat(floatLabelAmountEditText.getText().toString().replace(',', '.'));
                 } catch (Exception e) {
                     //Weird formatting
                     Snackbar.make(create_master, R.string.number_format_error, Snackbar.LENGTH_LONG).show();
