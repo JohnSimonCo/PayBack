@@ -86,7 +86,6 @@ public class FeedActivity extends DataActivity implements
 
     private boolean attemptCheckFilterAmount = false;
 
-	//TODO spara sort som en preference
 	private NullPromise bpInitialized = new NullPromise();
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -433,8 +432,6 @@ public class FeedActivity extends DataActivity implements
                 break;
 		}
 	}
-
-
 
 	public void purchaseFullVersion() {
 		bpInitialized.thenUnique(billingInitializedCallback);

@@ -10,6 +10,8 @@ import com.johnsimon.payback.ui.MaterialPreferenceActivity;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 
+import org.apache.http.impl.cookie.BasicMaxAgeHandler;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -110,11 +112,12 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		return amount;
 	}
 
+
 	public double getAbsoluteAmount() {
 		return Math.abs(amount);
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		touch();
 		this.amount = amount;
 		payments.clear();
@@ -184,7 +187,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	public double getPaidBackAmount() {
 		if(payments == null) return 0;
 
-		float sum = 0;
+		double sum = 0;
 		for(Payment payment : payments) {
 			sum += payment.amount;
 		}
@@ -227,7 +230,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 		return payments != null && payments.size() > 0;
 	}
 
-	public void edit(Person owner, float amount, String note) {
+	public void edit(Person owner, double amount, String note) {
         touch();
 		this.owner = owner;
 		this.amount = amount;
@@ -256,7 +259,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable {
 	}
 	*/
 
-	public static String totalString(float amount, UserCurrency userCurrency, String even, boolean isAll, String allEvenString) {
+	public static String totalString(double amount, UserCurrency userCurrency, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
 			return isAll ? allEvenString : even;
 		} else {

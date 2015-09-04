@@ -366,16 +366,16 @@ public class Resource {
         @Override
         public int compare(Debt a, Debt b) {
             if (a.isPaidBack()) {
-                if(!b.isPaidBack()) {
-					//Only a is paid back
-					return 1;
-				}
-			} else if(b.isPaidBack()) {
-				//Only b is paid back
-				return -1;
-			}
-			//Both or none is paid back
-			return (int) Math.round(b.getRemainingAbsoluteDebt() - a.getRemainingAbsoluteDebt());
+                if (!b.isPaidBack()) {
+                    //Only a is paid back
+                    return 1;
+                }
+            } else if (b.isPaidBack()) {
+                //Only b is paid back
+                return -1;
+            }
+            //Both or none is paid back
+            return (int) Math.round(b.getRemainingAbsoluteDebt() - a.getRemainingAbsoluteDebt());
         }
     }
 
