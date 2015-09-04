@@ -39,7 +39,11 @@ public class ShittyAppData {
 
 			return data;
 		} catch (Exception e) {
-			return Resource.gson.fromJson(JSON, ShittyAppData.class).cleanse();
+			try {
+				return Resource.gson.fromJson(JSON, ShittyAppData.class).cleanse();
+			} catch (Exception e1) {
+				return AppData.defaultAppData();
+			}
 		}
 	}
 
