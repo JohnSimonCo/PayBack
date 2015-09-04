@@ -9,3 +9,7 @@
 /app/seeds.txt
 /app/unused.txt
 /app/build
+/.idea/codeStyleSettings.xml
+/.idea/gradle.xml
+/app/app.iml
+PayBack.iml
