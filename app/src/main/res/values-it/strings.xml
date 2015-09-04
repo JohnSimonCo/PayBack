@@ -100,7 +100,7 @@
     <string name="wipe_data">Elimina dati applicazione</string>
     <string name="wipe_data_confirm_free">Sei sicuro di voler eliminare tutti i dati dell\'applicazione?</string>
     <string name="wipe_data_confirm_full">Sei sicuri di voler eliminare tutti i dati dell\'applicazione? Questo include anche i dati salvati in Google Drive</string>
-    <string name="wipe">Fai un wipe</string>
+    <string name="wipe">Elimina</string>
     <string name="phone_number">Numero di telefono</string>
     <string name="swish_copy_toast_end">copiato negli appunti</string>
     <string name="pay_with_swish">Paga con Swish</string>

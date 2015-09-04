@@ -11,5 +11,6 @@
 /app/build
 /.idea/codeStyleSettings.xml
 /.idea/gradle.xml
+/.idea/runConfigurations.xml
 /app/app.iml
 PayBack.iml
