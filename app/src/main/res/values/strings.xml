@@ -218,11 +218,6 @@
         <item>City</item>
     </string-array>
 
-    <string-array name="bg_entries">
-        <item>mountains</item>
-        <item>city</item>
-    </string-array>
-
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="pick_date">Pick a date…</string>

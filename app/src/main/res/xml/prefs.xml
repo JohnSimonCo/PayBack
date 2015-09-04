@@ -12,7 +12,6 @@
             android:key="pref_background"
             android:title="@string/background"
             android:entries="@array/bg_display"
-            android:entryValues="@array/bg_entries"
             android:defaultValue="mountains"    />
 
     </PreferenceCategory>

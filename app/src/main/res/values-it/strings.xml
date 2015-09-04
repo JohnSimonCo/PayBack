@@ -208,12 +208,6 @@
         <item>Monti</item>
         <item>Città</item>
     </string-array>
-    <string-array name="bg_entries">
-        <!--Do _NOT_ translate this-->
-        <item>mountains</item>
-        <!--Do _NOT_ translate this-->
-        <item>city</item>
-    </string-array>
     <string name="today">Oggi</string>
     <string name="tomorrow">Domani</string>
     <string name="pick_date">Scegli una data...</string>

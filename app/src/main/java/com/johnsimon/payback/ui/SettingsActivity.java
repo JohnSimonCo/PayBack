@@ -43,6 +43,8 @@ import java.util.Arrays;
 
 public class SettingsActivity extends MaterialPreferenceActivity implements BillingProcessor.IBillingHandler {
 
+    public final static String[] backgroundSettingsEntries = {"mountains", "city"};
+
     public Preference pref_currency;
 
     private ListPreference pref_background;
@@ -280,6 +282,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         });
 
         pref_background = (ListPreference) findPreference(PREFERENCE_BACKGROUND);
+        pref_background.setEntryValues(backgroundSettingsEntries);
 
 		Preference pref_wipe_data = findPreference(PREFERENCE_WIPE_DATA);
 		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -384,7 +387,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		bindPreferenceSummaryToValue(pref_currency);
 
 		pref_currency.setSummary(data.preferences.getCurrency().renderSelf());
-		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(backgroundSettingsEntries).indexOf(data.preferences.getBackground())]);
 
 	}
 
@@ -426,7 +429,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 				data.preferences.background.setValue((String) value);
 				storage.commit(SettingsActivity.this);
 
-				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(backgroundSettingsEntries).indexOf(data.preferences.getBackground())]);
 
 				return true;
 			}
