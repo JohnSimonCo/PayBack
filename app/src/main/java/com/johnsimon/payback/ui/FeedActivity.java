@@ -222,7 +222,14 @@ public class FeedActivity extends DataActivity implements
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 			beamer.processIntent(intent);
 		} else if (intent.getExtras() != null && intent.getExtras().get(Alarm.ALARM_ID) != null) {
-            Debt debt = data.findDebt((UUID) intent.getExtras().get(Alarm.ALARM_ID));
+			UUID debtId = (UUID) intent.getExtras().get(Alarm.ALARM_ID);
+			Debt debt = data.findDebt(debtId);
+
+			Alarm.cancelNotification(getApplicationContext(), debtId);
+
+			if(debt == null) {
+				return;
+			}
 
             person = debt.getOwner();
             feed = data.feed(person);
@@ -231,7 +238,6 @@ public class FeedActivity extends DataActivity implements
 
             feedFragment.showDetail(debt);
 
-			Alarm.cancelNotification(getApplicationContext(), debt);
         }
     }
 

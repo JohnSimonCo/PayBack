@@ -57,10 +57,12 @@ public class Alarm  {
 
         alarmManager.cancel(pendingIntent);
     }
-
     public static void cancelNotification(Context context, Debt debt) {
+        cancelNotification(context, debt.id);
+    }
+    public static void cancelNotification(Context context, UUID id) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(debt.id.hashCode());
+        notificationManager.cancel(id.hashCode());
     }
 
 	public static class AlarmReceiver extends BroadcastReceiver {
@@ -194,7 +196,7 @@ public class Alarm  {
             public void onCalled(AppData data) {
 				storage.subscription.unregister(this);
 
-                UUID id = (UUID) intent.getExtras().get(ALARM_ID);
+                final UUID id = (UUID) intent.getExtras().get(ALARM_ID);
                 final Debt debt = data.findDebt(id);
 
                 final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -202,6 +204,7 @@ public class Alarm  {
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
                         if(debt == null) {
+                            notificationManager.cancel(id.hashCode());
                             return;
                         }
 
@@ -221,7 +224,7 @@ public class Alarm  {
 						handler.postDelayed(new Runnable() {
 							@Override
 							public void run() {
-								notificationManager.cancel(debt.id.hashCode());
+								notificationManager.cancel(id.hashCode());
 							}
 						}, REMOVE_PAIDBACK_NOTIFICATION_DELAY);
 
@@ -229,6 +232,7 @@ public class Alarm  {
 
                     case ACTION_REMIND_LATER:
                         if(debt == null) {
+                            notificationManager.cancel(id.hashCode());
                             return;
                         }
 
