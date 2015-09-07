@@ -4,8 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.support.v7.internal.widget.TintCheckBox;
-import android.support.v7.internal.widget.TintSpinner;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,14 +20,6 @@ import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Currency;
-import java.util.List;
-import java.util.Set;
-
 public class CurrencyDialogFragment extends DataDialogFragment {
 
 	public final static String CONTINUE = "CONTINUE";
@@ -39,37 +32,26 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	public final static String CURRENCY_DISPLAY_SAVE_KEY = "CURRENCY_BEFORE_SAVE_KEY";
 	public final static String CURRENCY_CHECKBOX = "CURRENCY_CHECKBOX";
 	public final static String CURRENCY_DECIMAL_SEPARATOR = "CURRENCY_DECIMAL_SEPARATOR";
+	public final static String CURRENCY_TRAILING_ZEROS = "CURRENCY_TRAILING_ZEROS";
 	public final static String CURRENCY_THOUSAND_SPINNER = "CURRENCY_THOUSAND_SPINNER";
 
 	private RobotoButton welcome_select_currency;
 	private RobotoButton welcome_select_currency_display;
-	private TintCheckBox custom_currency_check_after;
-    private TintCheckBox custom_currency_decimal_separator;
-    private TintSpinner currency_thousand_separator;
+	private AppCompatCheckBox custom_currency_check_after;
+    private AppCompatCheckBox custom_currency_decimal_separator;
+    private AppCompatCheckBox custom_currency_trailing_zeros;
+    private AppCompatSpinner currency_thousand_separator;
 	private TextView welcome_currency_preview;
 
-	private String displayCurrency = "";
-	private String selectedCurrency = "";
+	private final static float DISPLAY_VALUE =  2400.5f;
+
+	private String currencyDisplay = "";
+	private String currencyCode = "";
 
 	private boolean continueToNfc = false;
     private boolean usingDefaults = true;
 
     public CurrencySelectedCallback currencySelectedCallback;
-
-    /*TODO simmes feautre
-        Vi borde ha med USD och alla de valutorna och fortfarande ha
-        dollartecken och eurotecken i början. Det känns fel att
-        USD och EUR helt saknas i listan. De möjliga scenariorna är:
-
-        1.  Person använder dollar, hittar det i början <- Påverkas inte
-
-        2.  Person använder dollar, scrollar ned och
-            hittar det för han letar alltid efter USD   <- Påverkas positivt
-
-        3.  Person använder inte dollar, använder dock
-            USD och liknande för att orientera sig för
-            hans valuta kanske börjar på U också.       <- Påverkas positivt
-     */
 
 	@Override
 	public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -111,37 +93,12 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		welcome_select_currency = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency);
 		welcome_select_currency_display = (RobotoButton) rootView.findViewById(R.id.welcome_select_currency_display);
 
-		custom_currency_check_after = (TintCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
-        custom_currency_decimal_separator = (TintCheckBox) rootView.findViewById(R.id.custom_currency_decimal_separator);
-		currency_thousand_separator = (TintSpinner) rootView.findViewById(R.id.currency_thousand_separator);
+		custom_currency_check_after = (AppCompatCheckBox) rootView.findViewById(R.id.custom_currency_check_after);
+        custom_currency_decimal_separator = (AppCompatCheckBox) rootView.findViewById(R.id.custom_currency_decimal_separator);
+        custom_currency_trailing_zeros = (AppCompatCheckBox) rootView.findViewById(R.id.custom_currency_trailing_zeros);
+		currency_thousand_separator = (AppCompatSpinner) rootView.findViewById(R.id.currency_thousand_separator);
 
         welcome_currency_preview = (TextView) rootView.findViewById(R.id.welcome_currency_preview);
-
-		final List<String> order = Arrays.asList("$", "€", "£", "₪", "₫", "₩", "¥", "฿");
-
-		Set<Currency> currencySet = CurrencyUtils.getAllCurrencies();
-
-		final ArrayList<String> currencyNames = new ArrayList<>(currencySet.size());
-		for(Currency currency : currencySet) {
-			currencyNames.add(currency.getSymbol());
-		}
-
-		Collections.sort(currencyNames, new Comparator<String>() {
-			@Override
-			public int compare(String a, String b) {
-				if(a.length() == 1) {
-					if(b.length() == 1) {
-						if(order.contains(a)) {
-							return order.contains(b) ? order.indexOf(a) - order.indexOf(b) : -1;
-						} else return 1;
-					} else return -1;
-				} else if(b.length() == 1) {
-					return 1;
-				} else {
-					return a.compareToIgnoreCase(b);
-				}
-			}
-		});
 
 		if (savedInstanceState != null) {
 
@@ -149,13 +106,14 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 			if (cc == null) {
                 usingDefaults = false;
 			} else {
-				selectedCurrency = cc;
+				currencyCode = cc;
 			}
 
-			displayCurrency = savedInstanceState.getString(CURRENCY_DISPLAY_SAVE_KEY, "$");
+			currencyDisplay = savedInstanceState.getString(CURRENCY_DISPLAY_SAVE_KEY, "");
 
             custom_currency_check_after.setChecked(savedInstanceState.getBoolean(CURRENCY_CHECKBOX, false));
             custom_currency_decimal_separator.setChecked(savedInstanceState.getBoolean(CURRENCY_DECIMAL_SEPARATOR, false));
+            custom_currency_trailing_zeros.setChecked(savedInstanceState.getBoolean(CURRENCY_TRAILING_ZEROS, false));
 
 			currency_thousand_separator.setSelection(savedInstanceState.getInt(CURRENCY_THOUSAND_SPINNER, UserCurrency.THOUSAND_SEPARATOR_NONE));
 		} else {
@@ -163,30 +121,32 @@ public class CurrencyDialogFragment extends DataDialogFragment {
         }
 
         rootView.findViewById(R.id.welcome_cancel).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				alertDialog.dismiss();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+		CurrencyUtils.generateAllCurrenciesWithPrioritizedAsDisplay();
 
 		welcome_select_currency.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new MaterialDialog.Builder(getActivity())
 						.title(R.string.select_currency)
-						.items(currencyNames.toArray(new String[currencyNames.size()]))
-						.itemsCallbackSingleChoice(currencyNames.indexOf(selectedCurrency), new MaterialDialog.ListCallback() {
-							@Override
-							public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								try {
-                                    selectedCurrency = currencyNames.get(which);
-                                    displayCurrency = text.toString();
+						.items(CurrencyUtils.allCurrenciesWithPrioritizedAsDisplay)
+						.itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog materialDialog, View view, int which, CharSequence charSequence) {
+                                try {
+                                    currencyCode = CurrencyUtils.getAllCurrenciesWithPrioritized()[which][0];
+                                    currencyDisplay = CurrencyUtils.getAllCurrenciesWithPrioritized()[which][1];
                                     updatePreview();
                                 } catch (Exception e) {
                                     //TODO mer avancerad crash prevention
                                 }
-							}
-						})
+                            }
+                        })
 						.positiveText(R.string.select)
 						.show();
 			}
@@ -199,7 +159,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				fragment.completeCallback = new CustomCurrencyDialogFragment.CustomCurrencySelectedCallback() {
 					@Override
 					public void onSelected(String currency) {
-						displayCurrency = currency;
+						currencyDisplay = currency;
 						updatePreview();
 					}
 				};
@@ -216,6 +176,13 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 		});
 
         custom_currency_decimal_separator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePreview();
+            }
+        });
+
+        custom_currency_trailing_zeros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePreview();
@@ -246,31 +213,42 @@ public class CurrencyDialogFragment extends DataDialogFragment {
     @Override
     protected void onDataReceived() {
         if (!usingDefaults) {
-            selectedCurrency = data.preferences.getCurrency().id;
-            displayCurrency = data.preferences.getCurrency().getDisplayName();
-            custom_currency_check_after.setChecked(!data.preferences.getCurrency().before);
-            custom_currency_decimal_separator.setChecked(data.preferences.getCurrency().decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
-			currency_thousand_separator.setSelection(data.preferences.getCurrency().thousandSeparator);
+
+            UserCurrency userCurrency = data.preferences.getCurrency();
+
+            currencyCode = userCurrency.id;
+            currencyDisplay = userCurrency.getDisplayName();
+            custom_currency_check_after.setChecked(!userCurrency.before);
+            custom_currency_decimal_separator.setChecked(userCurrency.decimalSeparator == UserCurrency.DECIMAL_SEPARATOR_COMMA);
+            custom_currency_trailing_zeros.setChecked(userCurrency.trailingZeros);
+			currency_thousand_separator.setSelection(userCurrency.thousandSeparator);
             updatePreview();
         }
         super.onDataReceived();
     }
 
     private void updatePreview() {
-		UserCurrency cur = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
-		welcome_currency_preview.setText(cur.render(2400.5f) + (displayCurrency.equals(selectedCurrency) ? "" : " (" + selectedCurrency + ")"));
+		UserCurrency cur = new UserCurrency(currencyCode, currencyDisplay, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition(), custom_currency_trailing_zeros.isChecked());
 
-		welcome_select_currency.setText(getString(R.string.currency) + " (" + selectedCurrency + ")");
-		welcome_select_currency_display.setText(getString(R.string.currency_symbol) + " (" + displayCurrency + ")");
+        boolean same = currencyCode.equals(currencyDisplay);
+        if (same) {
+            welcome_currency_preview.setText(cur.render(DISPLAY_VALUE));
+        } else {
+            welcome_currency_preview.setText(cur.render(DISPLAY_VALUE) + " (" + currencyCode + ")");
+        }
+
+		welcome_select_currency.setText(getString(R.string.currency) + " (" + currencyCode + ")");
+		welcome_select_currency_display.setText(getString(R.string.currency_symbol) + " (" + currencyDisplay + ")");
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(CURRENCY_SAVE_KEY, selectedCurrency);
-		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, displayCurrency);
+		outState.putString(CURRENCY_SAVE_KEY, currencyCode);
+		outState.putString(CURRENCY_DISPLAY_SAVE_KEY, currencyDisplay);
         outState.putBoolean(CURRENCY_CHECKBOX, custom_currency_check_after.isChecked());
         outState.putBoolean(CURRENCY_DECIMAL_SEPARATOR, custom_currency_decimal_separator.isChecked());
+        outState.putBoolean(CURRENCY_TRAILING_ZEROS, custom_currency_trailing_zeros.isChecked());
 		outState.putInt(CURRENCY_THOUSAND_SPINNER, currency_thousand_separator.getSelectedItemPosition());
 	}
 
@@ -283,10 +261,10 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 				welcomeNfcDialogFragment.show(getFragmentManager(), "welcome_nfc");
 			}
 
-			UserCurrency userCurrency = new UserCurrency(selectedCurrency, displayCurrency, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition());
+			UserCurrency userCurrency = new UserCurrency(currencyCode, currencyDisplay, !custom_currency_check_after.isChecked(), custom_currency_decimal_separator.isChecked() ? UserCurrency.DECIMAL_SEPARATOR_COMMA : UserCurrency.DECIMAL_SEPARATOR_DOT, currency_thousand_separator.getSelectedItemPosition(), custom_currency_trailing_zeros.isChecked());
 
 			data.preferences.currency.setValue(userCurrency);
-			storage.commit();
+			storage.commit(getActivity());
 
             currencySelectedCallback.onCurrencySelected();
 
@@ -295,7 +273,7 @@ public class CurrencyDialogFragment extends DataDialogFragment {
 	};
 
     public interface CurrencySelectedCallback {
-        public void onCurrencySelected();
+        void onCurrencySelected();
     }
 
 }

@@ -28,4 +28,8 @@ public class Subscription<D> {
             callback.onCalled(data);
         }
     }
+
+	public void clearCallbacks() {
+		callbacks.clear();
+	}
 }

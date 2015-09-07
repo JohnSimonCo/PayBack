@@ -3,10 +3,8 @@ package com.johnsimon.payback.core;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
@@ -14,30 +12,21 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.ui.base.BasePreferenceActivity;
+import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.Undo;
 
-public class DataPreferenceActivity extends PreferenceActivity implements DataActivityInterface {
+public class DataPreferenceActivity extends BasePreferenceActivity implements DataActivityInterface {
 
 	protected Storage storage;
 	public AppData data;
 
 	public User user;
 
-	protected Notification dataLink;
 	protected ContactLoader contactLoader;
 
-	@Override
-	public Storage getStorage() {
-		return storage;
-	}
-	@Override
-	public ContactLoader getContactLoader() {
-		return contactLoader;
-	}
-	@Override
-	public Notification getDataLink() {
-		return dataLink;
-	}
+	private DataLinker dataLinker;
+	private AlarmScheduler alarmScheduler;
 
 	@Override
 	public Activity getContext() {
@@ -60,14 +49,26 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 	}
 
 	@Override
+	public Storage getStorage() {
+		return storage;
+	}
+	@Override
+	public ContactLoader getContactLoader() {
+		return contactLoader;
+	}
+
+	@Override
+	public DataLinker getDataLinker() {
+		return dataLinker;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		storage = StorageManager.getStorage(getApplicationContext());
 
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
-
-		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
 	}
 
 	@Override
@@ -78,9 +79,12 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		dataLink.listen(dataLinkedCallback);
-
 		contactLoader.userLoaded.then(userLoadedCallback);
+
+		dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+		dataLinker.linked.listen(dataLinkedCallback);
+
+		alarmScheduler = new AlarmScheduler(this, storage.subscription);
 
 		storage.connect();
 	}
@@ -93,7 +97,11 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
 
+		dataLinker.die();
+		alarmScheduler.die();
+
 		storage.disconnect();
+
 	}
 
 	@Override
@@ -114,6 +122,7 @@ public class DataPreferenceActivity extends PreferenceActivity implements DataAc
 			onDataReceived();
 		}
 	};
+
 
 	private NotificationCallback dataLinkedCallback = new NotificationCallback() {
 		@Override

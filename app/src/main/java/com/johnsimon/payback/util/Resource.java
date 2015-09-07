@@ -7,12 +7,19 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.StrictMode;
+import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
 import android.view.Display;
 import android.view.View;
@@ -23,22 +30,36 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.google.gson.Gson;
 import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.drawable.AvatarPlaceholderDrawable;
+import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.SettingsActivity;
 import com.makeramen.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Currency;
+import java.util.Date;
+import java.util.Locale;
 
 public class Resource {
     private final static int MAX_ACTIONS = 20;
     private final static int MAX_FREE_DEBTS = 5;
+
+    public final static long ONE_WEEK = 604800000;
+    public final static long ONE_DAY = 86400000;
+    public final static long ONE_HOUR = 3600000;
 
     private final static String SAVE_KEY_FIRST_RUN = "FIRST_RUN";
 	private final static String SAVE_KEY_ACTIONS = "SAVE_KEY_ACTIONS";
@@ -53,6 +74,8 @@ public class Resource {
     public static boolean isFull = false;
 
     private static boolean isInitialized = false;
+
+	public static Gson gson = new Gson();
 
     public static void init(Context context) {
         if (isInitialized) return;
@@ -130,10 +153,10 @@ public class Resource {
 		return Build.VERSION.SDK_INT >= 21;
 	}
 
-    public static CharSequence getRelativeTimeString(Context ctx, long timestamp) {
+    public static CharSequence getRelativeTimeString(Context context, long timestamp) {
         long now = System.currentTimeMillis();
-        return (now - timestamp < 60000)
-                ? ctx.getString(R.string.justnow)
+        return (now - timestamp) < 60000
+                ? context.getString(R.string.justnow)
                 : DateUtils.getRelativeTimeSpanString(
 					timestamp,
 					now,
@@ -161,12 +184,33 @@ public class Resource {
 		}
 	}
 
-	//TODO fördela
-	public static void actionComplete(final Context context) {
+    public static int mixTwoColors( int color1, int color2, float amount )
+    {
+        final byte ALPHA_CHANNEL = 24;
+        final byte RED_CHANNEL   = 16;
+        final byte GREEN_CHANNEL =  8;
+        final byte BLUE_CHANNEL  =  0;
+
+        final float inverseAmount = 1.0f - amount;
+
+        int a = ((int)(((float)(color1 >> ALPHA_CHANNEL & 0xff )*amount) +
+                ((float)(color2 >> ALPHA_CHANNEL & 0xff )*inverseAmount))) & 0xff;
+        int r = ((int)(((float)(color1 >> RED_CHANNEL & 0xff )*amount) +
+                ((float)(color2 >> RED_CHANNEL & 0xff )*inverseAmount))) & 0xff;
+        int g = ((int)(((float)(color1 >> GREEN_CHANNEL & 0xff )*amount) +
+                ((float)(color2 >> GREEN_CHANNEL & 0xff )*inverseAmount))) & 0xff;
+        int b = ((int)(((float)(color1 & 0xff )*amount) +
+                ((float)(color2 & 0xff )*inverseAmount))) & 0xff;
+
+        return a << ALPHA_CHANNEL | r << RED_CHANNEL | g << GREEN_CHANNEL | b << BLUE_CHANNEL;
+    }
+
+	//TODO[Innan 1.3] fördela actionCompletes
+	public static void actionComplete(final Activity activity) {
 		//Don't do anything if user pressed "never rate"
 		if(neverRate) return;
 
-		final SharedPreferences preferences = StorageManager.getPreferences(context);
+		final SharedPreferences preferences = StorageManager.getPreferences(activity);
 
 		//Increment actions and compare to MAX_ACTIONS
 		if(++actions >= MAX_ACTIONS) {
@@ -174,7 +218,7 @@ public class Resource {
 
 			//Open the request rate dialog
 
-            new MaterialDialog.Builder(context)
+            new MaterialDialog.Builder(activity)
                     .title(R.string.rate_title)
                     .content(R.string.rate_text)
                     .positiveText(R.string.rate_now)
@@ -184,11 +228,11 @@ public class Resource {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            final String appPackageName = context.getPackageName();
+                            final String appPackageName = activity.getPackageName();
                             try {
-                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                             } catch (android.content.ActivityNotFoundException anfe) {
-                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
                             }
 
                             neverRate = true;
@@ -239,7 +283,12 @@ public class Resource {
             return ((BitmapDrawable)drawable).getBitmap();
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
@@ -247,10 +296,86 @@ public class Resource {
         return bitmap;
     }
 
+    public static Bitmap roundBitmap(Bitmap sbmp, int radius) {
+        Bitmap output = Bitmap.createBitmap(sbmp.getWidth(),
+                sbmp.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
+
+        //paint.setAntiAlias(true);
+        //paint.setFilterBitmap(true);
+        //paint.setDither(true);
+        //canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(Color.parseColor("#ff0000"));
+        //canvas.drawCircle(sbmp.getWidth() / 2 + 0.7f, sbmp.getHeight() / 2 + 0.7f,
+        //       sbmp.getWidth() / 2 + 0.1f, paint);
+        canvas.drawCircle(0, 0, (float)Math.sqrt(2f)/1.999999995f/*.707f*/, paint);
+        //canvas.drawPaint(paint);
+        //paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        //canvas.drawBitmap(sbmp, rect, rect, paint);
+        return output;
+    }
+
+    public static void purchasedFull(final Activity activity, BillingProcessor bp, final View masterView) {
+        Resource.checkFull(bp);
+
+        if (!Resource.isFull) {
+            return;
+        }
+
+        SharedPreferences preferences = StorageManager.getPreferences(activity);
+        preferences.edit().putBoolean(SettingsActivity.PREFERENCE_AUTO_BACKUP, true).apply();
+
+        //TODO Purshase skärm där man kan se alla features
+        new MaterialDialog.Builder(activity)
+                .title(R.string.cloud_sync)
+                .content(R.string.cloud_sync_description_first)
+                .positiveText(R.string.activate)
+                .negativeText(R.string.not_now)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.dismiss();
+                        StorageManager.migrateToDrive(activity).then(new Callback<DriveLoginManager.LoginResult>() {
+							@Override
+							public void onCalled(DriveLoginManager.LoginResult result) {
+								if (result.success) {
+									if (masterView != null) {
+										Snackbar.make(masterView, R.string.login_successful, Snackbar.LENGTH_LONG).show();
+									}
+								}
+							}
+						});
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+    
+    public static SimpleDateFormat monthDateFormat = new SimpleDateFormat("MMM d", Locale.getDefault());
+
     public static class AmountComparator implements Comparator<Debt> {
         @Override
-        public int compare(Debt debt1, Debt debt2) {
-            return Math.round(debt2.getAbsoluteAmount() - debt1.getAbsoluteAmount());
+        public int compare(Debt a, Debt b) {
+            if (a.isPaidBack()) {
+                if (!b.isPaidBack()) {
+                    //Only a is paid back
+                    return 1;
+                }
+            } else if (b.isPaidBack()) {
+                //Only b is paid back
+                return -1;
+            }
+            //Both or none is paid back
+            return (int) Math.round(b.getRemainingAbsoluteDebt() - a.getRemainingAbsoluteDebt());
         }
     }
 

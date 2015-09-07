@@ -51,12 +51,12 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
 
 	public interface OnItemMovedListener
 	{
-		public void onItemMoved(int from, int to);
+		void onItemMoved(int from, int to);
 	}
 
 	public interface OnDragStateChangedListener {
-		public void onDragStart();
-		public void onDragStop();
+		void onDragStart();
+		void onDragStop();
 	}
 
 	private void debugLog(String log)
@@ -358,6 +358,11 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
 		rv.scrollBy(0, (int)scrollAmount);
 
 		rv.invalidateItemDecorations();// Redraw
+	}
+
+	@Override
+	public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
 	}
 
 	private void setIsDragging(final boolean dragging) {

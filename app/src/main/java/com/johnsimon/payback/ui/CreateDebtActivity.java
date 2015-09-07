@@ -2,20 +2,24 @@ package com.johnsimon.payback.ui;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.graphics.Outline;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.internal.widget.TintEditText;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -25,56 +29,78 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewOutlineProvider;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.PathInterpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TimePicker;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.adapter.CreateSpinnerAdapter;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.RequiredValidator;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ValidatorListener;
-import com.johnsimon.payback.view.FloatLabelLayout;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.shamanland.fab.FloatingActionButton;
-import com.williammora.snackbar.Snackbar;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
-
-//TODO EDITAR HÖGA TAL SÅ KOMMER MAN HIT MED JÄVLA E12
 
 public class CreateDebtActivity extends DataActivity {
 
 	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
-	public static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
-    public static String ARG_ANIMATE_TOOLBAR = Resource.arg(ARG_PREFIX, "ANIMATE_TOOLBAR");
-	public static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
-	public static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
+	public final static String ARG_FROM_FEED = Resource.arg(ARG_PREFIX, "FROM_FEED");
+    public final static String ARG_ANIMATE_TOOLBAR = Resource.arg(ARG_PREFIX, "ANIMATE_TOOLBAR");
+	public final static String ARG_FROM_PERSON_NAME = Resource.arg(ARG_PREFIX, "FROM_PERSON_NAME");
+	public final static String ARG_ID = Resource.arg(ARG_PREFIX, "AMOUNT");
 
-	private TintEditText floatLabelAmountEditText;
-	private TintEditText floatLabelNoteEditText;
-	private AutoCompleteTextView floatLabelNameAutoCompleteTextView;
-	private FloatLabelLayout floatLabelLayout;
-    private ImageButton create_fab_l;
+    public final static String KEY_CALENDAR = "KEY_CALENDAR";
+    public final static String KEY_ADDED_CALENDAR = "KEY_ADDED_CALENDAR";
+    public final static String KEY_CHANGED_ADDED = "KEY_CHANGED_ADDED";
+    public final static String KEY_NO_FAB_ANIM = "KEY_NO_FAB_ANIM";
 
+	private AppCompatEditText floatLabelAmountEditText;
+	private AppCompatEditText floatLabelNoteEditText;
+	private AppCompatAutoCompleteTextView floatLabelNameAutoCompleteTextView;
+	private Button reminderButton;
+    private Button reminderDayButton;
+    private Button reminderTimeButton;
+    private View reminderDivider;
+	private ImageButton clearReminderButton;
 	private RadioGroup radioGroup;
+    private ScrollView mainScrollView;
+    private TextInputLayout float_label_layout_amount;
+    private RelativeLayout create_master;
+    private FloatingActionButton create_fab;
 
 	private RequiredValidator validator;
-
 	private Debt editingDebt = null;
 
-    private TransitionDrawable transitionDrawable;
+    private Calendar reminderCalendar = Calendar.getInstance();
+	private boolean usingCustomDate = false;
+
+    private Calendar addedCalendar = Calendar.getInstance();
+    private boolean changedAddedDate = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -90,11 +116,6 @@ public class CreateDebtActivity extends DataActivity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setTintColor(getResources().getColor(R.color.primary_color));
-
-            Drawable[] drawables = new Drawable[2];
-            drawables[0] = new ColorDrawable(getResources().getColor(R.color.accent_color));
-            drawables[1] = new ColorDrawable(getResources().getColor(android.R.color.white));
-            transitionDrawable = new TransitionDrawable(drawables);
         } else {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
@@ -103,24 +124,25 @@ public class CreateDebtActivity extends DataActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-		floatLabelAmountEditText = (TintEditText) findViewById(R.id.create_edittext_amount);
-		floatLabelNoteEditText = (TintEditText) findViewById(R.id.create_edittext_note);
-		floatLabelNameAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.create_edittext_name);
+		floatLabelAmountEditText = (AppCompatEditText) findViewById(R.id.create_edittext_amount);
+		floatLabelNoteEditText = (AppCompatEditText) findViewById(R.id.create_edittext_note);
+		floatLabelNameAutoCompleteTextView = (AppCompatAutoCompleteTextView) findViewById(R.id.create_edittext_name);
+        float_label_layout_amount = (TextInputLayout) findViewById(R.id.float_label_layout_amount);
+        create_master = (RelativeLayout) findViewById(R.id.create_master);
 
 		floatLabelNoteEditText.setTextColor(getResources().getColor(R.color.gray_text_normal));
 
-        floatLabelLayout = (FloatLabelLayout) findViewById(R.id.float_label_layout_amount);
-		floatLabelAmountEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
 		radioGroup = (RadioGroup) findViewById(R.id.create_radio);
 
         if (savedInstanceState == null) {
-            ((FloatLabelLayout) findViewById(R.id.float_label_layout_name)).showLabel(false);
-
-            if (getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
-                animateIn(toolbar);
+            if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean(ARG_ANIMATE_TOOLBAR, true)) {
+                animateIn(toolbar, true);
+                animateIn(findViewById(R.id.create_lower_master), false);
             }
         }
 
@@ -135,25 +157,24 @@ public class CreateDebtActivity extends DataActivity {
 
 		final ImageButton clearEditText = (ImageButton) findViewById(R.id.create_clear);
 		clearEditText.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				floatLabelNameAutoCompleteTextView.setText("");
-				floatLabelNameAutoCompleteTextView.requestFocus();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                floatLabelNameAutoCompleteTextView.setText("");
+                floatLabelNameAutoCompleteTextView.requestFocus();
+            }
+        });
 
 		if (TextUtils.isEmpty(floatLabelNameAutoCompleteTextView.getText().toString())) {
 			clearEditText.setVisibility(View.GONE);
 		}
 
-        final ScrollView mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
+        mainScrollView = (ScrollView) findViewById(R.id.create_scroll_view);
 
         floatLabelNoteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(final View v, boolean hasFocus) {
-
+            public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    new Handler().postDelayed(new Runnable() {
+                    handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             mainScrollView.smoothScrollTo(0, mainScrollView.getBottom());
@@ -163,79 +184,234 @@ public class CreateDebtActivity extends DataActivity {
             }
         });
 
-		floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-				if (TextUtils.isEmpty(s.toString())) {
-					clearEditText.setVisibility(View.GONE);
-				} else {
-					clearEditText.setVisibility(View.VISIBLE);
-				}
-			}
-		});
+        floatLabelNameAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-        if (Resource.isLOrAbove()) {
-            create_fab_l = (ImageButton) findViewById(R.id.create_fab_l);
-            create_fab_l.setBackground(transitionDrawable);
-            transitionDrawable.startTransition(200);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-            create_fab_l.setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, create_fab_l.getWidth(), create_fab_l.getHeight());
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    clearEditText.setVisibility(View.GONE);
+                } else {
+                    clearEditText.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+		final ArrayList<CreateSpinnerAdapter.CalendarOptionItem> dayList = new ArrayList<CreateSpinnerAdapter.CalendarOptionItem>() {{
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.today), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY, null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.tomorrow), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW, null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_date), null, CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM, null));
+		}};
+
+        final Calendar morning = Calendar.getInstance();
+        final Calendar afternoon = Calendar.getInstance();
+        final Calendar evening = Calendar.getInstance();
+        final Calendar night = Calendar.getInstance();
+
+        morning.set(Calendar.HOUR_OF_DAY, 9);
+        afternoon.set(Calendar.HOUR_OF_DAY, 13);
+        evening.set(Calendar.HOUR_OF_DAY, 17);
+        night.set(Calendar.HOUR_OF_DAY, 20);
+
+        morning.set(Calendar.MINUTE, 0);
+        afternoon.set(Calendar.MINUTE, 0);
+        evening.set(Calendar.MINUTE, 0);
+        night.set(Calendar.MINUTE, 0);
+
+		final ArrayList<CreateSpinnerAdapter.CalendarOptionItem> timeList = new ArrayList<CreateSpinnerAdapter.CalendarOptionItem>() {{
+			add(new CreateSpinnerAdapter.CalendarOptionItem(
+                    getString(R.string.morning),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(morning.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.afternoon),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(afternoon.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.evening),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(evening.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.night),
+                    DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(night.getTime()),
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT,
+                    null));
+			add(new CreateSpinnerAdapter.CalendarOptionItem(getString(R.string.pick_time),
+                    null,
+                    CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM,
+                    null));
+		}};
+
+        CreateSpinnerAdapter dayAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, dayList, false);
+		CreateSpinnerAdapter timeAdapter = new CreateSpinnerAdapter(getApplicationContext(), R.layout.create_spinner_item, timeList, true);
+
+        reminderDayButton = (Button) findViewById(R.id.create_button_day);
+        reminderTimeButton = (Button) findViewById(R.id.create_button_time);
+        reminderDivider = findViewById(R.id.create_button_divider);
+
+        final ListPopupWindow popupWindowDay = new ListPopupWindow(this);
+        final ListPopupWindow popupWindowTime = new ListPopupWindow(this);
+
+        popupWindowDay.setContentWidth(Resource.getPx(140, getResources()));
+        popupWindowTime.setContentWidth(Resource.getPx(170, getResources()));
+
+        popupWindowDay.setAnchorView(reminderDayButton);
+        popupWindowTime.setAnchorView(reminderTimeButton);
+
+        popupWindowDay.setAdapter(dayAdapter);
+        popupWindowTime.setAdapter(timeAdapter);
+
+        reminderDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowDay.show();
+            }
+        });
+
+        reminderTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowTime.show();
+            }
+        });
+
+        popupWindowDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (dayList.get(position).calendarFlag) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TODAY:
+                        Calendar nowToday = Calendar.getInstance();
+                        nowToday.setTimeInMillis(nowToday.getTimeInMillis());
+
+                        reminderCalendar.set(Calendar.YEAR, nowToday.get(Calendar.YEAR));
+                        reminderCalendar.set(Calendar.MONTH, nowToday.get(Calendar.MONTH));
+                        reminderCalendar.set(Calendar.DAY_OF_MONTH, nowToday.get(Calendar.DAY_OF_MONTH));
+
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_TOMORROW:
+                        Calendar nowTomorrow = Calendar.getInstance();
+                        nowTomorrow.setTimeInMillis(nowTomorrow.getTimeInMillis() + Resource.ONE_DAY);
+
+                        reminderCalendar.set(Calendar.YEAR, nowTomorrow.get(Calendar.YEAR));
+                        reminderCalendar.set(Calendar.MONTH, nowTomorrow.get(Calendar.MONTH));
+                        reminderCalendar.set(Calendar.DAY_OF_MONTH, nowTomorrow.get(Calendar.DAY_OF_MONTH));
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                CreateDebtActivity.this,
+                                dateSetCallback,
+                                reminderCalendar.get(Calendar.YEAR),
+                                reminderCalendar.get(Calendar.MONTH),
+                                reminderCalendar.get(Calendar.DAY_OF_MONTH));
+                        datePickerDialog.show();
+                        break;
+                }
+
+                popupWindowDay.dismiss();
+
+            }
+        });
+
+        popupWindowTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (timeList.get(position).calendarFlag) {
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_MORNING:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 9);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_AFTERNOON:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 13);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_EVENING:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 17);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_NIGHT:
+                        reminderCalendar.set(Calendar.HOUR_OF_DAY, 20);
+                        reminderCalendar.set(Calendar.MINUTE, 0);
+                        updateDate(false);
+                        break;
+
+                    case CreateSpinnerAdapter.CalendarOptionItem.FLAG_CALENDAR_CUSTOM:
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(CreateDebtActivity.this, timeSetCallback, reminderCalendar.get(Calendar.HOUR_OF_DAY), reminderCalendar.get(Calendar.MINUTE), android.text.format.DateFormat.is24HourFormat(CreateDebtActivity.this));
+                        timePickerDialog.show();
+                        break;
+                }
+
+                popupWindowTime.dismiss();
+
+            }
+        });
+
+		if (savedInstanceState == null) {
+			popupWindowDay.setSelection(1);
+			popupWindowTime.setSelection(0);
+		}
+
+		clearReminderButton = (ImageButton) findViewById(R.id.create_clear_reminder);
+		clearReminderButton.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   usingCustomDate = false;
+                   updateDate(true);
+               }
             });
 
-            create_fab_l.setClipToOutline(true);
+        reminderButton = (Button) findViewById(R.id.create_reminder_button);
+        reminderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                usingCustomDate = true;
+                updateDate(true);
+            }
+        });
 
-            validator = new RequiredValidator(new EditText[] {
-                    floatLabelNameAutoCompleteTextView,
-                    floatLabelAmountEditText
-            }, new ValidatorListener() {
-                @Override
-                public void onValid() {
-                    if (floatLabelAmountEditText.getText().equals("0")) return;
-                    create_fab_l.setActivated(true);
-                    create_fab_l.setAlpha(1f);
-                }
+        create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
 
-                @Override
-                public void onInvalid() {
-                    create_fab_l.setActivated(false);
-                    create_fab_l.setAlpha(0.6f);
-                }
-            });
-
-            create_fab_l.setOnClickListener(fabClickListener);
-        } else {
-            final FloatingActionButton create_fab = (FloatingActionButton) findViewById(R.id.create_fab);
-
-            validator = new RequiredValidator(new EditText[] {
-                    floatLabelNameAutoCompleteTextView,
-                    floatLabelAmountEditText
-            }, new ValidatorListener() {
-                @Override
-                public void onValid() {
-                    if (floatLabelAmountEditText.getText().equals("0")) return;
-                    create_fab.setActivated(true);
-                    create_fab.setAlpha(1f);
-                }
-
-                @Override
-                public void onInvalid() {
-                    create_fab.setActivated(false);
-                    create_fab.setAlpha(0.6f);
-                }
-            });
-
-            create_fab.setOnClickListener(fabClickListener);
+        if (Resource.isLOrAbove() && !getIntent().getBooleanExtra(KEY_NO_FAB_ANIM, false)) {
+            create_fab.setTransitionName("fab");
+            animateInFab();
         }
+
+        create_fab.setOnClickListener(fabClickListener);
+
+        validator = new RequiredValidator(new EditText[] {
+                floatLabelNameAutoCompleteTextView,
+                floatLabelAmountEditText
+        }, new ValidatorListener() {
+            @Override
+            public void onValid() {
+                if (floatLabelAmountEditText.getText().toString().equals("0")) return;
+                create_fab.setActivated(true);
+                create_fab.setAlpha(1f);
+            }
+
+            @Override
+            public void onInvalid() {
+                create_fab.setActivated(false);
+                create_fab.setAlpha(0.6f);
+            }
+        });
+
+		updateDate(false);
 
     }
 
@@ -244,11 +420,19 @@ public class CreateDebtActivity extends DataActivity {
 		Intent intent = getIntent();
 
 		String currencyText = getResources().getString(R.string.amount) + " (" + data.preferences.getCurrency().getDisplayName() + ")";
-		floatLabelLayout.setHint(currencyText);
-		floatLabelAmountEditText.setHint(currencyText);
+        float_label_layout_amount.setHint(currencyText);
 
 		if (intent.hasExtra(ARG_ID)) {
 			editingDebt = data.findDebt((UUID) intent.getSerializableExtra(ARG_ID));
+            if (editingDebt.isPaidBack()) {
+                findViewById(R.id.reminder_layout).setVisibility(View.GONE);
+            }
+
+            usingCustomDate = editingDebt.hasReminder();
+            if (usingCustomDate) {
+                reminderCalendar.setTimeInMillis(editingDebt.getRemindDate());
+                updateDate(false);
+            }
 
 			floatLabelNameAutoCompleteTextView.setText(editingDebt.getOwner().getName());
 
@@ -263,9 +447,149 @@ public class CreateDebtActivity extends DataActivity {
 			radioGroup.check(iOwe ? R.id.create_radio_i_owe : R.id.create_radio_they_owe);
 		} else if(intent.hasExtra(ARG_FROM_PERSON_NAME)) {
 			floatLabelNameAutoCompleteTextView.setText(intent.getStringExtra(ARG_FROM_PERSON_NAME));
-			floatLabelAmountEditText.requestFocus();
+			radioGroup.requestFocus();
 		}
 	}
+
+    private void updateDate(boolean anim) {
+		if (usingCustomDate) {
+
+            Calendar now = Calendar.getInstance();
+
+            int year = reminderCalendar.get(Calendar.YEAR);
+            int month = reminderCalendar.get(Calendar.MONTH);
+            int day = reminderCalendar.get(Calendar.DAY_OF_MONTH);
+
+            reminderDayButton.setText(getDayString(year, month, day, now));
+            reminderTimeButton.setText(DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(reminderCalendar.getTime()));
+
+            if (anim) {
+
+                reminderButton.setVisibility(View.VISIBLE);
+
+                Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_out_fast);
+
+                fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        reminderButton.setVisibility(View.GONE);
+
+                        Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_in_fast);
+
+                        clearReminderButton.setVisibility(View.VISIBLE);
+                        reminderDayButton.setVisibility(View.VISIBLE);
+                        reminderTimeButton.setVisibility(View.VISIBLE);
+                        reminderDivider.setVisibility(View.VISIBLE);
+
+                        clearReminderButton.startAnimation(fadeIn);
+                        reminderDayButton.startAnimation(fadeIn);
+                        reminderTimeButton.startAnimation(fadeIn);
+                        reminderDivider.startAnimation(fadeIn);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                reminderButton.startAnimation(fadeOut);
+
+            } else {
+                reminderButton.setVisibility(View.GONE);
+                clearReminderButton.setVisibility(View.VISIBLE);
+                reminderDayButton.setVisibility(View.VISIBLE);
+                reminderTimeButton.setVisibility(View.VISIBLE);
+                reminderDivider.setVisibility(View.VISIBLE);
+            }
+		} else {
+
+            if (anim) {
+
+                clearReminderButton.setVisibility(View.VISIBLE);
+                reminderDayButton.setVisibility(View.VISIBLE);
+                reminderTimeButton.setVisibility(View.VISIBLE);
+                reminderDivider.setVisibility(View.VISIBLE);
+
+                Animation fadeOut = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_out_fast);
+
+                fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                        clearReminderButton.setVisibility(View.GONE);
+                        reminderDayButton.setVisibility(View.GONE);
+                        reminderTimeButton.setVisibility(View.GONE);
+                        reminderDivider.setVisibility(View.GONE);
+
+                        Animation fadeIn = AnimationUtils.loadAnimation(CreateDebtActivity.this, R.anim.fade_in_fast);
+
+                        reminderButton.setVisibility(View.VISIBLE);
+                        reminderButton.startAnimation(fadeIn);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                clearReminderButton.startAnimation(fadeOut);
+                reminderDayButton.startAnimation(fadeOut);
+                reminderTimeButton.startAnimation(fadeOut);
+                reminderDivider.startAnimation(fadeOut);
+
+            } else {
+                reminderButton.setVisibility(View.VISIBLE);
+                clearReminderButton.setVisibility(View.GONE);
+                reminderDayButton.setVisibility(View.GONE);
+                reminderTimeButton.setVisibility(View.GONE);
+                reminderDivider.setVisibility(View.GONE);
+            }
+
+		}
+	}
+
+    private String getDayString(int year, int month, int day, Calendar now) {
+
+        int yearNow = now.get(Calendar.YEAR);
+        int monthNow = now.get(Calendar.MONTH);
+        int dayNow = now.get(Calendar.DAY_OF_MONTH);
+
+        if (year == yearNow && month == monthNow && day == dayNow) {
+            return getString(R.string.today);
+        }
+
+        now.setTimeInMillis(now.getTimeInMillis() + Resource.ONE_DAY);
+
+        yearNow = now.get(Calendar.YEAR);
+        monthNow = now.get(Calendar.MONTH);
+        dayNow = now.get(Calendar.DAY_OF_MONTH);
+
+        if (year == yearNow && month == monthNow && day == dayNow) {
+            return getString(R.string.tomorrow);
+        }
+
+        SimpleDateFormat simpleDateFormat = Resource.monthDateFormat;
+
+        Calendar target = Calendar.getInstance();
+        target.set(Calendar.YEAR, year);
+        target.set(Calendar.MONTH, month);
+        target.set(Calendar.DAY_OF_MONTH, day);
+
+        return simpleDateFormat.format(target.getTime());
+    }
 
     @Override
     protected void onDataLinked() {
@@ -283,18 +607,33 @@ public class CreateDebtActivity extends DataActivity {
         public void onClick(View v) {
 
             if (v.isActivated()) {
-                Person person = saveDebt(
+
+                float amount;
+
+                try {
+                    amount = Float.parseFloat(floatLabelAmountEditText.getText().toString().replace(',', '.'));
+                } catch (Exception e) {
+                    //Weird formatting
+                    Snackbar.make(create_master, R.string.number_format_error, Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                Debt debt = saveDebt(
                         floatLabelNameAutoCompleteTextView.getText().toString().trim(),
                         radioGroup.getCheckedRadioButtonId() == R.id.create_radio_i_owe,
-                        Float.parseFloat(floatLabelAmountEditText.getText().toString()),
-                        floatLabelNoteEditText.getText().toString().trim()
-                );
+                        amount,
+                        floatLabelNoteEditText.getText().toString().trim());
+
+                if (usingCustomDate) {
+                    debt.setRemindDate(reminderCalendar.getTimeInMillis());
+                    Alarm.addAlarm(CreateDebtActivity.this, debt);
+                }
 
                 finishAffinity();
                 final Intent intent = new Intent(getApplicationContext(), FeedActivity.class)
 						.putExtra(FeedActivity.ARG_FROM_CREATE, true);
 
-                FeedActivity.person = person;
+                FeedActivity.person = debt.getOwner();
 
                 if (Resource.isLOrAbove()) {
                     startActivity(intent);
@@ -302,16 +641,46 @@ public class CreateDebtActivity extends DataActivity {
                     startActivity(intent, ActivityOptions.makeCustomAnimation(getApplicationContext(), R.anim.activity_out_reverse, R.anim.activity_in_reverse).toBundle());
                 }
             } else {
-                Snackbar.with(getApplicationContext())
-                        .text(getString(R.string.create_fab_error))
-                        .show(CreateDebtActivity.this);
+                Snackbar.make(create_master, R.string.create_fab_error, Snackbar.LENGTH_SHORT).show();
 
                 Resource.hideKeyboard(CreateDebtActivity.this);
             }
         }
     };
 
-	public Person saveDebt(String name, boolean iOwe, float amount, String note) {
+	private TimePickerDialog.OnTimeSetListener timeSetCallback = new TimePickerDialog.OnTimeSetListener() {
+		@Override
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			reminderCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			reminderCalendar.set(Calendar.MINUTE, minute);
+			usingCustomDate = true;
+
+			updateDate(false);
+		}
+	};
+
+	private DatePickerDialog.OnDateSetListener dateSetCallback = new DatePickerDialog.OnDateSetListener() {
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			reminderCalendar.set(year, monthOfYear, dayOfMonth);
+			usingCustomDate = true;
+			updateDate(false);
+		}
+	};
+
+    private DatePickerDialog.OnDateSetListener dateAddedSetCallback = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, monthOfYear);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            addedCalendar = cal;
+            changedAddedDate = true;
+        }
+    };
+
+	public Debt saveDebt(String name, boolean iOwe, float amount, String note) {
 		if(iOwe) {
 			amount = -amount;
 		}
@@ -319,27 +688,46 @@ public class CreateDebtActivity extends DataActivity {
 			note = null;
 		}
 
-		Person person;
+		Debt debt;
 		if(editingDebt == null) {
-			person = data.getOrCreatePerson(name, ColorPalette.getInstance(this));
-			data.addFirst(new Debt(person, amount, note, data.preferences.getCurrency().id));
+			Person person = data.getOrCreatePerson(name, ColorPalette.getInstance(this));
+			data.addFirst(debt = new Debt(person, amount, note, data.preferences.getCurrency().id));
+
+            debt.changeDate(addedCalendar.getTimeInMillis());
 		} else {
-			person = editingDebt.getOwner().getName().equals(name)
+			Person person = editingDebt.getOwner().getName().equals(name)
 				? editingDebt.getOwner()
 				: data.getOrCreatePerson(name, ColorPalette.getInstance(this));
 
+            if (changedAddedDate) {
+                editingDebt.changeDate(addedCalendar.getTimeInMillis());
+            }
+
 			editingDebt.edit(person, amount, note);
+
+            debt = editingDebt;
 		}
 
-		storage.commit();
-		return person;
+        if (usingCustomDate) {
+            debt.setRemindDate(reminderCalendar.getTimeInMillis());
+        } else {
+            debt.setRemindDate(null);
+        }
+
+		storage.commit(this);
+
+		return debt;
 	}
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void animateIn(final View view) {
+    private void animateIn(final View view, boolean fromTop) {
         view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         view.setAlpha(0f);
-        view.setTranslationY(Resource.getPx(-100, getResources()));
+        if (fromTop) {
+            view.setTranslationY(Resource.getPx(-100, getResources()));
+        } else {
+            view.setTranslationY(Resource.getPx(80, getResources()));
+        }
 
         ObjectAnimator animY = ObjectAnimator.ofFloat(view, "translationY", 0);
         animY.setStartDelay(260);
@@ -350,10 +738,10 @@ public class CreateDebtActivity extends DataActivity {
         animAlpha.setDuration(450);
 
         if (Resource.isLOrAbove()) {
-            PathInterpolator interpolator = new PathInterpolator(0.5f, 1f, 0.75f, 1f);
+            PathInterpolator pathInterpolator = new PathInterpolator(0.1f, 0.4f, 0.5f, 1f);
 
-            animY.setInterpolator(interpolator);
-            animAlpha.setInterpolator(interpolator);
+            animY.setInterpolator(pathInterpolator);
+            animAlpha.setInterpolator(pathInterpolator);
         } else {
             animY.setInterpolator(new DecelerateInterpolator());
             animAlpha.setInterpolator(new DecelerateInterpolator());
@@ -405,15 +793,19 @@ public class CreateDebtActivity extends DataActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        } else if (id == R.id.action_create_date) {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(CreateDebtActivity.this, dateAddedSetCallback, addedCalendar.get(Calendar.YEAR), addedCalendar.get(Calendar.MONTH), addedCalendar.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+
         } else if (id == android.R.id.home) {
             if (getIntent().getBooleanExtra(ARG_FROM_FEED, false)) {
                 if (Resource.isLOrAbove()) {
-                    transitionDrawable.reverseTransition(600);
-                    create_fab_l.animate()
+                    animateOutFab();
+                    create_fab.animate()
                             .alpha(1f)
                             .setDuration(600)
                             .start();
-					create_fab_l.setImageResource(R.drawable.ic_action_content_new);
+					create_fab.setImageResource(R.drawable.ic_action_content_new);
 
                     finishAfterTransition();
                 } else {
@@ -440,12 +832,12 @@ public class CreateDebtActivity extends DataActivity {
     @Override
 	public void onBackPressed() {
         if (Resource.isLOrAbove()) {
-            transitionDrawable.reverseTransition(600);
-			create_fab_l.animate()
+            animateOutFab();
+			create_fab.animate()
 					.alpha(1f)
 					.setDuration(600)
 					.start();
-			create_fab_l.setImageResource(R.drawable.ic_action_content_new);
+			create_fab.setImageResource(R.drawable.ic_action_content_new);
             finishAfterTransition();
         } else {
             finish();
@@ -458,4 +850,73 @@ public class CreateDebtActivity extends DataActivity {
 		Log.i("my_app", "New intent with flags " + intent.getFlags());
 	}
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void animateInFab() {
+        if (Resource.isLOrAbove()) {
+            final int colorWhite = getResources().getColor(android.R.color.white);
+            final int colorOrange = getResources().getColor(R.color.accent_color);
+
+            ViewPropertyAnimator vpa = create_fab.animate();
+            vpa.setDuration(200);
+            vpa.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int color = Resource.mixTwoColors(colorWhite, colorOrange, valueAnimator.getAnimatedFraction());
+                    create_fab.setBackgroundTintList(ColorStateList.valueOf(color));
+                }
+            });
+
+            vpa.start();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void animateOutFab() {
+        if (Resource.isLOrAbove()) {
+            final int colorWhite = getResources().getColor(android.R.color.white);
+            final int colorOrange = getResources().getColor(R.color.accent_color);
+
+            ViewPropertyAnimator vpa = create_fab.animate();
+            vpa.setDuration(600);
+            vpa.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int color = Resource.mixTwoColors(colorOrange, colorWhite, valueAnimator.getAnimatedFraction());
+                    create_fab.setBackgroundTintList(ColorStateList.valueOf(color));
+                }
+            });
+
+            vpa.start();
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        long time = savedInstanceState.getLong(KEY_CALENDAR, 0);
+        long timeAdded = savedInstanceState.getLong(KEY_ADDED_CALENDAR, 0);
+
+        if (time != 0) {
+			reminderCalendar.setTimeInMillis(time);
+			usingCustomDate = true;
+			updateDate(false);
+		}
+
+        if (timeAdded > 0) {
+            addedCalendar.setTimeInMillis(timeAdded);
+        }
+
+        changedAddedDate = savedInstanceState.getBoolean(KEY_CHANGED_ADDED, false);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+		if (reminderCalendar != null) {
+			outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
+		}
+
+        outState.putLong(KEY_ADDED_CALENDAR, addedCalendar.getTimeInMillis());
+        outState.putBoolean(KEY_CHANGED_ADDED, changedAddedDate);
+    }
 }

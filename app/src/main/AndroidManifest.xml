@@ -7,9 +7,12 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
+        android:name="com.johnsimon.payback.core.BaseApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppThemeParent" >
@@ -64,6 +67,10 @@
             android:parentActivityName=".ui.FeedActivity"
             android:theme="@style/AppThemeParent"
             android:label="@string/title_activity_people_manager"   />
+        <activity
+            android:label=""
+            android:name=".ui.RemindLaterActivity"
+            android:theme="@style/Theme.Transparent"    />
 
         <!--Widget
         <receiver
@@ -78,7 +85,24 @@
         </receiver>
         <service
             android:name=".widget.ListWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        -->
+
+        <receiver android:name=".util.Alarm$NotificationEventReceiver">
+        </receiver>
+
+        <receiver android:name=".util.Alarm$AlarmReceiver">
+        </receiver>
+
+        <receiver android:name=".data.backup.AutoBackuper$AlarmReceiver">
+        </receiver>
+
+        <receiver
+            android:name=".util.Alarm$AlarmBootListener">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

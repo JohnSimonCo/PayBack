@@ -1,18 +1,18 @@
 package com.johnsimon.payback.util;
 
-import android.app.Activity;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.johnsimon.payback.R;
-import com.williammora.snackbar.Snackbar;
+import com.johnsimon.payback.ui.base.BaseActivity;
 
 public class Undo {
-	private final static int DURATION = 2500;
-	private final static int DELAY = 600;
+	private final static int DURATION = 3500;
 
 	private static QueuedAction queuedAction = null;
 
-	public static void executeAction(Activity context, int textId, final UndoableAction action) {
+	public static void executeAction(BaseActivity activity, int textId, final View baseView, final UndoableAction action) {
         completeAction();
 		queuedAction = new QueuedAction(action);
 
@@ -24,36 +24,27 @@ public class Undo {
                 cancelAction();
 			}
 		};
+
 		queuedAction.handler = handler;
 		queuedAction.runnable = runnable;
 
-		Snackbar snackbar = Snackbar.with(context.getApplicationContext());
-		snackbar.text(context.getString(textId))
-			.actionLabel(context.getString(R.string.undo))
-			.actionColor(context.getResources().getColor(R.color.undo_color))
-			.duration(DURATION)
-			.eventListener(new Snackbar.EventListener() {
-				@Override
-				public void onShow(int i) {
-					action.onDisplay();
-					handler.postDelayed(runnable, DURATION + DELAY);
-				}
+		Snackbar snackbar = Snackbar.make(baseView, textId, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				action.onRevert();
+				handler.removeCallbacks(runnable);
+				cancelAction();
+			}
+		});
 
-				@Override
-				public void onDismiss(int i) {
-				}
-			})
-			.actionListener(new Snackbar.ActionClickListener() {
-				@Override
-				public void onActionClicked() {
-					action.onRevert();
-					handler.removeCallbacks(runnable);
-                    cancelAction();
-				}
-			})
-			.show(context);
+		snackbar.setActionTextColor(activity.getResources().getColor(R.color.accent_color));
+		snackbar.show();
+
+		action.onDisplay();
+		handler.postDelayed(runnable, DURATION);
 
 		queuedAction.snackbar = snackbar;
+        activity.queuedActions.add(queuedAction);
 	}
 
     private static void cancelAction() {
@@ -70,8 +61,7 @@ public class Undo {
         }
 	}
 
-
-	private static class QueuedAction {
+	public static class QueuedAction {
 		public UndoableAction action;
 		public Snackbar snackbar;
 		public Handler handler;
@@ -83,8 +73,8 @@ public class Undo {
 	}
 
 	public interface UndoableAction {
-		public void onDisplay();
-		public void onRevert();
-		public void onCommit();
+		void onDisplay();
+		void onRevert();
+		void onCommit();
 	}
 }

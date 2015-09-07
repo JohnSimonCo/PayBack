@@ -3,20 +3,16 @@ package com.johnsimon.payback.storage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.backup.AutoBackuper;
+import com.johnsimon.payback.data.backup.Backup;
 
 public abstract class Storage {
-    protected Context context;
     public Subscription<AppData> subscription = new Subscription<>();
 
     protected AppData data;
-
-    public Storage(Context context) {
-        this.context = context;
-    }
 
 	public abstract SharedPreferences getPreferences();
 
@@ -31,19 +27,37 @@ public abstract class Storage {
 
     protected abstract void commit(String JSON);
 
-	public void wipe() {
-		commit(AppData.defaultAppData());
+	public void wipe(Context context) {
+		String JSON = data.save();
+		AutoBackuper.performBackup(JSON, Backup.Type.Wipe);
+
+		commit(context, AppData.defaultAppData());
 		emit();
 	}
 
-	public void commit() {
-		commit(data.save());
+	public void commit(Context context) {
+		String JSON = data.save();
+
+		commit(JSON);
+		sheduleBackup(context, JSON);
 	}
 
-    public void commit(AppData data) {
+	protected void sheduleBackup(Context context, String json) {
+
+	}
+
+    public void commit(Context context, AppData data) {
         this.data = data;
-		commit();
+		commit(context);
     }
+
+	public boolean isExternalStorage() {
+		return this instanceof ExternalStorage;
+	}
+
+	public ExternalStorage asExternalStorage() {
+		return (ExternalStorage) this;
+	}
 
 	public boolean isDriveStorage() {
 		return this instanceof DriveStorage;

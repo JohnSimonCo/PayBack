@@ -11,10 +11,9 @@ import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * Created by John on 2015-01-13.
- */
 public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Void, Void> {
 
 	public Promise<Void> promise = new Promise<>();
@@ -73,14 +72,14 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 
 		if(count < 1) return null;
 
-		String[] numbers = new String[count];
+		HashSet<String> numbers = new HashSet<>(count);
 
-		int i = -1;
 		while(cursor.moveToNext()) {
-			numbers[++i] = normalizePhoneNumber(cursor.getString(column));
+			numbers.add(normalizePhoneNumber(cursor.getString(column)));
 		}
 
-		return numbers;
+		int size = numbers.size();
+		return size > 0 ? numbers.toArray(new String[size]) : null;
 	}
 
 	//Removes all formatting, so that numbers can be compared

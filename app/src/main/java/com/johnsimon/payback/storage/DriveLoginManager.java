@@ -1,6 +1,5 @@
 package com.johnsimon.payback.storage;
 
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -10,12 +9,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
-import com.johnsimon.payback.BuildConfig;
+import com.google.android.gms.plus.Plus;
 import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.async.Promise;
 
 public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-	private final static int REQUEST_CODE_RESOLUTION = 14795;
+	private final static int REQUEST_CODE_RESOLUTION = 14795; // Looks pretty random to me
 
 	public final static String PREFERENCE_ACCOUNT_NAME = "ACCOUNT_NAME";
 
@@ -38,6 +37,7 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 	public void go() {
 		this.client = new GoogleApiClient.Builder(activity)
             .addApi(Drive.API)
+			.addApi(Plus.API) //Dirty AF
             .addScope(Drive.SCOPE_APPFOLDER)
             .addConnectionCallbacks(this)
             .addOnConnectionFailedListener(this)
@@ -69,6 +69,7 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 	public void onConnected(Bundle bundle) {
 		if(hasLoggedIn) {
 			connectedPromise.fire();
+			loginResult.fire(new LoginResult(getAccountName()));
 		} else {
 			client.clearDefaultAccountAndReconnect();
 		}
@@ -102,15 +103,19 @@ public class DriveLoginManager implements GoogleApiClient.ConnectionCallbacks, G
 					hasLoggedIn = true;
 					client.connect();
 
-					String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+					//String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
-					loginResult.fire(new LoginResult(accountName));
 				} else if(resultCode == Activity.RESULT_CANCELED) {
 					loginResult.fire(new LoginResult());
 				}
 				return true;
 		}
 		return false;
+	}
+
+	private String getAccountName() {
+		return Plus.AccountApi.getAccountName(client);
+
 	}
 
 	public static class LoginResult {

@@ -1,25 +1,18 @@
 package com.johnsimon.payback.core;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.data.User;
-import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.base.BaseDialogFragment;
 
-public abstract class DataDialogFragment extends DialogFragment {
-    protected Storage storage;
-    public AppData data;
-    public User user;
-
-    private ContactLoader contactLoader;
-
-    private Notification dataLink;
+public abstract class DataDialogFragment extends BaseDialogFragment {
+	protected Storage storage;
+	public AppData data;
+	public User user;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -28,73 +21,72 @@ public abstract class DataDialogFragment extends DialogFragment {
 		DataActivityInterface activity = getDataActivity();
 
 		this.storage = activity.getStorage();
-
-		contactLoader = activity.getContactLoader();
-
-		dataLink = activity.getDataLink();
 	}
 
 	protected DataActivityInterface getDataActivity() {
 		return (DataActivityInterface) getActivity();
 	}
 
-    @Override
-    public void onStart() {
-        super.onStart();
+	@Override
+	public void onStart() {
+		super.onStart();
 
-        storage.subscription.listen(dataLoadedCallback);
+		DataActivityInterface activity = getDataActivity();
 
-        dataLink.listen(dataLinkedCallback);
+		storage.subscription.listen(dataLoadedCallback);
 
-		contactLoader.userLoaded.then(userLoadedCallback);
-    }
+		activity.getContactLoader().userLoaded.then(userLoadedCallback);
 
-    @Override
-    public void onStop() {
-        super.onStop();
+		activity.getDataLinker().linked.listen(dataLinkedCallback);
+	}
 
-        storage.subscription.unregister(dataLoadedCallback);
+	@Override
+	public void onStop() {
+		super.onStop();
 
-        dataLink.unregister(dataLinkedCallback);
+		DataActivityInterface activity = getDataActivity();
 
-        contactLoader.userLoaded.unregister(userLoadedCallback);
-    }
+		storage.subscription.unregister(dataLoadedCallback);
 
-    private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
-        @Override
-        public void onCalled(AppData _data) {
-            data = _data;
-            onDataReceived();
-        }
-    };
+		activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
 
-    private NotificationCallback dataLinkedCallback = new NotificationCallback() {
+	}
+
+	private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
+		@Override
+		public void onCalled(AppData _data) {
+			data = _data;
+			onDataReceived();
+		}
+	};
+
+	private NotificationCallback dataLinkedCallback = new NotificationCallback() {
 		@Override
 		public void onNotify() {
 			onDataLinked();
 		}
 	};
 
-    private boolean userLoaded = false;
-    private Callback<User> userLoadedCallback = new Callback<User>() {
-        @Override
-        public void onCalled(User _user) {
-            if(userLoaded) return;
+	private boolean userLoaded = false;
+	private Callback<User> userLoadedCallback = new Callback<User>() {
+		@Override
+		public void onCalled(User _user) {
+			if(userLoaded) return;
 
-            userLoaded = true;
+			userLoaded = true;
 
-            user = _user;
+			user = _user;
 
-            onUserLoaded();
-        }
-    };
+			onUserLoaded();
+		}
+	};
 
-    protected void onDataReceived() {
-    }
+	protected void onDataReceived() {
+	}
 
-    protected void onDataLinked() {
-    }
+	protected void onDataLinked() {
+	}
 
-    protected void onUserLoaded() {
-    }
+	protected void onUserLoaded() {
+	}
 }

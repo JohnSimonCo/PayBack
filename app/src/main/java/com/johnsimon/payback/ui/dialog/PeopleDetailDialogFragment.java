@@ -153,9 +153,9 @@ public class PeopleDetailDialogFragment extends DataDialogFragment {
 	};
 
     public interface PeopleDetailCallbacks {
-        public void onDelete(Person person);
-        public void onRename(Person person, String name);
-        public void onMerge(Person person, String name);
+        void onDelete(Person person);
+        void onRename(Person person, String name);
+        void onMerge(Person person, String name);
     }
 
 }

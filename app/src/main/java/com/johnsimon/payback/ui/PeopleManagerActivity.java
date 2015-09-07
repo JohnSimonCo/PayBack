@@ -3,13 +3,12 @@ package com.johnsimon.payback.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +20,6 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.johnsimon.payback.R;
@@ -31,6 +28,7 @@ import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.PeopleOrder;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.base.BaseActivity;
 import com.johnsimon.payback.ui.dialog.PeopleDetailDialogFragment;
 import com.johnsimon.payback.ui.dialog.PersonPickerDialogFragment;
 import com.johnsimon.payback.util.ColorPalette;
@@ -38,19 +36,18 @@ import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
 import com.johnsimon.payback.view.DragSortRecycler;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class PeopleManagerActivity extends DataActivity implements DragSortRecycler.OnItemMovedListener, PeopleDetailDialogFragment.PeopleDetailCallbacks {
-
-	private static String ARG_PREFIX = Resource.prefix("CREATE_DEBT");
 
 	private PeopleListAdapter adapter;
     private RecyclerView recyclerView;
 
     private int sortAzX;
     private int sortAzY;
+
+    private View masterLayout;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -72,6 +69,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
         setContentView(R.layout.activity_people_manager);
 
+        masterLayout = findViewById(R.id.people_manager_master);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -80,7 +79,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		recyclerView = (RecyclerView) findViewById(R.id.people_recycler_view);
 
 		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager( new LinearLayoutManager(this));
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setItemAnimator(null);
 
 		DragSortRecycler dragSortRecycler = new DragSortRecycler();
@@ -94,46 +93,31 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
 		recyclerView.addItemDecoration(dragSortRecycler);
 		recyclerView.addOnItemTouchListener(dragSortRecycler);
-		recyclerView.setOnScrollListener(dragSortRecycler.getScrollListener());
-
-        final ImageView people_manager_empty_image = (ImageView) findViewById(R.id.people_manager_empty_image);
-		people_manager_empty_image.setBackgroundResource(R.anim.hand_wave);
-		people_manager_empty_image.post(new Runnable() {
-            @Override
-            public void run() {
-                AnimationDrawable frameAnimation = (AnimationDrawable) people_manager_empty_image.getBackground();
-                frameAnimation.start();
-            }
-        });
+		recyclerView.addOnScrollListener(dragSortRecycler.getScrollListener());
 
 		TypedValue tv = new TypedValue();
 		if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
 
 			int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
 
-			if (Resource.isLOrAbove()) {
-				ImageButton fab = (ImageButton) findViewById(R.id.feed_fab_l);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.people_fab);
 
+            if (Resource.isLOrAbove()) {
 				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
 				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - Math.round(getResources().getDimension(R.dimen.fab_size) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
 
 				fab.setLayoutParams(params);
-
-				fab.setOnClickListener(fabClickListener);
 			} else {
-				FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.feed_fab);
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
+                params.setMargins(0, actionBarHeight + Resource.getPx(28, getResources()) - Resource.getPx(28, getResources()),
+                        (int) (getResources().getDimension(R.dimen.fab_right_margin)) - (int) (getResources().getDimension(R.dimen.people_offset)), 0);
 
-				FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) fab.getLayoutParams();
-				params.setMargins(0, actionBarHeight + Resource.getPx(48, getResources()) - (Resource.getPx(56, getResources()) / 2), Math.round(getResources().getDimension(R.dimen.fab_right_margin)), 0);
-
-				fab.setLayoutParams(params);
-
-				fab.setOnClickListener(fabClickListener);
-			}
-		}
+                fab.setLayoutParams(params);
+            }
+            fab.setOnClickListener(fabClickListener);
+        }
 
 		setupTreeObserver();
-
     }
 
 	@Override
@@ -175,7 +159,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
                     data.add(person);
                     DataLinker.link(person, data.contacts);
                     adapter.people.add(person);
-					storage.commit();
+					storage.commit(getApplicationContext());
 					adapter.notifyDataSetChanged();
                     adapter.updateEmptyViewVisibility();
 				}
@@ -252,8 +236,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void sort(Activity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
-		Undo.executeAction(self, R.string.sort_list, new Undo.UndoableAction() {
+	private void sort(BaseActivity self, final PeopleOrder.SortResult result, final ArrayList<Person> list) {
+		Undo.executeAction(self, R.string.sort_list, masterLayout, new Undo.UndoableAction() {
 			@Override
 			public void onDisplay() {
                 adapter.people = result.people;
@@ -270,7 +254,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 			public void onCommit() {
 				data.peopleOrder = result.order;
 				data.touchPeopleOrder();
-				storage.commit();
+				storage.commit(getApplicationContext());
 			}
 		});
 	}
@@ -317,7 +301,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             data.peopleOrder.reorder(from, to, toLast);
 			data.touchPeopleOrder();
-            storage.commit();
+            storage.commit(getApplicationContext());
         }
     }
 
@@ -325,7 +309,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     public void onDelete(final Person person) {
         final int listIndex = adapter.people.indexOf(person);
 
-        Undo.executeAction(PeopleManagerActivity.this, R.string.deleted_person, new Undo.UndoableAction() {
+        Undo.executeAction(PeopleManagerActivity.this, R.string.deleted_person, masterLayout, new Undo.UndoableAction() {
             @Override
             public void onDisplay() {
                 adapter.people.remove(listIndex);
@@ -342,8 +326,8 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             @Override
             public void onCommit() {
-                data.delete(person);
-                storage.commit();
+                data.delete(PeopleManagerActivity.this, person);
+                storage.commit(getApplicationContext());
             }
         });
     }
@@ -352,7 +336,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
     public void onRename(final Person person, final String name) {
         final String oldName = person.getName();
 
-        Undo.executeAction(PeopleManagerActivity.this, R.string.renamed_person, new Undo.UndoableAction() {
+        Undo.executeAction(PeopleManagerActivity.this, R.string.renamed_person, masterLayout, new Undo.UndoableAction() {
             @Override
             public void onDisplay() {
                 person.setName(name);
@@ -369,10 +353,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
 
             @Override
             public void onCommit() {
-				//TODO might not be needed
-                //adapter.notifyDataSetChanged();
-
-                storage.commit();
+                storage.commit(getApplicationContext());
             }
         });
     }
@@ -386,7 +367,7 @@ public class PeopleManagerActivity extends DataActivity implements DragSortRecyc
         adapter.notifyDataSetChanged();
         adapter.updateEmptyViewVisibility();
 
-        data.merge(person, other);
-        storage.commit();
+        data.merge(this, person, other);
+        storage.commit(getApplicationContext());
     }
 }

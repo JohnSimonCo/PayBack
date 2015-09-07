@@ -1,18 +1,20 @@
 package com.johnsimon.payback.data;
 
-import com.johnsimon.payback.preferences.Preference;
 import com.johnsimon.payback.preferences.Preferences;
-import com.johnsimon.payback.ui.FeedActivity;
+import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
 
 public class DataSyncer {
     public static boolean sync(AppData a, AppData b, AppData out) {
         boolean changed = false;
+
+        sortDebts(a.debts);
+        sortDebts(b.debts);
 
         ArrayList<Person> people = a.people;
         ArrayList<Debt> debts = a.debts;
@@ -33,6 +35,11 @@ public class DataSyncer {
 
             people = sync(a.people, b.people);
             debts = sync(a.debts, b.debts);
+            sortDebts(debts);
+
+            for(Debt debt : debts) {
+                debt.linkOwner(people);
+            }
 
 			peopleOrder = mergePeopleOrder(a, b);
 
@@ -94,6 +101,20 @@ public class DataSyncer {
         return array;
     }
 
+    public static <T extends Identifiable> ArrayList<T> union(ArrayList<T> a, ArrayList<T> b) {
+        ArrayList<T> array = new ArrayList<>();
+
+        array.addAll(a);
+        for(T item : b) {
+            T other = find(array, item.getId());
+            if(other == null) {
+                array.add(item);
+            }
+        }
+
+        return array;
+    }
+
 	private static PeopleOrder mergePeopleOrder(AppData a, AppData b) {
 		//lord has priority over peasant
 		PeopleOrder lord, peasant;
@@ -115,4 +136,8 @@ public class DataSyncer {
 
 		return lord;
 	}
+
+    private static void sortDebts(ArrayList<Debt> debts) {
+        Collections.sort(debts, new Resource.TimeComparator());
+    }
 }

@@ -20,6 +20,19 @@
         <item name="colorAccent">@color/button_color</item>
     </style>
 
+    <style name="Theme.Transparent" parent="Theme.AppCompat.Light">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="TextAppearance.TextInputLayout.Hint" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/gray_oncolor_very_light</item>
+    </style>
+
     <style name="paid_back_anim" >
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/paid_back_dialog_out</item>
@@ -73,15 +86,17 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="Snackbar" />
-
-    <style name="Snackbar.Text">
-        <item name="android:paddingBottom">18dp</item>
-        <item name="android:paddingLeft">24dp</item>
-        <item name="android:paddingTop">18dp</item>
-        <item name="android:paddingRight">24dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/sb__text_color</item>
+    <style name="BetterPickersDialogFragment.CustomLight">
+        <item name="bpDialogBackground">@drawable/dialog_full_holo_light</item>
+        <item name="bpTitleColor">@color/dialog_text_color_holo_light</item>
+        <item name="bpTextColor">@color/dialog_text_color_holo_light</item>
+        <item name="bpDeleteIcon">@drawable/ic_backspace_light</item>
+        <item name="bpCheckIcon">@drawable/ic_check_light</item>
+        <item name="bpKeyBackground">@drawable/betterpicker_selector</item>
+        <item name="bpButtonBackground">@drawable/betterpicker_selector</item>
+        <item name="bpTitleDividerColor">@color/default_keyboard_indicator_color_dark</item>
+        <item name="bpDividerColor">@color/default_divider_color_light</item>
+        <item name="bpKeyboardIndicatorColor">@color/default_keyboard_indicator_color_light</item>
     </style>
 
 

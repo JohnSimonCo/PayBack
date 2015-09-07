@@ -3,7 +3,9 @@ package com.johnsimon.payback.send;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.data.Payment;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class DebtSendable {
@@ -11,7 +13,7 @@ public class DebtSendable {
 	public UUID id;
 
 	@SerializedName("amount")
-	public float amount;
+	public double amount;
 
 	@SerializedName("note")
 	public String note;
@@ -19,8 +21,11 @@ public class DebtSendable {
 	@SerializedName("timestamp")
 	public long timestamp;
 
-	@SerializedName("isPaidBack")
-	public boolean isPaidBack;
+	@SerializedName("paidBack")
+	public boolean paidBack;
+
+	@SerializedName("payments")
+	public ArrayList<Payment> payments;
 
 	@SerializedName("currency")
 	public String currency;
@@ -30,12 +35,13 @@ public class DebtSendable {
         this.amount = debt.getAmount();
 		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
-		this.isPaidBack = debt.isPaidBack();
+		this.paidBack = debt.isPaidBack();
+		this.payments = debt.payments;
 		this.currency = debt.currencyId;
 	}
 
 	public Debt extract(Person person) {
 		//Reverse amount
-		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), isPaidBack, currency);
+		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), paidBack, payments, currency);
 	}
 }

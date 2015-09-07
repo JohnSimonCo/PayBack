@@ -30,11 +30,11 @@ public class AboutDialogFragment extends DialogFragment {
 		try {
 			String version = getActivity().getPackageManager()
 					.getPackageInfo(getActivity().getPackageName(), 0).versionName;
-			versionText.setText("v" + version);
+			versionText.setText(version);
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
 			versionText.setText("");
-		};
+		}
 
 		LinearLayout about_dialog_list_parent = (LinearLayout) rootView.findViewById(R.id.about_dialog_list_parent);
 		for (int i = 0, l = about_dialog_list_parent.getChildCount(); i < l; i++) {

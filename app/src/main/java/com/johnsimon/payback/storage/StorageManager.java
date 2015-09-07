@@ -5,15 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.johnsimon.payback.BuildConfig;
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.NotificationCallback;
-import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.Promise;
-import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.core.DataActivityInterface;
 import com.johnsimon.payback.ui.FeedActivity;
-import com.johnsimon.payback.ui.SettingsActivity;
 
 public class StorageManager {
 	public final static String PREFERENCE_STORAGE_TYPE = "STORAGE_TYPE";
@@ -39,40 +33,38 @@ public class StorageManager {
     public static Storage getStorage(Context context) {
 		if(storage == null) {
 			LocalStorage localStorage = getLocalStorage(context);
+
 			switch (localStorage.getPreferences().getInt(PREFERENCE_STORAGE_TYPE, STORAGE_TYPE_LOCAL)) {
-				case STORAGE_TYPE_LOCAL:
-					storage = localStorage;
-					break;
 				case STORAGE_TYPE_DRIVE:
 					DriveConnector connector = new DriveConnector(context);
 
-					DriveStorage driveStorage = new DriveStorage(context.getApplicationContext(), connector.client, localStorage);
+					DriveStorage driveStorage = new DriveStorage(connector.client, localStorage);
 					driveStorage.listen(connector.connectedPromise);
 
 					storage = driveStorage;
 					break;
+				case STORAGE_TYPE_LOCAL: default:
+					storage = localStorage;
+					break;
 			}
-		}
-		if(BuildConfig.DEBUG && storage.isDriveStorage() && context instanceof Activity) {
-			storage.asDriveStorage().activity = (Activity) context;
 		}
 
         return storage;
     }
 
-	public static boolean isDrive(Activity context) {
-		return getStorage(context).isDriveStorage();
+	public static boolean isDrive(Activity activity) {
+		return getStorage(activity).isDriveStorage();
 	}
 
-	public static Promise<DriveLoginManager.LoginResult> migrateToDrive(final Activity context) {
-		final DriveLoginManager loginManager = new DriveLoginManager(context);
+	public static Promise<DriveLoginManager.LoginResult> migrateToDrive(final Activity activity) {
+		final DriveLoginManager loginManager = new DriveLoginManager(activity);
 		setLoginManager(loginManager);
 
 		loginManager.loginResult.then(new Callback<DriveLoginManager.LoginResult>() {
 			@Override
 			public void onCalled(DriveLoginManager.LoginResult result) {
 				if(result.success){
-					DriveStorage driveStorage = new DriveStorage(context.getApplicationContext(), loginManager.getClient(), localStorage);
+					DriveStorage driveStorage = new DriveStorage(loginManager.getClient(), localStorage);
 					driveStorage.listen(loginManager.connectedPromise);
 
 					localStorage.getPreferences().edit()
@@ -80,7 +72,7 @@ public class StorageManager {
 							.putString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, result.accountName).apply();
 
 					setStorage(driveStorage);
-					restart(context);
+					restart(activity);
 				} else {
 					loginManager.disconnect();
 				}
@@ -93,25 +85,25 @@ public class StorageManager {
 		return loginManager.loginResult;
 	}
 
-	public static Promise<DriveLoginManager.LoginResult> changeDriveAccount(final Activity context) {
+	public static Promise<DriveLoginManager.LoginResult> changeDriveAccount(final Activity activity) {
 		final DriveStorage driveStorage = storage.asDriveStorage();
 
-		final DriveLoginManager loginManager = new DriveLoginManager(context);
+		final DriveLoginManager loginManager = new DriveLoginManager(activity);
 		setLoginManager(loginManager);
 
 		loginManager.loginResult.then(new Callback<DriveLoginManager.LoginResult>() {
 			@Override
 			public void onCalled(DriveLoginManager.LoginResult result) {
 				if(result.success) {
-					localStorage.wipe();
+					localStorage.wipe(activity);
 					driveStorage.emit(localStorage.data);
 					driveStorage.listen(loginManager.connectedPromise);
 
 					localStorage.getPreferences().edit().putString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, result.accountName).apply();
 
-					restart(context);
+					restart(activity);
 				} else {
-					migrateToLocal(context);
+					migrateToLocal(activity);
 				}
 				setLoginManager(null);
 			}
@@ -122,7 +114,7 @@ public class StorageManager {
 		return loginManager.loginResult;
 	}
 
-	public static void migrateToLocal(Activity context) {
+	public static void migrateToLocal(Activity activity) {
 		storage.asDriveStorage().disconnect();
 
 		localStorage.getPreferences().edit()
@@ -130,7 +122,7 @@ public class StorageManager {
 			.remove(DriveLoginManager.PREFERENCE_ACCOUNT_NAME).apply();
 
 		setStorage(localStorage);
-		restart(context);
+		restart(activity);
 	}
 
 	private static void setStorage(Storage storage) {
@@ -141,10 +133,9 @@ public class StorageManager {
 		StorageManager.loginManager = loginManager;
 	}
 
-	private static void restart(Activity context) {
-		context.finishAffinity();
+	private static void restart(Activity activity) {
+        activity.finishAffinity();
 		FeedActivity.goToAll();
-		context.startActivity(new Intent(context, FeedActivity.class));
-		//context.startActivity(new Intent(context, context.getClass()));
+        activity.startActivity(new Intent(activity, FeedActivity.class));
 	}
 }

@@ -29,6 +29,7 @@
     </LinearLayout>
 
     <fragment
+        style="@style/Elevation4DP"
         android:id="@+id/navigation_drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

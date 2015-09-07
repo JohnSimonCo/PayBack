@@ -3,11 +3,8 @@ package com.johnsimon.payback.core;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
@@ -15,17 +12,21 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.ui.base.BaseActivity;
+import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.Undo;
 
-public abstract class DataActivity extends ActionBarActivity implements DataActivityInterface {
+public abstract class DataActivity extends BaseActivity implements DataActivityInterface {
 
     protected Storage storage;
     public AppData data;
 
 	public User user;
 
-	protected Notification dataLink;
     protected ContactLoader contactLoader;
+
+	private DataLinker dataLinker;
+	private AlarmScheduler alarmScheduler;
 
 	@Override
 	public Activity getContext() {
@@ -55,9 +56,10 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 	public ContactLoader getContactLoader() {
 		return contactLoader;
 	}
+
 	@Override
-	public Notification getDataLink() {
-		return dataLink;
+	public DataLinker getDataLinker() {
+		return dataLinker;
 	}
 
     @Override
@@ -67,8 +69,6 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
         storage = StorageManager.getStorage(getApplicationContext());
 
 		contactLoader = ContactLoader.getLoader(getApplicationContext());
-
-		dataLink = new DataLinker().link(storage.subscription, contactLoader.contactsLoaded);
 	}
 
 	@Override
@@ -79,9 +79,12 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		dataLink.listen(dataLinkedCallback);
-
 		contactLoader.userLoaded.then(userLoadedCallback);
+
+		dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+		dataLinker.linked.listen(dataLinkedCallback);
+
+		alarmScheduler = new AlarmScheduler(this, storage.subscription);
 
 		storage.connect();
     }
@@ -93,6 +96,9 @@ public abstract class DataActivity extends ActionBarActivity implements DataActi
 		storage.subscription.unregister(dataLoadedCallback);
 
 		contactLoader.userLoaded.unregister(userLoadedCallback);
+
+		dataLinker.die();
+		alarmScheduler.die();
 
         storage.disconnect();
 

@@ -1,12 +1,5 @@
 package com.johnsimon.payback.storage;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
@@ -20,50 +13,24 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.johnsimon.payback.BuildConfig;
-import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Notification;
-import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
-import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.data.DataSyncer;
-import com.johnsimon.payback.util.Resource;
-import com.williammora.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class DriveStorage extends Storage {
-    private final static String FILE_NAME = "data.json";
-
-	public Context context;
-
-    public Activity activity;
+public class DriveStorage extends ExternalStorage {
+	//TODO loading toast
+	private final static String FILE_NAME = "data.json";
 
     private GoogleApiClient client;
 
-    private LocalStorage localStorage;
-
     private DriveFile file = null;
 
-    public DriveStorage(Context context, GoogleApiClient client, final LocalStorage localStorage) {
-        super(context);
-
-        this.context = context;
-
-        this.localStorage = localStorage;
-
-		localStorage.subscription.listen(new Callback<AppData>() {
-			@Override
-			public void onCalled(AppData data) {
-				localStorage.subscription.unregister(this);
-				show("emit localStorage data");
-				emit(data);
-			}
-		});
+    public DriveStorage(GoogleApiClient client, final LocalStorage localStorage) {
+		super(localStorage);
 
 		this.client = client;
 	}
@@ -77,39 +44,13 @@ public class DriveStorage extends Storage {
 		});
 	}
 
-	@Override
-	public SharedPreferences getPreferences() {
-		return localStorage.getPreferences();
-	}
-
 	public GoogleApiClient getClient() {
 		return client;
 	}
 
-	public void sync(AppData driveData) {
-		show("checking for changes from drive");
-        AppData data = new AppData();
-        if(DataSyncer.sync(localStorage.data, driveData, data)) {
-            show("found changes and synced");
-
-            commit(data);
-            emit(data);
-        }
-    }
-
-	//TODO loading toast
 
 	@Override
-	public void emit() {
-		super.emit();
-		localStorage.emit(data);
-	}
-
-	@Override
-    protected void commit(String JSON) {
-        show("commited data to localStorage");
-        localStorage.commit(JSON);
-
+    protected void commitExternally(String JSON) {
         if(file == null) return;
         write(JSON, file, new ResultCallback<FileResult>() {
             @Override
@@ -187,7 +128,7 @@ public class DriveStorage extends Storage {
 
             String JSON = result.getText();
 
-            sync(AppData.fromJson(JSON));
+            sync(client.getContext(), AppData.fromJson(JSON));
         }
     };
 
@@ -319,21 +260,8 @@ public class DriveStorage extends Storage {
 		keepAlive = false;
     }
 
-    @Override
-    protected void show(String text) {
-		/*
-        Snackbar.with(activity.getApplicationContext())
-                .text(text)
-                .show(activity);*/
-    }
-
 	protected void error(String title, Status status) {
-		if(BuildConfig.DEBUG) {
-			new MaterialDialog.Builder(activity)
-					.title(title)
-					.content(status.getStatus() + ": " + status.getStatusMessage())
-					.show();
-		}
+		error(title, status.getStatus() + ": " + status.getStatusMessage());
 	}
 
     private static class FileResult implements Result {

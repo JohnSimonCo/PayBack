@@ -1,19 +1,21 @@
 package com.johnsimon.payback.data;
 
 import android.content.Context;
-import android.text.TextUtils;
+import android.widget.RelativeLayout;
 
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
+import com.johnsimon.payback.ui.MaterialPreferenceActivity;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.ShareStringGenerator;
 
 import org.apache.http.impl.cookie.BasicMaxAgeHandler;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Debt extends SyncedData<Debt> implements Identifiable{
+public class Debt extends SyncedData<Debt> implements Identifiable {
 	private final static int POSITIVE_COLOR = R.color.green;
 	private final static int NEGATIVE_COLOR = R.color.red;
 
@@ -28,24 +30,30 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	public UUID ownerId;
 
 	@SerializedName("amount")
-	public float amount;
+	public double amount;
 
 	@SerializedName("note")
 	public String note;
 
 	@SerializedName("timestamp")
-	public final long timestamp;
+	public long timestamp;
 
 	@SerializedName("paidBack")
 	public boolean paidBack;
 
+	@SerializedName("payments")
+	public ArrayList<Payment> payments;
+
 	@SerializedName("currencyId")
 	public String currencyId;
+
+	@SerializedName("remindDate")
+	public Long remindDate;
 
 	public transient Person owner;
 
 
-	public Debt(UUID ownerId, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
+	public Debt(UUID ownerId, double amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
 		super(touched);
 
 		this.id = id;
@@ -54,10 +62,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		this.note = note;
 		this.timestamp = timestamp;
 		this.paidBack = paidBack;
+		this.payments = payments;
 		this.currencyId = currency;
 	}
 
-    public Debt(Person owner, float amount, String note, UUID id, long timestamp, long touched, boolean paidBack, String currency) {
+    public Debt(Person owner, double amount, String note, UUID id, long timestamp, long touched, boolean paidBack, ArrayList<Payment> payments, String currency) {
 		super(touched);
 
         this.id = id;
@@ -67,15 +76,16 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
         this.note = note;
         this.timestamp = timestamp;
         this.paidBack = paidBack;
+		this.payments = payments;
 		this.currencyId = currency;
     }
 
-	private Debt(Person owner, float amount, String note, long time, String currencyId) {
-        this(owner, amount, note, UUID.randomUUID(), time, time, false, currencyId);
+	private Debt(Person owner, double amount, String note, long time, String currencyId) {
+        this(owner, amount, note, UUID.randomUUID(), time, time, false, new ArrayList<Payment>(), currencyId);
 	}
 
 	//Used when creating new
-	public Debt(Person owner, float amount, String note, String currencyId) {
+	public Debt(Person owner, double amount, String note, String currencyId) {
 		this(owner, amount, note, System.currentTimeMillis(), currencyId);
 	}
 
@@ -98,17 +108,19 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
         touch();
 	}
 
-	public float getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public float getAbsoluteAmount() {
+
+	public double getAbsoluteAmount() {
 		return Math.abs(amount);
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		touch();
 		this.amount = amount;
+		payments.clear();
 	}
 
 	public String getNote() {
@@ -124,18 +136,111 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 		return paidBack;
 	}
 
+	public boolean isPartiallyPaidBack() {
+		return !isPaidBack() && hasPayment();
+	}
+
+	public void payback() {
+		setPaidBack(true);
+		addPaymentWithoutCheck(getRemainingDebt());
+	}
+
+	public void unpayback() {
+		setPaidBack(false);
+		if(payments != null) {
+			payments.clear();
+		} else {
+			payments = new ArrayList<>();
+		}
+	}
+
 	public void setPaidBack(boolean isPaidBack) {
 		touch();
 		this.paidBack = isPaidBack;
 	}
 
-	public void edit(Person owner, float amount, String note) {
+	//Returns whether or not the debts is paid back
+	public void addPayment(double amount) {
+		double remaining = getRemainingAbsoluteDebt(), payment = Math.min(amount, remaining);
+
+		addPaymentWithoutCheck(payment);
+
+		if(remaining - payment <= 0) {
+			setPaidBack(true);
+		}
+	}
+	public void addPaymentWithoutCheck(double amount) {
+		touch();
+		if(payments == null) {
+			payments = new ArrayList<>();
+		}
+		payments.add(new Payment(amount, System.currentTimeMillis()));
+	}
+
+	public double getRemainingAbsoluteDebt() {
+		return (getAbsoluteAmount() - getPaidBackAmount());
+	}
+	public double getRemainingDebt() {
+		return getRemainingAbsoluteDebt() * Math.signum(getAmount());
+	}
+
+	public double getPaidBackAmount() {
+		if(payments == null) return 0;
+
+		double sum = 0;
+		for(Payment payment : payments) {
+			sum += payment.amount;
+		}
+		return sum;
+	}
+
+	public Long getDatePaidBack() {
+		if(payments == null) return null;
+
+		if(!isPaidBack() || payments.size() < 1) {
+			return null;
+		} else {
+			//Return date of last transaction
+			return getLastPayment().date;
+		}
+	}
+
+	public void setRemindDate(Long remindDate) {
+		touch();
+		this.remindDate = remindDate;
+	}
+
+	public Long getRemindDate() {
+		return remindDate;
+	}
+
+	public boolean hasReminder() {
+		return remindDate != null;
+	}
+
+	public ArrayList<Payment> getPayments() {
+		return payments;
+	}
+
+	public Payment getLastPayment() {
+		return payments.get(payments.size() - 1);
+	}
+
+	public boolean hasPayment() {
+		return payments != null && payments.size() > 0;
+	}
+
+	public void edit(Person owner, double amount, String note) {
         touch();
 		this.owner = owner;
 		this.amount = amount;
 		this.note = note;
 	}
 
+	public void changeDate(long time) {
+		touch();
+		this.timestamp = time;
+	}
 
 	public int getColor() {
 		return amount > 0 ? POSITIVE_COLOR : NEGATIVE_COLOR;
@@ -154,7 +259,7 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 	*/
 
-	public static String totalString(float amount, UserCurrency userCurrency, String even, boolean isAll, String allEvenString) {
+	public static String totalString(double amount, UserCurrency userCurrency, String even, boolean isAll, String allEvenString) {
 		if (amount == 0) {
 			return isAll ? allEvenString : even;
 		} else {
@@ -163,23 +268,18 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 	}
 
 	//Method to get a string usable for sharing.
-	public String getShareString(Context ctx, UserCurrency userCurrency) {
-		String shareText = this.amount < 0
-			? ctx.getString(R.string.ioweyou)
-			: ctx.getString(R.string.youoweme);
-
-		shareText += " " + userCurrency.render(this);
-		if (!TextUtils.isEmpty(this.note)) {
-			shareText += " " + ctx.getString(R.string.debt_for) + " " +  this.note;
-		}
-
-		return shareText;
+	public String getShareString(Context context, UserCurrency currency) {
+		return ShareStringGenerator.generateDebtShareString(context, this, currency);
 	}
 
     @Override
     public UUID getId() {
         return id;
     }
+
+	public int getIntegerId() {
+		return id.hashCode();
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -192,8 +292,11 @@ public class Debt extends SyncedData<Debt> implements Identifiable{
 			&& owner.id.equals(other.owner.id)
 			&& amount == other.amount
 			&& Resource.nullEquals(note, other.note)
-			&& paidBack == other.paidBack;
+			&& paidBack == other.paidBack
+			&& Resource.nullEquals(payments, other.payments);
 	}
+
+	//TODO could implement new syncWith to sync payments histories adequately
 
 	@Override
 	public String toString() {

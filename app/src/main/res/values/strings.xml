@@ -21,6 +21,7 @@
     <string name="checkbox">Checkbox!</string>
     <string name="create_fab_error">You need to enter a name and an amount</string>
     <string name="pay_back">Pay Back</string>
+    <string name="add_payment">Payment</string>
     <string name="send">Send</string>
     <string name="about_title">About</string>
     <string name="filter">Filter</string>
@@ -38,8 +39,10 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="ioweyou">I owe you</string>
+    <string name="iowedyou">I owed you</string>
     <string name="youoweme">You owe me</string>
-    <string name="debt_for">for</string>
+    <string name="youowedme">You owed me</string>
+    <string name="debt_incash">in cash</string>
     <string name="bytime">Latest</string>
     <string name="byamount">By amount</string>
     <string name="clear">Clear</string>
@@ -86,7 +89,7 @@
     <string name="cloud_sync_description">Activate cloud sync to sync debt data across devices using Google Drive.</string>
     <string name="activate">Activate</string>
     <string name="not_now">Not now</string>
-    <string name="cloud_sync_not_full">Requires full version</string>
+    <string name="not_full_version">Requires full version</string>
     <string name="upgrade_navigation_drawer">Unlock full version</string>
     <string name="debt_free">Debt free!</string>
     <string name="add_person">Add person</string>
@@ -113,19 +116,30 @@
     <string name="save_fail">Failed to save file</string>
     <string name="no_file">No backup found</string>
     <string name="read_failed">Failed to read file</string>
-    <string name="save_success_start">File saved in \"%1$s\"</string>
     <string name="restore_success">Restore successful</string>
     <string name="disable_cloud_sync_title">Disable cloud sync</string>
     <string name="disable_cloud_sync_content">Are you sure you want to disable cloud sync? No data will be lost.</string>
     <string name="disable_cloud_sync_affirmative">Disable</string>
-    <string name="restore_single">Restore</string>
-    <string name="remove_backup">Remove backup</string>
     <string name="backup_removed_success">Backup removed successfully</string>
-    <string name="disabled_in_free">Disabled in free version</string>
     <string name="no_backup_available">No backup available</string>
     <string name="set_reminder">Set reminder</string>
     <string name="even_out">Even out</string>
     <string name="evened_out">Evened out</string>
+    <string name="currency_show_trailing_zeros">Show trailing zeros</string>
+    <string name="set_date">Set date</string>
+    <string name="share_debt_summary">Share debt summary</string>
+    <!-- "Paid back Aug 5" -->
+    <string name="paid_back_when">Paid back %1$s</string>
+    <string name="autobackup">Auto Backup</string>
+    <string name="wipebackup">Wipe Backup</string>
+    <string name="backup">Backup</string>
+    <string name="delete_failed">Delete failed</string>
+    <string name="delete_successful">Delete successful</string>
+    <string name="login_successful">Login successful!</string>
+    <string name="reminder_detail">Reminder set %1$s %2$s</string>
+    <string name="backup_success">Backup successful</string>
+    <string name="backup_failed">Backup failed</string>
+    <string name="number_format_error">Invalid number format</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
@@ -134,8 +148,6 @@
     <string name="author_icon">Jovie Brett Bardoles</string>
     <string name="lib_riv">RoundedImageView</string>
     <string name="author_riv">Vince Mi</string>
-    <string name="lib_fab">Floating Action Button</string>
-    <string name="author_fab">Faiz Malkani</string>
     <string name="lib_gson">GSON</string>
     <string name="author_gson">Google</string>
     <string name="lib_pic">Picasso</string>
@@ -144,14 +156,14 @@
     <string name="author_dsr">Emile Belanger</string>
     <string name="lib_qr">QuickReturn</string>
     <string name="author_qr">Etienne Lawlor</string>
-    <string name="lib_snb">Snackbar</string>
-    <string name="author_snb">William Mora</string>
     <string name="lib_md">Material Dialogs</string>
     <string name="author_md">Aidan Follestad</string>
     <string name="lib_rbm">Android-RobotoTextView</string>
     <string name="author_rbm">Evgeny Shishkin</string>
     <string name="lib_iab">Android In-App Billing</string>
     <string name="author_iab">AnjLab</string>
+    <string name="lib_bp">BetterPickers</string>
+    <string name="author_bp">Derek Brameyer</string>
 
     <!-- Preferences -->
     <string name="pref_settings">Settings</string>
@@ -162,11 +174,37 @@
     <string name="background">Background</string>
     <string name="pref_cloud_sync">Sync data across devices</string>
     <string name="pref_backup_data">Backup data to storage</string>
-    <string name="pref_restore_data">Restore data from storage</string>
-    <string name="pref_restore_data_description">Are you sure you want to restore from storage? This will overwrite all current data.</string>
-    <string name="pref_backup_confirm">Overwrite backup</string>
-    <string name="pref_backup_confirm_text">Are you sure you want to overwrite previously saved data? This cannot be undone.</string>
-    <string name="pref_backup_confirm_single">Backup</string>
+    <string name="pref_manage_backups">Manage backups</string>
+    <string name="pref_restore_data">Restore data from backup</string>
+    <string name="pref_backup_last">Last backup %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notif_pay_back_reminder">Pay Back Reminder</string>
+    <string name="notif_remind_later">Remind later</string>
+    <string name="notif_they_owe">%1$s owes you %2$s</string>
+    <string name="notif_you_owe">You owe %1$s %2$s</string>
+
+    <!-- Debt summary -->
+    <string name="debtsummary_headerformat">%1$s a total of %2$s</string>
+    <string name="debtsummary_currentdebts">Current debts</string>
+    <string name="debtsummary_partialdebts">Partially paid back debts</string>
+    <string name="debtsummary_paidbackdebts">Paid back debts</string>
+    <string name="debtsummary_history_header">History</string>
+    <string name="debtsummary_history_entryformat">%1$s on %2$s</string>
+
+    <!-- Debt share string -->
+    <string name="debtshare_fulldebtformat">full debt %1$s</string>
+    <string name="debtshare_noteformat">for \"%1$s\"</string>
+    <string name="debtshare_dateformat">since %1$s</string>
+    <string name="debtshare_partialformat">paid back %1$s on %2$s</string>
+    <string name="debtshare_paidbackformat">"paid back on %1$s</string>
+
+    <string name="restoredialog_title_welcome">Welcome back!</string>
+    <string name="restoredialog_title">Restore data?</string>
+    <string name="restoredialog_content_both">There are backups saved on this device. Do you wish to restore from one of them or activate cloud sync?</string>
+    <string name="restoredialog_content_cloud">Do you wish to activate cloud sync?</string>
+    <string name="restoredialog_select_backup">Select backup</string>
+    <string name="restore">Restore</string>
 
     <string-array name="thousand_seperator_list">
         <item>None</item>
@@ -180,9 +218,28 @@
         <item>City</item>
     </string-array>
 
-    <string-array name="bg_entries">
-        <item>mountains</item>
-        <item>city</item>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="pick_date">Pick a date…</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
+    <string name="pick_time">Pick a time…</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string-array name="remind_later_options">
+        <item>In an hour</item>
+        <item>Tomorrow</item>
+        <item>Next %1s</item>
+        <item>Pick a date and time</item>
     </string-array>
 
 </resources>

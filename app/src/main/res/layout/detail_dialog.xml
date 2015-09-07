@@ -86,11 +86,49 @@
     <com.devspark.robototextview.widget.RobotoTextView
         app:fontFamily="roboto"
         app:textWeight="medium"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="6dp"
+        android:id="@+id/dialog_custom_amount_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="@color/green_strong"
+        android:textSize="20sp" />
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
         android:id="@+id/dialog_custom_content"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textColor="#999999"
         android:textSize="18sp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="6dp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:id="@+id/dialog_paid_back_date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="#aaa"
+        android:visibility="gone"
+        android:textSize="16sp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="6dp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:id="@+id/dialog_reminder_date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="#aaa"
+        android:visibility="gone"
+        android:textSize="16sp"
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
         android:paddingTop="6dp"/>
@@ -106,15 +144,25 @@
             style="@style/FlatButton"
             app:typeface="roboto_medium"
             android:text="@string/send"
-            android:id="@+id/dialog_custom_cancel"
+            android:id="@+id/dialog_custom_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <com.devspark.robototextview.widget.RobotoButton
             style="@style/FlatButton"
             app:typeface="roboto_medium"
+            android:text="@string/add_payment"
+            android:id="@+id/dialog_custom_payment"
+            android:layout_width="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_height="wrap_content"/>
+
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
             android:text="@string/pay_back"
-            android:id="@+id/dialog_custom_confirm"
+            android:id="@+id/dialog_custom_payback"
             android:layout_width="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"

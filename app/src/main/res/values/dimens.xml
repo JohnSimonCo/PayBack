@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="fab_create_right_margin">8dp</dimen>
+    <dimen name="fab_create_right_margin">-8dp</dimen>
 
     <dimen name="navigation_drawer_width">270dp</dimen>
 
@@ -13,11 +13,10 @@
     <dimen name="fab_bottom_margin">-36dp</dimen>
     <dimen name="feed_image_gradient_bottom_margin">40dp</dimen>
     <dimen name="base_padding">16dp</dimen>
-    <dimen name="fab_right_margin">8dp</dimen>
+    <dimen name="fab_right_margin">-8dp</dimen>
     <dimen name="list_header_height">176dp</dimen>
     <dimen name="list_header_height_full">180dp</dimen>
     <dimen name="list_header_image_height">140dp</dimen>
-
 
     <dimen name="feed_header_balance_text_size">20sp</dimen>
     <dimen name="feed_header_title_text_size">26sp</dimen>
@@ -25,13 +24,13 @@
     <dimen name="create_start_margin">56dp</dimen>
     <dimen name="create_start_margin_small">0dp</dimen>
 
-    <dimen name="create_right_margin">48dp</dimen>
+    <dimen name="create_right_margin">42dp</dimen>
     <dimen name="create_right_margin_small">0dp</dimen>
 
     <dimen name="navigation_drawer_padding">18dp</dimen>
 
     <dimen name="feed_list_item_extra_margin">0dp</dimen>
-    <dimen name="create_fab_top_margin">196dp</dimen>
+    <dimen name="create_fab_top_margin">170dp</dimen>
     <dimen name="fab_size">72dp</dimen>
 
     <dimen name="feed_avatar_full_size">40dp</dimen>
@@ -42,9 +41,11 @@
     <dimen name="feed_name_size">18sp</dimen>
     <dimen name="feed_info_size">13sp</dimen>
 
-    <dimen name="feed_fab_bottom_margin">4dp</dimen>
+    <dimen name="feed_fab_bottom_margin">-8dp</dimen>
     <dimen name="welcome_spinner_text_top_margin">16dp</dimen>
 
     <dimen name="side_margin">72dp</dimen>
+
+    <dimen name="people_offset">0dp</dimen>
 
 </resources>

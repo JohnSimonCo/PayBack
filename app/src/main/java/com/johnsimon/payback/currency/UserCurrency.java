@@ -5,8 +5,6 @@ import com.johnsimon.payback.data.Debt;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Currency;
-import java.util.Locale;
 
 public class UserCurrency {
 	public final static int DECIMAL_SEPARATOR_DOT    = 0;
@@ -23,14 +21,17 @@ public class UserCurrency {
     public final int decimalSeparator;
     public final int thousandSeparator;
 
+	public final boolean trailingZeros;
+
     private transient DecimalFormat format;
 
-	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator) {
+	public UserCurrency(String id, String displayName, boolean before, int decimalSeparator, int thousandSeparator, boolean trailingZeros) {
 		this.id = id;
 		this.displayName = displayName;
 		this.before = before;
         this.decimalSeparator = decimalSeparator;
         this.thousandSeparator = thousandSeparator;
+		this.trailingZeros = trailingZeros;
 
 		format = createFormat();
 	}
@@ -39,7 +40,7 @@ public class UserCurrency {
 		return displayName == null ? id : displayName;
 	}
 
-	public String render() {
+	public String renderSelf() {
 		String output = this.id;
 		if(displayName != null && !displayName.equals(id)) {
 			output += " (" + displayName + ")";
@@ -51,9 +52,10 @@ public class UserCurrency {
 		return render(debt.getAmount());
 	}
 
-	public String render(float amount) {
+	public String render(double amount) {
 		if(format == null) format = createFormat();
-        return format.format(Math.abs(amount));
+
+		return format.format(Math.abs(amount));
 	}
 
 	private DecimalFormat createFormat() {
@@ -66,7 +68,9 @@ public class UserCurrency {
 			symbols.setGroupingSeparator(thousandSeparator());
 		}
 
-		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###.###" : "###,###.###";
+		String formatString = thousandSeparator == THOUSAND_SEPARATOR_NONE ? "###." : "###,###.";
+
+		formatString += trailingZeros ? "00" : "##";
 
 		formatString = before ? "¤ " + formatString : formatString + " ¤";
 
@@ -93,4 +97,18 @@ public class UserCurrency {
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof UserCurrency))return false;
+		UserCurrency other = (UserCurrency) o;
+
+		return other.id.equals(id)
+			&& other.displayName.equals(displayName)
+			&& other.before == before
+			&& other.decimalSeparator == decimalSeparator
+			&& other.thousandSeparator == thousandSeparator
+			&& other.trailingZeros == trailingZeros;
+	}
 }

@@ -26,7 +26,7 @@
                 android:textColor="@android:color/white"
                 android:background="#009688"
                 android:id="@+id/welcome_currency_preview"
-                android:textSize="36sp"
+                android:textSize="32sp"
                 android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"    />
@@ -84,8 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <android.support.v7.internal.widget.TintCheckBox
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
+            <android.support.v7.widget.AppCompatCheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:paddingStart="4dp"
                 android:id="@+id/custom_currency_check_after"
                 android:textSize="16sp"
@@ -95,8 +95,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <android.support.v7.internal.widget.TintCheckBox
-                app:theme="@style/ThemeOverlay.AppCompat.Light"
+            <android.support.v7.widget.AppCompatCheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:paddingStart="4dp"
                 android:id="@+id/custom_currency_decimal_separator"
                 android:textSize="16sp"
@@ -104,6 +104,18 @@
                 android:layout_marginLeft="12dp"
                 android:checked="false"
                 android:text="@string/currency_decimal_separator_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                app:paddingStart="4dp"
+                android:id="@+id/custom_currency_trailing_zeros"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="12dp"
+                android:checked="false"
+                android:text="@string/currency_show_trailing_zeros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -124,8 +136,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
 
-                <android.support.v7.internal.widget.TintSpinner
-                    app:theme="@style/ThemeOverlay.AppCompat.Light"
+                <android.support.v7.widget.AppCompatSpinner
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:textSize="16sp"
                     android:entries="@array/thousand_seperator_list"
                     android:id="@+id/currency_thousand_separator"

@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_list"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#eeeeee" />
+    android:layout_height="match_parent"    >
+
+    <LinearLayout
+        android:background="@color/primary_color"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <include
+            layout="@layout/widget_header_title"  />
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"    />
+
+        <ImageButton
+            android:id="@+id/widget_layout_add"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_action_add_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff" />
+
+</LinearLayout>
+
+

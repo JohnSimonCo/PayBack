@@ -1,9 +1,7 @@
 package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -13,15 +11,16 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -29,24 +28,22 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
-import com.johnsimon.payback.currency.UserCurrency;
-import com.johnsimon.payback.data.AppData;
+import com.johnsimon.payback.data.backup.Backup;
+import com.johnsimon.payback.data.backup.BackupManager;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
-import com.johnsimon.payback.util.FileManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.williammora.snackbar.Snackbar;
 
 import java.util.Arrays;
-import java.util.List;
 
 //TODO SET BACKGROUND PREF VALUE ONDATARECIEVED TO AVOID BACKUP/RESTORE FUCKUP
 
 public class SettingsActivity extends MaterialPreferenceActivity implements BillingProcessor.IBillingHandler {
 
-    private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    public final static String[] backgroundSettingsEntries = {"mountains", "city"};
 
     public Preference pref_currency;
 
@@ -57,6 +54,16 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 	private Preference pref_cloud_sync_account;
     private Preference pref_import_data;
     private SwitchPreference pref_cloud_sync;
+    private SwitchPreference pref_auto_backup;
+
+    public final static String PREFERENCE_CURRENCY = "pref_currency";
+    public final static String PREFERENCE_BACKGROUND = "pref_background";
+    public final static String PREFERENCE_CLOUD_SYNC = "pref_cloud_sync";
+    public final static String PREFERENCE_CLOUD_SYNC_ACCOUNT = "pref_cloud_sync_account";
+    public final static String PREFERENCE_WIPE_DATA = "pref_wipe_data";
+    public final static String PREFERENCE_EXPORT_DATA = "pref_export_data";
+    public final static String PREFERENCE_IMPORT_DATA = "pref_import_data";
+    public final static String PREFERENCE_AUTO_BACKUP = "pref_auto_backup";
 
     private BillingProcessor bp;
 
@@ -85,95 +92,77 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             tintManager.setTintColor(getResources().getColor(R.color.primary_color_darker));
         }
 
-		Preference pref_export_data = findPreference("pref_export_data");
+		Preference pref_export_data = findPreference(PREFERENCE_EXPORT_DATA);
 		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                if (FileManager.hasFile()) {
-                    new MaterialDialog.Builder(SettingsActivity.this)
-                            .title(R.string.pref_backup_confirm)
-                            .content(R.string.pref_backup_confirm_text)
-                            .positiveText(R.string.pref_backup_confirm_single)
-                            .negativeText(R.string.cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    super.onPositive(dialog);
-                                    FileManager.write(SettingsActivity.this, data.save());
-                                    updateBackupStatus(true);
-
-                                    dialog.dismiss();
-                                }
-
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    super.onNegative(dialog);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
+                if (BackupManager.createBackup(data.save(), Backup.Type.Manual)) {
+                    Snackbar.make(masterView, R.string.backup_success, Snackbar.LENGTH_SHORT).show();
                 } else {
-                    FileManager.write(SettingsActivity.this, data.save());
-                    updateBackupStatus(true);
+                    Snackbar.make(masterView, R.string.backup_failed, Snackbar.LENGTH_LONG).show();
                 }
-
+                updateBackupStatus();
 				return true;
 			}
 		});
 
-		pref_import_data = findPreference("pref_import_data");
+        pref_auto_backup = (SwitchPreference) findPreference(PREFERENCE_AUTO_BACKUP);
+
+		pref_import_data = findPreference(PREFERENCE_IMPORT_DATA);
 		pref_import_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-                final String JSON = FileManager.read(SettingsActivity.this);
-
-                if (!TextUtils.isEmpty(JSON)) {
-                    new MaterialDialog.Builder(SettingsActivity.this)
-                            .title(R.string.pref_restore_data)
-                            .content(R.string.pref_restore_data_description)
-                            .positiveText(R.string.restore_single)
-                            .negativeText(R.string.cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    super.onPositive(dialog);
-
-                                    FeedActivity.goToAll();
-                                    storage.commit(AppData.fromJson(JSON));
-                                    storage.emit();
-
-                                    Snackbar.with(SettingsActivity.this).text(SettingsActivity.this.getString(R.string.restore_success)).show(SettingsActivity.this);
-
-                                    dialog.dismiss();
-                                }
-
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    super.onNegative(dialog);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                }
+                BackupRestoreDialog.attemptRestore(SettingsActivity.this, storage, false).then(new Callback<BackupRestoreDialog.RestoreResult>() {
+                    @Override
+                    public void onCalled(BackupRestoreDialog.RestoreResult result) {
+                        switch(result) {
+                            case Success:
+                                FeedActivity.goToAll();
+                                snackbar(R.string.restore_success);
+                                break;
+                            case Deleted:
+                                snackbar(R.string.delete_successful);
+                                updateBackupStatus();
+                                break;
+                            case FileNotFound:
+                                displayReadError(Backup.ReadError.FileNotFound);
+                                break;
+                            case Unknown:
+                                displayReadError(Backup.ReadError.Unknown);
+                                break;
+                            case DeleteFailed:
+                                snackbar(getString(R.string.delete_failed));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
                 return true;
             }
         });
 
-        if (!Resource.isFull) {
-            pref_export_data.setEnabled(false);
-            pref_import_data.setEnabled(false);
-            pref_export_data.setSummary(R.string.disabled_in_free);
-            pref_import_data.setSummary(R.string.disabled_in_free);
-        } else {
+        if (Resource.isFull) {
+            pref_auto_backup.setEnabled(true);
             pref_export_data.setEnabled(true);
             pref_import_data.setEnabled(true);
             pref_export_data.setSummary(null);
-            pref_import_data.setSummary(null);
+            pref_import_data.setSummary(getRestoreSummary());
+        } else {
+            pref_auto_backup.setChecked(false);
+            pref_auto_backup.setEnabled(false);
+            pref_auto_backup.setChecked(false);
+            pref_export_data.setEnabled(false);
+            pref_import_data.setEnabled(false);
+            pref_export_data.setSummary(R.string.not_full_version);
+            pref_import_data.setSummary(R.string.not_full_version);
         }
 
-        pref_currency = findPreference("pref_currency");
+        pref_auto_backup = (SwitchPreference) findPreference(PREFERENCE_AUTO_BACKUP);
+
+        pref_currency = findPreference(PREFERENCE_CURRENCY);
 
         pref_currency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -188,7 +177,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 currencyDialogFragment.currencySelectedCallback = new CurrencyDialogFragment.CurrencySelectedCallback() {
                     @Override
                     public void onCurrencySelected() {
-                        pref_currency.setSummary(data.preferences.getCurrency().render());
+                        pref_currency.setSummary(data.preferences.getCurrency().renderSelf());
                     }
                 };
 
@@ -198,28 +187,28 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             }
         });
 
-        pref_cloud_sync = (SwitchPreference) findPreference("pref_cloud_sync");
+        pref_cloud_sync = (SwitchPreference) findPreference(PREFERENCE_CLOUD_SYNC);
 
-		pref_cloud_sync_account = findPreference("pref_cloud_sync_account");
+		pref_cloud_sync_account = findPreference(PREFERENCE_CLOUD_SYNC_ACCOUNT);
 		pref_cloud_sync_account.setSummary(storage.getPreferences().getString(DriveLoginManager.PREFERENCE_ACCOUNT_NAME, null));
 		pref_cloud_sync_account.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				if(storage.isDriveStorage()) {
-					StorageManager.changeDriveAccount(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
-						@Override
-						public void onCalled(DriveLoginManager.LoginResult result) {
-							pref_cloud_sync_account.setSummary(result.accountName);
-						}
-					});
-				}
-				return false;
-			}
-		});
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (storage.isDriveStorage()) {
+                    StorageManager.changeDriveAccount(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
+                        @Override
+                        public void onCalled(DriveLoginManager.LoginResult result) {
+                            pref_cloud_sync_account.setSummary(result.accountName);
+                        }
+                    });
+                }
+                return false;
+            }
+        });
 
         Resource.checkFull(bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", null));
         if (!Resource.isFull) {
-            pref_cloud_sync.setSummary(R.string.cloud_sync_not_full);
+            pref_cloud_sync.setSummary(R.string.not_full_version);
             pref_cloud_sync.setEnabled(false);
         } else {
 			pref_cloud_sync.setChecked(StorageManager.isDrive(this));
@@ -292,75 +281,94 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
             }
         });
 
-        pref_background = (ListPreference) findPreference("pref_background");
+        pref_background = (ListPreference) findPreference(PREFERENCE_BACKGROUND);
+        pref_background.setEntryValues(backgroundSettingsEntries);
 
-		Preference pref_wipe_data = findPreference("pref_wipe_data");
+		Preference pref_wipe_data = findPreference(PREFERENCE_WIPE_DATA);
 		pref_wipe_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				new MaterialDialog.Builder(SettingsActivity.this)
-						.cancelable(true)
-						.title(R.string.wipe_data)
-						.content(Resource.isFull ? R.string.wipe_data_confirm_full : R.string.wipe_data_confirm_free)
-						.positiveText(R.string.wipe)
-						.negativeText(R.string.cancel)
-						.callback(new MaterialDialog.ButtonCallback() {
-							@Override
-							public void onPositive(MaterialDialog dialog) {
-								super.onPositive(dialog);
-
-								storage.wipe();
-
-								dialog.dismiss();
-							}
-
-							@Override
-							public void onNegative(MaterialDialog dialog) {
-								super.onNegative(dialog);
-							}
-						})
-						.show();
-				return false;
-			}
-		});
-
-        _toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(SettingsActivity.this)
+                        .cancelable(true)
+                        .title(R.string.wipe_data)
+                        .content(Resource.isFull ? R.string.wipe_data_confirm_full : R.string.wipe_data_confirm_free)
+                        .positiveText(R.string.wipe)
+                        .negativeText(R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
 
-                switch (item.getItemId()) {
-                    case R.id.menu_settings_remove_backup:
+                                BackupManager.createBackup(data.save(), Backup.Type.Wipe);
+                                updateBackupStatus();
 
-                        if (FileManager.removeFile()) {
-                            Snackbar.with(SettingsActivity.this)
-                                    .text(getString(R.string.backup_removed_success))
-                                    .show(SettingsActivity.this);
-                        }
+                                storage.wipe(SettingsActivity.this);
 
-                        updateBackupStatus(true);
+                                dialog.dismiss();
+                            }
 
-                        break;
-                }
-
-                return true;
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                super.onNegative(dialog);
+                            }
+                        })
+                        .show();
+                return false;
             }
         });
 
-        updateBackupStatus(false);
+        updateBackupStatus();
 
     }
 
-    private void updateBackupStatus(boolean clearFirst) {
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        _toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.menu_settings_rate) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:John+Simon+Co")));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:John+Simon+Co")));
+                    }
+                }
+                return true;
+            }
+        });
+    }
 
-        if (clearFirst) {
-            _toolbar.getMenu().clear();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    private String getRestoreSummary() {
+        Backup latest = BackupManager.latestBackup();
+
+        if (latest != null) {
+            return String.format(getString(R.string.pref_backup_last), latest.generateDateString(this));
+        } else {
+            return null;
         }
+    }
 
-        _toolbar.inflateMenu(R.menu.settings_menu);
+	private void displayReadError(Backup.ReadError result) {
+		snackbar(getString(result == Backup.ReadError.FileNotFound ? R.string.no_file : R.string.read_failed));
+	}
 
-        if (!FileManager.hasFile()) {
-            MenuItem removeBackup = _toolbar.getMenu().findItem(R.id.menu_settings_remove_backup);
-            removeBackup.setVisible(false);
+    private void snackbar(int id) {
+        snackbar(getString(id));
+    }
+
+	private void snackbar(String text) {
+        Snackbar.make(masterView, text, Snackbar.LENGTH_SHORT).show();
+	}
+
+    private void updateBackupStatus() {
+        if (!BackupManager.hasBackups()) {
             if (Resource.isFull) {
                 pref_import_data.setEnabled(false);
                 pref_import_data.setSummary(R.string.no_backup_available);
@@ -368,7 +376,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         } else {
             if (Resource.isFull) {
                 pref_import_data.setEnabled(true);
-                pref_import_data.setSummary(null);
+                pref_import_data.setSummary(getRestoreSummary());
             }
         }
     }
@@ -378,8 +386,8 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		bindPreferenceSummaryToValue(pref_background);
 		bindPreferenceSummaryToValue(pref_currency);
 
-		pref_currency.setSummary(data.preferences.getCurrency().render());
-		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+		pref_currency.setSummary(data.preferences.getCurrency().renderSelf());
+		pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(backgroundSettingsEntries).indexOf(data.preferences.getBackground())]);
 
 	}
 
@@ -403,32 +411,10 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
-    /**
-     * Determines whether the simplified settings UI should be shown. This is
-     * true if this is forced via {@link #ALWAYS_SIMPLE_PREFS}, or the device
-     * doesn't have newer APIs like {@link PreferenceFragment}, or the device
-     * doesn't have an extra-large screen. In these cases, a single-pane
-     * "simplified" settings UI should be shown.
-     */
     private static boolean isSimplePreferences(Resources resources) {
-        return ALWAYS_SIMPLE_PREFS
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-                || !isXLargeTablet(resources);
+        return !isXLargeTablet(resources);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        if (!isSimplePreferences(getResources())) {
-            //loadHeadersFromResource(R.xml.pref_headers, target);
-        }
-    }
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -441,9 +427,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
 			if (preference.getKey().equals("pref_background")) {
 				data.preferences.background.setValue((String) value);
-				storage.commit();
+				storage.commit(SettingsActivity.this);
 
-				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(getResources().getStringArray(R.array.bg_entries)).indexOf(data.preferences.getBackground())]);
+				pref_background.setSummary(getResources().getStringArray(R.array.bg_display)[Arrays.asList(backgroundSettingsEntries).indexOf(data.preferences.getBackground())]);
 
 				return true;
 			}
@@ -504,27 +490,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (storage.isDriveStorage()) {
-
-        }
-
-		if(loginSubscription != null) {
-
-		}
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-		if(loginSubscription != null) {
-		}
-    }
-
 	Callback<String> onLoginCallback = new Callback<String>() {
 		@Override
 		public void onCalled(String name) {
@@ -548,31 +513,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     @Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Resource.checkFull(bp);
-
-        if (!Resource.isFull) {
-            return;
-        }
-
-        new MaterialDialog.Builder(this)
-                .title(R.string.cloud_sync)
-                .content(R.string.cloud_sync_description_first)
-                .positiveText(R.string.activate)
-                .negativeText(R.string.not_now)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        Resource.purchasedFull(this, bp, masterView);
     }
 
 	@Override
@@ -583,7 +524,7 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
 	@Override
     public void onPurchaseHistoryRestored() {
-
+        Resource.checkFull(bp);
     }
 
     @Override

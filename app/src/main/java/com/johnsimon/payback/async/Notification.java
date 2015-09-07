@@ -4,11 +4,21 @@ import java.util.ArrayList;
 
 public class Notification {
 	private ArrayList<NotificationCallback> callbacks = new ArrayList<>();
-	boolean notified = false;
+	private boolean notify;
+	private boolean notified = false;
+
+	public Notification(boolean notify) {
+		this.notify = notify;
+	}
+
+	public Notification() {
+		this(true);
+	}
+
 
 	public void listen(NotificationCallback callback) {
 		callbacks.add(callback);
-		if(notified) {
+		if(notified && notify) {
 			callback.onNotify();
 		}
 	}
@@ -23,5 +33,9 @@ public class Notification {
 		for(NotificationCallback callback : callbacks) {
 			callback.onNotify();
 		}
+	}
+
+	public void clearCallbacks() {
+		callbacks.clear();
 	}
 }

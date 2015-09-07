@@ -13,28 +13,33 @@ import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.loader.ContactsLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.AlarmScheduler;
 
 public abstract class DataWidgetViewsFactory implements DataContextInterface, RemoteViewsService.RemoteViewsFactory {
 
     protected AppData data;
     protected Storage storage;
-    protected Context ctx;
+    protected Context context;
 
-    Notification dataLink;
+	private DataLinker dataLinker;
+	private AlarmScheduler alarmScheduler;
 
-    protected DataWidgetViewsFactory(Context ctx) {
-        this.ctx = ctx;
-        storage = StorageManager.getStorage(ctx);
+    protected DataWidgetViewsFactory(Context context) {
+        this.context = context;
+        storage = StorageManager.getStorage(context);
 
         ContactsLoader contactsLoader = new ContactsLoader();
-        contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ctx.getContentResolver());
+        contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getContentResolver());
 
-        dataLink = new DataLinker().link(storage.subscription, contactsLoader.promise);
-    }
+		dataLinker = new DataLinker(storage.subscription, contactsLoader.promise);
+
+		alarmScheduler = new AlarmScheduler(context, storage.subscription);
+	}
 
     @Override
     public Context getContext() {
-        return ctx;
+        return context;
     }
 
     @Override
@@ -63,12 +68,13 @@ public abstract class DataWidgetViewsFactory implements DataContextInterface, Re
     @Override
     public void onCreate() {
         storage.subscription.listen(dataLoadedCallback);
-        dataLink.listen(dataLinkedCallback);
+		dataLinker.linked.listen(dataLinkedCallback);
     }
 
     @Override
     public void onDestroy() {
         storage.subscription.unregister(dataLoadedCallback);
-        dataLink.unregister(dataLinkedCallback);
+		dataLinker.die();
+		alarmScheduler.die();
     }
 }

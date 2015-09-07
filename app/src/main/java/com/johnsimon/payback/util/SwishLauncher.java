@@ -19,7 +19,7 @@ import java.util.List;
 
 public class SwishLauncher {
 
-    public static void startSwish(final Activity activity, final float amount, final Person owner) {
+    public static void startSwish(final Activity activity, final double amount, final Person owner) {
         if (owner.hasNumbers()) {
 
             String[] numbers = owner.link.numbers;
@@ -44,11 +44,11 @@ public class SwishLauncher {
         }
     }
 
-    private static void startSwishApp(Activity activity, float amount) {
+    private static void startSwishApp(Activity activity, double amount) {
         startSwishApp(activity, amount, null);
     }
 
-	private static void startSwishApp(Activity activity, float amount, String phoneNumber) {
+	private static void startSwishApp(Activity activity, double amount, String phoneNumber) {
         startSwishApp(activity, amountToString(amount), phoneNumber);
     }
 
@@ -70,8 +70,8 @@ public class SwishLauncher {
 
 	}
 
-    private static String amountToString(float amount) {
-        return Float.toString(Math.abs(amount)).replaceAll("\\.0*$", "");
+    private static String amountToString(double amount) {
+        return Double.toString(Math.abs(amount)).replaceAll("\\.0*$", "");
     }
 
 	public static boolean hasService(PackageManager pkm) {

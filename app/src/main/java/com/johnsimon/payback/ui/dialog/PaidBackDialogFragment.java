@@ -2,31 +2,27 @@ package com.johnsimon.payback.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.data.Debt;
+import com.johnsimon.payback.ui.base.BaseDialogFragment;
 
-public class PaidBackDialogFragment extends DialogFragment {
+public class PaidBackDialogFragment extends BaseDialogFragment {
 
 	public final static int PAY_BACK = 0;
 	public final static int UNDO_PAY_BACK = 1;
 
 	private static boolean payBack = false;
-	private static Debt debt;
     private static boolean evenOut;
 
-	public static PaidBackDialogFragment newInstance(int flag, Debt _debt, boolean _evenOut) {
+	public static PaidBackDialogFragment newInstance(int flag, boolean _evenOut) {
 		payBack = flag == PAY_BACK;
-		debt = _debt;
         evenOut = _evenOut;
 		return new PaidBackDialogFragment();
 	}
@@ -88,11 +84,10 @@ public class PaidBackDialogFragment extends DialogFragment {
 
 		final AlertDialog alertDialog = builder.create();
 
-		final Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				completeCallback.onComplete(debt);
+				completeCallback.onComplete();
 				alertDialog.dismiss();
 			}
 		}, 1000);
@@ -100,8 +95,8 @@ public class PaidBackDialogFragment extends DialogFragment {
 		return alertDialog;
 	}
 
-	public interface CompleteCallback {
-		public void onComplete(Debt debt);
+    public interface CompleteCallback {
+		void onComplete();
 	}
 
 }

@@ -2,17 +2,20 @@ package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -25,31 +28,34 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.core.DataActivity;
-import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
+import com.johnsimon.payback.data.DebtState;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.LocalStorage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
+import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
+import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
+import com.johnsimon.payback.ui.dialog.InitialRestoreBackupDialog;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
+import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
@@ -62,6 +68,7 @@ public class FeedActivity extends DataActivity implements
 	public static String ARG_FROM_CREATE = Resource.arg(ARG_PREFIX, "FROM_CREATE");
 
 	public Toolbar toolbar;
+	public DrawerLayout masterLayout;
 	public static Person person = null;
 	public static ArrayList<Debt> feed;
 
@@ -73,7 +80,6 @@ public class FeedActivity extends DataActivity implements
 
 	private NavigationDrawerFragment navigationDrawerFragment;
 
-	private NfcAdapter nfcAdapter;
 	private Beamer beamer;
 
 	private FeedFragment feedFragment;
@@ -90,25 +96,24 @@ public class FeedActivity extends DataActivity implements
         Intent sentIntent = getIntent();
 
         if (sentIntent.getBooleanExtra(ARG_FROM_CREATE, false)) {
-            Resource.actionComplete(getApplicationContext());
+            Resource.actionComplete(this);
             sentIntent.removeExtra(ARG_FROM_CREATE);
         }
 
         bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", this);
 
-        Resource.checkFull(bp);
+		bp.loadOwnedPurchasesFromGoogle();
 
-        if (Resource.isLOrAbove()) {
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
-                    R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+		Resource.checkFull(bp);
 
-        }
+		if (Resource.isLOrAbove()) {
+			setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
+					R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
+
+		}
+
 
 		Resource.init(getApplicationContext());
-		if (Resource.isFirstRun(storage.getPreferences())) {
-			WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-			welcomeDialogFragment.show(getFragmentManager().beginTransaction(), "welcome_dialog_fragment");
-		}
 
 		setContentView(R.layout.activity_feed);
 
@@ -120,10 +125,30 @@ public class FeedActivity extends DataActivity implements
 		// Set up the drawer.
 		navigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout)
+				masterLayout = (DrawerLayout) findViewById(R.id.drawer_layout)
 		);
 
-		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		if (Resource.isFirstRun(storage.getPreferences())) {
+
+			if (Resource.isFull) {
+				InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
+					@Override
+					public void onCalled(Boolean successful) {
+						if (!successful) {
+							WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+							welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+						}
+					}
+				});
+			} else {
+				WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+				welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+			}
+
+
+		}
+
+		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		beamer = new Beamer(this, this);
 		if (nfcAdapter != null) {
 			nfcAdapter.setNdefPushMessageCallback(beamer, this);
@@ -151,7 +176,7 @@ public class FeedActivity extends DataActivity implements
 				.commit();
 
         if (BuildConfig.DEBUG) {
-            Toast.makeText(this, "DEBUG", Toast.LENGTH_SHORT).show();
+			Snackbar.make(masterLayout, "Debug build " + BuildConfig.VERSION_NAME, Snackbar.LENGTH_SHORT).show();
         }
 	}
 
@@ -163,8 +188,12 @@ public class FeedActivity extends DataActivity implements
             feed = data.feed(person);
         }
         sort();
-		feedSubscription.broadcast(feed);
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
+
+		navigationDrawerFragment.adapter.setItems(data.peopleOrdered());
+		navigationDrawerFragment.adapter.notifyDataSetChanged();
+
+		feedSubscription.broadcast(feed);
 
         //TODO REMOVE
         //LocalStorage.test(this, data);
@@ -190,9 +219,26 @@ public class FeedActivity extends DataActivity implements
 
 		// Check to see that the Activity started due to an Android Beam
 		Intent intent = getIntent();
-		if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 			beamer.processIntent(intent);
-		}
+		} else if (intent.getExtras() != null && intent.getExtras().get(Alarm.ALARM_ID) != null) {
+            Debt debt = data.findDebt((UUID) intent.getExtras().get(Alarm.ALARM_ID));
+
+			if(debt == null) {
+				return;
+			}
+
+            person = debt.getOwner();
+            feed = data.feed(person);
+            feedSubscription.broadcast(feed);
+            onFeedChange();
+
+            feedFragment.showDetail(debt);
+
+			NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.cancel(debt.id.hashCode());
+
+        }
     }
 
 	@Override
@@ -201,7 +247,8 @@ public class FeedActivity extends DataActivity implements
 		setIntent(intent);
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		Undo.completeAction();
 
@@ -218,8 +265,17 @@ public class FeedActivity extends DataActivity implements
 
         feed = data.feed(person);
         sort();
+
+        feedFragment.adapter.animate = true;
+
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                feedFragment.adapter.animate = false;
+            }
+        }, 200);
 
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
 
@@ -227,16 +283,17 @@ public class FeedActivity extends DataActivity implements
 
         invalidateOptionsMenu();
 
-		feedFragment.recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_in));
+        feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
+        feedFragment.scrollListener.mHeader.setTranslationY(0);
+        feedFragment.scrollListener.mHeaderDiffTotal = 0;
 
         feedFragment.displayTotalDebt(getResources());
-
 	}
 
 	@Override
 	public void onShowGlobalContextActionBar() {}
 
-	@Override
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Only show items in the action bar relevant to this screen
 		// if the drawer is not showing. Otherwise, let the drawer
@@ -245,6 +302,7 @@ public class FeedActivity extends DataActivity implements
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
         MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+		MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
 
         if (attemptCheckFilterAmount) {
             filterAmount.setChecked(true);
@@ -252,11 +310,17 @@ public class FeedActivity extends DataActivity implements
 
         menu_even_out = menu.findItem(R.id.menu_even_out);
 
-        if (isAll() || data.isEven(feed)) {
+        if (isAll() || AppData.isEven(feed)) {
             menu_even_out.setVisible(false);
         }
 
         sort();
+
+		if (isAll()) {
+			menuShare.setVisible(false);
+		} else {
+			menuShare.setVisible(feed.size() != 0);
+		}
 
 		if (isAll()) {
 			fullMenuPay.setVisible(false);
@@ -293,6 +357,15 @@ public class FeedActivity extends DataActivity implements
                 onEvenOut();
                 break;
 
+			case R.id.feed_menu_share:
+				Intent shareIntent = new Intent();
+				shareIntent.setAction(Intent.ACTION_SEND);
+				shareIntent.putExtra(Intent.EXTRA_TEXT, ShareStringGenerator.generateDebtSummary(
+						getApplicationContext(), feed, data.preferences.getCurrency()));
+				shareIntent.setType("text/plain");
+				startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+				break;
+
 		}
 
 		return result;
@@ -317,7 +390,15 @@ public class FeedActivity extends DataActivity implements
 
 		switch (v.getId()) {
 			case R.id.navigation_drawer_footer_people:
-				startActivity(new Intent(this, PeopleManagerActivity.class));
+
+                navigationDrawerFragment.closeDrawer();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(FeedActivity.this, PeopleManagerActivity.class));
+                    }
+                }, 200);
 				break;
 			case R.id.navigation_drawer_footer_settings:
 				startActivity(new Intent(this, SettingsActivity.class));
@@ -367,7 +448,7 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		navigationDrawerFragment.mDrawerToggle.syncState();
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -379,7 +460,7 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 
 		if (savedInstanceState.getBoolean("AMOUNT_USED_SORT", false)) {
@@ -449,7 +530,7 @@ public class FeedActivity extends DataActivity implements
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-                                    data.sync(person, debts);
+                                    data.sync(FeedActivity.this, person, debts);
                                     commitBeam();
                                     dialog.dismiss();
                                 }
@@ -469,7 +550,7 @@ public class FeedActivity extends DataActivity implements
 		};
 	}
 	private void commitBeam() {
-        storage.commit();
+        storage.commit(this);
 
 		feed = data.feed(person);
 
@@ -501,38 +582,12 @@ public class FeedActivity extends DataActivity implements
 
 	@Override
     public void onProductPurchased(String s, TransactionDetails transactionDetails) {
-        Resource.checkFull(bp);
-
-		navigationDrawerFragment.footerUpgrade.setVisibility(View.GONE);
-
-        if (!Resource.isFull) {
-            return;
-        }
-
-        new MaterialDialog.Builder(this)
-                .title(R.string.cloud_sync)
-                .content(R.string.cloud_sync_description_first)
-                .positiveText(R.string.activate)
-                .negativeText(R.string.not_now)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-						StorageManager.migrateToDrive(FeedActivity.this);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        Resource.purchasedFull(this, bp, masterLayout);
     }
 
     @Override
     public void onPurchaseHistoryRestored() {
+		Resource.checkFull(bp);
     }
 
     @Override
@@ -555,48 +610,68 @@ public class FeedActivity extends DataActivity implements
 
 	public void onEvenOut() {
 
-		final HashSet<UUID> wasPaidback = new HashSet<>();
+        PaidBackDialogFragment paidBackDialogFragment;
 
-		for(Debt debt: feed) {
-			wasPaidback.add(debt.id);
-		}
+        paidBackDialogFragment = PaidBackDialogFragment.newInstance(PaidBackDialogFragment.PAY_BACK, true);
+        paidBackDialogFragment.show(getFragmentManager().beginTransaction(), "evened_out_dialog");
+        paidBackDialogFragment.completeCallback = new PaidBackDialogFragment.CompleteCallback() {
+            @Override
+            public void onComplete() {
+				final ArrayList<DebtState> oldState = new ArrayList<>();
 
-		Undo.executeAction(this, R.string.renamed_person, new Undo.UndoableAction() {
-			@Override
-			public void onDisplay() {
-				for(Debt debt: feed) {
-					debt.setPaidBack(true);
+				for(Debt debt : feed) {
+					oldState.add(new DebtState(debt));
 				}
-				notifyDataSetChanged();
-			}
 
-			@Override
-			public void onRevert() {
-				for(Debt debt: feed) {
-					debt.setPaidBack(wasPaidback.contains(debt.id));
-				}
-				notifyDataSetChanged();
-			}
+                Undo.executeAction(FeedActivity.this, R.string.evened_out, masterLayout, new Undo.UndoableAction() {
+                    @Override
+                    public void onDisplay() {
+                        for(Debt debt: feed) {
+							if(!debt.isPaidBack()) {
+								debt.payback();
+							}
 
-			@Override
-			public void onCommit() {
-				storage.commit();
-			}
+							if (debt.getRemindDate() != null) {
+								Alarm.cancelAlarm(FeedActivity.this, debt);
+								debt.setRemindDate(null);
+							}
+						}
+						feedFragment.adapter.notifyDataSetChanged();
+						feedFragment.feedChangeCallback.onFeedChange();
+					}
 
-			private void notifyDataSetChanged() {
-				feedFragment.adapter.notifyDataSetChanged();
-				feedFragment.feedChangeCallback.onFeedChange();
-			}
-		});
+					@Override
+					public void onRevert() {
+						for (int i = 0; i < feed.size(); i++) {
+							Debt debt = feed.get(i);
+							oldState.get(i).restore(debt);
+
+							if (debt.getRemindDate() != null) {
+								Alarm.addAlarm(FeedActivity.this, debt);
+							}
+						}
+						feedFragment.adapter.notifyDataSetChanged();
+						feedFragment.feedChangeCallback.onFeedChange();
+					}
+
+					@Override
+					public void onCommit() {
+						storage.commit(getApplicationContext());
+					}
+				});
+            }
+        };
 	}
 
     @Override
     public void onFeedChange() {
         navigationDrawerFragment.updateBalance();
-        if (data.isEven(feed)) {
-            menu_even_out.setVisible(false);
-        } else {
-            menu_even_out.setVisible(true);
+        if (menu_even_out != null) {
+            if (AppData.isEven(feed)) {
+                menu_even_out.setVisible(false);
+            } else {
+                menu_even_out.setVisible(true);
+            }
         }
 
         feedFragment.displayTotalDebt(getResources());

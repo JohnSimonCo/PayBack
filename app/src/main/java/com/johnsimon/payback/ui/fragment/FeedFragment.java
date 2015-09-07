@@ -5,19 +5,17 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +30,6 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NotificationCallback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.core.DataFragment;
-import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
@@ -42,22 +39,22 @@ import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.Undo;
-import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class FeedFragment extends DataFragment implements DebtDetailDialogFragment.Callback {
-	private static String ARG_PREFIX = Resource.prefix("FEED_FRAGMENT");
+public class FeedFragment extends DataFragment implements FeedListAdapter.OnItemClickListener, DebtDetailDialogFragment.Callback {
 
 	public FeedListAdapter adapter;
     public FrameLayout headerView;
 
-	public TextView totalDebtTextView;
-    public TextView feed_header_balance;
+	private TextView totalDebtTextView;
+    private TextView feed_header_balance;
+    private FloatingActionButton feed_fab;
 
     public RecyclerView recyclerView;
+    public RecyclerView.LayoutManager layoutManager;
     private View emptyView;
-	private QuickReturnListViewOnScrollListener scrollListener;
+	public QuickReturnListViewOnScrollListener scrollListener;
 
 	private ImageView headerImage;
 
@@ -74,7 +71,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         recyclerView = (RecyclerView) rootView.findViewById(R.id.feed_list);
 		recyclerView.setHasFixedSize(true);
 
-		final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);
 
         headerView = (FrameLayout) rootView.findViewById(R.id.feed_list_header_master);
@@ -82,24 +79,13 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
         totalDebtTextView = (TextView) headerView.findViewById(R.id.total_debt);
 
-        //FAB is different on L
+        feed_fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
+        feed_fab.setOnClickListener(fabClickListener);
+
         if (Resource.isLOrAbove()) {
-            final ImageButton fab = (ImageButton) headerView.findViewById(R.id.feed_fab_l);
-
-            fab.setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, fab.getWidth(), fab.getHeight());
-                }
-            });
-
-            fab.setClipToOutline(true);
-
-            fab.setOnClickListener(fabClickListener);
-        } else {
-            FloatingActionButton fab = (FloatingActionButton) headerView.findViewById(R.id.feed_fab);
-            fab.setOnClickListener(fabClickListener);
+            feed_fab.setTransitionName("fab");
         }
+
 
         final ImageView emptyViewImage = (ImageView) rootView.findViewById(R.id.feed_list_empty_view_image);
         emptyView = rootView.findViewById(R.id.feed_list_empty_view);
@@ -134,7 +120,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         scrollListener = new QuickReturnListViewOnScrollListener(QuickReturnType.HEADER,
                 headerView, -headerHeight, null, 0, headerImage);
         scrollListener.setCanSlideInIdleScrollState(false);
-        recyclerView.setOnScrollListener(scrollListener);
+        recyclerView.addOnScrollListener(scrollListener);
 
 		FeedActivity host = (FeedActivity) getActivity();
 		feedSubscription = host.feedSubscription;
@@ -173,8 +159,6 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
                 adapter.notifyDataSetChanged();
             }
 
-			scrollListener.forceUpdateTranslationY();
-
 			adapter.checkAdapterIsEmpty();
 		}
 	};
@@ -198,25 +182,24 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	};
 
     @Override
-	public void onPaidBack(Debt debt) {
-		debt.setPaidBack(!debt.isPaidBack());
-        storage.commit();
+	public void onRefresh() {
 		adapter.notifyDataSetChanged();
         feedChangeCallback.onFeedChange();
+		displayTotalDebt(getResources());
 
 		Resource.actionComplete(getActivity());
 	}
 
     public void displayTotalDebt(Resources resources) {
-		float debt = AppData.total(FeedActivity.feed);
+		float total = AppData.total(FeedActivity.feed);
 
-        if (debt == 0) {
+        if (total == 0) {
             feed_header_balance.setVisibility(View.GONE);
         } else {
             feed_header_balance.setVisibility(View.VISIBLE);
         }
 
-		totalDebtTextView.setText(Debt.totalString(debt, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
+		totalDebtTextView.setText(Debt.totalString(total, data.preferences.getCurrency(), resources.getString(R.string.even), FeedActivity.isAll(), resources.getString(R.string.debt_free)));
 	}
 
 	private View.OnClickListener fabClickListener = new View.OnClickListener() {
@@ -266,12 +249,19 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 		}
 	};
 
-	@Override
-	public void onDelete(final Debt debt) {
+    public void showDetail(Debt debt) {
+        DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt);
+        detailDialogFragment.callback = this;
+        detailDialogFragment.show(getFragmentManager(), "detail_screen");
+    }
 
+    @Override
+	public void onDelete(final Debt debt) {
 		final int index = FeedActivity.feed.indexOf(debt);
 
-        new MaterialDialog.Builder(getActivity())
+		final Activity activity = getActivity();
+
+        new MaterialDialog.Builder(activity)
 			.content(R.string.delete_entry)
 			.positiveText(R.string.delete)
 			.negativeText(R.string.cancel)
@@ -279,8 +269,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 				@Override
 				public void onPositive(MaterialDialog dialog) {
 					super.onPositive(dialog);
-
-					Undo.executeAction(getActivity(), R.string.deleted_debt, new Undo.UndoableAction() {
+					Undo.executeAction(getBaseActivity(), R.string.deleted_debt, getView(), new Undo.UndoableAction() {
 						@Override
 						public void onDisplay() {
 							FeedActivity.feed.remove(index);
@@ -299,8 +288,8 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 
 						@Override
 						public void onCommit() {
-							data.delete(debt);
-							storage.commit();
+							data.delete(activity, debt);
+							storage.commit(getActivity());
 						}
 					});
 
@@ -319,7 +308,7 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
 	@Override
 	public void onMove(Debt debt, Person person) {
 		data.move(debt, person);
-		storage.commit();
+		storage.commit(getActivity());
 
 		if (!FeedActivity.isAll()) {
             int index = FeedActivity.feed.indexOf(debt);
@@ -334,18 +323,30 @@ public class FeedFragment extends DataFragment implements DebtDetailDialogFragme
         feedChangeCallback.onFeedChange();
 	}
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
 	public void onEdit(Debt debt) {
 		Intent intent = new Intent(getActivity(), CreateDebtActivity.class)
 				.putExtra(CreateDebtActivity.ARG_FROM_FEED, true)
                 .putExtra(CreateDebtActivity.ARG_ANIMATE_TOOLBAR, false)
 				.putExtra(CreateDebtActivity.ARG_ID, debt.id);
 
-		startActivity(intent);
+        if (Resource.isLOrAbove()) {
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), feed_fab, "fab");
+
+            startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent, ActivityOptions.makeCustomAnimation(getActivity(), R.anim.activity_in, R.anim.activity_out).toBundle());
+        }
 	}
 
+    @Override
+    public void onItemClick(View view, int position, Debt debt) {
+        showDetail(debt);
+    }
+
     public interface OnFeedChangeCallback {
-        public void onFeedChange();
+        void onFeedChange();
     }
 
 }
