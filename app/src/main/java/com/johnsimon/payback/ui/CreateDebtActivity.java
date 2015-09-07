@@ -576,7 +576,7 @@ public class CreateDebtActivity extends DataActivity {
             }
         }
 
-        return DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(reminderCalendar.getTime());
+        return android.text.format.DateFormat.getTimeFormat(this).format(reminderCalendar.getTime());
     }
 
     private String getDayString(int year, int month, int day, Calendar now) {
