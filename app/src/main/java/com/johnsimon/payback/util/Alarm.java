@@ -58,6 +58,11 @@ public class Alarm  {
         alarmManager.cancel(pendingIntent);
     }
 
+    public static void cancelNotification(Context context, Debt debt) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(debt.id.hashCode());
+    }
+
 	public static class AlarmReceiver extends BroadcastReceiver {
 
         private Context context;
@@ -196,6 +201,10 @@ public class Alarm  {
 
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
+                        if(debt == null) {
+                            return;
+                        }
+
 						debt.payback();
 
                         storage.commit(context);
@@ -219,6 +228,10 @@ public class Alarm  {
                         break;
 
                     case ACTION_REMIND_LATER:
+                        if(debt == null) {
+                            return;
+                        }
+
                         Intent remindLaterIntent = new Intent(context, RemindLaterActivity.class);
                         remindLaterIntent.putExtra(RemindLaterActivity.KEY_DEBT_ID, debt.id.toString());
                         remindLaterIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

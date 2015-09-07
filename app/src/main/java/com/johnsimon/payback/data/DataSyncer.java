@@ -134,6 +134,22 @@ public class DataSyncer {
 			}
 		}
 
+        HashSet<UUID> existingPeople = new HashSet<>();
+        for(Person p : a.people) {
+            existingPeople.add(p.id);
+        }
+        for (Person p: b.people) {
+            existingPeople.add(p.id);
+        }
+
+        Iterator<UUID> iterator = lord.iterator();
+        while (iterator.hasNext()) {
+            UUID id = iterator.next();
+            if(!existingPeople.contains(id)) {
+                iterator.remove();
+            }
+        }
+
 		return lord;
 	}
 

@@ -93,6 +93,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 	protected void onDataReceived() {
         DebtDetailDialogFragment.debt = data.findDebt(debt.id);
 
+        Alarm.cancelNotification(getActivity().getApplicationContext(), debt);
+
         Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
 
 		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));

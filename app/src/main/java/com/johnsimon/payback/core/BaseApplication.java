@@ -12,7 +12,7 @@ public class BaseApplication extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
-            LeakCanary.install(this);
+            //LeakCanary.install(this);
         }
     }
 }
