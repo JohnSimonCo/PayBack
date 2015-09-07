@@ -252,42 +252,49 @@ public class FeedActivity extends DataActivity implements
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		Undo.completeAction();
 
-		Person oldPerson = person;
-
 		if(item.type == NavigationDrawerItem.Type.All) {
-			person = null;
+			changePerson(null);
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
-			person = item.owner;
+			changePerson(item.owner);
 		}
 
-        if (person == oldPerson)
-            return;
+		storage.requestRefresh();
+	}
 
-        feed = data.feed(person);
-        sort();
+	public void changePerson(Person newPerson) {
+		if (newPerson == person) {
+			return;
+		}
 
-        feedFragment.adapter.animate = true;
+		person = newPerson;
+
+		feed = data.feed(person);
+		feedFragment.adapter.updateList(feed);
+		sort();
+
+		feedFragment.adapter.animate = true;
 
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
 
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                feedFragment.adapter.animate = false;
-            }
-        }, 200);
+		handler.postDelayed(new Runnable() {
+			public void run() {
+				feedFragment.adapter.animate = false;
+			}
+		}, 200);
 
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
 
-		storage.requestRefresh();
+		invalidateOptionsMenu();
 
-        invalidateOptionsMenu();
+		feedFragment.adapter.notifyDataSetChanged();
 
-        feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
-        feedFragment.scrollListener.mHeader.setTranslationY(0);
-        feedFragment.scrollListener.mHeaderDiffTotal = 0;
+		feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
+		feedFragment.scrollListener.mHeader.setTranslationY(0);
+		feedFragment.scrollListener.mHeaderDiffTotal = 0;
 
-        feedFragment.displayTotalDebt(getResources());
+		feedFragment.displayTotalDebt(getResources());
+
 	}
 
 	@Override
