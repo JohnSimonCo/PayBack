@@ -139,7 +139,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                     now.get(Calendar.DAY_OF_MONTH) == remindCalendar.get(Calendar.DAY_OF_MONTH));
 
 
-            dialog_reminder_date.setText(String.format(getString(R.string.reminder_detail), today ? getString(R.string.today).toLowerCase() : simpleDateFormat.format(remindDate), time));
+            dialog_reminder_date.setText(String.format(getString(R.string.reminder_detail), today ? getString(R.string.today) : simpleDateFormat.format(remindDate), time));
         } else {
             dialog_reminder_date.setVisibility(View.GONE);
         }
