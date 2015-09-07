@@ -95,8 +95,9 @@ public class Alarm  {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_stat_negative)
                         .setContentTitle(context.getString(R.string.notif_pay_back_reminder))
-                        .setContentText(getContentText(debt, data))
-                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setContentText(getContentText(debt, data, false, context))
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(getContentText(debt, data, true, context)))
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setColor(context.getResources().getColor(R.color.icon_green))
                         .addAction(getPayBackAction(id))
@@ -148,9 +149,16 @@ public class Alarm  {
             return PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        private String getContentText(Debt debt, AppData data) {
+        private String getContentText(Debt debt, AppData data, boolean full, Context context) {
+            if (!full) {
+                return ShareStringGenerator.generateDebtNotificationString(context, debt, data.preferences.getCurrency());
+            }
 			int format = debt.getAmount() > 0 ? R.string.notif_they_owe : R.string.notif_you_owe;
-			return context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getRemainingAbsoluteDebt()));
+			String result = context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getRemainingAbsoluteDebt()));
+            if (debt.getNote() != null) {
+                result += (System.getProperty("line.separator") + debt.getNote());
+            }
+            return result;
         }
     }
 
@@ -216,6 +224,7 @@ public class Alarm  {
 
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_stat_negative)
+                                .setDefaults(Notification.DEFAULT_ALL)
                                 .setContentIntent(getFeedPendingIntent())
                                 .setContent(new RemoteViews(context.getPackageName(), R.layout.paid_back_notification));
 
