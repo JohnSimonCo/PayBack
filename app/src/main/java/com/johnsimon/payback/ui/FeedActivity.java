@@ -235,6 +235,7 @@ public class FeedActivity extends DataActivity implements
             feed = data.feed(person);
             feedSubscription.broadcast(feed);
             onFeedChange();
+			sort();
 
             feedFragment.showDetail(debt);
 
@@ -560,6 +561,8 @@ public class FeedActivity extends DataActivity implements
         storage.commit(this);
 
 		feed = data.feed(person);
+
+		sort();
 
 		navigationDrawerFragment.adapter.setItems(data.peopleOrdered());
 		navigationDrawerFragment.setSelectedPerson(person);
