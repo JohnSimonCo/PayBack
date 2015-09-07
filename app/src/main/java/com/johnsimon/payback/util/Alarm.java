@@ -96,6 +96,7 @@ public class Alarm  {
                         .setSmallIcon(R.drawable.ic_stat_negative)
                         .setContentTitle(context.getString(R.string.notif_pay_back_reminder))
                         .setContentText(getContentText(debt, data))
+                        .setDefaults(Notification.DEFAULT_ALL)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setColor(context.getResources().getColor(R.color.icon_green))
                         .addAction(getPayBackAction(id))
