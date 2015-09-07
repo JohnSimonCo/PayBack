@@ -183,7 +183,7 @@ public class Alarm  {
             storage.subscription.listen(dataLoadedCallback);
         }
 
-		private final static int REMOVE_PAIDBACK_NOTIFICATION_DELAY = 5000;
+		private final static int REMOVE_PAIDBACK_NOTIFICATION_DELAY = 4000;
         private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
             @Override
             public void onCalled(AppData data) {
@@ -203,6 +203,7 @@ public class Alarm  {
 
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_stat_negative)
+                                .setContentIntent(getFeedPendingIntent())
                                 .setContent(new RemoteViews(context.getPackageName(), R.layout.paid_back_notification));
 
                         notificationManager.notify(debt.id.hashCode(), builder.build());
@@ -228,5 +229,12 @@ public class Alarm  {
                 }
             }
         };
+
+        private PendingIntent getFeedPendingIntent() {
+            Intent detailIntent = new Intent(context, FeedActivity.class);
+            detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            return PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
     }
 }
