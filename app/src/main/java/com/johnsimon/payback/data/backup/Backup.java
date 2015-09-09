@@ -55,10 +55,11 @@ public class Backup {
 			file.renameTo(new File(file.getParentFile(), BackupManager.generateFileName(Type.Manual)));
 		} else {
 			String[] parts = fileName.split(" ");
-			//To fix weird-crash
+			//To fix weird 1.3.1 crash
 			if(parts.length < 2) {
 				this.type = Type.Manual;
 				this.date = new Date();
+				return;
 			}
 			String backupType = parts[0], date = parts[1];
 			this.type = Type.fromTypeString(backupType);
