@@ -93,6 +93,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 	protected void onDataReceived() {
         DebtDetailDialogFragment.debt = data.findDebt(debt.id);
 
+        Alarm.cancelNotification(getActivity().getApplicationContext(), debt);
+
         Resource.createProfileImage(getDataActivity(), debt.getOwner(), avatar, avatarLetter);
 
 		dialog_custom_amount.setText(data.preferences.getCurrency().render(debt));
@@ -127,7 +129,17 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                     DateFormat.SHORT).format(
                     remindDate);
 
-            dialog_reminder_date.setText(String.format(getString(R.string.reminder_detail), simpleDateFormat.format(remindDate), time));
+            Calendar remindCalendar = Calendar.getInstance();
+            Calendar now = Calendar.getInstance();
+
+            remindCalendar.setTime(remindDate);
+
+            boolean today = (now.get(Calendar.DAY_OF_MONTH) == remindCalendar.get(Calendar.DAY_OF_MONTH) &&
+                            now.get(Calendar.DAY_OF_MONTH) == remindCalendar.get(Calendar.DAY_OF_MONTH) &&
+                    now.get(Calendar.DAY_OF_MONTH) == remindCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+            dialog_reminder_date.setText(String.format(getString(R.string.reminder_detail), today ? getString(R.string.today) : simpleDateFormat.format(remindDate), time));
         } else {
             dialog_reminder_date.setVisibility(View.GONE);
         }

@@ -75,7 +75,7 @@
     <string name="merged_people">Merged people</string>
     <string name="already_sorted">Already sorted</string>
     <string name="deleted_debt">Deleted entry</string>
-    <string name="delete_entry">Delete entry</string>
+    <string name="delete_entry">Delete debt</string>
     <string name="overwrite_nfc_title">Overwrite</string>
     <string name="overwrite_nfc_text">Are you sure you want to overwrite all entries from %1$s?</string>
     <string name="from_who_title">From who?</string>
@@ -130,13 +130,13 @@
     <string name="share_debt_summary">Share debt summary</string>
     <!-- "Paid back Aug 5" -->
     <string name="paid_back_when">Paid back %1$s</string>
-    <string name="autobackup">Auto Backup</string>
-    <string name="wipebackup">Wipe Backup</string>
+    <string name="autobackup">Auto backup</string>
+    <string name="wipebackup">Wipe backup</string>
     <string name="backup">Backup</string>
     <string name="delete_failed">Delete failed</string>
     <string name="delete_successful">Delete successful</string>
     <string name="login_successful">Login successful!</string>
-    <string name="reminder_detail">Reminder set %1$s %2$s</string>
+    <string name="reminder_detail">Reminder at %1$s %2$s</string>
     <string name="backup_success">Backup successful</string>
     <string name="backup_failed">Backup failed</string>
     <string name="number_format_error">Invalid number format</string>

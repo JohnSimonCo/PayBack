@@ -312,11 +312,11 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 
 		if (!FeedActivity.isAll()) {
             int index = FeedActivity.feed.indexOf(debt);
-
 			FeedActivity.feed.remove(index);
-            adapter.notifyItemRemoved(index);
             feedChangeCallback.onFeedChange();
 		}
+
+		((FeedActivity) getActivity()).changePerson(person);
 
 		Resource.actionComplete(getActivity());
 		adapter.notifyDataSetChanged();

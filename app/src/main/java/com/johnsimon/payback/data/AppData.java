@@ -15,6 +15,7 @@ import com.johnsimon.payback.util.Resource;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.UUID;
 
 public class AppData {
@@ -170,6 +171,7 @@ public class AppData {
 		if(debt.hasReminder()) {
 			Alarm.cancelAlarm(context, debt);
 		}
+        Alarm.cancelNotification(context, debt);
 	}
 
     public void add(Debt debt) {

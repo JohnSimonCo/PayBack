@@ -83,11 +83,11 @@ public class ShareStringGenerator {
 
 		builder.append(debt.amount < 0
 				? debt.isPaidBack()
-					? context.getString(R.string.iowedyou)
-					: context.getString(R.string.ioweyou)
+				? context.getString(R.string.iowedyou)
+				: context.getString(R.string.ioweyou)
 				: debt.isPaidBack()
-					? context.getString(R.string.youowedme)
-					: context.getString(R.string.youoweme));
+				? context.getString(R.string.youowedme)
+				: context.getString(R.string.youoweme));
 
 		builder.append(" ");
 		builder.append(currency.render(partiallyPaidBack ? debt.getRemainingAbsoluteDebt() : debt.getAmount()));
@@ -126,6 +126,23 @@ public class ShareStringGenerator {
 			builder.append(")");
 		}
 
+	}
+	public static String generateDebtNotificationString(Context context, Debt debt, UserCurrency currency) {
+        StringBuilder builder = new StringBuilder();
+
+        int format = debt.getAmount() > 0 ? R.string.notif_they_owe : R.string.notif_you_owe;
+        builder.append(context.getString(format, debt.getOwner().getName(), currency.render(debt.getRemainingAbsoluteDebt())));
+
+		builder.append(" ");
+
+		if(debt.getNote() == null) {
+			builder.append(context.getString(R.string.debt_incash));
+		} else {
+			builder.append(String.format(context.getString(R.string.debtshare_noteformat),
+					debt.getNote()));
+		}
+
+        return builder.toString();
 	}
 	/*
 	I owe you a total of £ 84.85

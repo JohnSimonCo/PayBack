@@ -461,7 +461,7 @@ public class CreateDebtActivity extends DataActivity {
             int day = reminderCalendar.get(Calendar.DAY_OF_MONTH);
 
             reminderDayButton.setText(getDayString(year, month, day, now));
-            reminderTimeButton.setText(DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(reminderCalendar.getTime()));
+            reminderTimeButton.setText(getTimeString(reminderCalendar));
 
             if (anim) {
 
@@ -560,6 +560,24 @@ public class CreateDebtActivity extends DataActivity {
 
 		}
 	}
+
+    private String getTimeString(Calendar reminderCalendar) {
+
+        if (reminderCalendar.get(Calendar.MINUTE) == 0) {
+            switch (reminderCalendar.get(Calendar.HOUR_OF_DAY)) {
+                case 9:
+                    return getString(R.string.morning);
+                case 13:
+                    return getString(R.string.afternoon);
+                case 17:
+                    return getString(R.string.evening);
+                case 20:
+                    return getString(R.string.night);
+            }
+        }
+
+        return android.text.format.DateFormat.getTimeFormat(this).format(reminderCalendar.getTime());
+    }
 
     private String getDayString(int year, int month, int day, Calendar now) {
 

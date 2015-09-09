@@ -57,6 +57,13 @@ public class Alarm  {
 
         alarmManager.cancel(pendingIntent);
     }
+    public static void cancelNotification(Context context, Debt debt) {
+        cancelNotification(context, debt.id);
+    }
+    public static void cancelNotification(Context context, UUID id) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(id.hashCode());
+    }
 
 	public static class AlarmReceiver extends BroadcastReceiver {
 
@@ -88,7 +95,9 @@ public class Alarm  {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_stat_negative)
                         .setContentTitle(context.getString(R.string.notif_pay_back_reminder))
-                        .setContentText(getContentText(debt, data))
+                        .setContentText(getContentText(debt, data, false, context))
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(getContentText(debt, data, true, context)))
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setColor(context.getResources().getColor(R.color.icon_green))
                         .addAction(getPayBackAction(id))
@@ -140,9 +149,16 @@ public class Alarm  {
             return PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        private String getContentText(Debt debt, AppData data) {
+        private String getContentText(Debt debt, AppData data, boolean full, Context context) {
+            if (!full) {
+                return ShareStringGenerator.generateDebtNotificationString(context, debt, data.preferences.getCurrency());
+            }
 			int format = debt.getAmount() > 0 ? R.string.notif_they_owe : R.string.notif_you_owe;
-			return context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getRemainingAbsoluteDebt()));
+			String result = context.getString(format, debt.getOwner().getName(), data.preferences.getCurrency().render(debt.getRemainingAbsoluteDebt()));
+            if (debt.getNote() != null) {
+                result += (System.getProperty("line.separator") + debt.getNote());
+            }
+            return result;
         }
     }
 
@@ -183,19 +199,24 @@ public class Alarm  {
             storage.subscription.listen(dataLoadedCallback);
         }
 
-		private final static int REMOVE_PAIDBACK_NOTIFICATION_DELAY = 5000;
+		private final static int REMOVE_PAIDBACK_NOTIFICATION_DELAY = 4000;
         private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
             @Override
             public void onCalled(AppData data) {
 				storage.subscription.unregister(this);
 
-                UUID id = (UUID) intent.getExtras().get(ALARM_ID);
+                final UUID id = (UUID) intent.getExtras().get(ALARM_ID);
                 final Debt debt = data.findDebt(id);
 
                 final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 switch (intent.getAction()) {
                     case ACTION_PAY_BACK:
+                        if(debt == null) {
+                            notificationManager.cancel(id.hashCode());
+                            return;
+                        }
+
 						debt.payback();
 
                         storage.commit(context);
@@ -203,6 +224,8 @@ public class Alarm  {
 
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_stat_negative)
+                                .setDefaults(Notification.DEFAULT_ALL)
+                                .setContentIntent(getFeedPendingIntent())
                                 .setContent(new RemoteViews(context.getPackageName(), R.layout.paid_back_notification));
 
                         notificationManager.notify(debt.id.hashCode(), builder.build());
@@ -211,13 +234,18 @@ public class Alarm  {
 						handler.postDelayed(new Runnable() {
 							@Override
 							public void run() {
-								notificationManager.cancel(debt.id.hashCode());
+								notificationManager.cancel(id.hashCode());
 							}
 						}, REMOVE_PAIDBACK_NOTIFICATION_DELAY);
 
                         break;
 
                     case ACTION_REMIND_LATER:
+                        if(debt == null) {
+                            notificationManager.cancel(id.hashCode());
+                            return;
+                        }
+
                         Intent remindLaterIntent = new Intent(context, RemindLaterActivity.class);
                         remindLaterIntent.putExtra(RemindLaterActivity.KEY_DEBT_ID, debt.id.toString());
                         remindLaterIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -228,5 +256,12 @@ public class Alarm  {
                 }
             }
         };
+
+        private PendingIntent getFeedPendingIntent() {
+            Intent detailIntent = new Intent(context, FeedActivity.class);
+            detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            return PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
     }
 }

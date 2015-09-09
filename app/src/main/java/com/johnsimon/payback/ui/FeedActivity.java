@@ -222,7 +222,10 @@ public class FeedActivity extends DataActivity implements
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 			beamer.processIntent(intent);
 		} else if (intent.getExtras() != null && intent.getExtras().get(Alarm.ALARM_ID) != null) {
-            Debt debt = data.findDebt((UUID) intent.getExtras().get(Alarm.ALARM_ID));
+			UUID debtId = (UUID) intent.getExtras().get(Alarm.ALARM_ID);
+			Debt debt = data.findDebt(debtId);
+
+			Alarm.cancelNotification(getApplicationContext(), debtId);
 
 			if(debt == null) {
 				return;
@@ -232,11 +235,9 @@ public class FeedActivity extends DataActivity implements
             feed = data.feed(person);
             feedSubscription.broadcast(feed);
             onFeedChange();
+			sort();
 
             feedFragment.showDetail(debt);
-
-			NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.cancel(debt.id.hashCode());
 
         }
     }
@@ -252,42 +253,49 @@ public class FeedActivity extends DataActivity implements
 	public void onNavigationDrawerItemSelected(NavigationDrawerItem item) {
 		Undo.completeAction();
 
-		Person oldPerson = person;
-
 		if(item.type == NavigationDrawerItem.Type.All) {
-			person = null;
+			changePerson(null);
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
-			person = item.owner;
+			changePerson(item.owner);
 		}
 
-        if (person == oldPerson)
-            return;
+		storage.requestRefresh();
+	}
 
-        feed = data.feed(person);
-        sort();
+	public void changePerson(Person newPerson) {
+		if (newPerson == person) {
+			return;
+		}
 
-        feedFragment.adapter.animate = true;
+		person = newPerson;
+
+		feed = data.feed(person);
+		feedFragment.adapter.updateList(feed);
+		sort();
+
+		feedFragment.adapter.animate = true;
 
 		feedSubscription.broadcast(feed);
 		feedLinkedNotification.broadcast();
 
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                feedFragment.adapter.animate = false;
-            }
-        }, 200);
+		handler.postDelayed(new Runnable() {
+			public void run() {
+				feedFragment.adapter.animate = false;
+			}
+		}, 200);
 
 		getSupportActionBar().setSubtitle(isAll() ? getString(R.string.all) : person.getName());
 
-		storage.requestRefresh();
+		invalidateOptionsMenu();
 
-        invalidateOptionsMenu();
+		feedFragment.adapter.notifyDataSetChanged();
 
-        feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
-        feedFragment.scrollListener.mHeader.setTranslationY(0);
-        feedFragment.scrollListener.mHeaderDiffTotal = 0;
+		feedFragment.recyclerView.getLayoutManager().scrollToPosition(0);
+		feedFragment.scrollListener.mHeader.setTranslationY(0);
+		feedFragment.scrollListener.mHeaderDiffTotal = 0;
 
-        feedFragment.displayTotalDebt(getResources());
+		feedFragment.displayTotalDebt(getResources());
+
 	}
 
 	@Override
@@ -553,6 +561,8 @@ public class FeedActivity extends DataActivity implements
         storage.commit(this);
 
 		feed = data.feed(person);
+
+		sort();
 
 		navigationDrawerFragment.adapter.setItems(data.peopleOrdered());
 		navigationDrawerFragment.setSelectedPerson(person);
