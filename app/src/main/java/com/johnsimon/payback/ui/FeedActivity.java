@@ -333,10 +333,10 @@ public class FeedActivity extends DataActivity implements
 		if (isAll()) {
 			fullMenuPay.setVisible(false);
 		} else {
-            if (!SwishLauncher.hasService(getPackageManager()) || AppData.total(feed) >= 0) {
-                fullMenuPay.setEnabled(false);
-            } else {
+            if (SwishLauncher.hasService(getPackageManager()) && AppData.total(feed) >= 0) {
                 fullMenuPay.setEnabled(true);
+            } else {
+                fullMenuPay.setEnabled(false);
 			}
 		}
 		return true;

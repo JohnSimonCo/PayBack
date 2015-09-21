@@ -19,13 +19,15 @@ import java.util.List;
 
 public class SwishLauncher {
 
+    public final static String activityPathShort = "se.bankgirot.swish";
+    public final static String activityPathLong = activityPathShort + ".ui.PaymentActivity";
+
     public static void startSwish(final Activity activity, final double amount, final Person owner) {
         if (owner.hasNumbers()) {
 
             String[] numbers = owner.link.numbers;
 
             if (numbers.length > 1) {
-
                 new MaterialDialog.Builder(activity)
                         .title(R.string.phone_number)
                         .items(numbers)
@@ -54,10 +56,9 @@ public class SwishLauncher {
 
 	private static void startSwishApp(Activity activity, String amount, String phoneNumber) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setComponent(ComponentName.unflattenFromString("se.bankgirot.swish/.ui.PaymentActivity"));
-		intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setComponent(new ComponentName(activityPathShort, activityPathLong));
 
-		intent.putExtra("phone", phoneNumber);
+        intent.putExtra("phone", phoneNumber);
 		intent.putExtra("amount", amount); //one can hope...
 
 		activity.startActivity(intent);
@@ -67,7 +68,6 @@ public class SwishLauncher {
 		clipboard.setPrimaryClip(clip);
 
 		Toast.makeText(activity, activity.getString(R.string.amount) + " " + "\"" + amount + "\"" + " " + activity.getString(R.string.swish_copy_toast_end), Toast.LENGTH_LONG).show();
-
 	}
 
     private static String amountToString(double amount) {
@@ -76,7 +76,7 @@ public class SwishLauncher {
 
 	public static boolean hasService(PackageManager pkm) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setComponent(ComponentName.unflattenFromString("se.bankgirot.swish/.ui.PaymentActivity"));
+        intent.setComponent(new ComponentName(activityPathShort, activityPathLong));
 
 		List<ResolveInfo> list = pkm.queryIntentActivities(intent,
 				PackageManager.MATCH_DEFAULT_ONLY);
