@@ -2,8 +2,6 @@ package com.johnsimon.payback.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
@@ -16,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -36,9 +33,7 @@ import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
-import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
@@ -49,12 +44,11 @@ import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
-import com.johnsimon.payback.util.PayPalWrapper;
+import com.johnsimon.payback.util.PayPalManager;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
-import com.paypal.android.MEP.PayPal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -179,7 +173,7 @@ public class FeedActivity extends DataActivity implements
 			Snackbar.make(masterLayout, "Debug build " + BuildConfig.VERSION_NAME, Snackbar.LENGTH_SHORT).show();
         }
 
-		PayPalWrapper.init(this);
+		PayPalManager.init(this);
 	}
 
     @Override

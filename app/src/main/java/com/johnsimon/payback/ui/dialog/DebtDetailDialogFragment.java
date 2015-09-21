@@ -21,7 +21,7 @@ import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.Alarm;
-import com.johnsimon.payback.util.PayPalWrapper;
+import com.johnsimon.payback.util.PayPalManager;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
@@ -93,8 +93,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
 	@Override
 	protected void onDataReceived() {
-        if(debt == null) { debt = data.debts.get(0); }
-
         DebtDetailDialogFragment.debt = data.findDebt(debt.id);
 
         Alarm.cancelNotification(getActivity().getApplicationContext(), debt);
@@ -297,7 +295,9 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 return true;
 
                             case R.id.detail_dialog_pay_back_paypal:
-                                PayPalWrapper.requestPayment(getActivity(), "swesnowme@gmail.com", new BigDecimal(100), "SEK");
+                                Double amount = debt.getRemainingAbsoluteDebt();
+                                String currency = data.preferences.getCurrency().id;
+                                 PayPalManager.requestPayment(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
                                 return true;
 
                             default:
