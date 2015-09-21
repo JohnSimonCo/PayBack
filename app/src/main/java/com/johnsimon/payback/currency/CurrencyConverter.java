@@ -25,7 +25,7 @@ public class CurrencyConverter {
                     convertCallback.onCurrencyConverted(0, false);
                     return;
                 }
-                ConvertResult convertResult = Resource.gson.fromJson(response, ConvertResult.class);
+                ConvertResult convertResult = Resource.gson().fromJson(response, ConvertResult.class);
                 convertCallback.onCurrencyConverted(convertResult.getRate().doubleValue(), true);
             }
         }, new Response.ErrorListener() {

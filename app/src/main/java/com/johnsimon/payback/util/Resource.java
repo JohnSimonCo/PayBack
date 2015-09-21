@@ -75,7 +75,14 @@ public class Resource {
 
     private static boolean isInitialized = false;
 
-	public static Gson gson = new Gson();
+
+	private static Gson _gson;
+    public static Gson gson() {
+        if(_gson == null) {
+            _gson = new Gson();
+        }
+        return _gson;
+    }
 
     public static void init(Context context) {
         if (isInitialized) return;

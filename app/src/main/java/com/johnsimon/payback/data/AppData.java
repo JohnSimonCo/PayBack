@@ -311,7 +311,7 @@ public class AppData {
 
 		//TODO remove when shitty period ends
 
-		//AppData data = new Gson().fromJson(JSON, AppData.class);
+		//AppData data = Resource.gson().fromJson(JSON, AppData.class);
 
 		AppData data = ShittyAppData.fromJson(JSON);
 
@@ -361,6 +361,6 @@ public class AppData {
 	}
 
     public static String toJson(AppData data) {
-        return Resource.gson.toJson(data, AppData.class);
+        return Resource.gson().toJson(data, AppData.class);
     }
 }

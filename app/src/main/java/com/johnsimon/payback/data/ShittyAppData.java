@@ -23,7 +23,7 @@ public class ShittyAppData {
 
 	public static AppData fromJson(String JSON) {
 		try {
-			AppData data = Resource.gson.fromJson(JSON, AppData.class);
+			AppData data = Resource.gson().fromJson(JSON, AppData.class);
 
 			if(data.debts.size() > 0) {
 				if(data.debts.get(0).ownerId == null) {
@@ -40,7 +40,7 @@ public class ShittyAppData {
 			return data;
 		} catch (Exception e) {
 			try {
-				return Resource.gson.fromJson(JSON, ShittyAppData.class).cleanse();
+				return Resource.gson().fromJson(JSON, ShittyAppData.class).cleanse();
 			} catch (Exception e1) {
 				return AppData.defaultAppData();
 			}
