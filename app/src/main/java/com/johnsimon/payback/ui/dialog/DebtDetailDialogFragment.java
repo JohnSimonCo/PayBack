@@ -21,10 +21,12 @@ import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.PayPalWrapper;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +50,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
     private TextView avatarLetter;
     private TextView dialog_custom_amount;
 
-    public MenuItem detailMenuPay;
+    public MenuItem detailMenuPaySwish;
     public AlertDialog alertDialog;
 
     public static DebtDetailDialogFragment newInstance(Debt debt) {
@@ -91,6 +93,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
 	@Override
 	protected void onDataReceived() {
+        if(debt == null) { debt = data.debts.get(0); }
+
         DebtDetailDialogFragment.debt = data.findDebt(debt.id);
 
         Alarm.cancelNotification(getActivity().getApplicationContext(), debt);
@@ -239,16 +243,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
-                detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
+                detailMenuPaySwish = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back_swish);
 
                 if (debt.getAmount() < 0) {
                     if (SwishLauncher.hasService(getActivity().getPackageManager())) {
-                        detailMenuPay.setEnabled(true);
+                        detailMenuPaySwish.setEnabled(true);
                     } else {
-                        detailMenuPay.setEnabled(false);
+                        detailMenuPaySwish.setEnabled(false);
                     }
                 } else {
-                    detailMenuPay.setVisible(false);
+                    detailMenuPaySwish.setVisible(false);
                 }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -288,8 +292,12 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 alertDialog.dismiss();
                                 return true;
 
-                            case R.id.detail_dialog_pay_back:
+                            case R.id.detail_dialog_pay_back_swish:
                                 SwishLauncher.startSwish(getActivity(), debt.getRemainingAbsoluteDebt(), debt.getOwner());
+                                return true;
+
+                            case R.id.detail_dialog_pay_back_paypal:
+                                PayPalWrapper.requestPayment(getActivity(), "swesnowme@gmail.com", new BigDecimal(100), "SEK");
                                 return true;
 
                             default:

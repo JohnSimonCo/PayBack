@@ -49,10 +49,12 @@ import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
+import com.johnsimon.payback.util.PayPalWrapper;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
+import com.paypal.android.MEP.PayPal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -109,9 +111,7 @@ public class FeedActivity extends DataActivity implements
 		if (Resource.isLOrAbove()) {
 			setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
 					R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
-
 		}
-
 
 		Resource.init(getApplicationContext());
 
@@ -178,6 +178,8 @@ public class FeedActivity extends DataActivity implements
         if (BuildConfig.DEBUG) {
 			Snackbar.make(masterLayout, "Debug build " + BuildConfig.VERSION_NAME, Snackbar.LENGTH_SHORT).show();
         }
+
+		PayPalWrapper.init(this);
 	}
 
     @Override
