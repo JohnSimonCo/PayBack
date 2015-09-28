@@ -180,8 +180,12 @@ public class FeedActivity extends DataActivity implements
         }
 	}
 
+	private Subscription<AppData> dataRecievedSubscription = new Subscription<>();
+
     @Override
     protected void onDataReceived() {
+		dataRecievedSubscription.broadcast(data);
+
         if (isAll()) {
             feed = data.debts;
         } else {
@@ -302,44 +306,50 @@ public class FeedActivity extends DataActivity implements
 	public void onShowGlobalContextActionBar() {}
 
     @Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(final Menu menu) {
 		// Only show items in the action bar relevant to this screen
 		// if the drawer is not showing. Otherwise, let the drawer
 		// decide what to show in the action bar.
 
-		getMenuInflater().inflate(R.menu.feed, menu);
+		dataRecievedSubscription.listen(new Callback<AppData>() {
+			@Override
+			public void onCalled(AppData data) {
+				getMenuInflater().inflate(R.menu.feed, menu);
 
-		filterAmount = menu.findItem(R.id.menu_filter_amount);
-        MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
-		MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
+				filterAmount = menu.findItem(R.id.menu_filter_amount);
+				MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+				MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
 
-        if (attemptCheckFilterAmount) {
-            filterAmount.setChecked(true);
-        }
+				if (attemptCheckFilterAmount) {
+					filterAmount.setChecked(true);
+				}
 
-        menu_even_out = menu.findItem(R.id.menu_even_out);
+				menu_even_out = menu.findItem(R.id.menu_even_out);
 
-        if (isAll() || AppData.isEven(feed)) {
-            menu_even_out.setVisible(false);
-        }
+				if (isAll() || AppData.isEven(feed)) {
+					menu_even_out.setVisible(false);
+				}
 
-        sort();
+				sort();
 
-		if (isAll()) {
-			menuShare.setVisible(false);
-		} else {
-			menuShare.setVisible(feed.size() != 0);
-		}
+				if (isAll()) {
+					menuShare.setVisible(false);
+				} else {
+					menuShare.setVisible(feed.size() != 0);
+				}
 
-		if (isAll()) {
-			fullMenuPay.setVisible(false);
-		} else {
-            if (SwishLauncher.hasService(getPackageManager()) && AppData.total(feed) >= 0) {
-                fullMenuPay.setEnabled(true);
-            } else {
-                fullMenuPay.setEnabled(false);
+				if (isAll()) {
+					fullMenuPay.setVisible(false);
+				} else {
+					if (SwishLauncher.hasService(getPackageManager()) && AppData.total(feed) >= 0) {
+						fullMenuPay.setEnabled(true);
+					} else {
+						fullMenuPay.setEnabled(false);
+					}
+				}
 			}
-		}
+		});
+
 		return true;
 	}
 

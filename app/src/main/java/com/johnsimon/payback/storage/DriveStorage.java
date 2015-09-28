@@ -101,6 +101,7 @@ public class DriveStorage extends ExternalStorage {
 							return;
 						}
 
+                        
 						MetadataBuffer buffer = result.getMetadataBuffer();
 						int count = buffer.getCount();
 						if (count > 0) {
