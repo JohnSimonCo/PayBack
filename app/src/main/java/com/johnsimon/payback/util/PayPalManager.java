@@ -30,11 +30,11 @@ public class PayPalManager {
 		}
 	}
 
-	public static Promise<Boolean> startPayPal(Activity context, Person recipent, BigDecimal amount, String currency) {
+	/*public static Promise<Boolean> startPayPal(Activity context, Person recipent, BigDecimal amount, String currency) {
 		Promise<Boolean> p = new Promise<>();
 
-		recipent.link.hasNumbers()
-	}
+		if (recipent.link.hasNumbers()
+	}*/
 
 	public static void requestPayment(Activity context, String recipent, BigDecimal amount, String currency) {
 
