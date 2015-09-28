@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -25,6 +24,8 @@ import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
+import com.johnsimon.payback.async.Promise;
+import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
@@ -54,7 +55,9 @@ import com.johnsimon.payback.util.Undo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
@@ -335,6 +338,7 @@ public class FeedActivity extends DataActivity implements
 			fullMenuPaySwish.setVisible(false);
 			fullMenuPayPayPal.setVisible(false);
 		} else {
+			fullMenuPayPayPal.setVisible(true);
 			if(AppData.total(feed) < 0) {
 				fullMenuPaySwish.setVisible(SwishLauncher.hasService(getPackageManager()));
 				fullMenuPayPayPal.setEnabled(true);
@@ -366,13 +370,14 @@ public class FeedActivity extends DataActivity implements
 				break;
 
 			case R.id.feed_menu_pay_back_paypal:
-				PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
-
-				Bundle args = new Bundle();
-				args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS, new String[]{"112", "agge21@hotmail.com"});
-
-				p.setArguments(args);
-				p.show(getFragmentManager(), "pp");
+				startPayPal(person.link, Math.abs(AppData.total(feed))).then(new Callback<Boolean>() {
+					@Override
+					public void onCalled(Boolean success) {
+						if (success) {
+							onEvenOut();
+						}
+					}
+				});
 				break;
 
             case R.id.menu_even_out:
@@ -701,15 +706,40 @@ public class FeedActivity extends DataActivity implements
         feedFragment.displayTotalDebt(getResources());
     }
 
+	public Promise<Boolean> startPayPal(Contact contact, double amount) {
+		PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
+
+		Bundle args = new Bundle();
+
+		ArrayList<String> suggestions = new ArrayList<>();
+		if(contact != null) {
+			if(contact.hasNumbers()) {
+				suggestions.addAll(Arrays.asList(contact.numbers));
+			}
+			if(contact.hasEmails()) {
+				suggestions.addAll(Arrays.asList(contact.emails));
+			}
+		}
+
+		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS, suggestions.toArray(new String[suggestions.size()]));
+		args.putDouble(PayPalRecipientPickerDialogFragment.KEY_AMOUNT, amount);
+
+		p.setArguments(args);
+		p.show(getFragmentManager(), "pp");
+
+		payPalPromise = new Promise<>();
+		return payPalPromise;
+	}
+
+	private static Promise<Boolean> payPalPromise;
+
 	@Override
-	public void onRecipientSelected(String recipient) {
+	public void onRecipientSelected(String recipient, double amount) {
 		String currency = data.preferences.getCurrency().id;
-		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(Math.abs(AppData.total(feed))), currency).then(new Callback<Boolean>() {
+		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(amount), currency).then(new Callback<Boolean>() {
 			@Override
-			public void onCalled(Boolean success) {
-				if (success) {
-					onEvenOut();
-				}
+			public void onCalled(Boolean data) {
+				payPalPromise.fire(data);
 			}
 		});
 	}

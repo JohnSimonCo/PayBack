@@ -15,14 +15,17 @@ import android.widget.LinearLayout;
 
 import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.core.DataDialogFragment;
 
 public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
     public final static String KEY_SUGGESTIONS = "KEY_SUGGESTIONS";
+    public final static String KEY_AMOUNT = "KEY_AMOUNT";
     public RecipientSelected recipientSelectedCallback = null;
 
     private AlertDialog alertDialog;
+    private double amount = 0;
 
     @Override
     public void onAttach(Activity activity) {
@@ -44,8 +47,11 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
         final RobotoButton dialogCancel = (RobotoButton) rootView.findViewById(R.id.paypal_dialog_cancel);
         final AppCompatEditText editText = (AppCompatEditText) rootView.findViewById(R.id.email_phone_picker_edittext);
 
-        Bundle args = getArguments();
+        final Bundle args = getArguments();
         if (args != null) {
+
+            amount = args.getDouble(KEY_AMOUNT);
+
             String[] suggestions = args.getStringArray(KEY_SUGGESTIONS);
             if (suggestions != null && suggestions.length > 0) {
                 for (final String suggestion : suggestions) {
@@ -56,7 +62,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            recipientSelectedCallback.onRecipientSelected(suggestion);
+                            recipientSelectedCallback.onRecipientSelected(suggestion, amount);
                             alertDialog.dismiss();
                         }
                     });
@@ -79,7 +85,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
         dialogContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recipientSelectedCallback.onRecipientSelected(editText.getText().toString());
+                recipientSelectedCallback.onRecipientSelected(editText.getText().toString(), amount);
                 alertDialog.dismiss();
             }
         });
@@ -143,7 +149,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
 
     public interface RecipientSelected {
-        void onRecipientSelected(String recipient);
+        void onRecipientSelected(String recipient, double amount);
     }
 
 }

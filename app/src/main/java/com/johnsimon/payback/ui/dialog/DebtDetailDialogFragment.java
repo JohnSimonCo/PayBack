@@ -21,6 +21,7 @@ import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.PayPalManager;
 import com.johnsimon.payback.util.Resource;
@@ -299,16 +300,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 Double amount = debt.getRemainingAbsoluteDebt();
                                 String currency = data.preferences.getCurrency().id;
                                 //TODO ENABLE WHEN WORKING PayPalManager.startPayPal(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
-								PayPalManager.requestPayment(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency).then(new com.johnsimon.payback.async.Callback<Boolean>() {
-									@Override
-									public void onCalled(Boolean success) {
-										if(success) {
-											debt.payback();
-											storage.commit(getActivity());
-											displayPaybackAnimation();
-										}
-									}
-								});
+                                ((FeedActivity) getActivity()).startPayPal(debt.owner.link, amount).then(new com.johnsimon.payback.async.Callback<Boolean>() {
+                                    @Override
+                                    public void onCalled(Boolean success) {
+                                        if(success) {
+                                            debt.payback();
+                                            storage.commit(getActivity());
+                                            displayPaybackAnimation();
+                                        }
+                                    }
+                                });
                                 return true;
 
                             default:
