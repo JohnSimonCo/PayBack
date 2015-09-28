@@ -930,7 +930,7 @@ public class CreateDebtActivity extends DataActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-		if (reminderCalendar != null) {
+		if (usingCustomDate) {
 			outState.putLong(KEY_CALENDAR, reminderCalendar.getTimeInMillis());
 		}
 
