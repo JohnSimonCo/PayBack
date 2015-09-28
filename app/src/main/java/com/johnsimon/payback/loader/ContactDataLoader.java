@@ -56,14 +56,14 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 
 	private String[] getContactEmails(ContentResolver contentResolver, long id) {
 		Cursor cursor = contentResolver.query(
-				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
+				ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+				ContactsContract.CommonDataKinds.Email.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
 
-		String[] phoneNumbers = getPhoneNumbers(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
+		String[] emails = getEmails(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
 
 		cursor.close();
 
-		return phoneNumbers;
+		return emails;
 	}
 
 	private String[] getContactPhoneNumbers(ContentResolver contentResolver, long id) {
@@ -99,20 +99,25 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 
 		if(count < 1) return null;
 
-		HashSet<String> numbers = new HashSet<>(count);
+		HashSet<String> email = new HashSet<>(count);
 
 		while(cursor.moveToNext()) {
-			numbers.add(normalizePhoneNumber(cursor.getString(column)));
+			email.add(cursor.getString(column));
 		}
 
-		int size = numbers.size();
-		return size > 0 ? numbers.toArray(new String[size]) : null;
+		int size = email.size();
+		return size > 0 ? email.toArray(new String[size]) : null;
 	}
 
 
 	//Removes all formatting, so that numbers can be compared
 	private String normalizePhoneNumber(String number) {
 		return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
+	}
+
+	//Removes all formatting, so that numbers can be compared
+	private String normalizeEmail(String email) {
+		return email == null ? null : email.toLowerCase();
 	}
 
 	public static class Argument {

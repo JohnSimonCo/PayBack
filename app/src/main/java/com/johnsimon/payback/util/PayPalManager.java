@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.Person;
 import com.paypal.android.MEP.PayPal;
@@ -38,8 +39,6 @@ public class PayPalManager {
 
 	public static void requestPayment(Activity context, String recipent, BigDecimal amount, String currency) {
 
-
-
 		PayPalPayment payment = new PayPalPayment();
 		//payment.setSubtotal(new BigDecimal(1));
 		payment.setSubtotal(amount);
@@ -50,7 +49,7 @@ public class PayPalManager {
 		//payment.setRecipient("johnsimondev@gmail.com");
 		payment.setRecipient(recipent);
 
-		payment.setMerchantName("Pay Back");
+		payment.setMerchantName(context.getString(R.string.app_name));
 		Intent checkout = PayPal.getInstance().checkout(payment, context);
 		context.startActivityForResult(checkout, REQUEST_CODE);
 	}
