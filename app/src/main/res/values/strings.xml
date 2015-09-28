@@ -129,7 +129,6 @@
     <string name="currency_show_trailing_zeros">Show trailing zeros</string>
     <string name="set_date">Set date</string>
     <string name="share_debt_summary">Share debt summary</string>
-    <!-- "Paid back Aug 5" -->
     <string name="paid_back_when">Paid back %1$s</string>
     <string name="autobackup">Auto backup</string>
     <string name="wipebackup">Wipe backup</string>
@@ -141,6 +140,9 @@
     <string name="backup_success">Backup successful</string>
     <string name="backup_failed">Backup failed</string>
     <string name="number_format_error">Invalid number format</string>
+    <string name="paypal_email_or_phone_number_title">Select email or phone number</string>
+    <string name="paypal_email_or_phone_number_hint">Email or phone number</string>
+    <string name="pay">Pay</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

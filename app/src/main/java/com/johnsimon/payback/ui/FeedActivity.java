@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -38,6 +39,7 @@ import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
 import com.johnsimon.payback.ui.dialog.InitialRestoreBackupDialog;
+import com.johnsimon.payback.ui.dialog.PayPalRecipientPickerDialogFragment;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
@@ -54,9 +56,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
+/*
+*
+
+
+
+PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
+
+Bundle args = new Bundle();
+args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS, new String[]{"112", "agge21@hotmail.com"});
+
+p.setArguments(args);
+p.show(getFragmentManager(), "pp");
+
+
+
+*
+* */
+
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
-        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback, FeedFragment.OnFeedChangeCallback {
+        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback,
+		FeedFragment.OnFeedChangeCallback, PayPalRecipientPickerDialogFragment.RecipientSelected {
 
     public BillingProcessor bp;
 
@@ -682,4 +703,9 @@ public class FeedActivity extends DataActivity implements
 
         feedFragment.displayTotalDebt(getResources());
     }
+
+	@Override
+	public void onRecipientSelected(String recipient) {
+		Toast.makeText(this, recipient, Toast.LENGTH_LONG).show();
+	}
 }
