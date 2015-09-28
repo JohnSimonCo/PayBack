@@ -52,6 +52,7 @@ import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
@@ -326,7 +327,8 @@ public class FeedActivity extends DataActivity implements
 		getMenuInflater().inflate(R.menu.feed, menu);
 
 		filterAmount = menu.findItem(R.id.menu_filter_amount);
-        MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+		MenuItem fullMenuPaySwish = menu.findItem(R.id.feed_menu_pay_back_swish);
+		MenuItem fullMenuPayPayPal = menu.findItem(R.id.feed_menu_pay_back_paypal);
 		MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
 
         if (attemptCheckFilterAmount) {
@@ -348,12 +350,15 @@ public class FeedActivity extends DataActivity implements
 		}
 
 		if (isAll()) {
-			fullMenuPay.setVisible(false);
+			fullMenuPaySwish.setVisible(false);
+			fullMenuPayPayPal.setVisible(false);
 		} else {
-            if (!SwishLauncher.hasService(getPackageManager()) || AppData.total(feed) >= 0) {
-                fullMenuPay.setEnabled(false);
-            } else {
-                fullMenuPay.setEnabled(true);
+			if(AppData.total(feed) < 0) {
+				fullMenuPaySwish.setVisible(SwishLauncher.hasService(getPackageManager()));
+				fullMenuPayPayPal.setEnabled(true);
+			} else {
+				fullMenuPaySwish.setVisible(false);
+				fullMenuPayPayPal.setEnabled(false);
 			}
 		}
 		return true;
@@ -374,8 +379,20 @@ public class FeedActivity extends DataActivity implements
 				sortAmount();
 				break;
 
-			case R.id.feed_menu_pay_back:
+			case R.id.feed_menu_pay_back_swish:
 				SwishLauncher.startSwish(this, AppData.total(feed), person);
+				break;
+
+			case R.id.feed_menu_pay_back_paypal:
+				String currency = data.preferences.getCurrency().id;
+				PayPalManager.requestPayment(FeedActivity.this, "swesnowme@gmail.com", new BigDecimal(Math.abs(AppData.total(feed))), currency).then(new Callback<Boolean>() {
+					@Override
+					public void onCalled(Boolean success) {
+						if (success) {
+							onEvenOut();
+						}
+					}
+				});
 				break;
 
             case R.id.menu_even_out:

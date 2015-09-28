@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.dialog.DebtDetailDialogFragment;
 import com.paypal.android.MEP.PayPal;
 import com.paypal.android.MEP.PayPalActivity;
 import com.paypal.android.MEP.PayPalPayment;
@@ -21,8 +23,8 @@ public class PayPalManager {
 
 		if (pp == null) {  // Test to see if the library is already initialized
 
-			//pp = PayPal.initWithAppID(context, "APP-80W284485P519543T", PayPal.ENV_NONE);
-			pp = PayPal.initWithAppID(context, "APP-5ER30931KD693732X", PayPal.ENV_LIVE);
+			pp = PayPal.initWithAppID(context, "APP-80W284485P519543T", PayPal.ENV_NONE);
+			//pp = PayPal.initWithAppID(context, "APP-5ER30931KD693732X", PayPal.ENV_LIVE);
 
 			//pp.setLanguage("en_US");
 			pp.setLanguage(Locale.getDefault().toString());
@@ -37,22 +39,27 @@ public class PayPalManager {
 		if (recipent.link.hasNumbers()
 	}*/
 
-	public static void requestPayment(Activity context, String recipent, BigDecimal amount, String currency) {
+	public static Promise<Boolean> requestPayment(Activity activity, String recipent, BigDecimal amount, String currency) {
 
 		PayPalPayment payment = new PayPalPayment();
 		//payment.setSubtotal(new BigDecimal(1));
 		payment.setSubtotal(amount);
 
-		//payment.setCurrencyType("SEK");
-		payment.setCurrencyType(currency);
+		payment.setCurrencyType("USD");
+		//payment.setCurrencyType(currency);
 
 		//payment.setRecipient("johnsimondev@gmail.com");
 		payment.setRecipient(recipent);
 
-		payment.setMerchantName(context.getString(R.string.app_name));
-		Intent checkout = PayPal.getInstance().checkout(payment, context);
-		context.startActivityForResult(checkout, REQUEST_CODE);
+		payment.setMerchantName(activity.getString(R.string.app_name));
+		Intent checkout = PayPal.getInstance().checkout(payment, activity);
+		activity.startActivityForResult(checkout, REQUEST_CODE);
+
+		resultPromise = new Promise<>();
+		return resultPromise;
 	}
+
+	private static Promise<Boolean> resultPromise;
 
 	public final static int REQUEST_CODE = 634; //Totally random (mashed my keyboard)
 
@@ -63,10 +70,19 @@ public class PayPalManager {
 
 		switch (resultCode) {
 			case Activity.RESULT_OK:
+
+				resultPromise.fire(true);
+
+				/*
 				String payKey = intent.getStringExtra(PayPalActivity.EXTRA_PAY_KEY);
 				//this.paymentSucceeded(payKey);
+				*/
+				break;
+			default:
+				resultPromise.fire(false);
 				break;
 
+			/*
 			case Activity.RESULT_CANCELED:
 				//this.paymentCanceled();
 				break;
@@ -75,6 +91,7 @@ public class PayPalManager {
 				String errorID = intent.getStringExtra(PayPalActivity.EXTRA_ERROR_ID);
 				String errorMessage = intent.getStringExtra(PayPalActivity.EXTRA_ERROR_MESSAGE);
 				//this.paymentFailed(errorID, errorMessage);
+			*/
 		}
 
 		return true;

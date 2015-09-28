@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
@@ -50,7 +51,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
     private TextView avatarLetter;
     private TextView dialog_custom_amount;
 
-    public MenuItem detailMenuPaySwish;
+	public MenuItem detailMenuPaySwish;
+	public MenuItem detailMenuPayPayPal;
     public AlertDialog alertDialog;
 
     public static DebtDetailDialogFragment newInstance(Debt debt) {
@@ -241,16 +243,15 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
-                detailMenuPaySwish = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back_swish);
+				detailMenuPaySwish = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back_swish);
+				detailMenuPayPayPal = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back_paypal);
 
-                if (debt.getAmount() < 0) {
-                    if (SwishLauncher.hasService(getActivity().getPackageManager())) {
-                        detailMenuPaySwish.setEnabled(true);
-                    } else {
-                        detailMenuPaySwish.setEnabled(false);
-                    }
-                } else {
-                    detailMenuPaySwish.setVisible(false);
+                if (debt.getRemainingDebt() < 0) {
+					detailMenuPaySwish.setVisible(SwishLauncher.hasService(getActivity().getPackageManager()));
+					detailMenuPayPayPal.setEnabled(true);
+				} else {
+					detailMenuPaySwish.setVisible(false);
+					detailMenuPayPayPal.setEnabled(false);
                 }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -298,6 +299,16 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 Double amount = debt.getRemainingAbsoluteDebt();
                                 String currency = data.preferences.getCurrency().id;
                                 //TODO ENABLE WHEN WORKING PayPalManager.startPayPal(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
+								PayPalManager.requestPayment(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency).then(new com.johnsimon.payback.async.Callback<Boolean>() {
+									@Override
+									public void onCalled(Boolean success) {
+										if(success) {
+											debt.payback();
+											storage.commit(getActivity());
+											displayPaybackAnimation();
+										}
+									}
+								});
                                 return true;
 
                             default:
