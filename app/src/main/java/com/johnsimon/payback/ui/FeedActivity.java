@@ -57,24 +57,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
-/*
-*
-
-
-
-PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
-
-Bundle args = new Bundle();
-args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS, new String[]{"112", "agge21@hotmail.com"});
-
-p.setArguments(args);
-p.show(getFragmentManager(), "pp");
-
-
-
-*
-* */
-
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
         BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback,
@@ -384,15 +366,13 @@ public class FeedActivity extends DataActivity implements
 				break;
 
 			case R.id.feed_menu_pay_back_paypal:
-				String currency = data.preferences.getCurrency().id;
-				PayPalManager.requestPayment(FeedActivity.this, "swesnowme@gmail.com", new BigDecimal(Math.abs(AppData.total(feed))), currency).then(new Callback<Boolean>() {
-					@Override
-					public void onCalled(Boolean success) {
-						if (success) {
-							onEvenOut();
-						}
-					}
-				});
+				PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
+
+				Bundle args = new Bundle();
+				args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS, new String[]{"112", "agge21@hotmail.com"});
+
+				p.setArguments(args);
+				p.show(getFragmentManager(), "pp");
 				break;
 
             case R.id.menu_even_out:
@@ -544,8 +524,8 @@ public class FeedActivity extends DataActivity implements
                             super.onNegative(dialog);
                         }
                     })
-                    .show();
-            return;
+					.show();
+			return;
         }
 
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
@@ -581,7 +561,7 @@ public class FeedActivity extends DataActivity implements
                                 public void onNegative(MaterialDialog dialog) {
                                     super.onNegative(dialog);
                                 }
-                            })
+							})
                             .show();
 
 				} else {
@@ -612,13 +592,13 @@ public class FeedActivity extends DataActivity implements
 
         if (!handled) {
             super.onActivityResult(requestCode, resultCode, data);
-        }
+		}
     }
 
     @Override
     public void onDestroy() {
         if (bp != null) {
-            bp.release();
+			bp.release();
         }
 
         super.onDestroy();
@@ -638,8 +618,8 @@ public class FeedActivity extends DataActivity implements
     public void onBillingError(int error, Throwable throwable) {
 	}
 
-    @Override
-    public void onBillingInitialized() {
+	@Override
+	public void onBillingInitialized() {
 		bpInitialized.fire();
 		Resource.checkFull(bp);
     }
@@ -649,7 +629,7 @@ public class FeedActivity extends DataActivity implements
         feedFragment.adapter.notifyDataSetChanged();
         navigationDrawerFragment.updateBalance();
 
-        feedFragment.displayTotalDebt(getResources());
+		feedFragment.displayTotalDebt(getResources());
     }
 
 	public void onEvenOut() {
@@ -723,6 +703,14 @@ public class FeedActivity extends DataActivity implements
 
 	@Override
 	public void onRecipientSelected(String recipient) {
-		Toast.makeText(this, recipient, Toast.LENGTH_LONG).show();
+		String currency = data.preferences.getCurrency().id;
+		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(Math.abs(AppData.total(feed))), currency).then(new Callback<Boolean>() {
+			@Override
+			public void onCalled(Boolean success) {
+				if (success) {
+					onEvenOut();
+				}
+			}
+		});
 	}
 }
