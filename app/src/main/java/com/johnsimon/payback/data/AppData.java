@@ -5,6 +5,9 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.BuildConfig;
+import com.johnsimon.payback.async.Background;
+import com.johnsimon.payback.async.BackgroundBlock;
+import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.send.DebtSendable;
@@ -68,6 +71,16 @@ public class AppData {
     public String save() {
         return AppData.toJson(this);
     }
+
+    public Promise<String> saveAsync(Context context) {
+        return Background.run(context, new BackgroundBlock<String>() {
+            @Override
+            public String run() {
+                return AppData.this.save();
+            }
+        });
+    }
+
 
     public boolean isLinked() {
         return contacts != null;
@@ -314,7 +327,7 @@ public class AppData {
 
 		//TODO remove when shitty period ends
 
-		//AppData data = new Gson().fromJson(JSON, AppData.class);
+		//AppData data = Resource.gson().fromJson(JSON, AppData.class);
 
 		AppData data = ShittyAppData.fromJson(JSON);
 
@@ -364,6 +377,6 @@ public class AppData {
 	}
 
     public static String toJson(AppData data) {
-        return Resource.gson.toJson(data, AppData.class);
+        return Resource.gson().toJson(data, AppData.class);
     }
 }

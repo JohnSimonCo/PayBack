@@ -28,6 +28,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Background;
+import com.johnsimon.payback.async.BackgroundBlock;
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.data.backup.Backup;
 import com.johnsimon.payback.data.backup.BackupManager;
@@ -99,12 +101,18 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-                if (BackupManager.createBackup(data.save(), Backup.Type.Manual)) {
-                    Snackbar.make(masterView, R.string.backup_success, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(masterView, R.string.backup_failed, Snackbar.LENGTH_LONG).show();
-                }
-                updateBackupStatus();
+                BackupManager.createBackupAsync(getApplicationContext(), data, Backup.Type.Manual).then(new Callback<Boolean>() {
+                    @Override
+                    public void onCalled(Boolean backupCreated) {
+                        if (backupCreated) {
+                            Snackbar.make(masterView, R.string.backup_success, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(masterView, R.string.backup_failed, Snackbar.LENGTH_LONG).show();
+                        }
+                        updateBackupStatus();
+
+                    }
+                });
 				return true;
 			}
 		});
@@ -347,10 +355,13 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
 
-                                BackupManager.createBackup(data.save(), Backup.Type.Wipe);
-                                updateBackupStatus();
-
-                                storage.wipe(SettingsActivity.this);
+                                BackupManager.createBackupAsync(getApplicationContext(), data, Backup.Type.Wipe).then(new Callback<Boolean>() {
+                                    @Override
+                                    public void onCalled(Boolean data) {
+                                        updateBackupStatus();
+                                        storage.wipe(SettingsActivity.this);
+                                    }
+                                });
 
                                 dialog.dismiss();
                             }

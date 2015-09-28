@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.johnsimon.payback.async.Background;
+import com.johnsimon.payback.async.BackgroundBlock;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.Debt;
@@ -22,9 +25,19 @@ public class LocalStorage extends Storage {
     public LocalStorage(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String JSON = preferences.getString(SAVE_KEY_DATA, null);
+		Background.run(context, new BackgroundBlock<AppData>() {
+			@Override
+			public AppData run() {
+				String JSON = preferences.getString(SAVE_KEY_DATA, null);
+				return AppData.fromJson(JSON);
+			}
+		}).then(new Callback<AppData>() {
+			@Override
+			public void onCalled(AppData data) {
+				emit(data);
+			}
+		});
 
-        emit(AppData.fromJson(JSON));
     }
 
 	@Override
