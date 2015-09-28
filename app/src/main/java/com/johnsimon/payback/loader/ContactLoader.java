@@ -11,9 +11,6 @@ import com.johnsimon.payback.data.User;
 
 import java.util.ArrayList;
 
-/**
- * Created by John on 2015-01-13.
- */
 public class ContactLoader {
 	private static ContactLoader instance = null;
 
@@ -25,6 +22,7 @@ public class ContactLoader {
 	private ArrayList<Contact> contacts;
 
 	public ContactLoader(Context context) {
+
 		final ContentResolver contentResolver = context.getContentResolver();
 
 		UserLoader userLoader = new UserLoader();
@@ -35,7 +33,6 @@ public class ContactLoader {
 		
 		final PhoneNumberLoader phoneNumberLoader = new PhoneNumberLoader();
 		phoneNumbersLoaded = phoneNumberLoader.promise;
-
 
 		userLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, contentResolver);
 		contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, contentResolver);

@@ -1,7 +1,9 @@
 package com.johnsimon.payback.ui;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -13,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
 import android.support.design.widget.Snackbar;
@@ -20,20 +23,19 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Callback;
-import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.backup.Backup;
 import com.johnsimon.payback.data.backup.BackupManager;
 import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
+import com.johnsimon.payback.util.PermissionManager;
 import com.johnsimon.payback.util.Resource;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -49,8 +51,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 
     private ListPreference pref_background;
 
-	public Subscription<String> loginSubscription = null;
-
 	private Preference pref_cloud_sync_account;
     private Preference pref_import_data;
     private SwitchPreference pref_cloud_sync;
@@ -64,6 +64,9 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
     public final static String PREFERENCE_EXPORT_DATA = "pref_export_data";
     public final static String PREFERENCE_IMPORT_DATA = "pref_import_data";
     public final static String PREFERENCE_AUTO_BACKUP = "pref_auto_backup";
+    public final static String PREFERENCE_CATEGORY_DATA = "pref_category_data";
+
+
 
     private BillingProcessor bp;
 
@@ -96,7 +99,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
 		pref_export_data.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-
                 if (BackupManager.createBackup(data.save(), Backup.Type.Manual)) {
                     Snackbar.make(masterView, R.string.backup_success, Snackbar.LENGTH_SHORT).show();
                 } else {
@@ -143,22 +145,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                 return true;
             }
         });
-
-        if (Resource.isFull) {
-            pref_auto_backup.setEnabled(true);
-            pref_export_data.setEnabled(true);
-            pref_import_data.setEnabled(true);
-            pref_export_data.setSummary(null);
-            pref_import_data.setSummary(getRestoreSummary());
-        } else {
-            pref_auto_backup.setChecked(false);
-            pref_auto_backup.setEnabled(false);
-            pref_auto_backup.setChecked(false);
-            pref_export_data.setEnabled(false);
-            pref_import_data.setEnabled(false);
-            pref_export_data.setSummary(R.string.not_full_version);
-            pref_import_data.setSummary(R.string.not_full_version);
-        }
 
         pref_auto_backup = (SwitchPreference) findPreference(PREFERENCE_AUTO_BACKUP);
 
@@ -207,12 +193,70 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         });
 
         Resource.checkFull(bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrcl2UtkJQ4UkkI9Az7rW4jXcxWHR+AWh+5MIa2byY9AkfiNL7HYsUB7T6KMUmjsdpUYcGKw4TuiVUMUu8hy4TlhTZ0Flitx4h7yCxJgPBiUGC34CO1f6Yk0n2LBnJCLKKwrIasnpteqTxWvWLEsPdhxjQgURDmTpR2RCAsNb1Zzn07U2PSQE07Qo34SvA4kr+VCb5pPpJ/+OodQJSdIKka56bBMpS5Ea+2iYbTfsch8nnghZTnwr6dOieOSqWnMtBPQp5VV8kj1tHd/0iaQrYVmtqnkpQ+mG/3/p55gxJUdv9uGNbF0tzMytSxyvXfICnd4oMYK66DurLfNDXoc3QIDAQAB", null));
+
+        if (Resource.isFull) {
+            pref_auto_backup.setEnabled(true);
+            pref_export_data.setEnabled(true);
+            pref_import_data.setEnabled(true);
+            pref_export_data.setSummary(null);
+            pref_import_data.setSummary(getRestoreSummary());
+        } else {
+            pref_auto_backup.setChecked(false);
+            pref_auto_backup.setEnabled(false);
+            pref_auto_backup.setChecked(false);
+            pref_export_data.setEnabled(false);
+            pref_import_data.setEnabled(false);
+            pref_export_data.setSummary(R.string.not_full_version);
+            pref_import_data.setSummary(R.string.not_full_version);
+        }
+
         if (!Resource.isFull) {
             pref_cloud_sync.setSummary(R.string.not_full_version);
             pref_cloud_sync.setEnabled(false);
         } else {
 			pref_cloud_sync.setChecked(StorageManager.isDrive(this));
 		}
+
+        if (Resource.isFull) {
+            if (!PermissionManager.getPermission(Manifest.permission.READ_EXTERNAL_STORAGE, SettingsActivity.this)) {
+                //Didn't get permission, let's hide some things
+                //TODO get screen and remove
+
+
+
+                Preference pref = new Preference(SettingsActivity.this);
+                pref.setTitle(getString(R.string.enable_storage_access));
+                pref.setSummary(getString(R.string.enable_storage_access_summary));
+                pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        if (PermissionManager.getPermission(Manifest.permission.READ_EXTERNAL_STORAGE, SettingsActivity.this)) {
+                            startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+                            finish();
+                        } else {
+                            try {
+                                //Open the specific App Info page:
+                                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+
+                            } catch (ActivityNotFoundException e ) {
+                                //Open the generic Apps page:
+                                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                                startActivity(intent);
+                            }
+                        }
+                        return false;
+                    }
+                });
+
+                ((PreferenceCategory) findPreference(PREFERENCE_CATEGORY_DATA)).addPreference(pref);
+
+                ((PreferenceCategory) findPreference(PREFERENCE_CATEGORY_DATA)).removePreference(pref_export_data);
+                ((PreferenceCategory) findPreference(PREFERENCE_CATEGORY_DATA)).removePreference(pref_import_data);
+                ((PreferenceCategory) findPreference(PREFERENCE_CATEGORY_DATA)).removePreference(pref_auto_backup);
+            }
+        }
 
         pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -489,13 +533,6 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
     }
-
-	Callback<String> onLoginCallback = new Callback<String>() {
-		@Override
-		public void onCalled(String name) {
-			pref_cloud_sync_account.setSummary(name);
-		}
-	};
 
     @Override
     public void onBackPressed() {

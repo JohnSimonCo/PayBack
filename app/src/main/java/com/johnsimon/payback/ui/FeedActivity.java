@@ -1,16 +1,21 @@
 package com.johnsimon.payback.ui;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -28,12 +33,14 @@ import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
 import com.johnsimon.payback.core.DataActivity;
+import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.core.NavigationDrawerItem;
 import com.johnsimon.payback.data.DebtState;
 import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.User;
+import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.storage.StorageManager;
@@ -49,6 +56,7 @@ import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
+import com.johnsimon.payback.util.PermissionManager;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
@@ -112,9 +120,6 @@ public class FeedActivity extends DataActivity implements
 
 		}
 
-
-		Resource.init(getApplicationContext());
-
 		setContentView(R.layout.activity_feed);
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -128,24 +133,14 @@ public class FeedActivity extends DataActivity implements
 				masterLayout = (DrawerLayout) findViewById(R.id.drawer_layout)
 		);
 
-		if (Resource.isFirstRun(storage.getPreferences())) {
+		if (Resource.isFirstRun(storage.getPreferences(), true)) {
 
 			if (Resource.isFull) {
-				InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
-					@Override
-					public void onCalled(Boolean successful) {
-						if (!successful) {
-							WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
-							welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
-						}
-					}
-				});
+				PermissionManager.requestAllPermissions(this);
 			} else {
 				WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
 				welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
 			}
-
-
 		}
 
 		NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -241,6 +236,35 @@ public class FeedActivity extends DataActivity implements
 
         }
     }
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PermissionManager.PERMISSION_FLAG_READ_CONTACTS:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					navigationDrawerFragment.footerEnableContactAccess.setVisibility(View.GONE);
+				}
+				break;
+			case PermissionManager.PERMISSION_FLAG_BOTH:
+				InitialRestoreBackupDialog.attemptRestore(this, storage, masterLayout).then(new Callback<Boolean>() {
+					@Override
+					public void onCalled(Boolean successful) {
+						if (!successful) {
+							WelcomeDialogFragment welcomeDialogFragment = new WelcomeDialogFragment();
+							welcomeDialogFragment.show(getFragmentManager(), "welcome_dialog_fragment");
+						}
+					}
+				});
+
+				if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+					//Contact permission granted
+
+					navigationDrawerFragment.footerEnableContactAccess.setVisibility(View.GONE);
+				}
+				break;
+
+		}
+	}
 
 	@Override
 	public void onNewIntent(Intent intent) {
@@ -438,6 +462,23 @@ public class FeedActivity extends DataActivity implements
                         })
                         .show();
                 break;
+			case R.id.navigation_drawer_footer_enable_contact_access:
+				if (PermissionManager.getPermission(Manifest.permission.READ_CONTACTS, FeedActivity.this)) {
+					navigationDrawerFragment.footerEnableContactAccess.setVisibility(View.GONE);
+				} else {
+					try {
+						//Open the specific App Info page:
+						Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+						intent.setData(Uri.parse("package:" + getPackageName()));
+						startActivity(intent);
+
+					} catch (ActivityNotFoundException e ) {
+						//Open the generic Apps page:
+						Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+						startActivity(intent);
+					}
+				}
+				break;
 		}
 	}
 

@@ -216,12 +216,15 @@ public class AppData {
         //Create new person
         //Attempt to find link
         Contact link = null;
-        for (Contact contact : contacts) {
-            if (contact.name.equals(name)) {
-                link = contact;
-                break;
+        if (contacts != null) {
+            for (Contact contact : contacts) {
+                if (contact.name.equals(name)) {
+                    link = contact;
+                    break;
+                }
             }
         }
+
         //Create person and add to people
         person = new Person(name, colorPalette);
         person.link = link;

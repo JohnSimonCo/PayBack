@@ -9,9 +9,6 @@ import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.AppData;
 
-/**
- * Created by John on 2015-01-15.
- */
 public interface DataActivityInterface extends DataContextInterface {
 	User getUser();
 

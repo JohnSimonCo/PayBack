@@ -1,7 +1,9 @@
 package com.johnsimon.payback.core;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.johnsimon.payback.async.Callback;
@@ -12,8 +14,10 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.ui.SettingsActivity;
 import com.johnsimon.payback.ui.base.BasePreferenceActivity;
 import com.johnsimon.payback.util.AlarmScheduler;
+import com.johnsimon.payback.util.PermissionManager;
 import com.johnsimon.payback.util.Undo;
 
 public class DataPreferenceActivity extends BasePreferenceActivity implements DataActivityInterface {
@@ -68,7 +72,9 @@ public class DataPreferenceActivity extends BasePreferenceActivity implements Da
 
 		storage = StorageManager.getStorage(getApplicationContext());
 
-		contactLoader = ContactLoader.getLoader(getApplicationContext());
+		if (PermissionManager.getPermission(Manifest.permission.READ_CONTACTS, this)) {
+			contactLoader = ContactLoader.getLoader(getApplicationContext());
+		}
 	}
 
 	@Override
@@ -79,10 +85,13 @@ public class DataPreferenceActivity extends BasePreferenceActivity implements Da
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		contactLoader.userLoaded.then(userLoadedCallback);
+		if (contactLoader != null) {
+			contactLoader.userLoaded.then(userLoadedCallback);
 
-		dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
-		dataLinker.linked.listen(dataLinkedCallback);
+			dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+			dataLinker.linked.listen(dataLinkedCallback);
+		}
+
 
 		alarmScheduler = new AlarmScheduler(this, storage.subscription);
 
@@ -95,13 +104,31 @@ public class DataPreferenceActivity extends BasePreferenceActivity implements Da
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactLoader.userLoaded.unregister(userLoadedCallback);
+		if (contactLoader != null) {
+			contactLoader.userLoaded.unregister(userLoadedCallback);
+		}
 
-		dataLinker.die();
+		if (dataLinker != null) {
+			dataLinker.die();
+		}
 		alarmScheduler.die();
 
 		storage.disconnect();
 
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PermissionManager.PERMISSION_FLAG_READ_EXTERNAL_STORAGE: {
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					finish();
+					startActivity(new Intent(this, SettingsActivity.class));
+				} else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+					//Toast.makeText(this, "nope", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
 	}
 
 	@Override

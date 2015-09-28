@@ -33,6 +33,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="pref_category_data"
         android:title="@string/pref_data"   >
 
         <Preference

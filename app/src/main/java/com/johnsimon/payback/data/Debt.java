@@ -1,16 +1,13 @@
 package com.johnsimon.payback.data;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.R;
 import com.johnsimon.payback.currency.UserCurrency;
-import com.johnsimon.payback.ui.MaterialPreferenceActivity;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 
-import org.apache.http.impl.cookie.BasicMaxAgeHandler;
 
 import java.util.ArrayList;
 import java.util.UUID;

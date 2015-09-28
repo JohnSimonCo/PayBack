@@ -102,9 +102,11 @@ public class Resource {
     /*  Method to detect if it's the first time the user uses the app.
         Will return true if a preference with the key "FIRST_TIME"
         already exists.  */
-    public static boolean isFirstRun(SharedPreferences preferences) {
+    public static boolean isFirstRun(SharedPreferences preferences, boolean saveCheck) {
         if (preferences.getBoolean(SAVE_KEY_FIRST_RUN, true)) {
-            preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
+            if (saveCheck) {
+                preferences.edit().putBoolean(SAVE_KEY_FIRST_RUN, false).apply();
+            }
             return true;
         } else {
             return false;
