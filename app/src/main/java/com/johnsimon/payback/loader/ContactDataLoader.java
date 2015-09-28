@@ -12,9 +12,8 @@ import com.johnsimon.payback.data.User;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
-public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Void, Void> {
+public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Void, Void> {
 
 	public Promise<Void> promise = new Promise<>();
 
@@ -29,6 +28,7 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 
 		for(Contact contact : contacts) {
 			contact.setNumbers(getContactPhoneNumbers(contentResolver, contact.id));
+			contact.setEmails(getContactEmails(contentResolver, contact.id));
 		}
 
 		return null;
@@ -48,6 +48,18 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 				null, null, null);
 
 		String[] phoneNumbers = getPhoneNumbers(cursor, 0);
+
+		cursor.close();
+
+		return phoneNumbers;
+	}
+
+	private String[] getContactEmails(ContentResolver contentResolver, long id) {
+		Cursor cursor = contentResolver.query(
+				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+				ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?", new String[]{Long.toString(id)}, null);
+
+		String[] phoneNumbers = getPhoneNumbers(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
 
 		cursor.close();
 
@@ -81,6 +93,22 @@ public class PhoneNumberLoader extends AsyncTask<PhoneNumberLoader.Argument, Voi
 		int size = numbers.size();
 		return size > 0 ? numbers.toArray(new String[size]) : null;
 	}
+
+	private String[] getEmails(Cursor cursor, int column) {
+		int count = cursor.getCount();
+
+		if(count < 1) return null;
+
+		HashSet<String> numbers = new HashSet<>(count);
+
+		while(cursor.moveToNext()) {
+			numbers.add(normalizePhoneNumber(cursor.getString(column)));
+		}
+
+		int size = numbers.size();
+		return size > 0 ? numbers.toArray(new String[size]) : null;
+	}
+
 
 	//Removes all formatting, so that numbers can be compared
 	private String normalizePhoneNumber(String number) {

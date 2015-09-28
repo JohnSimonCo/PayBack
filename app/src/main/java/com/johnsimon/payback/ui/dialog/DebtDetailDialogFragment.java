@@ -297,7 +297,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                             case R.id.detail_dialog_pay_back_paypal:
                                 Double amount = debt.getRemainingAbsoluteDebt();
                                 String currency = data.preferences.getCurrency().id;
-                                 PayPalManager.requestPayment(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
+                                PayPalManager.startPayPal(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
                                 return true;
 
                             default:

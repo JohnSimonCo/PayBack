@@ -3,6 +3,9 @@ package com.johnsimon.payback.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
+import com.johnsimon.payback.async.Promise;
+import com.johnsimon.payback.data.Person;
 import com.paypal.android.MEP.PayPal;
 import com.paypal.android.MEP.PayPalActivity;
 import com.paypal.android.MEP.PayPalPayment;
@@ -27,7 +30,15 @@ public class PayPalManager {
 		}
 	}
 
+	public static Promise<Boolean> startPayPal(Activity context, Person recipent, BigDecimal amount, String currency) {
+		Promise<Boolean> p = new Promise<>();
+
+		recipent.link.hasNumbers()
+	}
+
 	public static void requestPayment(Activity context, String recipent, BigDecimal amount, String currency) {
+
+
 
 		PayPalPayment payment = new PayPalPayment();
 		//payment.setSubtotal(new BigDecimal(1));

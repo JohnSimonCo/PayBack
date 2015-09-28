@@ -74,6 +74,8 @@
             android:theme="@style/Theme.Transparent"    />
 
         <activity
+            android:label=""
+            android:theme="@style/Theme.AppCompat.Light"
             android:name="com.paypal.android.MEP.PayPalActivity" />
 
         <!--Widget

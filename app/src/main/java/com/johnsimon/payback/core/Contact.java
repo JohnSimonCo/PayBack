@@ -6,6 +6,7 @@ import com.johnsimon.payback.data.User;
 public class Contact {
 	public String name;
 	public String[] numbers;
+	public String[] emails;
 	public String photoURI;
 	public long id;
 
@@ -21,6 +22,14 @@ public class Contact {
 
 	public boolean hasNumbers() {
 		return numbers != null;
+	}
+
+	public void setEmails(String[] emails) {
+		this.emails = emails;
+	}
+
+	public boolean hasEmails() {
+		return this.emails != null;
 	}
 
 	public boolean matchTo(User user) {
