@@ -261,9 +261,10 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
         pref_cloud_sync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
+
                 if (pref_cloud_sync.isChecked()) {
 
-					new MaterialDialog.Builder(SettingsActivity.this)
+                    new MaterialDialog.Builder(SettingsActivity.this)
 							.title(R.string.disable_cloud_sync_title)
 							.content(R.string.disable_cloud_sync_content)
 							.positiveText(R.string.disable_cloud_sync_affirmative)
@@ -297,7 +298,10 @@ public class SettingsActivity extends MaterialPreferenceActivity implements Bill
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
-									StorageManager.migrateToDrive(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
+
+                                    pref_cloud_sync.setChecked(false);
+
+                                    StorageManager.migrateToDrive(SettingsActivity.this).then(new Callback<DriveLoginManager.LoginResult>() {
 										@Override
 										public void onCalled(DriveLoginManager.LoginResult result) {
 											if (result.success) {

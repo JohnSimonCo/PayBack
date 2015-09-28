@@ -5,7 +5,7 @@
     <dimen name="fab_right_margin">178dp</dimen>
 
     <dimen name="create_start_margin_small">208dp</dimen>
-    <dimen name="create_start_margin">268dp</dimen>
+    <dimen name="create_start_margin">278dp</dimen>
 
     <dimen name="create_right_margin">198dp</dimen>
     <dimen name="create_right_margin_small">198dp</dimen>
