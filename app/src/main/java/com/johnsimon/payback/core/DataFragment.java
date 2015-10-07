@@ -35,9 +35,15 @@ public abstract class DataFragment extends BaseFragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		activity.getContactLoader().userLoaded.then(userLoadedCallback);
+		if (activity.getContactLoader() != null) {
+			activity.getContactLoader().userLoaded.then(userLoadedCallback);
+		} else {
+			user = new User(null);
+		}
 
-		activity.getDataLinker().linked.listen(dataLinkedCallback);
+		if (activity.getDataLinker() != null) {
+			activity.getDataLinker().linked.listen(dataLinkedCallback);
+		}
 	}
 
 	@Override
@@ -48,7 +54,9 @@ public abstract class DataFragment extends BaseFragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
+		if (activity.getContactLoader() != null) {
+			activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
+		}
 
 	}
 

@@ -5,6 +5,10 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.BuildConfig;
+import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Background;
+import com.johnsimon.payback.async.BackgroundBlock;
+import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.preferences.Preferences;
 import com.johnsimon.payback.send.DebtSendable;
@@ -68,6 +72,16 @@ public class AppData {
     public String save() {
         return AppData.toJson(this);
     }
+
+    public Promise<String> saveAsync(Context context) {
+        return Background.run(context, new BackgroundBlock<String>() {
+            @Override
+            public String run() {
+                return AppData.this.save();
+            }
+        });
+    }
+
 
     public boolean isLinked() {
         return contacts != null;
@@ -216,12 +230,15 @@ public class AppData {
         //Create new person
         //Attempt to find link
         Contact link = null;
-        for (Contact contact : contacts) {
-            if (contact.name.equals(name)) {
-                link = contact;
-                break;
+        if (contacts != null) {
+            for (Contact contact : contacts) {
+                if (contact.name.equals(name)) {
+                    link = contact;
+                    break;
+                }
             }
         }
+
         //Create person and add to people
         person = new Person(name, colorPalette);
         person.link = link;
@@ -304,14 +321,14 @@ public class AppData {
 		return total(debts) == 0;
 	}
 
-    public static AppData fromJson(String JSON) {
+    public static AppData fromJson(Context context, String JSON) {
 		if(JSON == null) {
 			return AppData.defaultAppData();
 		}
 
 		//TODO remove when shitty period ends
 
-		//AppData data = new Gson().fromJson(JSON, AppData.class);
+		//AppData data = Resource.gson().fromJson(JSON, AppData.class);
 
 		AppData data = ShittyAppData.fromJson(JSON);
 
@@ -321,12 +338,13 @@ public class AppData {
 
         ensureNewFeatures(data);
 
-		if(BuildConfig.DEBUG) {
-			analyzeData(data);
-		}
+        if(BuildConfig.DEBUG) {
+            analyzeData(data);
+        }
+
+        repairData(context, data);
 
 		return data;
-
     }
 
     public static void ensureNewFeatures(AppData data) {
@@ -360,7 +378,51 @@ public class AppData {
 		}
 	}
 
+    public static void repairData(Context context, AppData data) {
+
+        for(Debt debt : data.debts) {
+            debt.linkOwner(data.people);
+            if(debt.getOwner() == null) {
+                Person unknownPerson = new Person(
+                        context.getString(R.string.unknown_person), debt.ownerId,
+                        ColorPalette.getInstanceWithContext(context).nextIndex(),
+                        System.currentTimeMillis());
+
+                data.people.add(unknownPerson);
+            }
+        }
+
+    }
+
     public static String toJson(AppData data) {
-        return Resource.gson.toJson(data, AppData.class);
+        return Resource.gson().toJson(data, AppData.class);
+    }
+
+    public static void test(Context context) {
+        test1(context);
+        test2(context);
+    }
+    public static void test1(Context context) {
+        AppData a = AppData.defaultAppData();
+        AppData b = AppData.defaultAppData();
+
+        Person pa = new Person("John", ColorPalette.getInstanceWithContext(context));
+        a.people.add(pa);
+        b.people.add(pa);
+
+        Debt da = new Debt(pa, 10, null, null);
+        a.debts.add(da);
+        b.debts.add(da);
+
+        a.delete(context, pa);
+
+        AppData c = new AppData();
+        DataSyncer.sync(a, b, c);
+        int s;
+
+    }
+    public static void test2(Context context) {
+
+
     }
 }

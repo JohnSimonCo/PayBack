@@ -1,7 +1,12 @@
 package com.johnsimon.payback.data.backup;
 
+import android.content.Context;
 import android.os.Environment;
 
+import com.johnsimon.payback.async.Background;
+import com.johnsimon.payback.async.BackgroundBlock;
+import com.johnsimon.payback.async.Promise;
+import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.util.ReadResult;
 import com.johnsimon.payback.util.Resource;
 
@@ -54,6 +59,15 @@ public class BackupManager {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public static Promise<Boolean> createBackupAsync(Context context, final AppData data, final Backup.Type backupType) {
+		return Background.run(context, new BackgroundBlock<Boolean>() {
+			@Override
+			public Boolean run() {
+				return createBackup(data.save(), backupType);
+			}
+		});
 	}
 
 	public static SimpleDateFormat getFormatter() {

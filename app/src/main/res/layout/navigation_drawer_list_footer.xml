@@ -62,4 +62,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"    />
 
+    <com.devspark.robototextview.widget.RobotoButton
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:id="@+id/navigation_drawer_footer_enable_contact_access"
+        style="@style/navigation_drawer_footer"
+        android:onClick="navigationDrawerFooterClick"
+        android:drawableLeft="@drawable/ic_people"
+        android:drawableStart="@drawable/ic_people"
+        android:text="@string/enable_contact_access"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    />
+
 </LinearLayout>

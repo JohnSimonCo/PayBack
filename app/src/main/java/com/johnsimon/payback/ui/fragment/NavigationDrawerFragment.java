@@ -74,6 +74,7 @@ public class NavigationDrawerFragment extends DataFragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 	public RobotoButton footerUpgrade;
+    public RobotoButton footerEnableContactAccess;
 
     private ImageButton headerArrow;
     private LinearLayout headerTextContainer;
@@ -126,6 +127,9 @@ public class NavigationDrawerFragment extends DataFragment {
         View footerView = inflater.inflate(R.layout.navigation_drawer_list_footer, null);
 
         footerUpgrade = (RobotoButton) footerView.findViewById(R.id.navigation_drawer_footer_upgrade);
+        footerEnableContactAccess = (RobotoButton) footerView.findViewById(R.id.navigation_drawer_footer_enable_contact_access);
+
+        footerEnableContactAccess.setVisibility(((DataActivity) getActivity()).permissionContacts ? View.GONE : View.VISIBLE);
 
         if (Resource.isFull) {
             footerUpgrade.setVisibility(View.GONE);
@@ -363,6 +367,12 @@ public class NavigationDrawerFragment extends DataFragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateName();
+    }
+
     public void closeDrawer() {
         mDrawerLayout.closeDrawer(mDrawerListView);
     }
@@ -373,7 +383,11 @@ public class NavigationDrawerFragment extends DataFragment {
 	}
 
 	private void updateName() {
-        headerName.setText(user.getName(getResources()));
+        if (user == null) {
+            headerName.setText(getResources().getString(R.string.you));
+        } else {
+            headerName.setText(user.getName(getResources()));
+        }
 	}
 
     public boolean isDrawerOpen() {

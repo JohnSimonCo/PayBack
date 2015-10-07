@@ -1,10 +1,12 @@
 package com.johnsimon.payback.ui.dialog;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import com.johnsimon.payback.R;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.currency.UserCurrency;
 import com.johnsimon.payback.currency.CurrencyUtils;
+import com.johnsimon.payback.util.PermissionManager;
 
 public class CurrencyDialogFragment extends DataDialogFragment {
 

@@ -61,4 +61,14 @@ public class ColorPalette {
 
 		return instance;
 	}
+
+	public static ColorPalette getInstanceWithContext(Context context) {
+		if(instance == null) {
+			instance = new ColorPalette(context);
+		}
+
+		instance.data = AppData.defaultAppData();
+
+		return instance;
+	}
 }

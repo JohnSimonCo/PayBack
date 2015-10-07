@@ -35,9 +35,13 @@ public abstract class DataDialogFragment extends BaseDialogFragment {
 
 		storage.subscription.listen(dataLoadedCallback);
 
-		activity.getContactLoader().userLoaded.then(userLoadedCallback);
+		if (activity.getContactLoader() != null) {
+			activity.getContactLoader().userLoaded.then(userLoadedCallback);
+		}
 
-		activity.getDataLinker().linked.listen(dataLinkedCallback);
+		if (activity.getDataLinker() != null) {
+			activity.getDataLinker().linked.listen(dataLinkedCallback);
+		}
 	}
 
 	@Override
@@ -48,7 +52,9 @@ public abstract class DataDialogFragment extends BaseDialogFragment {
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
+		if (activity.getContactLoader() != null) {
+			activity.getContactLoader().userLoaded.unregister(userLoadedCallback);
+		}
 
 	}
 

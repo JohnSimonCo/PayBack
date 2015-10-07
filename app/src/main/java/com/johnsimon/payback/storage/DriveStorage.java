@@ -1,5 +1,7 @@
 package com.johnsimon.payback.storage;
 
+import android.content.Context;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
@@ -101,6 +103,7 @@ public class DriveStorage extends ExternalStorage {
 							return;
 						}
 
+                        
 						MetadataBuffer buffer = result.getMetadataBuffer();
 						int count = buffer.getCount();
 						if (count > 0) {
@@ -128,7 +131,8 @@ public class DriveStorage extends ExternalStorage {
 
             String JSON = result.getText();
 
-            sync(client.getContext(), AppData.fromJson(JSON));
+            Context context = client.getContext();
+            sync(context, AppData.fromJson(context, JSON));
         }
     };
 

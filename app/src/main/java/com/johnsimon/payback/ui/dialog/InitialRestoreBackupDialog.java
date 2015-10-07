@@ -1,8 +1,12 @@
 package com.johnsimon.payback.ui.dialog;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -13,13 +17,17 @@ import com.johnsimon.payback.storage.DriveLoginManager;
 import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.data.backup.BackupManager;
 import com.johnsimon.payback.storage.StorageManager;
+import com.johnsimon.payback.util.PermissionManager;
 
 public class InitialRestoreBackupDialog {
+
 
 	public static Promise<Boolean> attemptRestore(final Activity activity, final Storage storage, final View masterView) {
 		final Promise<Boolean> p = new Promise<>();
 
-		final boolean hasBackups = BackupManager.hasBackups();
+		boolean hasBackupPermission = ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+		final boolean hasBackups = hasBackupPermission ? BackupManager.hasBackups() : false;
 
 		int title = R.string.restoredialog_title_welcome;
 		int content = hasBackups ? R.string.restoredialog_content_both : R.string.restoredialog_content_cloud;

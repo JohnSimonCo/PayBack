@@ -140,6 +140,11 @@
     <string name="backup_success">Backup successful</string>
     <string name="backup_failed">Backup failed</string>
     <string name="number_format_error">Invalid number format</string>
+    <string name="enable_storage_access">Enable storage access</string>
+    <string name="enable_contact_access">Enable contact access</string>
+    <string name="enable_storage_access_summary">Required for backups</string>
+    <string name="unknown_person">Unknown person</string>
+
     <string name="paypal_email_or_phone_number_title">Select email or phone number</string>
     <string name="paypal_email_or_phone_number_hint">Email or phone number</string>
     <string name="pay">Pay</string>

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.johnsimon.payback.async.Background;
+import com.johnsimon.payback.async.BackgroundBlock;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Subscription;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.backup.AutoBackuper;
@@ -27,19 +30,19 @@ public abstract class Storage {
 
     protected abstract void commit(String JSON);
 
-	public void wipe(Context context) {
-		String JSON = data.save();
-		AutoBackuper.performBackup(JSON, Backup.Type.Wipe);
-
+	public void wipe(final Context context) {
 		commit(context, AppData.defaultAppData());
 		emit();
 	}
 
-	public void commit(Context context) {
-		String JSON = data.save();
-
-		commit(JSON);
-		sheduleBackup(context, JSON);
+	public void commit(final Context context) {
+		data.saveAsync(context).then(new Callback<String>() {
+			@Override
+			public void onCalled(String JSON) {
+				commit(JSON);
+				sheduleBackup(context, JSON);
+			}
+		});
 	}
 
 	protected void sheduleBackup(Context context, String json) {

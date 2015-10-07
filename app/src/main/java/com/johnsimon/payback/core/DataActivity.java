@@ -1,8 +1,11 @@
 package com.johnsimon.payback.core;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.NotificationCallback;
@@ -12,8 +15,11 @@ import com.johnsimon.payback.storage.Storage;
 import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.data.AppData;
 import com.johnsimon.payback.data.DataLinker;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.ui.base.BaseActivity;
 import com.johnsimon.payback.util.AlarmScheduler;
+import com.johnsimon.payback.util.PermissionManager;
+import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.PayPalManager;
 import com.johnsimon.payback.util.Undo;
 
@@ -23,6 +29,8 @@ public abstract class DataActivity extends BaseActivity implements DataActivityI
     public AppData data;
 
 	public User user;
+
+	public boolean permissionContacts = false;
 
     protected ContactLoader contactLoader;
 
@@ -69,7 +77,15 @@ public abstract class DataActivity extends BaseActivity implements DataActivityI
 
         storage = StorageManager.getStorage(getApplicationContext());
 
-		contactLoader = ContactLoader.getLoader(getApplicationContext());
+		if (!Resource.isFirstRun(storage.getPreferences(), false)) {
+			if (PermissionManager.getPermission(Manifest.permission.READ_CONTACTS, this)) {
+				contactLoader = ContactLoader.getLoader(getApplicationContext());
+				permissionContacts = true;
+			} else {
+				permissionContacts = false;
+			}
+		}
+
 	}
 
 	@Override
@@ -79,11 +95,12 @@ public abstract class DataActivity extends BaseActivity implements DataActivityI
 		Undo.completeAction();
 
 		storage.subscription.listen(dataLoadedCallback);
+		if (contactLoader != null) {
+			contactLoader.userLoaded.then(userLoadedCallback);
 
-		contactLoader.userLoaded.then(userLoadedCallback);
-
-		dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
-		dataLinker.linked.listen(dataLinkedCallback);
+			dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+			dataLinker.linked.listen(dataLinkedCallback);
+		}
 
 		alarmScheduler = new AlarmScheduler(this, storage.subscription);
 
@@ -96,9 +113,13 @@ public abstract class DataActivity extends BaseActivity implements DataActivityI
 
 		storage.subscription.unregister(dataLoadedCallback);
 
-		contactLoader.userLoaded.unregister(userLoadedCallback);
+		if (contactLoader != null) {
+			contactLoader.userLoaded.unregister(userLoadedCallback);
+		}
 
-		dataLinker.die();
+		if (dataLinker != null) {
+			dataLinker.die();
+		}
 		alarmScheduler.die();
 
         storage.disconnect();
@@ -118,6 +139,34 @@ public abstract class DataActivity extends BaseActivity implements DataActivityI
 
 		super.onActivityResult(requestCode, resultCode, data);
     }
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PermissionManager.PERMISSION_FLAG_READ_CONTACTS:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					contactLoader = ContactLoader.getLoader(getApplicationContext());
+
+					contactLoader.userLoaded.then(userLoadedCallback);
+
+					dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+					dataLinker.linked.listen(dataLinkedCallback);
+				} else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+					//Toast.makeText(this, "nope", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			case PermissionManager.PERMISSION_FLAG_BOTH:
+				//TODO SIMME FIRST START NO IMAGES
+				contactLoader = ContactLoader.getLoader(getApplicationContext());
+
+				contactLoader.userLoaded.then(userLoadedCallback);
+
+				dataLinker = new DataLinker(storage.subscription, contactLoader.contactsLoaded);
+				dataLinker.linked.listen(dataLinkedCallback);
+				break;
+
+		}
+	}
 
     private DataActivity self = this;
     private Callback<AppData> dataLoadedCallback = new Callback<AppData>() {
