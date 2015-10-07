@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class DebtSendable {
-	@SerializedName("id")
-	public UUID id;
-
 	@SerializedName("amount")
 	public double amount;
 
@@ -31,7 +28,6 @@ public class DebtSendable {
 	public String currency;
 
 	public DebtSendable(Debt debt) {
-		this.id = debt.id;
         this.amount = debt.getAmount();
 		this.note = debt.getNote();
 		this.timestamp = debt.timestamp;
@@ -42,6 +38,6 @@ public class DebtSendable {
 
 	public Debt extract(Person person) {
 		//Reverse amount
-		return new Debt(person, -amount, note, id, timestamp, System.currentTimeMillis(), paidBack, payments, currency);
+		return new Debt(person, -amount, note, UUID.randomUUID(), timestamp, System.currentTimeMillis(), paidBack, payments, currency);
 	}
 }
