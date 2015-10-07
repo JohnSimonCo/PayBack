@@ -15,12 +15,13 @@ import android.widget.LinearLayout;
 
 import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
-import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.core.DataDialogFragment;
+import com.johnsimon.payback.util.EmailUtils;
 
 public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
-    public final static String KEY_SUGGESTIONS = "KEY_SUGGESTIONS";
+    public final static String KEY_SUGGESTIONS_EMAIL = "KEY_SUGGESTIONS_EMAIL";
+    public final static String KEY_SUGGESTIONS_PHONE = "KEY_SUGGESTIONS_PHONE";
     public final static String KEY_AMOUNT = "KEY_AMOUNT";
     public RecipientSelected recipientSelectedCallback = null;
 
@@ -31,7 +32,6 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         recipientSelectedCallback = (RecipientSelected) activity;
-
     }
 
     @Override
@@ -52,9 +52,16 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
             amount = args.getDouble(KEY_AMOUNT);
 
-            String[] suggestions = args.getStringArray(KEY_SUGGESTIONS);
-            if (suggestions != null && suggestions.length > 0) {
-                for (final String suggestion : suggestions) {
+            String[] suggestionsEmail = args.getStringArray(KEY_SUGGESTIONS_EMAIL);
+            String[] suggestionsPhone = args.getStringArray(KEY_SUGGESTIONS_PHONE);
+
+            if (suggestionsEmail != null && suggestionsEmail.length > 0) {
+                for (final String suggestion : suggestionsEmail) {
+
+                    if (!EmailUtils.isValidEmailAddress(suggestion)) {
+                        break;
+                    }
+
                     LayoutInflater buttonInflater = LayoutInflater.from(getActivity());
                     RobotoButton button = (RobotoButton) buttonInflater.inflate(R.layout.paypal_suggestion_button, null, false);
 
@@ -69,7 +76,25 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
                     paypal_suggestions.addView(button);
                 }
-            } else {
+            }
+
+            if (suggestionsPhone != null && suggestionsPhone.length > 0) {
+                for (final String suggestion : suggestionsPhone) {
+                    LayoutInflater buttonInflater = LayoutInflater.from(getActivity());
+                    RobotoButton button = (RobotoButton) buttonInflater.inflate(R.layout.paypal_suggestion_button, null, false);
+
+                    button.setText(suggestion);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            recipientSelectedCallback.onRecipientSelected(suggestion, amount);
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    paypal_suggestions.addView(button);
+                }
+            } else if (suggestionsEmail == null || suggestionsEmail.length <= 0){
                 paypal_suggestions.setVisibility(View.GONE);
             }
         } else {

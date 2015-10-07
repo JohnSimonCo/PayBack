@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -713,18 +714,22 @@ public class FeedActivity extends DataActivity implements
 
 		Bundle args = new Bundle();
 
-		ArrayList<String> suggestions = new ArrayList<>();
+		ArrayList<String> suggestionsEmail = new ArrayList<>();
+		ArrayList<String> suggestionsPhone = new ArrayList<>();
 		if(contact != null) {
 			if(contact.hasNumbers()) {
-				suggestions.addAll(Arrays.asList(contact.numbers));
+				suggestionsPhone.addAll(Arrays.asList(contact.numbers));
 			}
 			if(contact.hasEmails()) {
-				suggestions.addAll(Arrays.asList(contact.emails));
+				suggestionsEmail.addAll(Arrays.asList(contact.emails));
 			}
 		}
 
-		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS, suggestions.toArray(new String[suggestions.size()]));
+		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS_EMAIL, suggestionsEmail.toArray(new String[suggestionsEmail.size()]));
+		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS_PHONE, suggestionsPhone.toArray(new String[suggestionsPhone.size()]));
 		args.putDouble(PayPalRecipientPickerDialogFragment.KEY_AMOUNT, amount);
+
+		//TODO CONT
 
 		p.setArguments(args);
 		p.show(getFragmentManager(), "pp");
@@ -738,6 +743,7 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onRecipientSelected(String recipient, double amount) {
 		String currency = data.preferences.getCurrency().id;
+		Toast.makeText(FeedActivity.this, recipient, Toast.LENGTH_LONG).show();
 		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(amount), currency).then(new Callback<Boolean>() {
 			@Override
 			public void onCalled(Boolean data) {
