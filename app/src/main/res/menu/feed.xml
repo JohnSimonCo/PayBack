@@ -36,7 +36,12 @@
 
     <item
         app:showAsAction="never"
-        android:id="@+id/feed_menu_pay_back"
+        android:id="@+id/feed_menu_pay_back_swish"
         android:title="@string/pay_with_swish"    />
+
+    <item
+        app:showAsAction="never"
+        android:id="@+id/feed_menu_pay_back_paypal"
+        android:title="@string/pay_with_paypal"    />
 
 </menu>

@@ -57,7 +57,7 @@
     <string name="merge_to">Merge to</string>
     <string name="merge">Merge</string>
     <string name="name">Name</string>
-    <string name="delete_person_text">Delete person?</string>
+    <string name="delete_person_text">Delete person and all of their debts?</string>
     <string name="merge_confirm_text_format">Merge all entries from %1$s to %2$s?</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
@@ -100,11 +100,12 @@
     <string name="cloud_sync_account">Sync account</string>
     <string name="wipe_data">Wipe app data</string>
     <string name="wipe_data_confirm_free">Are you sure you want to delete all app data?</string>
-    <string name="wipe_data_confirm_full">Are you sure you want to delete all app data? This includes Google Drive save data.</string>
+    <string name="wipe_data_confirm_full">Are you sure you want to delete all app data? This includes Google Drive save data. A backup with your current data will be created.</string>
     <string name="wipe">Wipe</string>
     <string name="phone_number">Phone number</string>
     <string name="swish_copy_toast_end">copied to clipboard</string>
     <string name="pay_with_swish">Pay with Swish</string>
+    <string name="pay_with_paypal">Pay with PayPal</string>
     <string name="currency_checkbox">Symbol after amount</string>
     <string name="select_currency">Select currency</string>
     <string name="select">Select</string>
@@ -128,7 +129,6 @@
     <string name="currency_show_trailing_zeros">Show trailing zeros</string>
     <string name="set_date">Set date</string>
     <string name="share_debt_summary">Share debt summary</string>
-    <!-- "Paid back Aug 5" -->
     <string name="paid_back_when">Paid back %1$s</string>
     <string name="autobackup">Auto backup</string>
     <string name="wipebackup">Wipe backup</string>
@@ -140,6 +140,10 @@
     <string name="backup_success">Backup successful</string>
     <string name="backup_failed">Backup failed</string>
     <string name="number_format_error">Invalid number format</string>
+    <string name="paypal_email_or_phone_number_title">Select email or phone number</string>
+    <string name="paypal_email_or_phone_number_hint">Email or phone number</string>
+    <string name="pay">Pay</string>
+    <string name="country_code_error">Phone number needs to contain country code (+XX)</string>
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>

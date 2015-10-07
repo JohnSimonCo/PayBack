@@ -92,6 +92,15 @@ public class Alarm  {
                 UUID id = (UUID) intent.getExtras().get(ALARM_ID);
                 Debt debt = data.findDebt(id);
 
+				//Do not remind again
+				debt.setRemindDate(null);
+				storage.commit(context);
+
+				//Fixed 1.3.1 crash
+                if(debt.getOwner() == null) {
+					return;
+                }
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_stat_negative)
                         .setContentTitle(context.getString(R.string.notif_pay_back_reminder))
@@ -111,11 +120,8 @@ public class Alarm  {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 notificationManager.notify(debt.id.hashCode(), builder.build());
-
-				//Do not remind again
-				debt.setRemindDate(null);
-				storage.commit(context);
-    }};
+   			}
+		};
 
         private NotificationCompat.Action getPayBackAction(UUID id) {
             Intent payBackIntent = new Intent(context, NotificationEventReceiver.class);

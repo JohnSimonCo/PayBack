@@ -8,6 +8,7 @@ import com.johnsimon.payback.R;
 public class User {
 	public String name;
 	public String[] numbers;
+	public String[] emails;
 
 	public User(String name) {
 		this.name = name;
@@ -19,6 +20,14 @@ public class User {
 
 	public boolean hasNumbers() {
 		return numbers != null;
+	}
+
+	public void setEmails(String[] emails) {
+		this.emails = emails;
+	}
+
+	public boolean hasEmails() {
+		return this.emails != null;
 	}
 
 	public String getName(Resources resources) {
