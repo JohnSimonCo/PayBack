@@ -290,7 +290,7 @@ public class AppData {
 
     public String guessName(User sender) {
         //If user has no name, use currently viewed person
-        if(sender.name == null) {
+        if(sender == null || sender.name == null) {
             return FeedActivity.isAll() ? null : FeedActivity.person.getName();
         }
 

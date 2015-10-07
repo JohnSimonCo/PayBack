@@ -301,7 +301,7 @@ public class FeedActivity extends DataActivity implements
 
 	public void changePerson(Person newPerson) {
 		if (newPerson == person) {
-			return;
+		//	return;
 		}
 
 		person = newPerson;
@@ -333,7 +333,9 @@ public class FeedActivity extends DataActivity implements
 		feedFragment.scrollListener.mHeader.setTranslationY(0);
 		feedFragment.scrollListener.mHeaderDiffTotal = 0;
 
-		feedFragment.displayTotalDebt(getResources());
+		if(feedFragment.data != null) {
+			feedFragment.displayTotalDebt(getResources());
+		}
 
 	}
 
@@ -599,7 +601,7 @@ public class FeedActivity extends DataActivity implements
 		fragment.completeCallback = new FromWhoDialogFragment.FromWhoSelected() {
 			@Override
 			public void onSelected(String name) {
-				person = data.getOrCreatePerson(name, ColorPalette.getInstance(FeedActivity.this));
+				final Person person = data.getOrCreatePerson(name, ColorPalette.getInstance(FeedActivity.this));
 
 				if(fullSync) {
 
@@ -612,7 +614,8 @@ public class FeedActivity extends DataActivity implements
                                 public void onPositive(MaterialDialog dialog) {
                                     super.onPositive(dialog);
                                     data.sync(FeedActivity.this, person, debts);
-                                    commitBeam();
+									storage.commit(FeedActivity.this);
+									changePerson(person);
                                     dialog.dismiss();
                                 }
 
@@ -621,28 +624,15 @@ public class FeedActivity extends DataActivity implements
                                     super.onNegative(dialog);
                                 }
 							})
-                            .show();
+							.show();
 
 				} else {
 					data.add(debts[0].extract(person));
-					commitBeam();
+					storage.commit(FeedActivity.this);
+					changePerson(person);
 				}
 			}
 		};
-	}
-	private void commitBeam() {
-        storage.commit(this);
-
-		feed = data.feed(person);
-
-		sort();
-
-		navigationDrawerFragment.adapter.setItems(data.peopleOrdered());
-		navigationDrawerFragment.setSelectedPerson(person);
-
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, new FeedFragment(), "feed_fragment_tag")
-				.commit();
 	}
 
     @Override

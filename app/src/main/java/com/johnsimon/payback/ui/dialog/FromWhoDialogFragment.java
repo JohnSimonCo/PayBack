@@ -118,27 +118,20 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
 	@Override
 	protected void onDataReceived() {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.autocomplete_list_item,
-                R.id.autocomplete_list_item_title,
-                data.getAllNames());
 
-        actv.setAdapter(adapter);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                actv.setAdapter(adapter);
-            }
-        }, 200);
-
-        actv.setSelection(actv.getText().length());
 	}
 
 	@Override
 	protected void onDataLinked() {
+		final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+				getActivity(),
+				R.layout.autocomplete_list_item,
+				R.id.autocomplete_list_item_title,
+				data.getAllNames());
 
+		actv.setAdapter(adapter);
+
+		actv.setSelection(actv.getText().length());
 	}
 
     private void disableButton(Button btn) {
