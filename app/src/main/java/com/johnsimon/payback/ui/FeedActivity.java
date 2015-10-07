@@ -291,9 +291,9 @@ public class FeedActivity extends DataActivity implements
 		Undo.completeAction();
 
 		if(item.type == NavigationDrawerItem.Type.All) {
-			changePerson(null);
+			if(person != null) { changePerson(null); }
 		} else if(item.type == NavigationDrawerItem.Type.Person) {
-			changePerson(item.owner);
+			if(person != item.owner) { changePerson(item.owner); }
 		}
 
 		storage.requestRefresh();
