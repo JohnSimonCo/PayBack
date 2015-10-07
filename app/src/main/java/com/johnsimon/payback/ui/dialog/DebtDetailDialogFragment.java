@@ -3,6 +3,7 @@ package com.johnsimon.payback.ui.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
@@ -300,8 +302,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
                             case R.id.detail_dialog_pay_back_paypal:
                                 Double amount = debt.getRemainingAbsoluteDebt();
-                                String currency = data.preferences.getCurrency().id;
-                                //TODO ENABLE WHEN WORKING PayPalManager.startPayPal(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
                                 ((FeedActivity) getActivity()).startPayPal(debt.owner.link, amount).then(new com.johnsimon.payback.async.Callback<PaymentResult>() {
                                     @Override
                                     public void onCalled(PaymentResult result) {
@@ -349,6 +349,13 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 			}
 		}
 	};
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Toast.makeText(getActivity(), "DISMISS", Toast.LENGTH_LONG).show();
+        debt = null;
+    }
 
 	public interface Callback {
 		void onRefresh();
