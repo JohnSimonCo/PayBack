@@ -32,7 +32,7 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 	private boolean useOnlyContacts;
 	private Button confirmButton;
 	private ArrayAdapter adapter;
-	private String blacklist;
+	private String blacklist = "";
 
 	public final static String USE_DEFAULT_TITLE = "PERSON_PICKER_DIALOG_FRAGMENT_NO_TITLE";
 	public final static String TITLE_KEY = "PERSON_PICKER_DIALOG_FRAGMENT_TITLE_KEY";
@@ -58,6 +58,8 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
             title = args.getString(TITLE_KEY, USE_DEFAULT_TITLE);
             useOnlyPeopleInApp = args.getBoolean(PEOPLE_KEY, false);
 			noExistingPeople = args.getBoolean(NO_EXISTING_PEOPLE_FLAG, false);
+			blacklist = args.getString(BLACKLIST_KEY, "");
+
 		}
 
         useOnlyContacts = false;
@@ -86,8 +88,6 @@ public class PersonPickerDialogFragment extends DataDialogFragment {
 		if (TextUtils.isEmpty(autoCompleteTextView.getText())) {
 			disableButton(confirmButton);
 		}
-
-		blacklist = getArguments().getString(BLACKLIST_KEY, "");
 
 		autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 			@Override

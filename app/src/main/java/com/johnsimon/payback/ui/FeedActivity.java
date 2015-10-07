@@ -276,6 +276,8 @@ public class FeedActivity extends DataActivity implements
 		feedFragment.adapter.updateList(feed);
 		sort();
 
+		navigationDrawerFragment.setSelectedPerson(newPerson);
+
 		feedFragment.adapter.animate = true;
 
 		feedSubscription.broadcast(feed);
