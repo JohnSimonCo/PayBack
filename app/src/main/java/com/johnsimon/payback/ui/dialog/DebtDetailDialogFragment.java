@@ -24,6 +24,7 @@ import com.johnsimon.payback.data.Person;
 import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.PayPalManager;
+import com.johnsimon.payback.util.PaymentResult;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
@@ -301,10 +302,10 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 Double amount = debt.getRemainingAbsoluteDebt();
                                 String currency = data.preferences.getCurrency().id;
                                 //TODO ENABLE WHEN WORKING PayPalManager.startPayPal(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
-                                ((FeedActivity) getActivity()).startPayPal(debt.owner.link, amount).then(new com.johnsimon.payback.async.Callback<Boolean>() {
+                                ((FeedActivity) getActivity()).startPayPal(debt.owner.link, amount).then(new com.johnsimon.payback.async.Callback<PaymentResult>() {
                                     @Override
-                                    public void onCalled(Boolean success) {
-                                        if(success) {
+                                    public void onCalled(PaymentResult result) {
+                                        if(result == PaymentResult.Successful) {
                                             debt.payback();
                                             storage.commit(getActivity());
                                             displayPaybackAnimation();

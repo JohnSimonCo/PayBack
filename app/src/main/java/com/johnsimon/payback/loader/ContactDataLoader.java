@@ -5,12 +5,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.Patterns;
 
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.User;
+import com.johnsimon.payback.util.EmailUtils;
+import com.johnsimon.payback.util.PhoneNumberUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Void, Void> {
@@ -24,7 +28,9 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
         User user = params[0].user;
         ArrayList<Contact> contacts = params[0].contacts;
 
-		user.setNumbers(getUserPhoneNumbers(contentResolver));
+		String[] userData = getUserData(contentResolver);
+		user.setNumbers(getUserPhoneNumbers(userData));
+		user.setEmails(getUserEmails(userData));
 
 		for(Contact contact : contacts) {
 			contact.setNumbers(getContactPhoneNumbers(contentResolver, contact.id));
@@ -39,12 +45,13 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 		promise.fire(v);
 	}
 
+	/*
 	private String[] getUserPhoneNumbers(ContentResolver contentResolver) {
 		Cursor cursor = contentResolver.query(
 				Uri.withAppendedPath(
 						ContactsContract.Profile.CONTENT_URI,
 						ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-				new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER},
+				new String[] {ContactsContract.CommonDataKinds.Phone.Number},
 				null, null, null);
 
 		String[] phoneNumbers = getPhoneNumbers(cursor, 0);
@@ -52,6 +59,49 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 		cursor.close();
 
 		return phoneNumbers;
+	}*/
+
+	private String[] getUserData(ContentResolver contentResolver) {
+		Cursor cursor = contentResolver.query(
+				Uri.withAppendedPath(
+						ContactsContract.Profile.CONTENT_URI,
+						ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+				new String[] {ContactsContract.CommonDataKinds.Phone.DATA},
+				null, null, null);
+
+		String[] data = getEmails(cursor, 0);
+
+		cursor.close();
+
+		return data;
+	}
+
+	private String[] getUserEmails(String[] userData) {
+		if(userData == null) return null;
+
+		ArrayList<String> emails = new ArrayList<>(userData.length);
+
+		for(String string: userData) {
+			if(EmailUtils.isValidEmailAdress(string)) {
+				emails.add(string);
+			}
+		}
+
+		return emails.toArray(new String[emails.size()]);
+	}
+
+	private String[] getUserPhoneNumbers(String[] userData) {
+		if(userData == null) return null;
+
+		ArrayList<String> numbers = new ArrayList<>(userData.length);
+
+		for(String string: userData) {
+			if(PhoneNumberUtils.isValidPhoneNumber(string)) {
+				numbers.add(string);
+			}
+		}
+
+		return numbers.toArray(new String[numbers.size()]);
 	}
 
 	private String[] getContactEmails(ContentResolver contentResolver, long id) {
@@ -84,10 +134,17 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 
 		if(count < 1) return null;
 
-		HashSet<String> numbers = new HashSet<>(count);
+		ArrayList<String> numbers = new ArrayList<>(count);
+		HashSet<String> uniqueNumbers = new HashSet<>(count);
 
 		while(cursor.moveToNext()) {
-			numbers.add(normalizePhoneNumber(cursor.getString(column)));
+			String number = cursor.getString(column);
+			String normalized = PhoneNumberUtils.normalizePhoneNumber(number);
+			if(number != null && !uniqueNumbers.contains(normalized)) {
+				uniqueNumbers.add(normalized);
+
+				numbers.add(number);
+			}
 		}
 
 		int size = numbers.size();
@@ -99,20 +156,17 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 
 		if(count < 1) return null;
 
-		HashSet<String> email = new HashSet<>(count);
+		HashSet<String> emails = new HashSet<>(count);
 
 		while(cursor.moveToNext()) {
-			email.add(cursor.getString(column));
+			String email = cursor.getString(column);
+			if(email != null) {
+				emails.add(email);
+			}
 		}
 
-		int size = email.size();
-		return size > 0 ? email.toArray(new String[size]) : null;
-	}
-
-
-	//Removes all formatting, so that numbers can be compared
-	private String normalizePhoneNumber(String number) {
-		return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
+		int size = emails.size();
+		return size > 0 ? emails.toArray(new String[size]) : null;
 	}
 
 	//Removes all formatting, so that numbers can be compared

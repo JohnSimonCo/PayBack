@@ -62,7 +62,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
             if (suggestionsEmail != null && suggestionsEmail.length > 0) {
                 for (final String suggestion : suggestionsEmail) {
 
-                    if (!EmailUtils.isValidEmail(suggestion)) {
+                    if (!EmailUtils.isValidEmailAdress(suggestion)) {
                         break;
                     }
 
@@ -151,7 +151,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
                     return;
                 }
 
-                if (EmailUtils.isValidEmail(text)) {
+                if (EmailUtils.isValidEmailAdress(text)) {
                     enableButton(dialogContinue);
                 } else {
                     if (text.matches("^\\+\\d{6,}$")) {
