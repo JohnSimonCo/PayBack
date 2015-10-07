@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.johnsimon.payback.BuildConfig;
+import com.johnsimon.payback.R;
 import com.johnsimon.payback.async.Background;
 import com.johnsimon.payback.async.BackgroundBlock;
 import com.johnsimon.payback.async.Promise;
@@ -320,7 +321,7 @@ public class AppData {
 		return total(debts) == 0;
 	}
 
-    public static AppData fromJson(String JSON) {
+    public static AppData fromJson(Context context, String JSON) {
 		if(JSON == null) {
 			return AppData.defaultAppData();
 		}
@@ -337,12 +338,13 @@ public class AppData {
 
         ensureNewFeatures(data);
 
-		if(BuildConfig.DEBUG) {
-			analyzeData(data);
-		}
+        if(BuildConfig.DEBUG) {
+            analyzeData(data);
+        }
+
+        repairData(context, data);
 
 		return data;
-
     }
 
     public static void ensureNewFeatures(AppData data) {
@@ -375,6 +377,22 @@ public class AppData {
 			throw new RuntimeException("peopleOrder size not equal to people size. peopleOrder.size = " + data.peopleOrder.size() + ", people.size = " + data.people.size());
 		}
 	}
+
+    public static void repairData(Context context, AppData data) {
+
+        for(Debt debt : data.debts) {
+            debt.linkOwner(data.people);
+            if(debt.getOwner() == null) {
+                Person unknownPerson = new Person(
+                        context.getString(R.string.unknown_person), debt.ownerId,
+                        ColorPalette.getInstanceWithContext(context).nextIndex(),
+                        System.currentTimeMillis());
+                
+                data.people.add(unknownPerson);
+            }
+        }
+
+    }
 
     public static String toJson(AppData data) {
         return Resource.gson().toJson(data, AppData.class);

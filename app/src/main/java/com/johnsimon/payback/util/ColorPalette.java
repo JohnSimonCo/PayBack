@@ -17,13 +17,13 @@ public class ColorPalette {
 	public ColorPalette(Context context) {
         Resources resources = context.getResources();
         palette = new int[] {
-			resources.getColor(R.color.color1),
-			resources.getColor(R.color.color2),
-			resources.getColor(R.color.color3),
-            resources.getColor(R.color.color4),
-			resources.getColor(R.color.color5),
-			resources.getColor(R.color.color6),
-			resources.getColor(R.color.color7)
+			resources.getColor(R.color.color1, null),
+			resources.getColor(R.color.color2, null),
+			resources.getColor(R.color.color3, null),
+            resources.getColor(R.color.color4, null),
+			resources.getColor(R.color.color5, null),
+			resources.getColor(R.color.color6, null),
+			resources.getColor(R.color.color7, null)
 		};
 	}
 
@@ -58,6 +58,16 @@ public class ColorPalette {
 		}
 
 		instance.data = dataContext.getData();
+
+		return instance;
+	}
+
+	public static ColorPalette getInstanceWithContext(Context context) {
+		if(instance == null) {
+			instance = new ColorPalette(context);
+		}
+
+		instance.data = AppData.defaultAppData();
 
 		return instance;
 	}

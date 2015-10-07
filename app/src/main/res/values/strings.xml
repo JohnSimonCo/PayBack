@@ -143,6 +143,8 @@
     <string name="enable_storage_access">Enable storage access</string>
     <string name="enable_contact_access">Enable contact access</string>
     <string name="enable_storage_access_summary">Required for backups</string>
+    <string name="unknown_person">Unknown person</string>
+
 
     <!-- About -->
     <string name="lib_devdesign">Development and Design</string>
