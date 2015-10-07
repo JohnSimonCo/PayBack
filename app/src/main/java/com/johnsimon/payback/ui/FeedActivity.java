@@ -201,7 +201,7 @@ public class FeedActivity extends DataActivity implements
 
         //TODO REMOVE
         //LocalStorage.test(this, data);
-    }
+	}
 
     @Override
     protected void onDataLinked() {
@@ -729,8 +729,6 @@ public class FeedActivity extends DataActivity implements
 		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS_PHONE, suggestionsPhone.toArray(new String[suggestionsPhone.size()]));
 		args.putDouble(PayPalRecipientPickerDialogFragment.KEY_AMOUNT, amount);
 
-		//TODO CONT
-
 		p.setArguments(args);
 		p.show(getFragmentManager(), "pp");
 
@@ -743,7 +741,6 @@ public class FeedActivity extends DataActivity implements
 	@Override
 	public void onRecipientSelected(String recipient, double amount) {
 		String currency = data.preferences.getCurrency().id;
-		Toast.makeText(FeedActivity.this, recipient, Toast.LENGTH_LONG).show();
 		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(amount), currency).then(new Callback<Boolean>() {
 			@Override
 			public void onCalled(Boolean data) {

@@ -61,6 +61,18 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/email_phone_picker_country_code_error"
+                android:text="@string/country_code_error"
+                android:textColor="@color/error_color"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
 
     </ScrollView>

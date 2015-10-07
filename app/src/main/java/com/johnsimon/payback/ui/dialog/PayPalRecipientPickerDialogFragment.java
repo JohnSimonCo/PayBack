@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.devspark.robototextview.widget.RobotoButton;
 import com.johnsimon.payback.R;
@@ -27,6 +28,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
     private AlertDialog alertDialog;
     private double amount = 0;
+    private TextView countryCodeErrorTextView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -47,6 +49,8 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
         final RobotoButton dialogCancel = (RobotoButton) rootView.findViewById(R.id.paypal_dialog_cancel);
         final AppCompatEditText editText = (AppCompatEditText) rootView.findViewById(R.id.email_phone_picker_edittext);
 
+        countryCodeErrorTextView = (TextView) rootView.findViewById(R.id.email_phone_picker_country_code_error);
+
         final Bundle args = getArguments();
         if (args != null) {
 
@@ -58,7 +62,7 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
             if (suggestionsEmail != null && suggestionsEmail.length > 0) {
                 for (final String suggestion : suggestionsEmail) {
 
-                    if (!EmailUtils.isValidEmailAddress(suggestion)) {
+                    if (!EmailUtils.isValidEmail(suggestion)) {
                         break;
                     }
 
@@ -87,8 +91,12 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            recipientSelectedCallback.onRecipientSelected(suggestion, amount);
-                            alertDialog.dismiss();
+                            if (suggestion.matches("^\\+\\d{6,}$")) {
+                                recipientSelectedCallback.onRecipientSelected(suggestion, amount);
+                                alertDialog.dismiss();
+                            } else {
+                                editText.setText(suggestion);
+                            }
                         }
                     });
 
@@ -135,10 +143,24 @@ public class PayPalRecipientPickerDialogFragment extends DataDialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (TextUtils.isEmpty(editable.toString())) {
+                countryCodeErrorTextView.setVisibility(View.GONE);
+
+                String text = editable.toString();
+                if (TextUtils.isEmpty(text)) {
                     disableButton(dialogContinue);
-                } else {
+                    return;
+                }
+
+                if (EmailUtils.isValidEmail(text)) {
                     enableButton(dialogContinue);
+                } else {
+                    if (text.matches("^\\+\\d{6,}$")) {
+                        enableButton(dialogContinue);
+                    } else if (text.matches("^\\d+$")) {
+                        countryCodeErrorTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        disableButton(dialogContinue);
+                    }
                 }
             }
         });
