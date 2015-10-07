@@ -131,6 +131,13 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 
 		actv.setAdapter(adapter);
 
+		/*handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				actv.setAdapter(adapter);
+			}
+		}, 200);*/
+
 		actv.setSelection(actv.getText().length());
 	}
 
