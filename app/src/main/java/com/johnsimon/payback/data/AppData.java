@@ -397,4 +397,32 @@ public class AppData {
     public static String toJson(AppData data) {
         return Resource.gson().toJson(data, AppData.class);
     }
+
+    public static void test(Context context) {
+        test1(context);
+        test2(context);
+    }
+    public static void test1(Context context) {
+        AppData a = AppData.defaultAppData();
+        AppData b = AppData.defaultAppData();
+
+        Person pa = new Person("John", ColorPalette.getInstanceWithContext(context));
+        a.people.add(pa);
+        b.people.add(pa);
+
+        Debt da = new Debt(pa, 10, null, null);
+        a.debts.add(da);
+        b.debts.add(da);
+
+        a.delete(context, pa);
+
+        AppData c = new AppData();
+        DataSyncer.sync(a, b, c);
+        int s;
+
+    }
+    public static void test2(Context context) {
+
+
+    }
 }
