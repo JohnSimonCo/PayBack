@@ -23,8 +23,8 @@ public class PayPalManager {
 
 		if (pp == null) {  // Test to see if the library is already initialized
 
-			pp = PayPal.initWithAppID(context, "APP-80W284485P519543T", PayPal.ENV_NONE);
-			//pp = PayPal.initWithAppID(context, "APP-5ER30931KD693732X", PayPal.ENV_LIVE);
+			//pp = PayPal.initWithAppID(context, "APP-80W284485P519543T", PayPal.ENV_NONE);
+			pp = PayPal.initWithAppID(context, "APP-5ER30931KD693732X", PayPal.ENV_LIVE);
 
 			//pp.setLanguage("en_US");
 			pp.setLanguage(Locale.getDefault().toString());
@@ -45,8 +45,8 @@ public class PayPalManager {
 		//payment.setSubtotal(new BigDecimal(1));
 		payment.setSubtotal(amount);
 
-		payment.setCurrencyType("USD");
-		//payment.setCurrencyType(currency);
+		//payment.setCurrencyType("USD");
+		payment.setCurrencyType(currency);
 
 		//payment.setRecipient("johnsimondev@gmail.com");
 		payment.setRecipient(recipent);
