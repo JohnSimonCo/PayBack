@@ -288,9 +288,9 @@ public class AppData {
         return names;
     }
 
-    public String guessName(User user, User sender) {
+    public String guessName(User sender) {
         //If user has no name, use currently viewed person
-        if(user.name == null) {
+        if(sender.name == null) {
             return FeedActivity.isAll() ? null : FeedActivity.person.getName();
         }
 

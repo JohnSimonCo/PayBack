@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -32,6 +31,8 @@ import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.async.Notification;
 import com.johnsimon.payback.async.NullCallback;
 import com.johnsimon.payback.async.NullPromise;
+import com.johnsimon.payback.async.Promise;
+import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.core.DataActivity;
 import com.johnsimon.payback.data.DataLinker;
 import com.johnsimon.payback.data.Debt;
@@ -43,13 +44,12 @@ import com.johnsimon.payback.data.User;
 import com.johnsimon.payback.loader.ContactLoader;
 import com.johnsimon.payback.send.DebtSendable;
 import com.johnsimon.payback.data.AppData;
-import com.johnsimon.payback.storage.StorageManager;
 import com.johnsimon.payback.ui.dialog.AboutDialogFragment;
-import com.johnsimon.payback.ui.dialog.BackupRestoreDialog;
 import com.johnsimon.payback.ui.dialog.CurrencyDialogFragment;
 import com.johnsimon.payback.ui.dialog.FromWhoDialogFragment;
 import com.johnsimon.payback.ui.dialog.PaidBackDialogFragment;
 import com.johnsimon.payback.ui.dialog.InitialRestoreBackupDialog;
+import com.johnsimon.payback.ui.dialog.PayPalRecipientPickerDialogFragment;
 import com.johnsimon.payback.ui.dialog.WelcomeDialogFragment;
 import com.johnsimon.payback.ui.fragment.FeedFragment;
 import com.johnsimon.payback.ui.fragment.NavigationDrawerFragment;
@@ -57,18 +57,24 @@ import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.PermissionManager;
+import com.johnsimon.payback.util.PayPalManager;
+import com.johnsimon.payback.util.PaymentResult;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.johnsimon.payback.util.Undo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class FeedActivity extends DataActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks, Beamer.BeamListener,
-        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback, FeedFragment.OnFeedChangeCallback {
+        BillingProcessor.IBillingHandler, CurrencyDialogFragment.CurrencySelectedCallback,
+		FeedFragment.OnFeedChangeCallback, PayPalRecipientPickerDialogFragment.RecipientSelected {
 
     public BillingProcessor bp;
 
@@ -117,8 +123,9 @@ public class FeedActivity extends DataActivity implements
 		if (Resource.isLOrAbove()) {
 			setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(),
 					R.drawable.ic_launcher), getResources().getColor(R.color.primary_color)));
-
 		}
+
+		Resource.init(getApplicationContext());
 
 		setContentView(R.layout.activity_feed);
 
@@ -173,6 +180,8 @@ public class FeedActivity extends DataActivity implements
         if (BuildConfig.DEBUG) {
 			Snackbar.make(masterLayout, "Debug build " + BuildConfig.VERSION_NAME, Snackbar.LENGTH_SHORT).show();
         }
+
+		PayPalManager.init(this);
 	}
 
 	private Subscription<AppData> dataRecievedSubscription = new Subscription<>();
@@ -196,7 +205,7 @@ public class FeedActivity extends DataActivity implements
 
         //TODO REMOVE
         //LocalStorage.test(this, data);
-    }
+	}
 
     @Override
     protected void onDataLinked() {
@@ -301,6 +310,8 @@ public class FeedActivity extends DataActivity implements
 		feedFragment.adapter.updateList(feed);
 		sort();
 
+		navigationDrawerFragment.setSelectedPerson(newPerson);
+
 		feedFragment.adapter.animate = true;
 
 		feedSubscription.broadcast(feed);
@@ -339,9 +350,9 @@ public class FeedActivity extends DataActivity implements
 			@Override
 			public void onCalled(AppData data) {
 				getMenuInflater().inflate(R.menu.feed, menu);
-
 				filterAmount = menu.findItem(R.id.menu_filter_amount);
-				MenuItem fullMenuPay = menu.findItem(R.id.feed_menu_pay_back);
+				MenuItem fullMenuPaySwish = menu.findItem(R.id.feed_menu_pay_back_swish);
+				MenuItem fullMenuPayPayPal = menu.findItem(R.id.feed_menu_pay_back_paypal);
 				MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
 
 				if (attemptCheckFilterAmount) {
@@ -356,19 +367,18 @@ public class FeedActivity extends DataActivity implements
 
 				sort();
 
-				if (isAll()) {
-					menuShare.setVisible(false);
-				} else {
-					menuShare.setVisible(feed.size() != 0);
-				}
 
 				if (isAll()) {
-					fullMenuPay.setVisible(false);
+					fullMenuPaySwish.setVisible(false);
+					fullMenuPayPayPal.setVisible(false);
 				} else {
-					if (SwishLauncher.hasService(getPackageManager()) && AppData.total(feed) >= 0) {
-						fullMenuPay.setEnabled(true);
+					fullMenuPayPayPal.setVisible(true);
+					if (AppData.total(feed) < 0) {
+						fullMenuPaySwish.setVisible(SwishLauncher.hasService(getPackageManager()));
+						fullMenuPayPayPal.setEnabled(true);
 					} else {
-						fullMenuPay.setEnabled(false);
+						fullMenuPaySwish.setVisible(false);
+						fullMenuPayPayPal.setEnabled(false);
 					}
 				}
 			}
@@ -392,8 +402,19 @@ public class FeedActivity extends DataActivity implements
 				sortAmount();
 				break;
 
-			case R.id.feed_menu_pay_back:
+			case R.id.feed_menu_pay_back_swish:
 				SwishLauncher.startSwish(this, AppData.total(feed), person);
+				break;
+
+			case R.id.feed_menu_pay_back_paypal:
+				startPayPal(person.link, Math.abs(AppData.total(feed))).then(new Callback<PaymentResult>() {
+					@Override
+					public void onCalled(PaymentResult result) {
+						if (result == PaymentResult.Successful) {
+							onEvenOut();
+						}
+					}
+				});
 				break;
 
             case R.id.menu_even_out:
@@ -562,14 +583,14 @@ public class FeedActivity extends DataActivity implements
                             super.onNegative(dialog);
                         }
                     })
-                    .show();
-            return;
+					.show();
+			return;
         }
 
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
 		Bundle arguments = new Bundle();
-		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(user, sender));
+		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(sender));
 		fragment.setArguments(arguments);
 
 		fragment.show(getFragmentManager(), "from_who");
@@ -599,7 +620,7 @@ public class FeedActivity extends DataActivity implements
                                 public void onNegative(MaterialDialog dialog) {
                                     super.onNegative(dialog);
                                 }
-                            })
+							})
                             .show();
 
 				} else {
@@ -630,13 +651,13 @@ public class FeedActivity extends DataActivity implements
 
         if (!handled) {
             super.onActivityResult(requestCode, resultCode, data);
-        }
+		}
     }
 
     @Override
     public void onDestroy() {
         if (bp != null) {
-            bp.release();
+			bp.release();
         }
 
         super.onDestroy();
@@ -656,8 +677,8 @@ public class FeedActivity extends DataActivity implements
     public void onBillingError(int error, Throwable throwable) {
 	}
 
-    @Override
-    public void onBillingInitialized() {
+	@Override
+	public void onBillingInitialized() {
 		bpInitialized.fire();
 		Resource.checkFull(bp);
     }
@@ -667,7 +688,7 @@ public class FeedActivity extends DataActivity implements
         feedFragment.adapter.notifyDataSetChanged();
         navigationDrawerFragment.updateBalance();
 
-        feedFragment.displayTotalDebt(getResources());
+		feedFragment.displayTotalDebt(getResources());
     }
 
 	public void onEvenOut() {
@@ -738,4 +759,44 @@ public class FeedActivity extends DataActivity implements
 
         feedFragment.displayTotalDebt(getResources());
     }
+
+	public Promise<PaymentResult> startPayPal(Contact contact, double amount) {
+		PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
+
+		Bundle args = new Bundle();
+
+		ArrayList<String> suggestionsEmail = new ArrayList<>();
+		ArrayList<String> suggestionsPhone = new ArrayList<>();
+		if(contact != null) {
+			if(contact.hasNumbers()) {
+				suggestionsPhone.addAll(Arrays.asList(contact.numbers));
+			}
+			if(contact.hasEmails()) {
+				suggestionsEmail.addAll(Arrays.asList(contact.emails));
+			}
+		}
+
+		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS_EMAIL, suggestionsEmail.toArray(new String[suggestionsEmail.size()]));
+		args.putStringArray(PayPalRecipientPickerDialogFragment.KEY_SUGGESTIONS_PHONE, suggestionsPhone.toArray(new String[suggestionsPhone.size()]));
+		args.putDouble(PayPalRecipientPickerDialogFragment.KEY_AMOUNT, amount);
+
+		p.setArguments(args);
+		p.show(getFragmentManager(), "pp");
+
+		payPalPromise = new Promise<>();
+		return payPalPromise;
+	}
+
+	private static Promise<PaymentResult> payPalPromise;
+
+	@Override
+	public void onRecipientSelected(String recipient, double amount) {
+		String currency = data.preferences.getCurrency().id;
+		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(amount), currency).then(new Callback<PaymentResult>() {
+			@Override
+			public void onCalled(PaymentResult data) {
+				payPalPromise.fire(data);
+			}
+		});
+	}
 }

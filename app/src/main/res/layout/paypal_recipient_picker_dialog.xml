@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="24dp"
+                app:fontFamily="roboto"
+                app:textWeight="medium"
+                android:text="@string/paypal_email_or_phone_number_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#474747"
+                android:textSize="22sp"/>
+
+            <LinearLayout
+                android:paddingTop="16dp"
+                android:id="@+id/paypal_suggestions"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--This will be populated with suggestions-->
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="text"
+                    android:id="@+id/email_phone_picker_edittext"
+                    android:textColorHint="@color/gray_text_very_light"
+                    android:textColor="@color/gray_text_light"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/paypal_email_or_phone_number_hint"
+                    android:textSize="18sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/email_phone_picker_country_code_error"
+                android:text="@string/country_code_error"
+                android:textColor="@color/error_color"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:orientation="horizontal">
+
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
+            android:text="@string/cancel"
+            android:id="@+id/paypal_dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.devspark.robototextview.widget.RobotoButton
+            style="@style/FlatButton"
+            app:typeface="roboto_medium"
+            android:text="@string/pay"
+            android:id="@+id/paypal_dialog_ok"
+            android:layout_width="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_height="wrap_content"    />
+    </LinearLayout>
+
+</LinearLayout>
+

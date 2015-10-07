@@ -31,8 +31,8 @@ public class ContactLoader {
 		final ContactsLoader contactsLoader = new ContactsLoader();
 		contactsLoaded = contactsLoader.promise;
 		
-		final PhoneNumberLoader phoneNumberLoader = new PhoneNumberLoader();
-		phoneNumbersLoaded = phoneNumberLoader.promise;
+		final ContactDataLoader contactDataLoader = new ContactDataLoader();
+		phoneNumbersLoaded = contactDataLoader.promise;
 
 		userLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, contentResolver);
 		contactsLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, contentResolver);
@@ -53,8 +53,8 @@ public class ContactLoader {
 		Promise.all(userLoaded, contactsLoaded).then(new Callback<Void>() {
 			@Override
 			public void onCalled(Void v) {
-				phoneNumberLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-						new PhoneNumberLoader.Argument(contentResolver, contacts, user));
+				contactDataLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+						new ContactDataLoader.Argument(contentResolver, contacts, user));
 			}
 		});
 	}

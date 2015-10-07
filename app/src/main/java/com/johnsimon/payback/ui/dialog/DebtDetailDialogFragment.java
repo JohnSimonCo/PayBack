@@ -17,14 +17,19 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.johnsimon.payback.R;
+import com.johnsimon.payback.async.Callback;
 import com.johnsimon.payback.core.DataDialogFragment;
 import com.johnsimon.payback.data.Debt;
 import com.johnsimon.payback.data.Person;
+import com.johnsimon.payback.ui.FeedActivity;
 import com.johnsimon.payback.util.Alarm;
+import com.johnsimon.payback.util.PayPalManager;
+import com.johnsimon.payback.util.PaymentResult;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.SwishLauncher;
 import com.makeramen.RoundedImageView;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +53,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
     private TextView avatarLetter;
     private TextView dialog_custom_amount;
 
-    public MenuItem detailMenuPay;
+	public MenuItem detailMenuPaySwish;
+	public MenuItem detailMenuPayPayPal;
     public AlertDialog alertDialog;
 
     public static DebtDetailDialogFragment newInstance(Debt debt) {
@@ -239,16 +245,15 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
                 popupMenu.inflate(R.menu.detail_dialog_popup);
 
-                detailMenuPay = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back);
+				detailMenuPaySwish = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back_swish);
+				detailMenuPayPayPal = popupMenu.getMenu().findItem(R.id.detail_dialog_pay_back_paypal);
 
-                if (debt.getAmount() < 0) {
-                    if (SwishLauncher.hasService(getActivity().getPackageManager())) {
-                        detailMenuPay.setEnabled(true);
-                    } else {
-                        detailMenuPay.setEnabled(false);
-                    }
-                } else {
-                    detailMenuPay.setVisible(false);
+                if (debt.getRemainingDebt() < 0) {
+					detailMenuPaySwish.setVisible(SwishLauncher.hasService(getActivity().getPackageManager()));
+					detailMenuPayPayPal.setEnabled(true);
+				} else {
+					detailMenuPaySwish.setVisible(false);
+					detailMenuPayPayPal.setEnabled(false);
                 }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -276,6 +281,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
                                 Bundle args = new Bundle();
                                 args.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+                                args.putString(PersonPickerDialogFragment.BLACKLIST_KEY, debt.owner.getName());
                                 args.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
                                 personPickerDialogFragment.setArguments(args);
 
@@ -288,8 +294,24 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
                                 alertDialog.dismiss();
                                 return true;
 
-                            case R.id.detail_dialog_pay_back:
+                            case R.id.detail_dialog_pay_back_swish:
                                 SwishLauncher.startSwish(getActivity(), debt.getRemainingAbsoluteDebt(), debt.getOwner());
+                                return true;
+
+                            case R.id.detail_dialog_pay_back_paypal:
+                                Double amount = debt.getRemainingAbsoluteDebt();
+                                String currency = data.preferences.getCurrency().id;
+                                //TODO ENABLE WHEN WORKING PayPalManager.startPayPal(getActivity(), "swesnowme@gmail.com", new BigDecimal(amount), currency);
+                                ((FeedActivity) getActivity()).startPayPal(debt.owner.link, amount).then(new com.johnsimon.payback.async.Callback<PaymentResult>() {
+                                    @Override
+                                    public void onCalled(PaymentResult result) {
+                                        if(result == PaymentResult.Successful) {
+                                            debt.payback();
+                                            storage.commit(getActivity());
+                                            displayPaybackAnimation();
+                                        }
+                                    }
+                                });
                                 return true;
 
                             default:

@@ -18,6 +18,7 @@ import com.johnsimon.payback.ui.SettingsActivity;
 import com.johnsimon.payback.ui.base.BasePreferenceActivity;
 import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.PermissionManager;
+import com.johnsimon.payback.util.PayPalManager;
 import com.johnsimon.payback.util.Undo;
 
 public class DataPreferenceActivity extends BasePreferenceActivity implements DataActivityInterface {
@@ -137,6 +138,9 @@ public class DataPreferenceActivity extends BasePreferenceActivity implements Da
 			if(StorageManager.loginManager.handleActivityResult(requestCode, resultCode, data)) {
 				return;
 			}
+		}
+		if(PayPalManager.onActivityResult(requestCode, resultCode, data)) {
+			return;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}

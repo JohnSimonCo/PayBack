@@ -10,6 +10,7 @@
     <color name="button_color">#009688</color>
     <color name="button_color_disabled">#80CBC4</color>
     <color name="undo_color">#FFEB3B</color>
+    <color name="error_color">#F44336</color>
 
     <color name="gray_text_dark">#181818</color>
     <color name="gray_text_normal">#333333</color>

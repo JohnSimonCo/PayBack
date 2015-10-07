@@ -20,6 +20,7 @@ import com.johnsimon.payback.ui.base.BaseActivity;
 import com.johnsimon.payback.util.AlarmScheduler;
 import com.johnsimon.payback.util.PermissionManager;
 import com.johnsimon.payback.util.Resource;
+import com.johnsimon.payback.util.PayPalManager;
 import com.johnsimon.payback.util.Undo;
 
 public abstract class DataActivity extends BaseActivity implements DataActivityInterface {
@@ -132,6 +133,10 @@ public abstract class DataActivity extends BaseActivity implements DataActivityI
 				return;
 			}
 		}
+		if(PayPalManager.onActivityResult(requestCode, resultCode, data)) {
+			return;
+		}
+
 		super.onActivityResult(requestCode, resultCode, data);
     }
 

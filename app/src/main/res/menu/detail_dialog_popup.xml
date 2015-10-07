@@ -15,7 +15,11 @@
         android:title="@string/change_person"    />
 
     <item
-        android:id="@+id/detail_dialog_pay_back"
+        android:id="@+id/detail_dialog_pay_back_swish"
         android:title="@string/pay_with_swish"    />
+
+    <item
+        android:id="@+id/detail_dialog_pay_back_paypal"
+        android:title="@string/pay_with_paypal"    />
 
 </menu>
