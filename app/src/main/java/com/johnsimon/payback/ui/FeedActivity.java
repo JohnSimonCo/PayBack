@@ -300,10 +300,6 @@ public class FeedActivity extends DataActivity implements
 	}
 
 	public void changePerson(Person newPerson) {
-		if (newPerson == person) {
-		//	return;
-		}
-
 		person = newPerson;
 
 		feed = data.feed(person);
