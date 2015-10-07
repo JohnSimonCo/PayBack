@@ -250,7 +250,10 @@ public class FeedFragment extends DataFragment implements FeedListAdapter.OnItem
 	};
 
     public void showDetail(Debt debt) {
-        DebtDetailDialogFragment detailDialogFragment = DebtDetailDialogFragment.newInstance(debt);
+        DebtDetailDialogFragment detailDialogFragment = new DebtDetailDialogFragment();
+		Bundle args = new Bundle();
+		args.putString(DebtDetailDialogFragment.ARG_ID, debt.id.toString());
+		detailDialogFragment.setArguments(args);
         detailDialogFragment.callback = this;
         detailDialogFragment.show(getFragmentManager(), "detail_screen");
     }

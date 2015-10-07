@@ -36,6 +36,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class DebtDetailDialogFragment extends DataDialogFragment {
 
@@ -59,11 +60,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 	public MenuItem detailMenuPayPayPal;
     public AlertDialog alertDialog;
 
-    public static DebtDetailDialogFragment newInstance(Debt debt) {
-        DebtDetailDialogFragment.debt = debt;
-
-        return new DebtDetailDialogFragment();
-    }
+    public final static String ARG_ID = "ARG_ID";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -99,7 +96,8 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
 	@Override
 	protected void onDataReceived() {
-        DebtDetailDialogFragment.debt = data.findDebt(debt.id);
+        UUID id = UUID.fromString(getArguments().getString(ARG_ID));
+        DebtDetailDialogFragment.debt = data.findDebt(id);
 
         Alarm.cancelNotification(getActivity().getApplicationContext(), debt);
 
@@ -353,7 +351,6 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        Toast.makeText(getActivity(), "DISMISS", Toast.LENGTH_LONG).show();
         debt = null;
     }
 
