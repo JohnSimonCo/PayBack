@@ -540,7 +540,7 @@ public class FeedActivity extends DataActivity implements
         FromWhoDialogFragment fragment = new FromWhoDialogFragment();
 
 		Bundle arguments = new Bundle();
-		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(user, sender));
+		arguments.putString(FromWhoDialogFragment.KEY_NAME, data.guessName(sender));
 		fragment.setArguments(arguments);
 
 		fragment.show(getFragmentManager(), "from_who");

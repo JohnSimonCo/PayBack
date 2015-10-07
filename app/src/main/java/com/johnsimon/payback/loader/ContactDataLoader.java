@@ -10,6 +10,8 @@ import android.util.Patterns;
 import com.johnsimon.payback.core.Contact;
 import com.johnsimon.payback.async.Promise;
 import com.johnsimon.payback.data.User;
+import com.johnsimon.payback.util.EmailUtils;
+import com.johnsimon.payback.util.PhoneNumberUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +82,7 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 		ArrayList<String> emails = new ArrayList<>(userData.length);
 
 		for(String string: userData) {
-			if(Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
+			if(EmailUtils.isValidEmailAddress(string)) {
 				emails.add(string);
 			}
 		}
@@ -94,7 +96,7 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 		ArrayList<String> numbers = new ArrayList<>(userData.length);
 
 		for(String string: userData) {
-			if(Patterns.PHONE.matcher(string).matches()) {
+			if(PhoneNumberUtils.isValidPhoneNumber(string)) {
 				numbers.add(string);
 			}
 		}
@@ -137,7 +139,7 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 
 		while(cursor.moveToNext()) {
 			String number = cursor.getString(column);
-			String normalized = normalizePhoneNumber(number);
+			String normalized = PhoneNumberUtils.normalizePhoneNumber(number);
 			if(number != null && !uniqueNumbers.contains(normalized)) {
 				uniqueNumbers.add(normalized);
 
@@ -165,12 +167,6 @@ public class ContactDataLoader extends AsyncTask<ContactDataLoader.Argument, Voi
 
 		int size = emails.size();
 		return size > 0 ? emails.toArray(new String[size]) : null;
-	}
-
-
-	//Removes all formatting, so that numbers can be compared
-	private String normalizePhoneNumber(String number) {
-		return number == null ? null : number.replaceAll("[- ]", "").replaceAll("^\\+\\d{2}", "0");
 	}
 
 	//Removes all formatting, so that numbers can be compared
