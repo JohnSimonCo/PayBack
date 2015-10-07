@@ -45,7 +45,7 @@ public class FeedActivityTest {
 
         DrawerActions.openDrawer(R.id.drawer_layout);
         onView(withId(R.id.navigation_drawer_footer_people)).perform(click());
-        onView(withId(R.id.people_manager_fab_container)).perform(click());
+        onView(withId(R.id.people_fab)).perform(click());
 
         onView(withText(R.string.add_person)).check(matches(isDisplayed()));
         onView(withHint(R.string.name)).perform(typeTextIntoFocusedView("First Sur"));

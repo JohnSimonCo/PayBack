@@ -281,6 +281,7 @@ public class DebtDetailDialogFragment extends DataDialogFragment {
 
                                 Bundle args = new Bundle();
                                 args.putString(PersonPickerDialogFragment.TITLE_KEY, PersonPickerDialogFragment.USE_DEFAULT_TITLE);
+                                args.putString(PersonPickerDialogFragment.BLACKLIST_KEY, debt.owner.getName());
                                 args.putBoolean(PersonPickerDialogFragment.PEOPLE_KEY, true);
                                 personPickerDialogFragment.setArguments(args);
 
