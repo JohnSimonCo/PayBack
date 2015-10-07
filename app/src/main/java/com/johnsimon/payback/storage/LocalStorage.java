@@ -22,14 +22,14 @@ public class LocalStorage extends Storage {
 
     private SharedPreferences preferences;
 
-    public LocalStorage(Context context) {
+    public LocalStorage(final Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
 		Background.run(context, new BackgroundBlock<AppData>() {
 			@Override
 			public AppData run() {
 				String JSON = preferences.getString(SAVE_KEY_DATA, null);
-				return AppData.fromJson(JSON);
+				return AppData.fromJson(context, JSON);
 			}
 		}).then(new Callback<AppData>() {
 			@Override

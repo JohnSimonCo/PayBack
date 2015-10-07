@@ -387,7 +387,7 @@ public class AppData {
                         context.getString(R.string.unknown_person), debt.ownerId,
                         ColorPalette.getInstanceWithContext(context).nextIndex(),
                         System.currentTimeMillis());
-                
+
                 data.people.add(unknownPerson);
             }
         }

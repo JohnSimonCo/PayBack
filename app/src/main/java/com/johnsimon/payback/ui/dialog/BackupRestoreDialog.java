@@ -52,7 +52,7 @@ public class BackupRestoreDialog {
                                             if (restoreDeleteWhich == 0) /*Magic number AF*/ {
                                                 ReadResult<String, Backup.ReadError> result = backups[which].read();
                                                 if (result.isSuccess()) {
-                                                    storage.commit(activity, AppData.fromJson(result.data));
+                                                    storage.commit(activity, AppData.fromJson(activity, result.data));
                                                     storage.emit();
 
                                                     promise.fire(RestoreResult.Success);
@@ -77,7 +77,7 @@ public class BackupRestoreDialog {
                         } else {
                             ReadResult<String, Backup.ReadError> result = backups[which].read();
                             if (result.isSuccess()) {
-                                storage.commit(activity, AppData.fromJson(result.data));
+                                storage.commit(activity, AppData.fromJson(activity, result.data));
                                 storage.emit();
 
                                 promise.fire(RestoreResult.Success);
