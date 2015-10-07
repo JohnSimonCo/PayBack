@@ -39,7 +39,7 @@ public class PayPalManager {
 		if (recipent.link.hasNumbers()
 	}*/
 
-	public static Promise<Boolean> requestPayment(Activity activity, String recipent, BigDecimal amount, String currency) {
+	public static Promise<PaymentResult> requestPayment(Activity activity, String recipent, BigDecimal amount, String currency) {
 
 		PayPalPayment payment = new PayPalPayment();
 		//payment.setSubtotal(new BigDecimal(1));
@@ -59,7 +59,7 @@ public class PayPalManager {
 		return resultPromise;
 	}
 
-	private static Promise<Boolean> resultPromise;
+	private static Promise<PaymentResult> resultPromise;
 
 	public final static int REQUEST_CODE = 634; //Totally random (mashed my keyboard)
 
@@ -71,27 +71,30 @@ public class PayPalManager {
 		switch (resultCode) {
 			case Activity.RESULT_OK:
 
-				resultPromise.fire(true);
-
+				resultPromise.fire(PaymentResult.Successful);
 				/*
 				String payKey = intent.getStringExtra(PayPalActivity.EXTRA_PAY_KEY);
 				//this.paymentSucceeded(payKey);
 				*/
 				break;
-			default:
-				resultPromise.fire(false);
-				break;
 
-			/*
 			case Activity.RESULT_CANCELED:
+				resultPromise.fire(PaymentResult.Canceled);
 				//this.paymentCanceled();
 				break;
 
+
+
 			case PayPalActivity.RESULT_FAILURE:
-				String errorID = intent.getStringExtra(PayPalActivity.EXTRA_ERROR_ID);
-				String errorMessage = intent.getStringExtra(PayPalActivity.EXTRA_ERROR_MESSAGE);
+				resultPromise.fire(PaymentResult.Error);
+				//String errorID = intent.getStringExtra(PayPalActivity.EXTRA_ERROR_ID);
+				//String errorMessage = intent.getStringExtra(PayPalActivity.EXTRA_ERROR_MESSAGE);
 				//this.paymentFailed(errorID, errorMessage);
-			*/
+				break;
+
+			default:
+				resultPromise.fire(PaymentResult.Canceled);
+				break;
 		}
 
 		return true;

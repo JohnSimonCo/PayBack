@@ -48,6 +48,7 @@ import com.johnsimon.payback.util.Alarm;
 import com.johnsimon.payback.util.Beamer;
 import com.johnsimon.payback.util.ColorPalette;
 import com.johnsimon.payback.util.PayPalManager;
+import com.johnsimon.payback.util.PaymentResult;
 import com.johnsimon.payback.util.Resource;
 import com.johnsimon.payback.util.ShareStringGenerator;
 import com.johnsimon.payback.util.SwishLauncher;
@@ -370,10 +371,10 @@ public class FeedActivity extends DataActivity implements
 				break;
 
 			case R.id.feed_menu_pay_back_paypal:
-				startPayPal(person.link, Math.abs(AppData.total(feed))).then(new Callback<Boolean>() {
+				startPayPal(person.link, Math.abs(AppData.total(feed))).then(new Callback<PaymentResult>() {
 					@Override
-					public void onCalled(Boolean success) {
-						if (success) {
+					public void onCalled(PaymentResult result) {
+						if (result == PaymentResult.Successful) {
 							onEvenOut();
 						}
 					}
@@ -706,7 +707,7 @@ public class FeedActivity extends DataActivity implements
         feedFragment.displayTotalDebt(getResources());
     }
 
-	public Promise<Boolean> startPayPal(Contact contact, double amount) {
+	public Promise<PaymentResult> startPayPal(Contact contact, double amount) {
 		PayPalRecipientPickerDialogFragment p = new PayPalRecipientPickerDialogFragment();
 
 		Bundle args = new Bundle();
@@ -731,14 +732,14 @@ public class FeedActivity extends DataActivity implements
 		return payPalPromise;
 	}
 
-	private static Promise<Boolean> payPalPromise;
+	private static Promise<PaymentResult> payPalPromise;
 
 	@Override
 	public void onRecipientSelected(String recipient, double amount) {
 		String currency = data.preferences.getCurrency().id;
-		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(amount), currency).then(new Callback<Boolean>() {
+		PayPalManager.requestPayment(FeedActivity.this, recipient, new BigDecimal(amount), currency).then(new Callback<PaymentResult>() {
 			@Override
-			public void onCalled(Boolean data) {
+			public void onCalled(PaymentResult data) {
 				payPalPromise.fire(data);
 			}
 		});
