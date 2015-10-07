@@ -58,7 +58,6 @@ public class FromWhoDialogFragment extends DataDialogFragment {
 		});
 
 		actv = (AutoCompleteTextView) rootView.findViewById(R.id.from_who_actv);
-		actv.setTextColor(getResources().getColor(R.color.button_color));
 
 		Resources res = getResources();
 		actv.setPadding(
