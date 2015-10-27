@@ -75,7 +75,6 @@ public class Resource {
 
     private static boolean isInitialized = false;
 
-
 	private static Gson _gson;
     public static Gson gson() {
         if(_gson == null) {

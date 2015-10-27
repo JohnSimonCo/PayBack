@@ -38,9 +38,9 @@ repositories {
 
 dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.makeramen:roundedimageview:1.4.0'
     compile 'com.anjlab.android.iab.v3:library:1.0.+@aar'
@@ -49,9 +49,8 @@ dependencies {
     compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
     compile 'com.afollestad:material-dialogs:0.7.7.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.mcxiaoke.volley:library:1.0.+@aar'
     compile 'com.code-troopers.betterpickers:library:2.0.0'
-    compile 'ch.acra:acra:4.6.2'
+    compile 'ch.acra:acra:4.7.0-RC.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
 

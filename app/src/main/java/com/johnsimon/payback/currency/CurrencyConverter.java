@@ -2,17 +2,12 @@ package com.johnsimon.payback.currency;
 
 import android.content.Context;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+
 import com.google.gson.Gson;
 import com.johnsimon.payback.util.Resource;
 
 public class CurrencyConverter {
-
+/*
     public CurrencyConverter(Context context, String fromCountryCode, String toCountryCode, final ConvertCallback convertCallback) {
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -41,5 +36,5 @@ public class CurrencyConverter {
     public interface ConvertCallback {
         void onCurrencyConverted(double amount, boolean success);
     }
-
+*/
 }

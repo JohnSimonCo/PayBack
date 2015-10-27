@@ -344,27 +344,27 @@ public class FeedActivity extends DataActivity implements
 		// if the drawer is not showing. Otherwise, let the drawer
 		// decide what to show in the action bar.
 
+		getMenuInflater().inflate(R.menu.feed, menu);
+		filterAmount = menu.findItem(R.id.menu_filter_amount);
+		final MenuItem fullMenuPaySwish = menu.findItem(R.id.feed_menu_pay_back_swish);
+		final MenuItem fullMenuPayPayPal = menu.findItem(R.id.feed_menu_pay_back_paypal);
+		menu_even_out = menu.findItem(R.id.menu_even_out);
+
+		menu_even_out.setVisible(false);
+
 		dataRecievedSubscription.listen(new Callback<AppData>() {
 			@Override
 			public void onCalled(AppData data) {
-				getMenuInflater().inflate(R.menu.feed, menu);
-				filterAmount = menu.findItem(R.id.menu_filter_amount);
-				MenuItem fullMenuPaySwish = menu.findItem(R.id.feed_menu_pay_back_swish);
-				MenuItem fullMenuPayPayPal = menu.findItem(R.id.feed_menu_pay_back_paypal);
-				MenuItem menuShare = menu.findItem(R.id.feed_menu_share);
 
 				if (attemptCheckFilterAmount) {
 					filterAmount.setChecked(true);
 				}
 
-				menu_even_out = menu.findItem(R.id.menu_even_out);
-
-				if (isAll() || AppData.isEven(feed)) {
-					menu_even_out.setVisible(false);
+				if (!isAll() && !AppData.isEven(feed)) {
+					menu_even_out.setVisible(true);
 				}
 
 				sort();
-
 
 				if (isAll()) {
 					fullMenuPaySwish.setVisible(false);

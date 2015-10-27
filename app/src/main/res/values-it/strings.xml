@@ -104,6 +104,7 @@
     <string name="phone_number">Numero di telefono</string>
     <string name="swish_copy_toast_end">copiato negli appunti</string>
     <string name="pay_with_swish">Paga con Swish</string>
+    <string name="pay_with_paypal">Restituisci con Paypal</string>
     <string name="currency_checkbox">Simbolo dopo ammontare</string>
     <string name="select_currency">Seleziona valuta</string>
     <string name="select">Seleziona</string>
@@ -127,7 +128,6 @@
     <string name="currency_show_trailing_zeros">Mostra gli zeri finali</string>
     <string name="set_date">Imposta data</string>
     <string name="share_debt_summary">Condivi riepilogo debiti</string>
-    <!-- "Paid back Aug 5" -->
     <string name="paid_back_when">Restituito il %1$s</string>
     <string name="autobackup">Backup Automatico</string>
     <string name="wipebackup">Elimina Backup</string>
@@ -139,6 +139,14 @@
     <string name="backup_success">Backup riuscito</string>
     <string name="backup_failed">Backup fallito</string>
     <string name="number_format_error">Formato numero non valido</string>
+    <string name="enable_storage_access">Abilita accesso memoria di massa</string>
+    <string name="enable_contact_access">Abilita accesso ai contatti</string>
+    <string name="enable_storage_access_summary">Necessario per effettuare backup</string>
+    <string name="unknown_person">Persona sconosciuta</string>
+    <string name="paypal_email_or_phone_number_title">Seleziona email o numero di telefono</string>
+    <string name="paypal_email_or_phone_number_hint">Email o numero di telefono</string>
+    <string name="pay">Restituisci</string>
+    <string name="country_code_error">Il numero di telefono deve essere completo di codice paese (+XX)</string>
     <!-- About -->
     <string name="lib_devdesign">Sviluppo e Progettazione</string>
     <string name="author_johnsimon">John Rapp Farnes\nSimon Halvdansson</string>
@@ -226,6 +234,7 @@
     <string-array name="remind_later_options">
         <item>tra un\'ora</item>
         <item>Domani</item>
+    <!--Used for indicating which day to renew reminder for. Example: "Next thursday"-->
         <item>Prossimo %1s</item>
         <item>Scegli data e orario</item>
     </string-array>
